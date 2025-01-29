@@ -19,7 +19,7 @@ function Loginpage() {
                         <input type="email" placeholder='Email' className='p-2 rounded-full border border-black w-1/2 m-1'/>
                         <label>Password</label>
                         <input type="Password" placeholder='Password' className='p-2 rounded-full border border-black w-1/2 m-1'/>
-                        <button className='bg-blue-700'>Submit</button>
+                        <button className='bg-blue-700 w-1/2'>Submit</button>
                     </form>
                 </div>
 
