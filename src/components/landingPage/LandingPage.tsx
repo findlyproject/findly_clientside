@@ -2,7 +2,7 @@
 
 import React from "react";
 import Image from "next/image";
-import landingImage from "../../../public/undraw_online-art_eetx.png";
+
 import jobImage from "../../../public/job.png";
 import register1 from "../../../public/register-1.png"
 import { FaSearch, FaMapMarkerAlt } from "react-icons/fa";
@@ -192,7 +192,7 @@ function LandingPage() {
       <h3 className="text-gray-500 text-sm uppercase">Who We Are</h3>
       <h1 className="text-4xl font-bold mb-4">About us</h1>
       <p className="text-gray-700 mb-4">
-        Welcome to the National Hookah Community Association "NHCA". We are a
+        Welcome to the National Hookah Community Association NHCA. We are a
         diverse alliance of businesses from all ends of the Hookah experience,
         from manufacturers & importers of molasses, pipes and accessories to
         distributors, Hookah lounges and Hookah/shisha retail stores.
