@@ -1,11 +1,11 @@
 import { configureStore } from "@reduxjs/toolkit";
-import countReducer from  "./features/count-slice"
+
 import themeReducer from "./features/them"
 
 export const makeStore = () => {
     return configureStore({
      reducer:{
-       count:countReducer,
+       
        theme:themeReducer
      }
     });
