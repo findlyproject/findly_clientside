@@ -6,9 +6,12 @@ interface RegisterType {
     firstName:string
   lastName:string
   location:string
-  collage:string,
-  startYear:string,
-  endYear:string,
+  education:{
+    collage:string,
+    startYear:string,
+    endYear:string,
+  },
+  
   jobTitles:string[],
   jobLocations:string[]
 }
@@ -19,9 +22,13 @@ const initialState: RegisterType = {
   firstName:"",
   lastName:"",
   location:"",
-  collage:"",
-  startYear:"",
-  endYear:"",
+  education:{
+    collage:"",
+    startYear:"",
+    endYear:"",
+    
+  },
+  
   jobTitles:[],
   jobLocations:[]
 };
@@ -46,13 +53,13 @@ state.firstName=action.payload
       state.location=action.payload
     },
     setCollage:(state,action)=>{
-  state.collage=action.payload
+  state.education.collage=action.payload
     },
     setstartYear:(state,action)=>{
-      state.startYear=action.payload
+      state.education.startYear=action.payload
     },
     setendYear:(state,action)=>{
-      state.endYear=action.payload
+      state.education.endYear=action.payload
     },
     setjobTitles:(state,action)=>{
       state.jobTitles=action.payload
