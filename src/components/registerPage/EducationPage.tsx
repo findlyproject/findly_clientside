@@ -1,12 +1,23 @@
 "use client";
 
-import React from "react";
+import React, { useState } from "react";
 import { useRouter } from "next/navigation";
+import { useAppDispatch } from "@/lib/store/hooks";
+import { setCollage, setendYear, setLocation, setstartYear } from "@/lib/store/features/registerSlice";
 
 export default function EducationPage() {
+  const dispatch=useAppDispatch()
+  const[Location,setLocallocation]=useState("")
+  const[College,setLocalcollege]=useState("")
+  const[StartYear,setStartYear]=useState("")
+  const[EndYear,setEndYear]=useState("")
   const router = useRouter();
   const handleContinue = (e: React.MouseEvent<HTMLButtonElement>) => {
     e.preventDefault();
+    dispatch(setLocation(Location))
+    dispatch(setCollage(College))
+    dispatch(setstartYear(StartYear))
+    dispatch(setendYear(EndYear))
     router.push(`/register/namepage/educationpage/questionpage`);
   };
   return (
@@ -23,6 +34,8 @@ export default function EducationPage() {
             <input
               type="text"
               placeholder="Location"
+              value={Location}
+              onChange={(e)=>setLocallocation(e.target.value)}
               className="px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-purple-600"
             />
           </div>
@@ -34,6 +47,8 @@ export default function EducationPage() {
             <input
               type="text"
               placeholder="School or College/University"
+              value={College}
+              onChange={(e)=>setLocalcollege(e.target.value)}
               className="px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-purple-600"
             />
           </div>
@@ -46,6 +61,8 @@ export default function EducationPage() {
               <input
                 type="text"
                 placeholder=" Start year"
+                value={StartYear}
+                onChange={(e)=>setStartYear(e.target.value)}
                 className="px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-purple-600"
               />
             </div>
@@ -55,6 +72,8 @@ export default function EducationPage() {
               <input
                 type="text"
                 placeholder="End year"
+                value={EndYear}
+                onChange={(e)=>setEndYear(e.target.value)}
                 className="px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-purple-600"
               />
             </div>
