@@ -10,6 +10,7 @@ import { FaUserPlus, FaUpload, FaCheckCircle } from "react-icons/fa";
 import { FaArrowLeft, FaArrowRight } from "react-icons/fa";
 import goup from "../../../public/landingPage-group-discussion.png"
 import landingTop from "../../../public/landingpage-group.jpg"
+import Navbar from "../navBar/Navbar";
 
 function LandingPage() {
 
@@ -60,11 +61,14 @@ function LandingPage() {
     }
   ];
   return (
-    <div className=" w-full h-full">
-      <div className="flex flex-col md:flex-row items-center justify-center   w-full  pt-40 ">
 
-        <div className="w-full flex justify-between items-center space-x-20   ">
-          <div className="md:w-1/2 text-center md:text-left   ">
+  
+    <div className=" w-full h-full">
+        <Navbar/>
+      <div className="flex flex-col md:flex-row items-center justify-center   w-full  pt-32 ">
+
+        <div className="w-full flex justify-between items-center space-x-20    ">
+          <div className="  w-3/6  text-center md:text-left  space-y-2 flex flex-col items-center ">
             <h1 className="text-3xl md:text-5xl font-bold text-gray-900">
               Find a job that suits <br /> your interest & skills.
             </h1>
@@ -103,11 +107,6 @@ function LandingPage() {
 
 
 
-
-
-
-
-
           <div className="md:w-1/2 flex justify-center ">
             <Image
               src={landingTop}
@@ -122,7 +121,7 @@ function LandingPage() {
 
       </div>
 
-      <div className="flex flex-wrap justify-center gap-4 p-4">
+      <div className="flex flex-wrap justify-center gap-4 p-4 mt-16">
 
         <div className="flex h-20  items-center border border-black w-full sm:w-60 p-4 rounded-lg shadow-md">
           <Image
@@ -251,9 +250,9 @@ function LandingPage() {
               <div>
                 <h3 className="font-semibold text-lg">{testimonial.name}</h3>
                 <p className="text-gray-500 text-sm">{testimonial.role}</p>
-              </div>
+              </div>x
             </div>
-          </div>
+          </div>  
         ))}
       </div>
       <div className="absolute top-1/2 left-5 text-gray-400 cursor-pointer"><FaArrowLeft /></div>
