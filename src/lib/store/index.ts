@@ -1,12 +1,13 @@
 import { configureStore } from "@reduxjs/toolkit";
 
 import themeReducer from "./features/them"
-
+import registerReducer from './features/registerSlice'
 export const makeStore = () => {
     return configureStore({
      reducer:{
        
-       theme:themeReducer
+       theme:themeReducer,
+       register:registerReducer
      }
     });
   };
