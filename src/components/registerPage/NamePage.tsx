@@ -1,10 +1,20 @@
 "use client";
-import React from "react";
+import React, { useState } from "react";
 import { useRouter } from "next/navigation";
+import { useAppDispatch, useAppSelector } from "@/lib/store/hooks";
+import { setfirstName, setlastName } from "@/lib/store/features/registerSlice";
 export default function NamePage() {
+  const dispatch=useAppDispatch()
+  const [Firstname,setLocalfirstname]=useState("")
+  const[Lastname,setLocallastname]=useState("")
+  const data=useAppSelector((state)=>state.register)
+  console.log("data",data);
+  
   const router = useRouter();
   const handleContinue = (e: React.MouseEvent<HTMLButtonElement>) => {
     e.preventDefault();
+    dispatch(setfirstName(Firstname))
+    dispatch(setlastName(Lastname))
     router.push(`/register/namepage/educationpage`);
   };
   return (
@@ -21,6 +31,8 @@ export default function NamePage() {
             <input
               type="text"
               placeholder="First Name"
+              value={Firstname}
+              onChange={(e)=>setLocalfirstname(e.target.value)}
               className="px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-purple-600"
             />
           </div>
@@ -30,6 +42,8 @@ export default function NamePage() {
             <input
               type="text"
               placeholder="Last Name"
+              value={Lastname}
+              onChange={(e)=>setLocallastname(e.target.value)}
               className="px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-purple-600"
             />
           </div>
