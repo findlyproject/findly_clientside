@@ -6,8 +6,9 @@ import Navbar from "@/components/navBar/Navbar";
 export default function Home() {
   return (
     <div>
-      <LandingPage/>
       <Navbar/>
+      <LandingPage/>
+      
     </div>
   );
 }
