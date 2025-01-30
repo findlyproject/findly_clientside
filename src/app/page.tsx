@@ -8,7 +8,10 @@ export default function Home() {
     <div>
       <Navbar/>
       <LandingPage/>
+<<<<<<< HEAD
       
+=======
+>>>>>>> 31558624596b0393ec4e1e087be781dfee800caa
     </div>
   );
 }
