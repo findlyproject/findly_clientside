@@ -1,11 +1,23 @@
 'use client'
 import { useRouter } from "next/navigation";
-
+import { useState } from "react";
+import { setEmail,setPassword } from "@/lib/store/features/registerSlice";
+import { useAppDispatch } from "@/lib/store/hooks";
 export default function RegisterPage() {
+  const dispatch=useAppDispatch()
+  const [Email,setLocalemail]=useState("")
+  const [Password,setLocalpassword]=useState("")
+  console.log(Email,Password);
+  
+  const[conformpassword,setConformPassword]=useState("")
 const router=useRouter()
     const handleContinue=()=>{
+      dispatch(setEmail(Email))
+      dispatch(setPassword(Password))
         router.push(`/register/namepage`)
     }
+
+    
   return (
     <div className="flex justify-center items-center min-h-screen  py-8 px-4">
       <div className="w-full max-w-sm  p-8 rounded-lg shadow-lg">
@@ -24,7 +36,9 @@ const router=useRouter()
             <input
               id="email"
               type="email"
-              placeholder="Enter your email"
+              placeholder=" Email"
+              value={Email}
+              onChange={(e)=>setLocalemail(e.target.value)}
               className="w-full px-4 py-2 mt-1 border border-gray-300 rounded-full focus:outline-none focus:ring-2 focus:ring-purple-600"
             />
           </div>
@@ -36,7 +50,9 @@ const router=useRouter()
             <input
               id="password"
               type="password"
-              placeholder="Enter your password"
+              placeholder=" Password"
+              value={Password}
+              onChange={(e)=>setLocalpassword(e.target.value)}
               className="w-full px-4 py-2 mt-1 border border-gray-300 rounded-full focus:outline-none focus:ring-2 focus:ring-purple-600"
             />
           </div>
@@ -48,7 +64,9 @@ const router=useRouter()
             <input
               id="confirm-password"
               type="password"
-              placeholder="Confirm your password"
+              value={conformpassword}
+              onChange={(e)=>setConformPassword(e.target.value)}
+              placeholder="Confirm password"
               className="w-full px-4 py-2 mt-1 border border-gray-300 rounded-full focus:outline-none focus:ring-2 focus:ring-purple-600"
             />
           </div>

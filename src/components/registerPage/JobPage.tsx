@@ -1,12 +1,23 @@
 'use client'
 
-import React from "react";
+import React, { useState } from "react";
 import { useRouter } from "next/navigation";
+import { useAppDispatch, useAppSelector } from "@/lib/store/hooks";
+import { setjobLocations, setjobTitles } from "@/lib/store/features/registerSlice";
+
 export default function JobPage() {
+  const formData=useAppSelector((state)=>state.register)
+  console.log("formData",formData);
+  
+  const dispatch=useAppDispatch()
+  const [JobTitles, setJobTitles] = useState<string[]>([]);
+  const [JobLocations, setJobLocations] = useState<string[]>([]);
     const router = useRouter();
       const handleContinue = (e: React.MouseEvent<HTMLButtonElement>) => {
         e.preventDefault();
-        router.push(`/`);
+        dispatch(setjobLocations(JobLocations))
+        dispatch(setjobTitles(JobTitles))
+        // router.push(`/`);
       };
   return (
     <div className="flex justify-center items-center min-h-screen  px-4">
@@ -22,6 +33,8 @@ export default function JobPage() {
             <input
               type="text"
               placeholder="Ex.Sales Manager"
+              value={JobTitles}
+              onChange={(e)=>setJobTitles(e.target.value.split(","))}
               className="px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-purple-600"
             />
           </div>
@@ -33,6 +46,8 @@ export default function JobPage() {
             <input
               type="text"
               placeholder="Location"
+              value={JobLocations}
+              onChange={(e)=>setJobLocations(e.target.value.split(","))}
               className="px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-purple-600"
             />
           </div>
