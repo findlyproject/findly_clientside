@@ -14,6 +14,7 @@ export default function JobPage() {
   const [JobTitles, setJobTitles] = useState<string[]>([]);
   const [JobLocations, setJobLocations] = useState<string[]>([]);
     const router = useRouter();
+     
 
       useEffect(() => {
         dispatch(setjobLocations(JobLocations));
