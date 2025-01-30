@@ -10,6 +10,10 @@ import { FaUserPlus, FaUpload, FaCheckCircle } from "react-icons/fa";
 import { FaArrowLeft, FaArrowRight } from "react-icons/fa";
 import goup from "../../../public/landingPage-group-discussion.png"
 import landingTop from "../../../public/landingpage-group.jpg"
+import { Swiper, SwiperSlide } from "swiper/react";
+import { Pagination, Autoplay } from "swiper/modules";
+import "swiper/css";
+import "swiper/css/pagination";
 
 function LandingPage() {
 
@@ -23,41 +27,59 @@ function LandingPage() {
 
   const testimonials = [
     {
-      name: "Robert Fox",
-      role: "UI/UX Designer",
-      text: "Ut ullamcorper hendrerit tempor. Aliquam in rutrum dui. Maecenas at placerat metus, in faucibus est.",
-      image: "https://randomuser.me/api/portraits/men/32.jpg"
+      id: 1,
+      name: "Jane D",
+      role: "CEO",
+      image: "https://pagedone.io/asset/uploads/1696229969.png",
+      rating: 4.9,
+      feedback:
+        "Pagedone has made it possible for me to stay on top of my portfolio and make informed decisions quickly and easily.",
     },
     {
-      name: "Bessie Cooper",
-      role: "Creative Director",
-      text: "Mauris eget lorem odio. Mauris convallis justo in molestie metus aliquam lacinia.",
-      image: "https://randomuser.me/api/portraits/women/44.jpg"
+      id: 2,
+      name: "Harsh P.",
+      role: "Product Designer",
+      image: "https://pagedone.io/asset/uploads/1696229994.png",
+      rating: 4.9,
+      feedback:
+        "Thanks to pagedone, I feel more informed and confident about my investment decisions than ever before.",
     },
     {
-      name: "Jane Cooper",
-      role: "Photographer",
-      text: "Class aptent taciti sociosqu ad litora torquent per conubia nostra, per inceptos himenaeos.",
-      image: "https://randomuser.me/api/portraits/women/12.jpg"
+      id: 3,
+      name: "Alex K.",
+      role: "Design Lead",
+      image: "https://pagedone.io/asset/uploads/1696230027.png",
+      rating: 4.9,
+      feedback:
+        "The customer service team at pagedone went above and beyond to help me resolve a billing issue.",
     },
     {
-      name: "Jane Cooper",
-      role: "Photographer",
-      text: "Class aptent taciti sociosqu ad litora torquent per conubia nostra, per inceptos himenaeos.",
-      image: "https://randomuser.me/api/portraits/women/12.jpg"
+      id: 1,
+      name: "Jane D",
+      role: "CEO",
+      image: "https://pagedone.io/asset/uploads/1696229969.png",
+      rating: 4.9,
+      feedback:
+        "Pagedone has made it possible for me to stay on top of my portfolio and make informed decisions quickly and easily.",
     },
     {
-      name: "Jane Cooper",
-      role: "Photographer",
-      text: "Class aptent taciti sociosqu ad litora torquent per conubia nostra, per inceptos himenaeos.",
-      image: "https://randomuser.me/api/portraits/women/12.jpg"
+      id: 2,
+      name: "Harsh P.",
+      role: "Product Designer",
+      image: "https://pagedone.io/asset/uploads/1696229994.png",
+      rating: 4.9,
+      feedback:
+        "Thanks to pagedone, I feel more informed and confident about my investment decisions than ever before.",
     },
     {
-      name: "Jane Cooper",
-      role: "Photographer",
-      text: "Class aptent taciti sociosqu ad litora torquent per conubia nostra, per inceptos himenaeos.",
-      image: "https://randomuser.me/api/portraits/women/12.jpg"
-    }
+      id: 3,
+      name: "Alex K.",
+      role: "Design Lead",
+      image: "https://pagedone.io/asset/uploads/1696230027.png",
+      rating: 4.9,
+      feedback:
+        "The customer service team at pagedone went above and beyond to help me resolve a billing issue.",
+    },
   ];
   return (
     <div className=" w-full h-full">
@@ -240,26 +262,79 @@ function LandingPage() {
     </div>
 </div>
 
-<div className="bg-white py-10 px-5 mt-28 text-center relative">
-      <div className="flex justify-center gap-5 overflow-hidden">
-        {testimonials.map((testimonial, index) => (
-          <div key={index} className="bg-white shadow-lg p-5 rounded-lg max-w-sm">
-            <div className="text-yellow-500 text-xl mb-2">★★★★★</div>
-            <p className="text-gray-700 italic">{testimonial.text}</p>
-            <div className="flex items-center mt-4">
-              <img src={testimonial.image} alt={testimonial.name} className="w-10 h-10 rounded-full mr-3" />
-              <div>
-                <h3 className="font-semibold text-lg">{testimonial.name}</h3>
-                <p className="text-gray-500 text-sm">{testimonial.role}</p>
-              </div>
-            </div>
-          </div>
-        ))}
-      </div>
-      <div className="absolute top-1/2 left-5 text-gray-400 cursor-pointer"><FaArrowLeft /></div>
-      <div className="absolute top-1/2 right-5 text-gray-400 cursor-pointer"><FaArrowRight /></div>
-    </div>
+<section className="py-24">
+      <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+        {/* Header */}
+        <div className="mb-16 text-center">
+          <span className="text-sm text-gray-500 font-medium block mb-2">
+            TESTIMONIAL
+          </span>
+          <h2 className="text-4xl font-bold text-gray-900">
+            What our happy users say!
+          </h2>
+        </div>
 
+        {/* Swiper Slider */}
+        <Swiper
+          slidesPerView={1}
+          spaceBetween={32}
+          loop={true}
+          centeredSlides={true}
+          pagination={{ clickable: true }}
+          autoplay={{ delay: 2500, disableOnInteraction: false }}
+          breakpoints={{
+            640: { slidesPerView: 1, spaceBetween: 32 },
+            768: { slidesPerView: 2, spaceBetween: 32 },
+            1024: { slidesPerView: 3, spaceBetween: 32 },
+          }}
+          modules={[Pagination, Autoplay]}
+          className="mySwiper"
+        >
+          {testimonials.map((testimonial) => (
+            <SwiperSlide key={testimonial.id}>
+              <div className="group bg-white border border-gray-300 rounded-xl p-6 transition-all duration-500 mx-auto hover:border-indigo-600 hover:shadow-sm">
+                {/* Rating */}
+                <div className="flex items-center mb-7 gap-2 text-amber-500">
+                  <svg
+                    className="w-5 h-5"
+                    viewBox="0 0 18 17"
+                    fill="none"
+                    xmlns="http://www.w3.org/2000/svg"
+                  >
+                    <path
+                      d="M8.10326 1.31699C8.47008 0.57374 9.52992 0.57374 9.89674 1.31699L11.7063 4.98347C11.8519 5.27862 12.1335 5.48319 12.4592 5.53051L16.5054 6.11846C17.3256 6.23765 17.6531 7.24562 17.0596 7.82416L14.1318 10.6781C13.8961 10.9079 13.7885 11.2389 13.8442 11.5632L14.5353 15.5931C14.6754 16.41 13.818 17.033 13.0844 16.6473L9.46534 14.7446C9.17402 14.5915 8.82598 14.5915 8.53466 14.7446L4.91562 16.6473C4.18199 17.033 3.32456 16.41 3.46467 15.5931L4.15585 11.5632C4.21148 11.2389 4.10393 10.9079 3.86825 10.6781L0.940384 7.82416C0.346867 7.24562 0.674378 6.23765 1.4946 6.11846L5.54081 5.53051C5.86652 5.48319 6.14808 5.27862 6.29374 4.98347L8.10326 1.31699Z"
+                      fill="currentColor"
+                    />
+                  </svg>
+                  <span className="text-base font-semibold text-indigo-600">
+                    {testimonial.rating}
+                  </span>
+                </div>
+
+                {/* Feedback */}
+                <p className="text-base text-gray-600 leading-6 pb-8 group-hover:text-gray-800">
+                  {testimonial.feedback}
+                </p>
+
+                {/* User Info */}
+                <div className="flex items-center gap-5 border-t border-gray-200 pt-5">
+                  <img
+                    className="rounded-full h-10 w-10 object-cover"
+                    src={testimonial.image}
+                    alt={testimonial.name}
+                  />
+                  <div>
+                    <h5 className="text-gray-900 font-medium">{testimonial.name}</h5>
+                    <span className="text-sm text-gray-500">{testimonial.role}</span>
+                  </div>
+                </div>
+              </div>
+            </SwiperSlide>
+          ))}
+        </Swiper>
+
+      </div>
+    </section>
     <div className="grid grid-cols-1 md:grid-cols-2 gap-5 px-10 py-10">
       {/* Candidate Section */}
       <div className="bg-gray-200 p-6 rounded-lg flex flex-col md:flex-row items-center justify-between">
