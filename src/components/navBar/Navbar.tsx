@@ -8,9 +8,8 @@ import Beforlogin from "./Navbiforlogin";
 export const navigation = [
   { name: "Home", href: "/" },
   { name: "About", href: "/about" },
-  { name: "Services", href: "/" },
-  { name: "Contact", href: "/contact" },
-  
+  { name: "RateUs", href: "/rateus" },
+  { name: "Contact", href: "/contactus" },
 ];
 
 export default function Navbar() {
