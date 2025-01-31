@@ -1,9 +1,10 @@
 import React from 'react'
 import AboutPage from '@/components/aboutPage/AboutPage'
+import Navbar from '@/components/navBar/Navbar'
 export default function page() {
   return (
     <div>
-      <h1>dfgh</h1>
+      <Navbar/>
       <AboutPage/>
     </div>
   )
