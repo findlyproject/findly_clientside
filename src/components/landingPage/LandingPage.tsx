@@ -97,7 +97,7 @@ function LandingPage() {
             <div className="flex items-center w-full max-w-xl bg-white shadow-md rounded-lg  border-gray-300">
 
               <div className="flex items-center px-4 py-2 w-1/2 border-r border-gray-300">
-                <FaSearch className="text-purple-600" />
+                <FaSearch className="text-primary" />
                 <input
                   type="text"
                   placeholder="Job title, Keyword..."
@@ -107,7 +107,7 @@ function LandingPage() {
 
 
               <div className="flex items-center px-4 py-2 w-1/2">
-                <FaMapMarkerAlt className="text-purple-600" />
+                <FaMapMarkerAlt className="text-primary" />
                 <input
                   type="text"
                   placeholder="Your Location"
@@ -116,7 +116,7 @@ function LandingPage() {
               </div>
 
 
-              <button className="bg-purple-600 text-white px-6 py-3 font-semibold">
+              <button className="bg-primary text-white px-6 py-3 font-semibold">
                 Find Job
               </button>
             </div>
@@ -242,8 +242,8 @@ function LandingPage() {
   </div>
 
   {/* Blue Background Section */}
-  <div className="absolute top-1/2 -mt-32 w-full h-4/6  bg-purple-600  flex justify-center items-center p-32 z-0"></div>
-  <div className="bg-purple-700 text-white py-10">
+  <div className="absolute top-1/2 -mt-32 w-full h-4/6  bg-primary  flex justify-center items-center p-32 z-0"></div>
+  <div className="bg-primary text-white py-10">
       <h2 className="text-center text-3xl font-bold mb-6">How Findly Work</h2>
       <div className="flex flex-wrap justify-center gap-10 px-10 items-center">
         {steps.map((step, index) => (
@@ -251,7 +251,7 @@ function LandingPage() {
             {index > 0 && (
               <div className="absolute -left-20 top-6 w-16 h-1 border-dashed border-white border"></div>
             )}
-            <div className="w-16 h-16 bg-white text-purple-700 rounded-full flex items-center justify-center mx-auto mb-4 text-2xl">
+            <div className="w-16 h-16 bg-white text-primary rounded-full flex items-center justify-center mx-auto mb-4 text-2xl">
               {step.icon}
             </div>
             <h3 className="font-semibold text-lg">{step.title}</h3>
@@ -350,7 +350,7 @@ function LandingPage() {
       </div>
 
       {/* Employer Section */}
-      <div className="bg-purple-700 text-white p-6 rounded-lg flex flex-col md:flex-row items-center justify-between relative">
+      <div className="bg-primary text-white p-6 rounded-lg flex flex-col md:flex-row items-center justify-between relative">
         <div className="md:w-1/2">
           <h2 className="text-2xl font-bold">Become an Employer</h2>
           <p>Cras in massa pellentesque, mollis ligula non, luctus dui.</p>
