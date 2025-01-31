@@ -13,7 +13,7 @@ const ContactUs: React.FC = () => {
               Contact Us
             </h1>
             <p className="text-gray-900 text-lg font-normal leading-7 lg:text-left text-center">
-              We're here to assist you! Whether you have questions, feedback, or
+              We are here to assist you! Whether you have questions, feedback, or
               inquiries, our team is ready to help.
             </p>
 
