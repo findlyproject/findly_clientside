@@ -1,5 +1,5 @@
 "use client";
-import { useState } from "react";
+import { useState }from "react";
 import { FiImage } from "react-icons/fi";
 
 const CreatePost = () => {

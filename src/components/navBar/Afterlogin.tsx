@@ -6,9 +6,10 @@ import React from "react";
 function Afterlogin() {
   return (
     <div className="flex">
+      <Link href="/notification">
       <button className="relative text-gray-500 hover:text-gray-700 p-2">
         <BellIcon className="h-6 w-6" />
-      </button>
+      </button></Link>
       <Menu as="div" className="relative ml-3">
         <Menu.Button className="flex text-sm rounded-full focus:outline-none">
           <img
