@@ -5,6 +5,17 @@ export default function AboutPage() {
   return (
     <div>
       <section className="flex flex-col lg:flex-row items-center justify-center px-6 lg:px-20 py-10 gap-10">
+      <div className="flex flex-col space-y-4">
+  <img
+    src="https://i.pinimg.com/736x/0a/57/bc/0a57bce7dd90b7ae5925db13dbf90996.jpg"
+    className="rounded-lg shadow-md w-full lg:w-72 h-[300px] object-cover"
+  />
+  <img
+    src="https://i.pinimg.com/736x/13/7e/22/137e223eb7b58509809d13ac4a44f3de.jpg"
+    className="rounded-lg shadow-md w-full lg:w-72 h-[300px] object-cover"
+  />
+</div>
+
         <div className="flex flex-col gap-6">
           <div className="relative">
             <img
@@ -26,7 +37,7 @@ export default function AboutPage() {
               opportunities. Trusted by over 1,000 companies!
             </p>
           </div>
-          <h3 className="text-purple-600 text-sm font-semibold tracking-wide uppercase">
+          <h3 className="text-primary text-sm font-semibold tracking-wide uppercase">
             A Bit
           </h3>
           <h1 className="text-3xl font-bold text-gray-900">About Us</h1>
@@ -40,7 +51,7 @@ export default function AboutPage() {
             Whether you're seeking your next career move or the perfect
             candidate, Findly is here to make it happen.
           </p>
-          <button className="mt-6 bg-purple-600 text-white px-6 py-2 rounded-lg shadow-md hover:bg-purple-700 transition">
+          <button className="mt-6 bg-primary text-white px-6 py-2 rounded-lg shadow-md hover:bg-purple-700 transition">
             Explore More
           </button>
         </div>
