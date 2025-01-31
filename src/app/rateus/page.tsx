@@ -1,11 +1,12 @@
-import ContactUs from '@/components/navBar/ContactUs'
 import Navbar from '@/components/navBar/Navbar'
+import RateUs from '@/components/navBar/RateUs'
 import React from 'react'
 
 function page() {
   return (
     <div>
-        <Navbar/><ContactUs/></div>
+        <Navbar/>
+        <RateUs/></div>
   )
 }
 

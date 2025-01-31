@@ -7,14 +7,9 @@ import jobImage from "../../../public/job.png";
 import register1 from "../../../public/register-1.png"
 import { FaSearch, FaMapMarkerAlt } from "react-icons/fa";
 import { FaUserPlus, FaUpload, FaCheckCircle } from "react-icons/fa";
-
+import { FaArrowLeft, FaArrowRight } from "react-icons/fa";
 import goup from "../../../public/landingPage-group-discussion.png"
 import landingTop from "../../../public/landingpage-group.jpg"
-
-import "swiper/css";
-import "swiper/css/pagination";
-import Testimonials from "./Testimonial";
-
 
 function LandingPage() {
 
@@ -26,72 +21,108 @@ const router=useRouter()
     { title: "Apply job", desc: "Nam sodales purus.", icon: <FaCheckCircle /> },
   ];
 
-  
+  const testimonials = [
+    {
+      name: "Robert Fox",
+      role: "UI/UX Designer",
+      text: "Ut ullamcorper hendrerit tempor. Aliquam in rutrum dui. Maecenas at placerat metus, in faucibus est.",
+      image: "https://randomuser.me/api/portraits/men/32.jpg"
+    },
+    {
+      name: "Bessie Cooper",
+      role: "Creative Director",
+      text: "Mauris eget lorem odio. Mauris convallis justo in molestie metus aliquam lacinia.",
+      image: "https://randomuser.me/api/portraits/women/44.jpg"
+    },
+    {
+      name: "Jane Cooper",
+      role: "Photographer",
+      text: "Class aptent taciti sociosqu ad litora torquent per conubia nostra, per inceptos himenaeos.",
+      image: "https://randomuser.me/api/portraits/women/12.jpg"
+    },
+    {
+      name: "Jane Cooper",
+      role: "Photographer",
+      text: "Class aptent taciti sociosqu ad litora torquent per conubia nostra, per inceptos himenaeos.",
+      image: "https://randomuser.me/api/portraits/women/12.jpg"
+    },
+    {
+      name: "Jane Cooper",
+      role: "Photographer",
+      text: "Class aptent taciti sociosqu ad litora torquent per conubia nostra, per inceptos himenaeos.",
+      image: "https://randomuser.me/api/portraits/women/12.jpg"
+    },
+    {
+      name: "Jane Cooper",
+      role: "Photographer",
+      text: "Class aptent taciti sociosqu ad litora torquent per conubia nostra, per inceptos himenaeos.",
+      image: "https://randomuser.me/api/portraits/women/12.jpg"
+    }
+  ];
   return (
-
-  
     <div className=" w-full h-full">
-      <div className="flex flex-col md:flex-row items-center justify-center   w-full  pt-32 ">
+      <div className="flex flex-col md:flex-row items-center justify-center   w-full  pt-40 ">
+
+        <div className="w-full flex justify-between items-center space-x-20   ">
+          <div className="md:w-1/2 text-center md:text-left   ">
+            <h1 className="text-3xl md:text-5xl font-bold text-gray-900">
+              Find a job that suits <br /> your interest & skills.
+            </h1>
+            <p className="text-gray-600 text-lg">
+              Aliquam vitae turpis in diam convallis finibus in at risus. Nullam <br /> in
+              scelerisque leo, eget sollicitudin velit vestibulum.
+            </p>
+            <div className="flex items-center w-full max-w-xl bg-white shadow-md rounded-lg  border-gray-300">
+
+              <div className="flex items-center px-4 py-2 w-1/2 border-r border-gray-300">
+                <FaSearch className="text-purple-600" />
+                <input
+                  type="text"
+                  placeholder="Job title, Keyword..."
+                  className="ml-2 w-full focus:outline-none text-gray-600 placeholder-gray-400"
+                />
+              </div>
 
 
-      <div className="w-full flex flex-col-reverse md:flex-row justify-between items-center space-y-8 md:space-y-0 md:space-x-10 p-4 md:p-8">
-  {/* Left Section */}
-  <div className="w-full md:w-3/6 text-center md:text-left space-y-4 flex flex-col items-center md:items-start">
-    <h1 className="text-3xl md:text-5xl font-bold text-gray-900 leading-tight">
-      Find a job that suits <br className="hidden md:block" /> your interest & skills.
-    </h1>
-    <p className="text-gray-600 text-lg">
-      Aliquam vitae turpis in diam convallis finibus in at risus. Nullam <br className="hidden md:block" /> 
-      in scelerisque leo, eget sollicitudin velit vestibulum.
-    </p>
+              <div className="flex items-center px-4 py-2 w-1/2">
+                <FaMapMarkerAlt className="text-purple-600" />
+                <input
+                  type="text"
+                  placeholder="Your Location"
+                  className="ml-2 w-full focus:outline-none text-gray-600 placeholder-gray-400"
+                />
+              </div>
 
-    {/* Search Bar */}
-    <div className="flex flex-col sm:flex-row items-center w-full max-w-xl bg-white shadow-md rounded-lg border border-gray-300 overflow-hidden">
-      {/* Job Search Input */}
-      <div className="flex items-center px-4 py-2 w-full sm:w-1/2 border-b sm:border-b-0 sm:border-r border-gray-300">
-        <FaSearch className="text-purple-600" />
-        <input
-          type="text"
-          placeholder="Job title, Keyword..."
-          className="ml-2 w-full focus:outline-none text-gray-600 placeholder-gray-400"
-        />
+
+              <button className="bg-purple-600 text-white px-6 py-3 font-semibold">
+                Find Job
+              </button>
+            </div>
+
+          </div>
+
+
+
+
+
+
+
+
+          <div className="md:w-1/2 flex justify-center ">
+            <Image
+              src={landingTop}
+              alt="Landing Page Illustration"
+              width={500}
+              height={300}
+              className="object-cover"
+            />
+          </div>
+        </div>
+
+
       </div>
 
-      {/* Location Input */}
-      <div className="flex items-center px-4 py-2 w-full sm:w-1/2">
-        <FaMapMarkerAlt className="text-purple-600" />
-        <input
-          type="text"
-          placeholder="Your Location"
-          className="ml-2 w-full focus:outline-none text-gray-600 placeholder-gray-400"
-        />
-      </div>
-    </div>
-
-    {/* Button */}
-    <button className="bg-purple-600 text-white px-6 py-3 font-semibold w-full sm:w-auto mt-4 sm:mt-0">
-      Find Job
-    </button>
-  </div>
-
-  {/* Right Section - Image */}
-  <div className="w-full md:w-1/2 flex justify-center">
-    <Image
-      src={landingTop}
-      alt="Landing Page Illustration"
-      width={500}
-      height={300}
-      className="object-cover max-w-full"
-    />
-  </div>
-</div>
-
-        
-
-
-      </div>
-
-      <div className="flex flex-wrap justify-center gap-4 p-4 mt-16">
+      <div className="flex flex-wrap justify-center gap-4 p-4">
 
         <div className="flex h-20  items-center border border-black w-full sm:w-60 p-4 rounded-lg shadow-md">
           <Image
@@ -209,9 +240,26 @@ const router=useRouter()
     </div>
 </div>
 
-              <div className="relative mt-10">
-              <Testimonials/>
+<div className="bg-white py-10 px-5 mt-28 text-center relative">
+      <div className="flex justify-center gap-5 overflow-hidden">
+        {testimonials.map((testimonial, index) => (
+          <div key={index} className="bg-white shadow-lg p-5 rounded-lg max-w-sm">
+            <div className="text-yellow-500 text-xl mb-2">★★★★★</div>
+            <p className="text-gray-700 italic">{testimonial.text}</p>
+            <div className="flex items-center mt-4">
+              <img src={testimonial.image} alt={testimonial.name} className="w-10 h-10 rounded-full mr-3" />
+              <div>
+                <h3 className="font-semibold text-lg">{testimonial.name}</h3>
+                <p className="text-gray-500 text-sm">{testimonial.role}</p>
               </div>
+            </div>
+          </div>
+        ))}
+      </div>
+      <div className="absolute top-1/2 left-5 text-gray-400 cursor-pointer"><FaArrowLeft /></div>
+      <div className="absolute top-1/2 right-5 text-gray-400 cursor-pointer"><FaArrowRight /></div>
+    </div>
+
     <div className="grid grid-cols-1 md:grid-cols-2 gap-5 px-10 py-10">
       {/* Candidate Section */}
       <div className="bg-gray-200 p-6 rounded-lg flex flex-col md:flex-row items-center justify-between">
