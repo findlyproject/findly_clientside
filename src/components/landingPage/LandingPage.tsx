@@ -2,7 +2,7 @@
 
 import React from "react";
 import Image from "next/image";
-
+import { useRouter } from "next/navigation";
 import jobImage from "../../../public/job.png";
 import register1 from "../../../public/register-1.png"
 import { FaSearch, FaMapMarkerAlt } from "react-icons/fa";
@@ -18,7 +18,7 @@ import Testimonials from "./Testimonial";
 
 function LandingPage() {
 
-
+const router=useRouter()
   const steps = [
     { title: "Create account", desc: "Aliquam facilisis egestas sapien.", icon: <FaUserPlus /> },
     { title: "Upload CV/Resume", desc: "Curabitur sit amet maximus ligula.", icon: <FaUpload /> },
@@ -209,34 +209,38 @@ function LandingPage() {
         </div>
       </div>
 
-      <div className="relative mt-10">
-      <Testimonials />
-      </div>
-      <div className="grid grid-cols-1 md:grid-cols-2 gap-5 px-10 py-10">
-
-        <div className="bg-gray-200 p-6 rounded-lg flex flex-col md:flex-row items-center justify-between">
-          <div className="md:w-1/2">
-            <h2 className="text-2xl font-bold">Become a Candidate</h2>
-            <p className="text-gray-600">Lorem ipsum dolor sit amet, consectetur adipiscing elit.</p>
-            <button className="bg-blue-600 text-white px-5 py-2 rounded-full mt-4">Register Now</button>
-          </div>
-          <div className="md:w-1/2">
-            <Image src={register1} alt="Register" width={300} height={200} />
-
-          </div>
+              <div className="relative mt-10">
+              <Testimonials/>
+              </div>
+    <div className="grid grid-cols-1 md:grid-cols-2 gap-5 px-10 py-10">
+      {/* Candidate Section */}
+      <div className="bg-gray-200 p-6 rounded-lg flex flex-col md:flex-row items-center justify-between">
+        <div className="md:w-1/2">
+          <h2 className="text-2xl font-bold">Become a Candidate</h2>
+          <p className="text-gray-600">Lorem ipsum dolor sit amet, consectetur adipiscing elit.</p>
+          <button 
+          onClick={()=>router.push(`/register`)}
+          className="bg-blue-600 text-white px-5 py-2 rounded-full mt-4">Register Now</button>
         </div>
-
-        <div className="bg-purple-700 text-white p-6 rounded-lg flex flex-col md:flex-row items-center justify-between relative">
-          <div className="md:w-1/2">
-            <h2 className="text-2xl font-bold">Become an Employer</h2>
-            <p>Cras in massa pellentesque, mollis ligula non, luctus dui.</p>
-            <button className="bg-white text-blue-600 px-5 py-2 rounded-full mt-4">Register Now</button>
-          </div>
-          <div className="md:w-1/2 flex justify-end">
-            <Image src={register1} alt="Register" width={300} height={200} />
-          </div>
+        <div className="md:w-1/2">
+        <Image src={register1} alt="Register" width={300} height={200} />
+        
         </div>
       </div>
+
+      {/* Employer Section */}
+      <div className="bg-purple-700 text-white p-6 rounded-lg flex flex-col md:flex-row items-center justify-between relative">
+        <div className="md:w-1/2">
+          <h2 className="text-2xl font-bold">Become an Employer</h2>
+          <p>Cras in massa pellentesque, mollis ligula non, luctus dui.</p>
+          <button className="bg-white text-blue-600 px-5 py-2 rounded-full mt-4"
+          >Register Now</button>
+        </div>
+        <div className="md:w-1/2 flex justify-end">
+     <Image src={register1} alt="Register" width={300} height={200} />
+        </div>
+      </div>
+    </div>
     </div>
 
 

@@ -7,14 +7,14 @@ import Beforlogin from "./Navbiforlogin";
 
 export const navigation = [
   { name: "Home", href: "/" },
-  { name: "About", href: "/login" },
+  { name: "About", href: "/about" },
   { name: "Services", href: "/" },
-  { name: "Contact", href: "/" },
+  { name: "Contact", href: "/contact" },
   
 ];
 
 export default function Navbar() {
-  const [activeuser, setactivuser] = useState(false);
+  const [activeuser, setactivuser] = useState(true);
 
   return (
     <nav className="bg-white border border-b-2">
@@ -56,7 +56,9 @@ export default function Navbar() {
          
           
         </div>
+
       </div>
+
     </nav>
   );
 }

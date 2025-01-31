@@ -1,13 +1,10 @@
-import ViewProfile from '@/components/navBar/ViewProfile'
+import Faqs from '@/components/contactSupport/Faqs'
 import React from 'react'
 
 const page = () => {
   return (
     <div>
-    
-      <ViewProfile/>
-
-      
+      <Faqs/>
     </div>
   )
 }
