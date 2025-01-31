@@ -1,64 +1,101 @@
 
 "use client";
-import { useState } from "react";
-import { FaPlus, FaMinus } from "react-icons/fa";
 
+import React, { useState } from "react";
+import { ChevronDown } from "lucide-react";
 
-interface FAQItem{
-    question:string,
-    answer:string
-
+interface FAQItem {
+  question: string;
+  answer: string;
 }
-const Faqs = () => {
-    
 
-const [openIndex, setOpenIndex] = useState<number|null>(null);
-const faqs :FAQItem[] = [
-    {
-      question: "How can I reset my password?",
-      answer:
-        "To reset your password, go to the login page and click on the 'Forgot password' link. Enter the email address associated with your account, and you will receive an email with instructions on how to reset your password. Follow the instructions in the email to create a new password.",
-    },
-    { question: "Which is a safe investment?", answer: "Safe investments include bonds, index funds, and diversified portfolios." },
-    { question: "Which is better, short term or long term?", answer: "It depends on your financial goals and risk tolerance." },
-    { question: "How many percent return in long term?", answer: "Long-term investments generally yield 7-10% annually on average." },
-    { question: "How many percent return in short term?", answer: "Short-term returns vary widely and depend on market conditions." },
-    { question: "How do I delete my account?", answer: "To delete your account, go to settings and follow the account deletion process." },
-  ];
+const faqs: FAQItem[] = [
+  {
+    question: "1. How do I create an account on Findly?",
+    answer:
+      "You can create an account by clicking on the Sign Up button, filling in your details, and verifying your email. Once registered, you can upload your resume and start applying for jobs.",
+  },
+  {
+    question: "2. Is it free to apply for jobs?",
+    answer:
+      "Yes! Job seekers can browse and apply for jobs for free on Findly",
+  },
+  {
+    question: "3. How can I upload my resume?",
+    answer:
+      "After logging in, go to Profile > Upload Resume, and choose a PDF or DOC file to upload.",
+  },
+  {
+    question: "4. How do I track my job applications?",
+    answer:
+      "You can track your applications by visiting the My Applications section in your dashboard. You’ll see the status of each job you applied for.",
+  },
+];
+
+const FAQSection: React.FC = () => {
+  const [openIndex, setOpenIndex] = useState<number | null>(null);
+
+  const toggleAccordion = (index: number) => {
+    setOpenIndex(openIndex === index ? null : index);
+  };
+
   return (
-<div className="max-w-4xl mx-auto p-6 h-full bg-white shadow-md rounded-lg">
-      <h3 className="text-indigo-600 text-sm font-semibold">MOST ASKED QUESTIONS</h3>
-      <h2 className="text-3xl font-bold mb-4">FAQs</h2>
-      <p className="text-gray-600 mb-6">
-        Trusted in more than 100 countries and 5 million customers. Transact easily and quickly with just one click.
-      </p>
-      <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-        <div>
-          <img
-            src="https://static.vecteezy.com/system/resources/previews/002/779/438/non_2x/website-faq-section-user-help-desk-customer-support-concept-illustration-flat-vector.jpg"
-            alt="Business woman"
-            className="rounded-lg"
-          />
-        </div>
-        <div>
-          {faqs.map((faq, index) => (
-            <div key={index} className="border-b py-3">
-              <button
-                className="w-full flex justify-between items-center text-left font-medium text-gray-800"
-                onClick={() => setOpenIndex(openIndex === index ? null : index)}
-              >
-                {faq.question}
-                {openIndex === index ? <FaMinus /> : <FaPlus />}
-              </button>
-              {openIndex === index && (
-                <p className="mt-2 text-gray-600">{faq.answer}</p>
-              )}
+    <section className="py-">
+      <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+        <div className="flex flex-col h-screen justify-center items-center gap-x-16 gap-y-5 xl:gap-28 lg:flex-row lg:justify-between max-lg:max-w-2xl mx-auto max-w-full">
+        
+          <div className="w-full lg:w-1/2">
+            <img
+              src="https://pagedone.io/asset/uploads/1696230182.png"
+              alt="FAQ section"
+              className="w-96 rounded-xl object-cover"
+            />
+          </div>
+
+         
+          <div className="w-full lg:w-1/2">
+            <div className="lg:max-w-xl">
+              <div className="mb-6 lg:mb-16">
+                <h6 className="text-lg text-center font-medium text-primarymb-2 lg:text-left">
+                  FAQs
+                </h6>
+                <h2 className="text-4xl text-center font-bold text-gray-900 leading-[3.25rem] mb-5 lg:text-left">
+                  Looking for answers?
+                </h2>
+              </div>
+
+       
+              <div className="space-y-6">
+                {faqs.map((faq, index) => (
+                  <div
+                    key={index}
+                    className="border-b border-gray-200 pb-4"
+                  >
+                    <button
+                      onClick={() => toggleAccordion(index)}
+                      className="flex justify-between items-center w-full text-left text-xl font-medium text-gray-700 hover:text-primary transition-all duration-300"
+                    >
+                      {faq.question}
+                      <ChevronDown
+                        size={22}
+                        className={`transition-transform ${
+                          openIndex === index ? "rotate-180 text-primary" : ""
+                        }`}
+                      />
+                    </button>
+                    {openIndex === index && (
+                      <p className="text-base text-gray-600 mt-2">{faq.answer}</p>
+                    )}
+                  </div>
+                ))}
+              </div>
+            
             </div>
-          ))}
+          </div>
         </div>
       </div>
-    </div>
-  )
-}
+    </section>
+  );
+};
 
-export default Faqs
+export default FAQSection;

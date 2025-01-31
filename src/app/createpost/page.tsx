@@ -1,11 +1,14 @@
+import PricingPlans from '@/components/common/Premium'
 import ContactUs from '@/components/navBar/ContactUs'
-import Navbar from '@/components/navBar/Navbar'
+import CreatePost from '@/components/post/CreatePost'
 import React from 'react'
 
 function page() {
   return (
+    <>
     <div>
-        <Navbar/><ContactUs/></div>
+        
+    </div></>
   )
 }
 
