@@ -7,9 +7,9 @@ import Beforlogin from "./Navbiforlogin";
 
 export const navigation = [
   { name: "Home", href: "/" },
-  { name: "About", href: "/login" },
+  { name: "About", href: "/about" },
   { name: "Services", href: "/" },
-  { name: "Contact", href: "/" },
+  { name: "Contact", href: "/contact" },
   
 ];
 

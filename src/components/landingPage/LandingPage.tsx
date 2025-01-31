@@ -2,7 +2,7 @@
 
 import React from "react";
 import Image from "next/image";
-
+import { useRouter } from "next/navigation";
 import jobImage from "../../../public/job.png";
 import register1 from "../../../public/register-1.png"
 import { FaSearch, FaMapMarkerAlt } from "react-icons/fa";
@@ -18,7 +18,7 @@ import Testimonials from "./Testimonial";
 
 function LandingPage() {
 
-
+const router=useRouter()
   const steps = [
     { title: "Create account", desc: "Aliquam facilisis egestas sapien.", icon: <FaUserPlus /> },
     { title: "Upload CV/Resume", desc: "Curabitur sit amet maximus ligula.", icon: <FaUpload /> },
@@ -218,7 +218,9 @@ function LandingPage() {
         <div className="md:w-1/2">
           <h2 className="text-2xl font-bold">Become a Candidate</h2>
           <p className="text-gray-600">Lorem ipsum dolor sit amet, consectetur adipiscing elit.</p>
-          <button className="bg-blue-600 text-white px-5 py-2 rounded-full mt-4">Register Now</button>
+          <button 
+          onClick={()=>router.push(`/register`)}
+          className="bg-blue-600 text-white px-5 py-2 rounded-full mt-4">Register Now</button>
         </div>
         <div className="md:w-1/2">
         <Image src={register1} alt="Register" width={300} height={200} />
@@ -231,7 +233,8 @@ function LandingPage() {
         <div className="md:w-1/2">
           <h2 className="text-2xl font-bold">Become an Employer</h2>
           <p>Cras in massa pellentesque, mollis ligula non, luctus dui.</p>
-          <button className="bg-white text-blue-600 px-5 py-2 rounded-full mt-4">Register Now</button>
+          <button className="bg-white text-blue-600 px-5 py-2 rounded-full mt-4"
+          >Register Now</button>
         </div>
         <div className="md:w-1/2 flex justify-end">
      <Image src={register1} alt="Register" width={300} height={200} />

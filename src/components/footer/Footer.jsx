@@ -6,7 +6,7 @@ function Footer() {
       <footer className="bg-gray-900 text-white py-10">
       <div className="max-w-7xl mx-auto px-6 md:px-12">
    
-        <div className="grid grid-cols-1 md:grid-cols-4 gap-6 border-t border-gray-700 pt-8">
+        <div className="grid grid-cols-1 md:grid-cols-4 gap-6  pt-8">
           <div>
             <h4 className="text-lg font-semibold">Findly</h4>
             <p className="text-gray-400 mt-2">Call now: <strong>(319) 555-0115</strong></p>
