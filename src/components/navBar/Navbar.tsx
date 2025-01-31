@@ -14,7 +14,7 @@ export const navigation = [
 ];
 
 export default function Navbar() {
-  const [activeuser, setactivuser] = useState(false);
+  const [activeuser, setactivuser] = useState(true);
 
   return (
     <nav className="bg-white border border-b-2">
@@ -56,7 +56,9 @@ export default function Navbar() {
          
           
         </div>
+
       </div>
+
     </nav>
   );
 }
