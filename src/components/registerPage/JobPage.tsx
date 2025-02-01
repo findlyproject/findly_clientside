@@ -14,18 +14,12 @@ export default function JobPage() {
   const [JobTitles, setJobTitles] = useState<string[]>([]);
   const [JobLocations, setJobLocations] = useState<string[]>([]);
     const router = useRouter();
-      // const handleContinue = (e: React.MouseEvent<HTMLButtonElement>) => {
-      //   e.preventDefault();
-      //   dispatch(setjobLocations(JobLocations))
-      //   dispatch(setjobTitles(JobTitles))
-       
-        
-      // };
+     
 
       useEffect(() => {
         dispatch(setjobLocations(JobLocations));
         dispatch(setjobTitles(JobTitles));
-      }, [dispatch, JobTitles, JobLocations]); // ✅ Now updates Redux state whenever inputs change
+      }, [dispatch, JobTitles, JobLocations]); 
       
       const handleSubmit=async(e:React.FormEvent<HTMLFormElement>)=>{
         e.preventDefault()
@@ -59,7 +53,7 @@ export default function JobPage() {
               placeholder="Ex.Sales Manager"
               value={JobTitles}
               onChange={(e)=>setJobTitles(e.target.value.split(","))}
-              className="px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-purple-600"
+              className="px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-primary"
             />
           </div>
 
@@ -72,15 +66,15 @@ export default function JobPage() {
               placeholder="Location"
               value={JobLocations}
               onChange={(e)=>setJobLocations(e.target.value.split(","))}
-              className="px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-purple-600"
+              className="px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-primary"
             />
           </div>
 
           <div className="w-full flex justify-center">
             <button
             type="submit"
-              className="w-1/2 py-2 bg-purple-700 text-white font-semibold rounded-full hover:bg-purple-700 focus:outline-none focus:ring-2 focus:ring-purple-600"
-              // onClick={handleContinue}
+              className="w-1/2 py-2 bg-primary text-white font-semibold rounded-full hover:bg-primary focus:outline-none focus:ring-2 focus:ring-primary"
+             
             >
               Register
             </button>
