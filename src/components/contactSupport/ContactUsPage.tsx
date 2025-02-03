@@ -60,7 +60,7 @@ export default function ContactUsPage() {
 
       
       <div className="w-full md:w-1/2 bg-white shadow-lg rounded-lg p-6 md:p-10 flex flex-col justify-center">
-        <h2 className="text-xl md:text-2xl font-bold text-purple-700">Send Us A Email</h2>
+        <h2 className="text-xl md:text-2xl font-bold text-primary">Send Us A Email</h2>
         <form  onSubmit={handleSend}  className="mt-4 space-y-4">
           
           <input 
@@ -90,7 +90,7 @@ export default function ContactUsPage() {
         )}
           <button 
           type="submit" 
-          className="w-full p-3 bg-purple-600 text-white rounded-lg hover:bg-purple-700"
+          className="w-full p-3 bg-primary text-white rounded-lg hover:bg-purple-700"
           
           >
             Send

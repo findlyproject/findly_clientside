@@ -1,4 +1,4 @@
-// import LandingPage from '@/components/landingPage/LandingPage'
+
 import LandingPage from '@/components/landingPage/LandingPage'
 import Navbar from '@/components/navBar/Navbar'
 
@@ -9,6 +9,7 @@ const LandingHomePage = () => {
     <div>
       <Navbar/>
       <LandingPage/>
+      
      
     </div>
   )

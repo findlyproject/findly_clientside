@@ -7,7 +7,6 @@ import jobImage from "../../../public/job.png";
 import register1 from "../../../public/register-1.png"
 import { FaSearch, FaMapMarkerAlt } from "react-icons/fa";
 import { FaUserPlus, FaUpload, FaCheckCircle } from "react-icons/fa";
-
 import goup from "../../../public/landingPage-group-discussion.png"
 import landingTop from "../../../public/landingpage-group.jpg"
 import Testimonials from "./Testimonial";
@@ -23,7 +22,7 @@ function LandingPage() {
   ];
 
   return (
-    <div className=" w-full h-full">
+    <div className="w-full h-full">
       <div className="flex flex-col md:flex-row items-center justify-center   w-full  pt-20 ">
 
 
