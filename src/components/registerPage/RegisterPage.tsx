@@ -20,6 +20,14 @@ const router=useRouter()
     
   return (
     <div className="flex justify-center items-center min-h-screen  py-8 px-4">
+     <div className=" flex flex-row absolute top-6 left-4">
+     <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 16 16" fill="currentColor" className="size-7">
+  <path fill-rule="evenodd" d="M9.78 4.22a.75.75 0 0 1 0 1.06L7.06 8l2.72 2.72a.75.75 0 1 1-1.06 1.06L5.47 8.53a.75.75 0 0 1 0-1.06l3.25-3.25a.75.75 0 0 1 1.06 0Z" clip-rule="evenodd" />
+</svg>
+
+
+     </div>
+
       <div className="w-full max-w-sm  p-8 rounded-lg shadow-lg">
         <h1 className="text-3xl font-semibold  text-gray-800 mb-4">
           Create Account
@@ -39,7 +47,7 @@ const router=useRouter()
               placeholder=" Email"
               value={Email}
               onChange={(e)=>setLocalemail(e.target.value)}
-              className="w-full px-4 py-2 mt-1 border border-gray-300 rounded-full focus:outline-none focus:ring-2 focus:ring-purple-600"
+              className="w-full px-4 py-2 mt-1 border border-gray-300 rounded-full focus:outline-none focus:ring-2 focus:ring-primary"
             />
           </div>
 
@@ -53,7 +61,7 @@ const router=useRouter()
               placeholder=" Password"
               value={Password}
               onChange={(e)=>setLocalpassword(e.target.value)}
-              className="w-full px-4 py-2 mt-1 border border-gray-300 rounded-full focus:outline-none focus:ring-2 focus:ring-purple-600"
+              className="w-full px-4 py-2 mt-1 border border-gray-300 rounded-full focus:outline-none focus:ring-2 focus:ring-primary"
             />
           </div>
 
@@ -67,11 +75,11 @@ const router=useRouter()
               value={conformpassword}
               onChange={(e)=>setConformPassword(e.target.value)}
               placeholder="Confirm password"
-              className="w-full px-4 py-2 mt-1 border border-gray-300 rounded-full focus:outline-none focus:ring-2 focus:ring-purple-600"
+              className="w-full px-4 py-2 mt-1 border border-gray-300 rounded-full focus:outline-none focus:ring-2 focus:ring-primary"
             />
           </div>
 
-          <button className="w-full py-2 bg-purple-700 text-white font-semibold rounded-full mt-4 hover:bg-purple-700 focus:outline-none focus:ring-2 focus:ring-purple-600"
+          <button className="w-full py-2 bg-primary text-white font-semibold rounded-full mt-4  focus:outline-none focus:ring-2 focus:ring-primary"
           onClick={handleContinue}>
             Continue
           </button>
