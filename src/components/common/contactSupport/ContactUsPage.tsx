@@ -1,5 +1,5 @@
 "use client";
-import api from "@/axiosInstance/api";
+import api from "@/utils/api";
 import { useState } from "react";
 export default function ContactUsPage() {
   const [email, setEmail] = useState("");

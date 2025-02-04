@@ -4,7 +4,7 @@ import React, { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
 import { useAppDispatch, useAppSelector } from "@/lib/store/hooks";
 import { setjobLocations, setjobTitles } from "@/lib/store/features/registerSlice";
-import api from "@/axiosInstance/api";
+import api from "@/utils/api";
 
 export default function JobPage() {
   const formData=useAppSelector((state)=>state.register)
