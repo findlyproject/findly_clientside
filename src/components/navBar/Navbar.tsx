@@ -1,11 +1,10 @@
 "use client";
 
-import { useState } from "react";
 import Link from "next/link";
 import AfterLogin from "./Afterlogin";
 import Beforlogin from "./Navbiforlogin";
 import Image from "next/image";
-import logo from '../../../public/assets/findlylogo.png'
+import { useAppSelector } from "@/lib/store/hooks";
 
 export const navigation = [
   { name: "Home", href: "/" },
@@ -13,9 +12,10 @@ export const navigation = [
   { name: "RateUs", href: "/rateus" },      
   { name: "Contact", href: "/contactus" },
 ];
-
 export default function Navbar() {
-  const [activeuser, setactivuser] = useState(true);
+  const {activeuser} = useAppSelector((state) => state.login)
+  console.log("activeuser",activeuser);
+  
 
   return (
     <nav className="bg-white border border-b-2">
@@ -23,12 +23,20 @@ export default function Navbar() {
         <div className="flex justify-between h-16 items-center">
           <div className="flex items-center">
             <Link href="/">
-              <Image
-                src={logo}
-                alt="Logo"
-                className="h-10 w-auto cursor-pointer"
-              />
+<Image 
+  src="/ascites/findlylogo.png" 
+  alt="Logo" 
+  width={150} 
+  height={50} 
+/>
             </Link>
+            
+{/* <div className="w-full h-10 bg-slate-300">
+
+</div> */}
+            <div className="w-52 bg-slate-500">
+               
+            </div>
           </div>
 
          
