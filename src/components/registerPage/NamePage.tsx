@@ -4,18 +4,37 @@ import { useRouter } from "next/navigation";
 import { useAppDispatch, useAppSelector } from "@/lib/store/hooks";
 import { setfirstName, setlastName } from "@/lib/store/features/registerSlice";
 export default function NamePage() {
-  const dispatch=useAppDispatch()
-  const [Firstname,setLocalfirstname]=useState("")
-  const[Lastname,setLocallastname]=useState("")
-  const data=useAppSelector((state)=>state.register)
-  console.log("data",data);
-  
+  const dispatch = useAppDispatch();
+  const [Firstname, setLocalfirstname] = useState("");
+
+  const [Lastname, setLocallastname] = useState("");
+  const data = useAppSelector((state) => state.register);
+  console.log("data", data);
+  const [firstnameerror, setfirstnameError] = useState("");
+  const [lastnameerror, setlastnameError] = useState("");
   const router = useRouter();
+
   const handleContinue = (e: React.MouseEvent<HTMLButtonElement>) => {
     e.preventDefault();
-    dispatch(setfirstName(Firstname))
-    dispatch(setlastName(Lastname))
-    router.push(`/register/namepage/educationpage`);
+
+    setfirstnameError("");
+    setlastnameError("");
+    let isValid = true;
+    if (!Firstname) {
+      setfirstnameError("Firstname is required");
+      isValid = false;
+    }
+
+    if (!Lastname) {
+      setlastnameError("Lastname is required");
+      isValid = false;
+    }
+
+    if (isValid) {
+      dispatch(setfirstName(Firstname));
+      dispatch(setlastName(Lastname));
+      router.push(`/register/namepage/educationpage`);
+    }
   };
   return (
     <div className="flex justify-center items-center min-h-screen  px-4">
@@ -32,9 +51,13 @@ export default function NamePage() {
               type="text"
               placeholder="First Name"
               value={Firstname}
-              onChange={(e)=>setLocalfirstname(e.target.value)}
+              onFocus={() => setfirstnameError("")}
+              onChange={(e) => setLocalfirstname(e.target.value)}
               className="px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-primary"
             />
+            {firstnameerror && (
+              <span className="text-red-500">{firstnameerror}</span>
+            )}
           </div>
 
           <div className="flex flex-col w-1/2">
@@ -43,9 +66,13 @@ export default function NamePage() {
               type="text"
               placeholder="Last Name"
               value={Lastname}
-              onChange={(e)=>setLocallastname(e.target.value)}
+              onFocus={() => setlastnameError("")}
+              onChange={(e) => setLocallastname(e.target.value)}
               className="px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-primary"
             />
+            {lastnameerror && (
+              <span className="text-red-500">{lastnameerror}</span>
+            )}
           </div>
 
           <div className="w-full flex justify-center">

@@ -13,6 +13,10 @@ export default function JobPage() {
   const dispatch=useAppDispatch()
   const [JobTitles, setJobTitles] = useState<string[]>([]);
   const [JobLocations, setJobLocations] = useState<string[]>([]);
+  const[titlesError,settitlesError]=useState("")
+  const[joblocationError,setjoblocationError]=useState("")
+  console.log("titlesError",titlesError);
+  
     const router = useRouter();
      
 
@@ -21,20 +25,41 @@ export default function JobPage() {
         dispatch(setjobTitles(JobTitles));
       }, [dispatch, JobTitles, JobLocations]); 
       
+
+const validateForm=()=>{
+  let isValid=true
+  if(JobTitles.length===0){
+    settitlesError('jobtitle is required')
+    isValid=false
+  }
+
+
+  if(JobLocations.length===0){
+    setjoblocationError("job location is required")
+    isValid=false
+  }
+  return isValid
+}
+
       const handleSubmit=async(e:React.FormEvent<HTMLFormElement>)=>{
         e.preventDefault()
-        try {
-          const response=await api.post(`/api/user/registration`,{ ...formData, 
-            jobTitles: JobTitles, 
-            jobLocations: JobLocations })
-          console.log("response",response);
-          
-         router.push(`/`);
-          
-        } catch (error) {
-          console.error(error);
-          
-        }
+
+if(validateForm()){
+  try {
+    const response=await api.post(`/api/user/registration`,{ ...formData, 
+      jobTitles: JobTitles, 
+      jobLocations: JobLocations })
+    console.log("response",response);
+    
+   router.push(`/home`);
+    
+  } catch (error) {
+    console.error(error);
+    
+  }
+}
+
+      
       }
 
   return (
@@ -52,9 +77,13 @@ export default function JobPage() {
               type="text"
               placeholder="Ex.Sales Manager"
               value={JobTitles}
+              onFocus={()=>settitlesError("")}
               onChange={(e)=>setJobTitles(e.target.value.split(","))}
               className="px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-primary"
             />
+            {titlesError && (
+              <span className="text-red-500">{titlesError}</span>
+            )}
           </div>
 
           <div className="flex flex-col w-1/2">
@@ -65,9 +94,13 @@ export default function JobPage() {
               type="text"
               placeholder="Location"
               value={JobLocations}
+              onFocus={()=>setjoblocationError("")}
               onChange={(e)=>setJobLocations(e.target.value.split(","))}
               className="px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-primary"
             />
+            {joblocationError && (
+              <span className="text-red-500">{joblocationError}</span>
+            )}
           </div>
 
           <div className="w-full flex justify-center">
