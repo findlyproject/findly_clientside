@@ -1,4 +1,4 @@
-import ContactUsPage from '@/components/contactSupport/ContactUsPage'
+import ContactUsPage from '@/components/common/contactSupport/ContactUsPage'
 import Navbar from '@/components/navBar/Navbar'
 import React from 'react'
 

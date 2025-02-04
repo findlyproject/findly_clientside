@@ -1,4 +1,4 @@
-import Loginpage from '@/components/loginPage/Loginpage'
+import Loginpage from '@/components/user/Loginpage'
 import React from 'react'
 
 function page() {

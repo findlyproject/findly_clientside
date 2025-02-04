@@ -160,7 +160,7 @@ import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
 import { setEmail, setPassword } from "@/lib/store/features/registerSlice";
 import { useAppDispatch } from "@/lib/store/hooks";
-import api from "@/axiosInstance/api";
+import api from "@/utils/api";
 
 export default function RegisterPage() {
   const dispatch = useAppDispatch();
