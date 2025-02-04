@@ -4,6 +4,8 @@ import { useState } from "react";
 import Link from "next/link";
 import AfterLogin from "./Afterlogin";
 import Beforlogin from "./Navbiforlogin";
+import Image from "next/image";
+import logo from '../../../public/assets/findlylogo.png'
 
 export const navigation = [
   { name: "Home", href: "/" },
@@ -21,8 +23,8 @@ export default function Navbar() {
         <div className="flex justify-between h-16 items-center">
           <div className="flex items-center">
             <Link href="/">
-              <img
-                src="/ascites/findlylogo.png"
+              <Image
+                src={logo}
                 alt="Logo"
                 className="h-10 w-auto cursor-pointer"
               />

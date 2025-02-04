@@ -25,7 +25,7 @@ export default function LoginPage() {
         {/* Left Section */}
         <div className="w-full  lg:w-1/2 flex flex-col items-center justify-center p-6 bg-transparent">
           <img
-        src='/ascites/findlylogo.png'
+        src='/assets/findlylogo.png'
             alt="Logo"
             className="w-1/2 h-1/2 cursor-pointer"
           />
