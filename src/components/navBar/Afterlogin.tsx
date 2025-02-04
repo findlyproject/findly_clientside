@@ -1,9 +1,27 @@
+
+import { setUserDetailes } from "@/lib/store/features/userSlice";
+import { useAppDispatch, useAppSelector } from "@/lib/store/hooks";
+import api from "@/utils/api";
 import { Menu, Transition } from "@headlessui/react";
 import { BellIcon } from "@heroicons/react/24/outline";
 import Link from "next/link";
+import { useRouter } from "next/navigation";
 import React from "react";
 
+
 function AfterLogin() {
+  const router=useRouter()
+const dispatch=useAppDispatch()
+const userdetailes=useAppSelector((state)=>state.user.details)
+console.log("userdetailes",userdetailes);
+
+  const handleViewProfile=async()=>{
+    const response=await api.get(`/api/user/currentuserdetails`)
+    console.log("response of user profile view",response);
+    dispatch(setUserDetailes(response.data.currentUserDetails))
+    router.push("/ownprofile")
+    
+  }
   return (
     <div className="flex">
       <Link href="/notification">
@@ -29,14 +47,15 @@ function AfterLogin() {
           <Menu.Items className="absolute right-0 mt-2 w-48 bg-white rounded-md shadow-lg py-1 ring-1 ring-black/5">
             <Menu.Item>
               {({ active }) => (
-                <Link
-                  href="/ownprofile"
+                <button
+                onClick={handleViewProfile}
+                  
                   className={`block px-4 py-2 text-sm hover:bg-gray-300 ${
                     active ? "bg-gray-300" : ""
                   }`}
                 >
                   Your Profile
-                </Link>
+                </button>
               )}
             </Menu.Item>
             <Menu.Item>

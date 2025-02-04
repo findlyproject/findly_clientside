@@ -1,7 +1,11 @@
+"use client"
 
-
+import { useAppSelector } from "@/lib/store/hooks";
 
 export default function ViewProfile() {
+
+const user=useAppSelector((state)=>state.user.details)
+console.log("user",user);
 
 
   const institutes = [
@@ -15,6 +19,8 @@ export default function ViewProfile() {
     },
   
   ];
+
+
   return (
     <div className="max-w-4xl mx-auto bg-white shadow-lg rounded-lg overflow-hidden mt-5">
     
@@ -42,7 +48,7 @@ export default function ViewProfile() {
         </div>
         <div className=" flex flex-col md:flex-row justify-between">
   <div className="mt-12 flex flex-col items-center">
-    <h2 className="text-xl font-bold">Aslah C</h2>
+    <h2 className="text-xl font-bold"></h2>
     <p className="text-gray-600">Developer</p>
     <p className="text-gray-500 text-sm">India • 148 connections</p>
   </div>

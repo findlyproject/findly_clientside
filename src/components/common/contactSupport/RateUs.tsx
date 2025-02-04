@@ -1,10 +1,34 @@
 "use client";
 import React, { useState } from "react";
 import { Star } from "lucide-react";
+import { useRouter } from "next/navigation";
+import api from "@/utils/api";
 
 const RateUs: React.FC = () => {
-  const [rating, setRating] = useState<number | null>(3);
+  const router=useRouter()
+  const [rating, setRating] = useState<number | null>(0);
+  console.log("rating",rating);
+  
+
   const [message, setMessage] = useState("");
+  console.log("message",message);
+  const handleSubmit = async () => {
+    console.log("Submitting review:", { rating, message }); 
+    if(!rating||!message){
+      alert('fill the blanks')
+    }
+  
+    try {
+      const response = await api.post(`/api/rating/createreview`, {review:message, starsRating:rating });
+      console.log("Response rating:", response.data);
+      
+      setMessage("");  
+      setRating(null);
+    } catch (error) {
+      console.error("Error submitting review");
+    }
+  };
+  
 
   return (
     <div className="shadow-md border my-10 mx-96 w-2/4 h-1/2 rounded-lg">
@@ -52,15 +76,15 @@ const RateUs: React.FC = () => {
       <div className="flex gap-4 mt-6">
         <button
           className="border border-purple-600 text-purple-600 px-6 py-2 rounded-full hover:bg-purple-100 transition-all"
-          onClick={() => alert("Going Back!")}
+          onClick={() =>router.push(`/home`) }
         >
           Back
         </button>
         <button
           className="bg-purple-600 text-white px-6 py-2 rounded-full hover:bg-purple-700 transition-all"
-          onClick={() => alert(`Submitted!\nRating: ${rating ?? "None"}\nMessage: ${message}`)}
+          onClick={handleSubmit}
         >
-          Next Step
+          Submit
         </button>
       </div>
     </div>
