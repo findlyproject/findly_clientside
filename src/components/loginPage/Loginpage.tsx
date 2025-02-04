@@ -2,8 +2,10 @@
 import React from "react";
 import { signIn, signOut, useSession } from "next-auth/react";
 import { FcGoogle } from "react-icons/fc";
+import { useRouter } from "next/navigation";
 
 function Loginpage() {
+  const router=useRouter()
   const googlelogin = () => {
     signIn("google");
   };
@@ -51,7 +53,9 @@ function Loginpage() {
             </div>
 
             {/* Submit Button */}
-            <button className="w-full bg-blue-600 hover:bg-blue-700 transition-all text-white text-lg font-semibold py-3 rounded-full ">
+            <button 
+            onClick={()=>router.push('/home')}
+            className="w-full bg-blue-600 hover:bg-blue-700 transition-all text-white text-lg font-semibold py-3 rounded-full ">
               Submit
             </button>
             <div className="flex items-center justify-center gap-4">

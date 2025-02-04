@@ -2,12 +2,14 @@ import { configureStore } from "@reduxjs/toolkit";
 
 import themeReducer from "./features/them"
 import registerReducer from './features/registerSlice'
+import paymentReducer from "./features/paymentSlice"
 export const makeStore = () => {
     return configureStore({
      reducer:{
        
        theme:themeReducer,
-       register:registerReducer
+       register:registerReducer,
+       payment:paymentReducer
      }
     });
   };
