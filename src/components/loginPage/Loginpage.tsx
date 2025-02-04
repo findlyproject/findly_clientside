@@ -1,14 +1,42 @@
 "use client";
-import React from "react";
-import { signIn, signOut, useSession } from "next-auth/react";
+import React, { useState } from "react";
+import { signIn, signOut } from "next-auth/react";
 import { FcGoogle } from "react-icons/fc";
+import { useAppDispatch, useAppSelector } from "@/lib/store/hooks";
+import { loginUser, setActive, setEmail, setPassword } from "@/lib/store/features/loginSlice";
+import api from "@/axiosInstance/api";
+import { useRouter } from "next/navigation";
 
 function Loginpage() {
+  const router = useRouter()
+  const [state, setState] = useState({
+    email: "",
+    password: ""
+  })
+const dispatch = useAppDispatch()
+  const handilchange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setState({ ...state, [e.target.name]: e.target.value });
+  }
+
+  const handleSubmit = async (e: React.FormEvent) => {
+    e.preventDefault();
+    try {
+      const response = await api.post("/api/user/login", state)
+      console.log("response",response?.data.logeduser);
+      
+      alert("Login Successful!")
+      router.push("/home")
+      dispatch(setActive(response?.data?.logeduser))
+      localStorage.setItem("user",JSON.stringify(response?.data?.logeduser))
+    } catch (error: any) {
+      alert(error?.response.data?.message)
+    }
+
+  };
   const googlelogin = () => {
     signIn("google");
   };
-  const { data: session } = useSession();
-  console.log("session", session);
+
   return (
     <div className="flex h-screen items-center justify-center bg-gray-100">
       {/* Logo in top-left */}
@@ -27,31 +55,34 @@ function Loginpage() {
             Explore jobs and build skills
           </p>
 
-          <form className="mt-6 space-y-5">
+          <form className="mt-6 space-y-5" onSubmit={handleSubmit} >
             {/* Email Input */}
             <div>
               <label className="text-gray-700 font-medium">Email</label>
               <input
                 type="email"
+                name="email"
                 placeholder="Enter your email"
                 className="w-full p-3 rounded-full border border-gray-500 mt-1 focus:outline-blue-500"
+                onChange={handilchange}
                 required
               />
             </div>
 
-            {/* Password Input */}
             <div>
               <label className="text-gray-700 font-medium">Password</label>
               <input
                 type="password"
+                name="password"
                 placeholder="Enter your password"
                 className="w-full p-3 rounded-full border border-gray-500 mt-1 focus:outline-blue-500"
+                onChange={handilchange}
                 required
               />
             </div>
 
-            {/* Submit Button */}
-            <button className="w-full bg-blue-600 hover:bg-blue-700 transition-all text-white text-lg font-semibold py-3 rounded-full ">
+
+            <button className="w-full bg-blue-600 hover:bg-blue-700 transition-all text-white text-lg font-semibold py-3 rounded-full " type="submit">
               Submit
             </button>
             <div className="flex items-center justify-center gap-4">
@@ -71,7 +102,6 @@ function Loginpage() {
           </button>
         </div>
 
-        {/* Right Section - Image */}
         <div className="hidden md:block md:w-1/2 bg-gray-300">
           <img
             src="https://images.pexels.com/photos/414612/pexels-photo-414612.jpeg?cs=srgb&dl=pexels-souvenirpixels-414612.jpg&fm=jpg"
