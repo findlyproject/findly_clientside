@@ -1,8 +1,7 @@
 "use client";
 
-import { useState } from "react";
 import Link from "next/link";
-import Afterlogin from "./Afterlogin";
+import AfterLogin from "./Afterlogin";
 import Beforlogin from "./Navbiforlogin";
 import Image from "next/image";
 import { useAppSelector } from "@/lib/store/hooks";
@@ -10,7 +9,7 @@ import { useAppSelector } from "@/lib/store/hooks";
 export const navigation = [
   { name: "Home", href: "/" },
   { name: "About", href: "/about" },
-  { name: "RateUs", href: "/rateus" },
+  { name: "RateUs", href: "/rateus" },      
   { name: "Contact", href: "/contactus" },
 ];
 export default function Navbar() {
@@ -57,7 +56,7 @@ export default function Navbar() {
           <div className="flex items-center">
 
             {activeuser ? (
-                <Afterlogin/>
+                <AfterLogin/>
             ) : (
               <Beforlogin/>
             )}

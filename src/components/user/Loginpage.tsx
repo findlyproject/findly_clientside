@@ -2,10 +2,10 @@
 import React, { useState } from "react";
 import { signIn, signOut } from "next-auth/react";
 import { FcGoogle } from "react-icons/fc";
-import { useAppDispatch, useAppSelector } from "@/lib/store/hooks";
-import { loginUser, setActive, setEmail, setPassword } from "@/lib/store/features/loginSlice";
-import api from "@/axiosInstance/api";
+import { useAppDispatch } from "@/lib/store/hooks";
+import { setActive } from "@/lib/store/features/loginSlice";
 import { useRouter } from "next/navigation";
+import api from "@/utils/api";
 
 function Loginpage() {
   const router = useRouter()

@@ -3,7 +3,7 @@ import { BellIcon } from "@heroicons/react/24/outline";
 import Link from "next/link";
 import React from "react";
 
-function Afterlogin() {
+function AfterLogin() {
   return (
     <div className="flex">
       <Link href="/notification">
@@ -105,4 +105,4 @@ function Afterlogin() {
   );
 }
 
-export default Afterlogin;
+export default AfterLogin;

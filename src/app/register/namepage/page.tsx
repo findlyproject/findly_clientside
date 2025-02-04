@@ -1,5 +1,5 @@
 
-import NamePage from '@/components/registerPage/NamePage'
+import NamePage from '@/components/user/registerPage/NamePage'
 import React from 'react'
 
 export default function page() {

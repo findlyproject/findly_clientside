@@ -1,10 +1,9 @@
-import JobPage from '@/components/user/registerPage/JobPage'
 import React from 'react'
-
+import Premium from '@/components/common/premium/Premium'
 export default function page() {
   return (
     <div>
-     <JobPage/>
+      <Premium/>
     </div>
   )
 }

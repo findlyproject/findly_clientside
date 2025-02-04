@@ -1,4 +1,4 @@
-import ContactUs from '@/components/navBar/ContactUs'
+import ContactUs from '@/components/common/contactSupport/ContactUs'
 import Navbar from '@/components/navBar/Navbar'
 import React from 'react'
 
