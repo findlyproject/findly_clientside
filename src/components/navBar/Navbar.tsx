@@ -10,7 +10,7 @@ import logo from '../../../public/assets/findlylogo.png'
 export const navigation = [
   { name: "Home", href: "/" },
   { name: "About", href: "/about" },
-  { name: "RateUs", href: "/rateus" },
+  { name: "RateUs", href: "/rateus" },      
   { name: "Contact", href: "/contactus" },
 ];
 
