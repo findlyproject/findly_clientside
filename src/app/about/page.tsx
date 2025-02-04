@@ -1,5 +1,5 @@
 import React from 'react'
-import AboutPage from '@/components/aboutPage/AboutPage'
+import AboutPage from '@/components/common/aboutPage/AboutPage'
 import Navbar from '@/components/navBar/Navbar'
 export default function page() {
   return (
