@@ -2,7 +2,7 @@
 
 import { useState } from "react";
 import Link from "next/link";
-import Afterlogin from "./Afterlogin";
+import AfterLogin from "./Afterlogin";
 import Beforlogin from "./Navbiforlogin";
 
 export const navigation = [
@@ -46,7 +46,7 @@ export default function Navbar() {
           <div className="flex items-center">
 
             {activeuser ? (
-                <Afterlogin/>
+                <AfterLogin/>
             ) : (
               <Beforlogin/>
             )}

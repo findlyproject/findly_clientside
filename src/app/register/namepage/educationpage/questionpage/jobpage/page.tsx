@@ -1,4 +1,4 @@
-import JobPage from '@/components/registerPage/JobPage'
+import JobPage from '@/components/user/registerPage/JobPage'
 import React from 'react'
 
 export default function page() {

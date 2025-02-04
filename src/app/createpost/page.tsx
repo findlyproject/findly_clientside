@@ -1,5 +1,5 @@
-import PricingPlans from '@/components/common/Premium'
-import ContactUs from '@/components/navBar/ContactUs'
+import PricingPlans from '@/components/common/premium/Premium'
+import ContactUs from '@/components/common/contactSupport/ContactUs'
 import CreatePost from '@/components/post/CreatePost'
 import React from 'react'
 
