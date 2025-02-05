@@ -55,7 +55,8 @@ function Beforlogin() {
               </Menu.Item>
               
               {navigation.map((item)=>(
-                <Menu.Item>
+                <Menu.Item key={item.name}>
+                  
                 {({ active }) => (
                   <Link
                   key={item.name}
@@ -69,29 +70,7 @@ function Beforlogin() {
                 )}
               </Menu.Item>
               ))}
-              <Menu.Item>
-                {({ active }) => (
-                  <Link
-                    href="/settings"
-                    className={`block px-4 py-2 text-sm hover:bg-gray-300 ${
-                      active ? "bg-gray-100" : ""
-                    }`}
-                  >
-                    Settings
-                  </Link>
-                )}
-              </Menu.Item>
-              <Menu.Item>
-                {({ active }) => (
-                  <button
-                    className={`block w-full text-left px-4 py-2 text-md hover:bg-gray-300 text-red-600 ${
-                      active ? "bg-gray-100" : ""
-                    }`}
-                  >
-                    Sign out
-                  </button>
-                )}
-              </Menu.Item>
+              
             </Menu.Items>
           </Transition>
         </Menu>

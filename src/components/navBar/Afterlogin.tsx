@@ -1,9 +1,29 @@
+
+
+import { useAppDispatch,useAppSelector } from "@/lib/store/hooks";
+
 import { Menu, Transition } from "@headlessui/react";
 import { BellIcon } from "@heroicons/react/24/outline";
 import Link from "next/link";
+import { useRouter } from "next/navigation";
 import React from "react";
+import { navigation } from "./Navbar";
+import Image from "next/image";
+import { logoutUser } from "@/lib/store/features/actions/userActions";
+
 
 function AfterLogin() {
+  const router=useRouter()
+
+
+  const dispatch = useAppDispatch()
+    const handilLogut = ()=>{
+      dispatch(logoutUser())
+
+    }
+    const {activeuser} = useAppSelector((state)=>state.login)
+    console.log("nabar",activeuser);
+    
   return (
     <div className="flex">
       <Link href="/notification">
@@ -11,11 +31,13 @@ function AfterLogin() {
         <BellIcon className="h-6 w-6" />
       </button></Link>
       <Menu as="div" className="relative ml-3">
-        <Menu.Button className="flex text-sm rounded-full focus:outline-none">
-          <img
-            src="https://images.unsplash.com/photo-1472099645785-5658abf4ff4e"
+        <Menu.Button className="flex text-sm rounded-full focus:outline-none w-32">
+          <Image
+            src="/assets/profile.jpg"
             alt="User"
-            className="h-8 w-8 rounded-full"
+            width={200}
+            height={200}
+            className="h-10 w-10 rounded-full"
           />
         </Menu.Button>
         <Transition
@@ -29,52 +51,32 @@ function AfterLogin() {
           <Menu.Items className="absolute right-0 mt-2 w-48 bg-white rounded-md shadow-lg py-1 ring-1 ring-black/5">
             <Menu.Item>
               {({ active }) => (
-                <Link
-                  href="/ownprofile"
+                <button
+                  onClick={()=>router.push(`/ownprofile`)}
                   className={`block px-4 py-2 text-sm hover:bg-gray-300 ${
                     active ? "bg-gray-300" : ""
                   }`}
                 >
                   Your Profile
-                </Link>
+                </button>
               )}
             </Menu.Item>
-            <Menu.Item>
-              {({ active }) => (
-                <Link
-                  href="/profile"
-                  className={`block px-4 py-2 text-sm hover:bg-gray-300 ${
-                    active ? "bg-gray-300" : ""
-                  }`}
-                >
-                  Home
-                </Link>
-              )}
-            </Menu.Item>
-            <Menu.Item>
-              {({ active }) => (
-                <Link
-                  href="/profile"
-                  className={`block px-4 py-2 text-sm hover:bg-gray-300 ${
-                    active ? "bg-gray-300" : ""
-                  }`}
-                >
-                  About
-                </Link>
-              )}
-            </Menu.Item>
-            <Menu.Item>
-              {({ active }) => (
-                <Link
-                  href="/profile"
-                  className={`block px-4 py-2 text-sm hover:bg-gray-300 ${
-                    active ? "bg-gray-300" : ""
-                  }`}
-                >
-                  Contact
-                </Link>
-              )}
-            </Menu.Item>
+            {navigation.map((item)=>(
+                <Menu.Item key={item.name}>
+                  
+                {({ active }) => (
+                  <Link
+                  key={item.name}
+                  href={item.href}
+                    className={`block px-4 py-2 text-sm hover:bg-gray-300 ${
+                      active ? "bg-gray-300" : ""
+                    }`}
+                  >
+                    {item.name}
+                  </Link>
+                )}
+              </Menu.Item>
+              ))}
             <Menu.Item>
               {({ active }) => (
                 <Link
@@ -93,6 +95,7 @@ function AfterLogin() {
                   className={`block w-full text-left px-4 py-2 text-md hover:bg-gray-300 text-red-600 ${
                     active ? "bg-gray-100" : ""
                   }`}
+                  onClick={handilLogut}
                 >
                   Sign out
                 </button>

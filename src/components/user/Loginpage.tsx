@@ -3,9 +3,11 @@ import React, { useState } from "react";
 import { signIn, signOut } from "next-auth/react";
 import { FcGoogle } from "react-icons/fc";
 import { useAppDispatch } from "@/lib/store/hooks";
-import { setActive } from "@/lib/store/features/loginSlice";
+import { logoutUser, setActive, SetLogout } from "@/lib/store/features/userSlice";
 import { useRouter } from "next/navigation";
 import api from "@/utils/api";
+import Image from "next/image";
+import { loginUser } from "@/lib/store/features/actions/userActions";
 
 function Loginpage() {
   const router = useRouter()
@@ -13,35 +15,35 @@ function Loginpage() {
     email: "",
     password: ""
   })
-const dispatch = useAppDispatch()
+  const dispatch = useAppDispatch()
   const handilchange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setState({ ...state, [e.target.name]: e.target.value });
   }
 
-  const handleSubmit = async (e: React.FormEvent) => {
+  const handleSubmit = async(e: React.FormEvent) => {
     e.preventDefault();
-    try {
-      const response = await api.post("/api/user/login", state)
-      console.log("response",response?.data.logeduser);
-      
-      alert("Login Successful!")
-      router.push("/home")
-      dispatch(setActive(response?.data?.logeduser))
-      localStorage.setItem("user",JSON.stringify(response?.data?.logeduser))
-    } catch (error: any) {
-      alert(error?.response.data?.message)
-    }
+    const resultAction = await dispatch(loginUser(state));
 
+    if (loginUser.fulfilled.match(resultAction)) {
+      router.push("/home");  
+      alert("Login Successful!");
+    }
   };
+  
   const googlelogin = () => {
     signIn("google");
   };
-
   return (
-    <div className="flex h-screen items-center justify-center bg-gray-100">
+    <div className="flex h-screen items-center justify-center bg-gray-100">  
       {/* Logo in top-left */}
-      <div className="absolute top-6 left-6">
-        <Image src="/ascites/findlylogo.png" alt="Findly Logo" className="w-32" />
+      <div className="absolute top-3 left-1">
+        <Image
+          src="/assets/findlylogo.png"
+          alt="Findly Logo"
+          width={100}
+          height={100}
+        />
+
       </div>
 
       {/* Main Container */}
@@ -97,15 +99,15 @@ const dispatch = useAppDispatch()
           >
             <FcGoogle className="mr-2" /> <span className="mb-2">google</span>
           </button>
-          <button onClick={() => signOut()} className="p-2 bg-red-500 text-white rounded">
-            Sign Out
-          </button>
+      
         </div>
 
         <div className="hidden md:block md:w-1/2 bg-gray-300">
           <Image
-            src="https://images.pexels.com/photos/414612/pexels-photo-414612.jpeg?cs=srgb&dl=pexels-souvenirpixels-414612.jpg&fm=jpg"
+            src="/assets/loginbanner.jpg"
             alt="Login Background"
+            width={100}
+            height={100}
             className="w-full h-full object-cover"
           />
         </div>
