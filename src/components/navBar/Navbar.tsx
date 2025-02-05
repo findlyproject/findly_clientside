@@ -31,11 +31,11 @@ export default function Navbar() {
 />
             </Link>
             
-{/* <div className="w-full h-10 bg-slate-300">
-
-</div> */}
-            <div className="w-52 bg-slate-500">
-               
+            <div className="w-52 h-10 bg-slate-200 rounded-3xl outline-none">
+               <input type="text" 
+               placeholder="Search"
+               className="w-full h-full bg-transparent outline-none p-2 "
+               />
             </div>
           </div>
 

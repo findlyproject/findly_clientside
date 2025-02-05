@@ -115,8 +115,8 @@ const HomePage = () => {
             </div>
 
             {/* Posts */}
-            {[1, 2, 3].map((post) => (
-              <div key={post} className="bg-white rounded-lg shadow mb-4">
+            {[1, 2, 3].map((post,index) => (
+              <div key={index} className="bg-white rounded-lg shadow mb-4">
                 <div className="p-4">
                   <div className="flex items-center justify-between">
                     <div className="flex items-center">
