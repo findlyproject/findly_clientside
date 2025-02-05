@@ -1,22 +1,66 @@
-import { createSlice,PayloadAction  } from "@reduxjs/toolkit";
+import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 
-interface UserState {
-    details:object[];
+// Define the shape of the user's active profile
+  export interface UserProfile {
+  firstName: string;
+  lastName: string;
+  email: string;
+  password: string;
+  phoneNumber?: string;
+  dateOfBirth?: Date;
+  location?: string;
+  profileImage?: string;
+  banner?: string;
+  skills?: string[];
+  jobTitle?: string[];
+  jobLocation?: string[];
+  education: {
+    qualification: string;
+    startYear: string;
+    endYear: string;
+    location: string;
+  };
+  projects?: {
+    title: string;
+    description: string;
+    link?: string;
+  }[];
+  connecting: string[];  
+  about?: string;
+  resume?: {
+    fileUrl: string;
+    type: "PDF" | "Video";
+    uploadedAt?: Date;
+  }[];
+  role: "user" | "premium";
+  subscriptionEndDate: Date | null;
+  subscriptionStartDate: Date | null;
+  coverLetter?: string;
+  isBlocked?: boolean;
+  _id: string;
 }
 
-const initialState: UserState = {
-    details : [],
+interface LoginState {
+  activeuser: UserProfile | null;
+}
+
+const initialState: LoginState = {
+  activeuser: null,
 };
 
-const userSlice = createSlice({
-  name: "user",
+const loginSlice = createSlice({
+  name: "login",
   initialState,
   reducers: {
-    setUserDetailes: (state,action:PayloadAction<object[]>) => {
-      state.details  = action.payload
+    setActive: (state, action: PayloadAction<UserProfile | null>) => {
+      state.activeuser = action.payload;
+    },
+    SetLogout: (state) => {
+      state.activeuser = null;
     },
   },
 });
 
-export const { setUserDetailes } = userSlice.actions;
-export default userSlice.reducer;
+
+export const { setActive, SetLogout } = loginSlice.actions;
+export default loginSlice.reducer;

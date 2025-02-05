@@ -1,46 +1,49 @@
-// // store/actions/authActions.ts
-// import { Dispatch } from "redux";
-// import api from "../../../../utils/api"; 
-// import handleAsync from "../../../../utils/handleAsync"
-// import { setActive } from "../loginSlice";
-// import { useAppDispatch } from "../../hooks";
+import { createAsyncThunk } from '@reduxjs/toolkit';
+import api from '@/utils/api';
+import { setActive, SetLogout, UserProfile } from '../userSlice';
+import handleAsync from '@/utils/handleAsync';
+import { AxiosResponse } from "axios";
 
-  
-import api from "../../../../utils/api";
-import handleAsync from "../../../../utils/handleAsync";
-
-
-import { AppDispatch } from "../..";
-import { log } from "console";
+interface LoginResponse {
+  logeduser: UserProfile
+}
 
 
+export const loginUser = createAsyncThunk(
+  "auth/loginUser",
+  async (state: { email: string; password: string }, { dispatch, rejectWithValue }) => {
+    const response = await handleAsync<AxiosResponse<LoginResponse>>(() => api.post("/user/login", state));
+    if (!response) {
+      return rejectWithValue("Login failed. Please try again.");
+    }
+
+    dispatch(setActive(response?.data?.logeduser as UserProfile));
+    return response?.data?.logeduser;
+  }
+);
 
 
-export const LOGOUTUSER = "LOGOUT_USER";
-
-  export const CLEAR_SAVED_FOLDERS = "CLEAR_SAVED_FOLDERS";
-
-  
-// export const logoutUser = (dispatch: AppDispatch) =>
-//   handleAsync(async () => {
-//     const response = await api.post("/user/logout");
-
-//     console.log("response", response);
-//     if (response.status >= 200 && response.status < 300) {
-//         console.log("dfdsgd")
-//       dispatch({ type: LOGOUTUSER });
-//       dispatch({ type: CLEAR_SAVED_FOLDERS });
-//     } else {
-//       throw new Error(response.data?.message || "An error occurred");
-//     }
-//   });
-
-
-  export const logoutUser=async()=>{
-    const response = await api.post("/user/logout");
-    console.log("response",response);
+export const logoutUser = createAsyncThunk(
+  "auth/logoutUser",
+  async (_, { dispatch, rejectWithValue }) => {
     
+    const response = await handleAsync<AxiosResponse<LoginResponse>>(() => api.post("/user/logout"));
+
+    if (!response) {
+      return rejectWithValue("logout failed")
+    }
+
+    const status: number = response.status;
+    if (status >= 200 && status < 300) {
+      dispatch(SetLogout());
+      localStorage.removeItem("user");
+      return null;
+    } else {
+      throw new Error("Logout failed");
+      
+    }
 
   }
+);
 
 
