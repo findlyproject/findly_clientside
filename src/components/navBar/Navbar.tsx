@@ -5,7 +5,7 @@ import AfterLogin from "./Afterlogin";
 import Beforlogin from "./Navbiforlogin";
 import Image from "next/image";
 import { useAppSelector } from "@/lib/store/hooks";
-
+import logo from '../../../public/assets/findlylogo.png'
 export const navigation = [
   { name: "Home", href: "/" },
   { name: "About", href: "/about" },
@@ -24,7 +24,7 @@ export default function Navbar() {
           <div className="flex items-center">
             <Link href="/">
 <Image 
-  src="/ascites/findlylogo.png" 
+  src={logo} 
   alt="Logo" 
   width={150} 
   height={50} 

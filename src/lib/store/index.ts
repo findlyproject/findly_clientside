@@ -4,6 +4,7 @@ import themeReducer from "./features/them"
 import registerReducer from './features/registerSlice'
 import paymentReducer from "./features/paymentSlice"
 import loginReducer from './features/loginSlice'
+import userReducer from "./features/userSlice"
 export const makeStore = () => {
     return configureStore({
      reducer:{
@@ -11,7 +12,8 @@ export const makeStore = () => {
        theme:themeReducer,
        register:registerReducer,
        payment:paymentReducer,
-       login:loginReducer
+       login:loginReducer,
+       user:userReducer
      }
     });
   };

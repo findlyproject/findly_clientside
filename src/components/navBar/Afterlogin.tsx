@@ -1,13 +1,19 @@
-import { logoutUser, SetLogout } from "@/lib/store/features/loginSlice";
-import { useAppDispatch, useAppSelector } from "@/lib/store/hooks";
+
+
+import { useAppDispatch,useAppSelector } from "@/lib/store/hooks";
+import { SetLogout,logoutUser } from "@/lib/store/features/loginSlice";
 import { Menu, Transition } from "@headlessui/react";
 import { BellIcon } from "@heroicons/react/24/outline";
 import Link from "next/link";
+import { useRouter } from "next/navigation";
 import React from "react";
 import { navigation } from "./Navbar";
 import Image from "next/image";
 
+
 function AfterLogin() {
+  const router=useRouter()
+
 
   const dispatch = useAppDispatch()
     const handilLogut = ()=>{
@@ -44,14 +50,14 @@ function AfterLogin() {
           <Menu.Items className="absolute right-0 mt-2 w-48 bg-white rounded-md shadow-lg py-1 ring-1 ring-black/5">
             <Menu.Item>
               {({ active }) => (
-                <Link
-                  href="/ownprofile"
+                <button
+                  onClick={()=>router.push(`/ownprofile`)}
                   className={`block px-4 py-2 text-sm hover:bg-gray-300 ${
                     active ? "bg-gray-300" : ""
                   }`}
                 >
                   Your Profile
-                </Link>
+                </button>
               )}
             </Menu.Item>
             {navigation.map((item)=>(
