@@ -1,4 +1,5 @@
-import { createSlice } from "@reduxjs/toolkit"
+import api from "@/utils/api";
+import { createAsyncThunk, createSlice } from "@reduxjs/toolkit"
 
 
 interface loginType {
@@ -46,9 +47,8 @@ interface loginType {
         _id: string;},
 }
 const state = localStorage.getItem("user")
-
 const initialState:loginType={
-    activeuser:state,
+    activeuser:JSON.parse(state),
 }
 
 
@@ -59,11 +59,28 @@ const loginSlice = createSlice({
         setActive: (state,actions) => {
           state.activeuser = actions.payload; 
         },
+        SetLogout: (state)=>{
+          state.activeuser = null;
+        }
     }
 
 })
 
+export const logoutUser = createAsyncThunk(
+  "auth/logout", 
+  async (_, thunkAPI) => {
+    try {
+      await api.post("/api/user/logout");
+      localStorage.removeItem("user");
+
+      return null; 
+    } catch (error: any) {
+      console.log("logout error", error);
+      return thunkAPI.rejectWithValue(error.response?.data?.message || "Logout failed");
+    }
+  }
+);
 
 
-export const {setActive} = loginSlice.actions;
+export const {setActive,SetLogout} = loginSlice.actions;
 export default loginSlice.reducer
