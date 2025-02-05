@@ -1,19 +1,21 @@
 "use client";
 
-import { useState } from "react";
 import Link from "next/link";
-import Afterlogin from "./Afterlogin";
+import AfterLogin from "./Afterlogin";
 import Beforlogin from "./Navbiforlogin";
-
+import Image from "next/image";
+import { useAppSelector } from "@/lib/store/hooks";
+import logo from '../../../public/assets/findlylogo.png'
 export const navigation = [
   { name: "Home", href: "/" },
   { name: "About", href: "/about" },
-  { name: "RateUs", href: "/rateus" },
+  { name: "RateUs", href: "/rateus" },      
   { name: "Contact", href: "/contactus" },
 ];
-
 export default function Navbar() {
-  const [activeuser, setactivuser] = useState(true);
+  const {activeuser} = useAppSelector((state) => state.login)
+  console.log("activeuser",activeuser);
+  
 
   return (
     <nav className="bg-white border border-b-2">
@@ -21,12 +23,20 @@ export default function Navbar() {
         <div className="flex justify-between h-16 items-center">
           <div className="flex items-center">
             <Link href="/">
-              <img
-                src="/ascites/findlylogo.png"
-                alt="Logo"
-                className="h-10 w-auto cursor-pointer"
-              />
+<Image 
+  src={logo} 
+  alt="Logo" 
+  width={150} 
+  height={50} 
+/>
             </Link>
+            
+            <div className="w-52 h-10 bg-slate-200 rounded-3xl outline-none">
+               <input type="text" 
+               placeholder="Search"
+               className="w-full h-full bg-transparent outline-none p-2 "
+               />
+            </div>
           </div>
 
          
@@ -46,7 +56,7 @@ export default function Navbar() {
           <div className="flex items-center">
 
             {activeuser ? (
-                <Afterlogin/>
+                <AfterLogin/>
             ) : (
               <Beforlogin/>
             )}

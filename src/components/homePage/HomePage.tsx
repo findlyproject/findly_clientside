@@ -2,15 +2,15 @@ import React from "react";
 
 const HomePage = () => {
   return (
-    <div className="bg-[#f3f2ef] mt-[85px]">
-      <div className="container mx-auto">
-        <div className="flex">
+    <div className="bg-[#f3f2ef]">
+      <div className="container mx-auto ">
+        <div className="flex mt-1">
           {/* Left Column */}
           <div className="w-1/6">
             <div className="bg-white rounded-lg shadow">
               <div className="relative mb-4 h-14 bg-cover bg-center">
                 <img
-                  src="/api/placeholder/400/320"
+                  src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcS36xsmM2n3kOTy6gaVeJu1v4t2Wcf7dY_gfg&s"
                   className="absolute -bottom-8 left-1/2 -translate-x-1/2 w-16 h-16 rounded-full border-2 border-white"
                   alt="Profile"
                 />
@@ -47,7 +47,7 @@ const HomePage = () => {
               <div className="p-4">
                 <h2 className="text-xl font-medium">My Pages</h2>
                 <div className="flex items-center mt-4">
-                  <img src="/api/placeholder/400/320" className="w-8 h-8 rounded" alt="Page" />
+                  <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcS36xsmM2n3kOTy6gaVeJu1v4t2Wcf7dY_gfg&s" className="w-8 h-8 rounded" alt="Page" />
                   <div className="ml-3">
                     <div className="font-medium text-sm">Harum Necessitatibus</div>
                     <div className="text-sm text-gray-500">
@@ -115,12 +115,12 @@ const HomePage = () => {
             </div>
 
             {/* Posts */}
-            {[1, 2, 3].map((post) => (
-              <div key={post} className="bg-white rounded-lg shadow mb-4">
+            {[1, 2, 3].map((post,index) => (
+              <div key={index} className="bg-white rounded-lg shadow mb-4">
                 <div className="p-4">
                   <div className="flex items-center justify-between">
                     <div className="flex items-center">
-                      <img src="/api/placeholder/400/320" className="w-12 h-12 rounded-full" alt="Profile" />
+                      <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcS36xsmM2n3kOTy6gaVeJu1v4t2Wcf7dY_gfg&s" className="w-12 h-12 rounded-full" alt="Profile" />
                       <div className="ml-3">
                         <a href="#" className="font-medium text-gray-900 hover:underline">
                           David J. Malan
@@ -136,7 +136,7 @@ const HomePage = () => {
                     </button>
                   </div>
                   <p className="mt-4">Sample post content</p>
-                  <img src="/api/placeholder/400/320" className="w-full mt-4 rounded" alt="Post" />
+                  <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcS36xsmM2n3kOTy6gaVeJu1v4t2Wcf7dY_gfg&s" className="w-full mt-4 rounded" alt="Post" />
                   <div className="flex items-center mt-4">
                     <div className="flex -space-x-1">
                       {/* Reaction icons */}
@@ -182,7 +182,7 @@ const HomePage = () => {
       <div className="fixed bottom-0 right-4 w-72 bg-white shadow-lg rounded-t-lg">
         <div className="flex items-center justify-between p-3 border-b">
           <div className="flex items-center">
-            <img src="/api/placeholder/400/320" className="w-8 h-8 rounded-full" alt="Profile" />
+            <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcS36xsmM2n3kOTy6gaVeJu1v4t2Wcf7dY_gfg&s" className="w-8 h-8 rounded-full" alt="Profile" />
             <span className="ml-2 font-medium">Messaging</span>
           </div>
           <div className="flex items-center space-x-3">

@@ -1,13 +1,16 @@
 "use client";
 import Link from "next/link";
 import React from "react";
-
+import { useRouter } from "next/navigation";
 const ContactUs: React.FC = () => {
+  const router=useRouter()
+
+  
   return (
     <section className="w-full xl:py-24 lg:py-20 py-12 bg-slate-50 border-b border-gray-300 font-inter">
       <div className="w-full max-w-7xl px-6 lg:px-8 mx-auto">
         <div className="grid lg:grid-cols-1 grid-cols-1 gap-x-16 xl:gap-x-24 gap-y-14 max-w-lg md:max-w-3xl lg:max-w-full mx-auto">
-          {/* Left Section */}
+          
           <div>
             <h1 className="font-manrope text-gray-900 md:text-5xl text-4xl font-bold leading-tight mb-8 lg:text-left text-center">
               Contact Us
@@ -17,10 +20,12 @@ const ContactUs: React.FC = () => {
               inquiries, our team is ready to help.
             </p>
 
-            {/* Support Cards */}
+            
             <div className="my-12 grid lg:grid-cols-4 md:grid-cols-2 grid-cols-1 md:gap-x-8 gap-y-8">
-              {/* Support */}
-              <div className="rounded-2xl border border-gray-200 bg-white p-7 group transition-all duration-500 hover:bg-primary">
+              
+              <div 
+              onClick={()=>router.push(`/contactus/contact`)}
+              className="rounded-2xl border border-gray-200 bg-white p-7 group transition-all duration-500 hover:bg-primary">
                 <Link
                   href="#"
                   className="w-14 h-14 bg-primary rounded-full flex items-center justify-center mb-5 transition-all duration-500 group-hover:bg-white cursor-pointer"
@@ -45,7 +50,7 @@ const ContactUs: React.FC = () => {
                 </p>
               </div>
 
-              {/* Blog */}
+             
               <div className="rounded-2xl border border-gray-200 bg-white p-7 group transition-all duration-500 hover:bg-primary">
                 <Link
                   href="#"
@@ -72,7 +77,9 @@ const ContactUs: React.FC = () => {
               </div>
             
             
-              <div className="rounded-2xl border border-gray-200 bg-white p-7 group transition-all duration-500 hover:bg-primary">
+              <div 
+              onClick={()=>router.push(`/contactus/faqs`)}
+              className="rounded-2xl border border-gray-200 bg-white p-7 group transition-all duration-500 hover:bg-primary">
                 <Link
                   href="#"
                   className="w-14 h-14 bg-primary rounded-full flex items-center justify-center mb-5 transition-all duration-500 group-hover:bg-white cursor-pointer"
@@ -100,7 +107,9 @@ const ContactUs: React.FC = () => {
                   Questions (FAQs) section.
                 </p>
               </div>
-              <div className="rounded-2xl border border-gray-200 bg-white p-7 group transition-all duration-500 hover:bg-primary">
+              <div 
+              onClick={()=>router.push(`/rateus`)}
+              className="rounded-2xl border border-gray-200 bg-white p-7 group transition-all duration-500 hover:bg-primary">
                 <Link
                   href="#"
                   className="w-14 h-14 bg-primary rounded-full flex items-center justify-center mb-5 transition-all duration-500 group-hover:bg-white cursor-pointer pl-[10px] pt-1"

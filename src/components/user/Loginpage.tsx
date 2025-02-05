@@ -1,19 +1,57 @@
 "use client";
-import React from "react";
-import { signIn, signOut, useSession } from "next-auth/react";
+import React, { useState } from "react";
+import { signIn, signOut } from "next-auth/react";
 import { FcGoogle } from "react-icons/fc";
+import { useAppDispatch } from "@/lib/store/hooks";
+import { logoutUser, setActive, SetLogout } from "@/lib/store/features/loginSlice";
+import { useRouter } from "next/navigation";
+import api from "@/utils/api";
+import Image from "next/image";
+// import { loginUser } from "@/lib/store/features/actions/userActions";
 
 function Loginpage() {
+  const router = useRouter()
+  const [state, setState] = useState({
+    email: "",
+    password: ""
+  })
+  const dispatch = useAppDispatch()
+  const handilchange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setState({ ...state, [e.target.name]: e.target.value });
+  }
+
+  const handleSubmit = async (e: React.FormEvent) => {
+    e.preventDefault();
+    try {
+      const response = await api.post("/user/login", state)
+      console.log("response", response?.data.logeduser);
+
+      alert("Login Successful!")
+      router.push("/home")
+      dispatch(setActive(response?.data?.logeduser))
+      localStorage.setItem("user", JSON.stringify(response?.data?.logeduser))
+    } catch (error: any) {
+      alert(error?.response.data?.message)
+    }
+
+  };
+  // const handleSubmit=(e: React.FormEvent)=>{
+  //   dispatch(loginUser(state,router)(e))
+  // }
   const googlelogin = () => {
     signIn("google");
   };
-  const { data: session } = useSession();
-  console.log("session", session);
   return (
-    <div className="flex h-screen items-center justify-center bg-gray-100">
+    <div className="flex h-screen items-center justify-center bg-gray-100">  
       {/* Logo in top-left */}
-      <div className="absolute top-6 left-6">
-        <img src="/ascites/findlylogo.png" alt="Findly Logo" className="w-32" />
+      <div className="absolute top-3 left-1">
+        <Image
+          src="/assets/findlylogo.png"
+          alt="Findly Logo"
+          width={100}
+          height={100}
+        />
+
       </div>
 
       {/* Main Container */}
@@ -27,31 +65,34 @@ function Loginpage() {
             Explore jobs and build skills
           </p>
 
-          <form className="mt-6 space-y-5">
+          <form className="mt-6 space-y-5" onSubmit={handleSubmit} >
             {/* Email Input */}
             <div>
               <label className="text-gray-700 font-medium">Email</label>
               <input
                 type="email"
+                name="email"
                 placeholder="Enter your email"
                 className="w-full p-3 rounded-full border border-gray-500 mt-1 focus:outline-blue-500"
+                onChange={handilchange}
                 required
               />
             </div>
 
-            {/* Password Input */}
             <div>
               <label className="text-gray-700 font-medium">Password</label>
               <input
                 type="password"
+                name="password"
                 placeholder="Enter your password"
                 className="w-full p-3 rounded-full border border-gray-500 mt-1 focus:outline-blue-500"
+                onChange={handilchange}
                 required
               />
             </div>
 
-            {/* Submit Button */}
-            <button className="w-full bg-blue-600 hover:bg-blue-700 transition-all text-white text-lg font-semibold py-3 rounded-full ">
+
+            <button className="w-full bg-blue-600 hover:bg-blue-700 transition-all text-white text-lg font-semibold py-3 rounded-full " type="submit">
               Submit
             </button>
             <div className="flex items-center justify-center gap-4">
@@ -66,16 +107,15 @@ function Loginpage() {
           >
             <FcGoogle className="mr-2" /> <span className="mb-2">google</span>
           </button>
-          <button onClick={() => signOut()} className="p-2 bg-red-500 text-white rounded">
-            Sign Out
-          </button>
+      
         </div>
 
-        {/* Right Section - Image */}
         <div className="hidden md:block md:w-1/2 bg-gray-300">
-          <img
-            src="https://images.pexels.com/photos/414612/pexels-photo-414612.jpeg?cs=srgb&dl=pexels-souvenirpixels-414612.jpg&fm=jpg"
+          <Image
+            src="/assets/loginbanner.jpg"
             alt="Login Background"
+            width={100}
+            height={100}
             className="w-full h-full object-cover"
           />
         </div>

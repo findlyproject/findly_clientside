@@ -3,12 +3,12 @@
 import React from "react";
 import Image from "next/image";
 import { useRouter } from "next/navigation";
-import jobImage from "../../../public/job.png";
-import register1 from "../../../public/register-1.png"
+import jobImage from "../../../../public/job.png";
+import register1 from "../../../../public/register-1.png"
 import { FaSearch, FaMapMarkerAlt } from "react-icons/fa";
 import { FaUserPlus, FaUpload, FaCheckCircle } from "react-icons/fa";
-import goup from "../../../public/landingPage-group-discussion.png"
-import landingTop from "../../../public/landingpage-group.jpg"
+import goup from "../../../../public/landingPage-group-discussion.png"
+import landingTop from "../../../../public/landingpage-group.jpg"
 import Testimonials from "./Testimonial";
 
 function LandingPage() {

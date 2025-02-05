@@ -1,10 +1,10 @@
-import JobPage from '@/components/user/registerPage/JobPage'
+import LoginPage from '@/components/admin/LoginPage'
 import React from 'react'
 
 export default function page() {
   return (
     <div>
-     <JobPage/>
+      <LoginPage/>
     </div>
   )
 }

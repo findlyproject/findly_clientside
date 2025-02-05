@@ -11,7 +11,7 @@ export default function AboutPage() {
     className="rounded-lg shadow-md w-full lg:w-72 h-[300px] object-cover"
   />
   <img
-    src="https://i.pinimg.com/736x/13/7e/22/137e223eb7b58509809d13ac4a44f3de.jpg"
+    src="https://i.pinimg.com/736x/73/57/b4/7357b4cf1b3ad436a5122047051c2ce3.jpg"
     className="rounded-lg shadow-md w-full lg:w-72 h-[300px] object-cover"
   />
 </div>

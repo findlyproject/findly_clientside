@@ -4,6 +4,9 @@ import "../styles/globals.css";
 import StoreProvider from "@/lib/store/store-provider";
 import SessionProvider from "@/providers/auth-provider";
 import { getServerSession } from "next-auth";
+import { ToastContainer } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
+
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -33,6 +36,20 @@ export default async function RootLayout({
       >
         <StoreProvider>
           <SessionProvider session={session}>{children}</SessionProvider>
+          <ToastContainer
+            autoClose={1000}
+            position="top-center"
+            hideProgressBar={true}
+            closeOnClick
+            pauseOnHover
+            draggable
+            toastStyle={{
+              width: "auto",
+              maxWidth: "90%",
+              padding: "10px 20px",
+              wordBreak: "break-word",
+            }}
+          />
         </StoreProvider>
       </body>
     </html>

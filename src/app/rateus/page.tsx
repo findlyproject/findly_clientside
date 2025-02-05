@@ -1,5 +1,5 @@
 import Navbar from '@/components/navBar/Navbar'
-import RateUs from '@/components/navBar/RateUs'
+import RateUs from '@/components/common/contactSupport/RateUs'
 import React from 'react'
 
 function page() {
