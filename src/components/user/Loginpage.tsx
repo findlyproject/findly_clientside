@@ -7,7 +7,6 @@ import { logoutUser, setActive, SetLogout } from "@/lib/store/features/loginSlic
 import { useRouter } from "next/navigation";
 import api from "@/utils/api";
 import Image from "next/image";
-// import { loginUser } from "@/lib/store/features/actions/userActions";
 
 function Loginpage() {
   const router = useRouter()
@@ -35,14 +34,11 @@ function Loginpage() {
     }
 
   };
-  // const handleSubmit=(e: React.FormEvent)=>{
-  //   dispatch(loginUser(state,router)(e))
-  // }
   const googlelogin = () => {
     signIn("google");
   };
   return (
-    <div className="flex h-screen items-center justify-center bg-gray-100">  
+    <div className="flex h-screen items-center justify-center bg-gray-100">
       {/* Logo in top-left */}
       <div className="absolute top-3 left-1">
         <Image

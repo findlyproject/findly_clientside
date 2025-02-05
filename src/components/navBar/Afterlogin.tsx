@@ -16,10 +16,10 @@ function AfterLogin() {
   const router=useRouter()
 
 
-  const dispatch = useAppDispatch()
-    const handilLogut = ()=>{
-      dispatch(logoutUser())
 
+    const handilLogut = ()=>{
+      
+      logoutUser()
     }
     const {activeuser} = useAppSelector((state)=>state.login)
     console.log("nabar",activeuser);

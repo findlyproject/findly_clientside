@@ -1,6 +1,6 @@
-import api from "@/utils/api";
-import { createAsyncThunk, createSlice } from "@reduxjs/toolkit"
-import { LOGOUT_USER } from "./actions/userActions";
+
+import {  createSlice } from "@reduxjs/toolkit"
+import { LOGOUTUSER } from "./actions/userActions";
 
 
 interface loginType {
@@ -17,7 +17,7 @@ interface loginType {
         jobTitle?: string[];
         jobLocation?: string[];
       
-        education: {
+        education: { 
           qualification: string;
           startYear: string;
           endYear: string;
@@ -30,7 +30,7 @@ interface loginType {
           link?: string;
         }[];
       
-        connecting: mongoose.Types.ObjectId[],
+        connecting: string[],
       
         about?: string;
       
@@ -62,7 +62,7 @@ const loginSlice = createSlice({
         },
         SetLogout: (state,action)=>{
           switch(action.type){
-            case LOGOUT_USER:
+            case LOGOUTUSER:
               state.activeuser=null
 
           }
@@ -85,6 +85,9 @@ const loginSlice = createSlice({
 //     }
 //   }
 // );
+
+
+
 
 
 export const {setActive,SetLogout} = loginSlice.actions;
