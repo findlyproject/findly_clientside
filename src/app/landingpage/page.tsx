@@ -9,6 +9,7 @@ const LandingHomePage = () => {
     <div>
       <Navbar/>
       <LandingPage/>
+      
      
     </div>
   )

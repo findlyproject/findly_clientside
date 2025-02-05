@@ -49,7 +49,7 @@ const Testimonials = () => {
   return (
     <section className="py-24">
       <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
-        {/* Header */}
+    
         <div className="mb-16 text-center">
           <span className="text-sm text-gray-500 font-medium block mb-2">
             TESTIMONIAL
@@ -59,7 +59,7 @@ const Testimonials = () => {
           </h2>
         </div>
 
-        {/* Swiper Slider */}
+       
         <Swiper
           slidesPerView={1}
           spaceBetween={32}
@@ -78,7 +78,7 @@ const Testimonials = () => {
           {testimonials.map((testimonial) => (
             <SwiperSlide key={testimonial.id}>
               <div className="group bg-white border border-gray-300 rounded-xl p-6 transition-all duration-500 mx-auto hover:border-indigo-600 hover:shadow-sm">
-                {/* Rating */}
+          
                 <div className="flex items-center mb-7 gap-2 text-amber-500">
                   <svg
                     className="w-5 h-5"
@@ -96,12 +96,12 @@ const Testimonials = () => {
                   </span>
                 </div>
 
-                {/* Feedback */}
+        
                 <p className="text-base text-gray-600 leading-6 pb-8 group-hover:text-gray-800">
                   {testimonial.feedback}
                 </p>
 
-                {/* User Info */}
+          
                 <div className="flex items-center gap-5 border-t border-gray-200 pt-5">
                   <img
                     className="rounded-full h-10 w-10 object-cover"

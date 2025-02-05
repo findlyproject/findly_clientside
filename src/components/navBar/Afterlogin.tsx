@@ -1,7 +1,7 @@
 
 
 import { useAppDispatch,useAppSelector } from "@/lib/store/hooks";
-import { SetLogout,logoutUser } from "@/lib/store/features/loginSlice";
+
 import { Menu, Transition } from "@headlessui/react";
 import { BellIcon } from "@heroicons/react/24/outline";
 import Link from "next/link";
@@ -9,6 +9,7 @@ import { useRouter } from "next/navigation";
 import React from "react";
 import { navigation } from "./Navbar";
 import Image from "next/image";
+import { logoutUser } from "@/lib/store/features/actions/userActions";
 
 
 function AfterLogin() {
@@ -17,8 +18,8 @@ function AfterLogin() {
 
   const dispatch = useAppDispatch()
     const handilLogut = ()=>{
-      dispatch(SetLogout())
       dispatch(logoutUser())
+
     }
     const {activeuser} = useAppSelector((state)=>state.login)
     console.log("nabar",activeuser);
