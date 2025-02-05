@@ -1,13 +1,12 @@
 "use client";
-import React, { useEffect, useState } from "react";
-import { signIn, signOut, useSession } from "next-auth/react";
+import React, { useState } from "react";
+import { signIn} from "next-auth/react";
 import { FcGoogle } from "react-icons/fc";
 import { useAppDispatch } from "@/lib/store/hooks";
-import { logoutUser, setActive, SetLogout } from "@/lib/store/features/loginSlice";
 import { useRouter } from "next/navigation";
 import api from "@/utils/api";
 import Image from "next/image";
-// import { loginUser } from "@/lib/store/features/actions/userActions";
+import { loginUser } from "@/lib/store/features/actions/userActions";
 
 function Loginpage() {
   const router = useRouter()
@@ -21,56 +20,41 @@ function Loginpage() {
     setState({ ...state, [e.target.name]: e.target.value });
   }
 
-  const handleSubmit = async (e: React.FormEvent) => {
+  const handleSubmit = async(e: React.FormEvent) => {
     e.preventDefault();
-    try {
-      const response = await api.post("/user/login", state)
-      console.log("response", response?.data.logeduser);
+    const resultAction = await dispatch(loginUser(state));
 
-      alert("Login Successful!")
-      router.push("/home")
-      dispatch(setActive(response?.data?.logeduser))
-      localStorage.setItem("user", JSON.stringify(response?.data?.logeduser))
-    } catch (error: any) {
-      alert(error?.response.data?.message)
+    if (loginUser.fulfilled.match(resultAction)) {
+      router.push("/home");  
+      alert("Login Successful!");
     }
-
-  };
-  // const handleSubmit=(e: React.FormEvent)=>{
-  //   dispatch(loginUser(state,router)(e))
-  // }
-
-  /////////////// GOOGLE AUTH LOGIN ////////////////////
-  
-  const {data: session} = useSession()
-
-console.log("session",session);
-
-  const googlelogin =async () => {
-    signIn("google");    
   };
   
- useEffect(()=>{
-  if(session){
-    const verfygooglrlogin = async ()=>{
-      console.log("session",{email:session?.user?.email,name:session?.user?.name});
+  const googlelogin = () => {
+    signIn("google");
+  };
+  
+//  useEffect(()=>{
+//   if(session){
+//     const verfygooglrlogin = async ()=>{
+//       console.log("session",{email:session?.user?.email,name:session?.user?.name});
       
-            try {
-              const response =await api.post("/api/user/googleauthlogin",{email:session?.user?.email,name:session?.user?.name})
-              alert("Login Successful!")
-              router.push("/home")
-              dispatch(setActive(response?.data?.logeduser))
-              localStorage.setItem("user", JSON.stringify(response?.data?.logeduser))
+//             try {
+//               const response =await api.post("/api/user/googleauthlogin",{email:session?.user?.email,name:session?.user?.name})
+//               alert("Login Successful!")
+//               router.push("/home")
+//               dispatch(setActive(response?.data?.logeduser))
+//               localStorage.setItem("user", JSON.stringify(response?.data?.logeduser))
               
-            } catch (error) {
-              console.log(error);
+//             } catch (error) {
+//               console.log(error);
               
-            }
+//             }
       
-    }
-    verfygooglrlogin()
-   }
- },[session])
+//     }
+//     verfygooglrlogin()
+//    }
+//  },[session])
   
   return (
     <div className="flex h-screen items-center justify-center bg-gray-100">  
