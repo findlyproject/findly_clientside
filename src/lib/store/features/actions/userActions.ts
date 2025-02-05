@@ -1,40 +1,42 @@
-// store/actions/authActions.ts
-import { Dispatch } from "redux";
-import api from "../../../../utils/api"; 
-import handleAsync from "../../../../utils/handleAsync"
-import { setActive } from "../loginSlice";
+import { createAsyncThunk } from '@reduxjs/toolkit';
+import api from '@/utils/api'; // Assuming the API is set up
+import { setActive, SetLogout } from '../userSlice';
 
-
-export const LOGOUT_USER = "LOGOUT_USER";
-export const CLEAR_SAVED_FOLDERS = "CLEAR_SAVED_FOLDERS";
-
-
-// export const loginUser =(state:{email:string;password:string},router: any)=> handleAsync(async (dispatch: Dispatch,e: React.FormEvent) => {
-//     e.preventDefault();
-
-//       const response = await api.post("/user/login", state)
-//       console.log("response", response?.data.logeduser);
-//       alert("Login Successful!")
-//       router.push("/home")
-//       dispatch(setActive(response?.data?.logeduser))
+// login
+export const loginUser = createAsyncThunk(
+  "auth/loginUser",
+  async (state: { email: string; password: string}, { dispatch, rejectWithValue }) => {
    
+    try {
+      const response = await api.post("/user/login", state);
+      console.log("response",response.data?.logeduser)
     
-
-//   });
-
-  
-export const logoutUser = () => handleAsync ( async (dispatch: Dispatch)=> {
-  
-    const response = await api.post("/user/logout");
-
-
-    console.log("response",response)
-    if (response.status >= 200 && response.status < 300) {
-      dispatch({ type: LOGOUT_USER });
-      dispatch({ type: CLEAR_SAVED_FOLDERS });
-    } else {
-      throw new Error(response.data.message || "An error occurred");
+      dispatch(setActive(response?.data?.logeduser));
+      return response?.data?.logeduser; 
+    } catch (error: any) {
+      console.error("Login error:", error);
+      return rejectWithValue(error.response?.data?.message || "Login failed");
     }
-  
-});
+  }
+);
 
+// logout
+export const logoutUser = createAsyncThunk(
+  "auth/logoutUser",
+  async (_, { dispatch, rejectWithValue }) => {
+    try {
+      const response = await api.post("/user/logout");
+      if (response.status >= 200 && response.status < 300) {
+        dispatch(SetLogout()); 
+        localStorage.removeItem("user"); 
+        return null;
+      } else {
+        throw new Error("Logout failed");
+      }
+    } catch (error: any) {
+      // Handling logout errors
+      console.error("Logout error:", error);
+      return rejectWithValue(error.response?.data?.message || "Logout failed");
+    }
+  }
+);

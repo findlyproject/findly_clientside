@@ -115,8 +115,8 @@ const HomePage = () => {
             </div>
 
             {/* Posts */}
-            {[1, 2, 3].map((post,index) => (
-              <div key={index} className="bg-white rounded-lg shadow mb-4">
+              {[1, 2, 3].map((post) => (
+              <div key={post} className="bg-white rounded-lg shadow mb-4">
                 <div className="p-4">
                   <div className="flex items-center justify-between">
                     <div className="flex items-center">
@@ -209,3 +209,43 @@ const HomePage = () => {
 };
 
 export default HomePage;
+
+
+// import { useEffect } from 'react'
+// import { useDispatch, useSelector } from 'react-redux'
+// import { Posts } from './middle/Posts'
+// import { RightSideBar } from './rightSide/RightSideBar'
+// import { LeftSideBar } from './leftSide/LeftSide'
+// import { setCurrPage, setNextPage } from '../store/actions/postActions'
+// import loadongGif from '../assets/imgs/loading-gif.gif'
+
+// const HomePage = () => {
+//   const { loggedInUser } = useSelector((state) => state.userModule)
+//   const dispatch = useDispatch()
+
+//   useEffect(() => {
+//     dispatch(setCurrPage('home'))
+//     dispatch(setNextPage(1))
+//   }, [dispatch])
+
+//   if (!loggedInUser)
+//     return (
+//       <section className="feed-load">
+//         <div className="loading">
+//           <span>
+//             <img src={loadongGif} alt="" />
+//           </span>
+//         </div>
+//       </section>
+//     )
+
+//   return (
+//     <section className="feed-page">
+//       <LeftSideBar />
+//       <Posts />
+//       <RightSideBar />
+//     </section>
+//   )
+// }
+
+// export default HomePage
