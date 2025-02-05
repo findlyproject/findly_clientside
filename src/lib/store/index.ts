@@ -5,6 +5,7 @@ import registerReducer from './features/registerSlice'
 import paymentReducer from "./features/paymentSlice"
 import loginReducer from './features/loginSlice'
 import userReducer from "./features/userSlice"
+import ratingReducer from "./features/ratingSlice"
 export const makeStore = () => {
     return configureStore({
      reducer:{
@@ -13,7 +14,8 @@ export const makeStore = () => {
        register:registerReducer,
        payment:paymentReducer,
        login:loginReducer,
-       user:userReducer
+       user:userReducer,
+       rating:ratingReducer
      }
     });
   };
