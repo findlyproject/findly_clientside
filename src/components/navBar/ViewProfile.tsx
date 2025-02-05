@@ -1,11 +1,11 @@
 "use client"
 
 import { useAppSelector } from "@/lib/store/hooks";
+import { useEffect } from "react";
 
 export default function ViewProfile() {
 
-const user=useAppSelector((state)=>state.user.details)
-console.log("user",user);
+
 
 
   const institutes = [

@@ -1,7 +1,6 @@
 
-import { setUserDetailes } from "@/lib/store/features/userSlice";
-import { useAppDispatch, useAppSelector } from "@/lib/store/hooks";
-import api from "@/utils/api";
+
+
 import { Menu, Transition } from "@headlessui/react";
 import { BellIcon } from "@heroicons/react/24/outline";
 import Link from "next/link";
@@ -11,17 +10,7 @@ import React from "react";
 
 function AfterLogin() {
   const router=useRouter()
-const dispatch=useAppDispatch()
-const userdetailes=useAppSelector((state)=>state.user.details)
-console.log("userdetailes",userdetailes);
 
-  const handleViewProfile=async()=>{
-    const response=await api.get(`/api/user/currentuserdetails`)
-    console.log("response of user profile view",response);
-    dispatch(setUserDetailes(response.data.currentUserDetails))
-    router.push("/ownprofile")
-    
-  }
   return (
     <div className="flex">
       <Link href="/notification">
@@ -48,7 +37,6 @@ console.log("userdetailes",userdetailes);
             <Menu.Item>
               {({ active }) => (
                 <button
-                onClick={handleViewProfile}
                   
                   className={`block px-4 py-2 text-sm hover:bg-gray-300 ${
                     active ? "bg-gray-300" : ""
