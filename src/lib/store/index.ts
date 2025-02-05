@@ -36,24 +36,27 @@ import registerReducer from "./features/registerSlice";
 import paymentReducer from "./features/paymentSlice";
 import loginReducer from "./features/userSlice";
 import userReducer from "./features/userSlice";
-
+import ratingReducer from "./features/ratingSlice"
 // Create persist configs for specific reducers
 const userPersistConfig = { key: "user", storage };
 const loginPersistConfig = { key: "login", storage };
-
+const ratingPersistConfig={key:"login",storage}
+const registerPersistConfig={key:"register",storage}
 // Wrap reducers with persistReducer
 const persistedUserReducer = persistReducer(userPersistConfig, userReducer);
+const persistedRegisterReducer = persistReducer(registerPersistConfig, registerReducer);
 const persistedLoginReducer = persistReducer(loginPersistConfig, loginReducer);
-
+const persistedRatingReducer=persistReducer(ratingPersistConfig,ratingReducer)
 // Configure the store
 export const makeStore = () =>
   configureStore({
     reducer: {
       theme: themeReducer,
-      register: registerReducer,
+      register: persistedRegisterReducer,//persisted
       payment: paymentReducer,
       login: persistedLoginReducer,  // Persist login state
-      user: persistedUserReducer,    // Persist user state
+      user: persistedUserReducer, //persist
+      rating:persistedRatingReducer   // Persist rating state
     },
     middleware: (getDefaultMiddleware) =>
       getDefaultMiddleware({
