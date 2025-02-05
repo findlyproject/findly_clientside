@@ -1,11 +1,7 @@
-<<<<<<< HEAD
 
 
-
-=======
-import { logoutUser, SetLogout } from "@/lib/store/features/loginSlice";
-import { useAppDispatch, useAppSelector } from "@/lib/store/hooks";
->>>>>>> 0633bea806bfe40d6600a7aec3c8e2aa08e0a03d
+import { useAppDispatch,useAppSelector } from "@/lib/store/hooks";
+import { SetLogout,logoutUser } from "@/lib/store/features/loginSlice";
 import { Menu, Transition } from "@headlessui/react";
 import { BellIcon } from "@heroicons/react/24/outline";
 import Link from "next/link";
@@ -16,10 +12,8 @@ import Image from "next/image";
 
 
 function AfterLogin() {
-<<<<<<< HEAD
   const router=useRouter()
 
-=======
 
   const dispatch = useAppDispatch()
     const handilLogut = ()=>{
@@ -29,7 +23,6 @@ function AfterLogin() {
     const {activeuser} = useAppSelector((state)=>state.login)
     console.log("nabar",activeuser);
     
->>>>>>> 0633bea806bfe40d6600a7aec3c8e2aa08e0a03d
   return (
     <div className="flex">
       <Link href="/notification">
@@ -58,7 +51,7 @@ function AfterLogin() {
             <Menu.Item>
               {({ active }) => (
                 <button
-                  
+                  onClick={()=>router.push(`/ownprofile`)}
                   className={`block px-4 py-2 text-sm hover:bg-gray-300 ${
                     active ? "bg-gray-300" : ""
                   }`}
