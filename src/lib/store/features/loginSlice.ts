@@ -47,7 +47,6 @@ interface loginType {
         _id: string;},
 }
 const state = localStorage.getItem("user")
-
 const initialState:loginType={
     activeuser:JSON.parse(state),
 }
@@ -68,7 +67,7 @@ const loginSlice = createSlice({
 })
 
 export const logoutUser = createAsyncThunk(
-  "auth/logout", // Action type
+  "auth/logout", 
   async (_, thunkAPI) => {
     try {
       await api.post("/api/user/logout");
