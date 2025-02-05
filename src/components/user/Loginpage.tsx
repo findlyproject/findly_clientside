@@ -6,8 +6,7 @@ import { useAppDispatch } from "@/lib/store/hooks";
 import { setActive } from "@/lib/store/features/loginSlice";
 import { useRouter } from "next/navigation";
 import api from "@/utils/api";
-import Image from "next/image";
-import 
+
 function Loginpage() {
   const router = useRouter()
   const [state, setState] = useState({
@@ -42,7 +41,7 @@ const dispatch = useAppDispatch()
     <div className="flex h-screen items-center justify-center bg-gray-100">
       {/* Logo in top-left */}
       <div className="absolute top-6 left-6">
-        <Image src={logo} alt="Findly Logo" className="w-32" />
+        <Image src="/ascites/findlylogo.png" alt="Findly Logo" className="w-32" />
       </div>
 
       {/* Main Container */}
@@ -104,7 +103,7 @@ const dispatch = useAppDispatch()
         </div>
 
         <div className="hidden md:block md:w-1/2 bg-gray-300">
-          <img
+          <Image
             src="https://images.pexels.com/photos/414612/pexels-photo-414612.jpeg?cs=srgb&dl=pexels-souvenirpixels-414612.jpg&fm=jpg"
             alt="Login Background"
             className="w-full h-full object-cover"
