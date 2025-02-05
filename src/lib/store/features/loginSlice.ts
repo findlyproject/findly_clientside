@@ -1,5 +1,6 @@
 import api from "@/utils/api";
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit"
+import { LOGOUT_USER } from "./actions/userActions";
 
 
 interface loginType {
@@ -44,11 +45,11 @@ interface loginType {
       
         coverLetter?: string;
         isBlocked?: boolean;
-        _id: string;},
+        _id: string;}|null,
 }
-const state = localStorage.getItem("user")
+
 const initialState:loginType={
-    activeuser:JSON.parse(state),
+    activeuser:null,
 }
 
 
@@ -59,27 +60,31 @@ const loginSlice = createSlice({
         setActive: (state,actions) => {
           state.activeuser = actions.payload; 
         },
-        SetLogout: (state)=>{
-          state.activeuser = null;
+        SetLogout: (state,action)=>{
+          switch(action.type){
+            case LOGOUT_USER:
+              state.activeuser=null
+
+          }
         }
     }
 
 })
 
-export const logoutUser = createAsyncThunk(
-  "auth/logout", 
-  async (_, thunkAPI) => {
-    try {
-      await api.post("/api/user/logout");
-      localStorage.removeItem("user");
+// export const logoutUser = createAsyncThunk(
+//   "auth/logout", 
+//   async (_, thunkAPI) => {
+//     try {
+//       await api.post("/api/user/logout");
+//       localStorage.removeItem("user");
 
-      return null; 
-    } catch (error: any) {
-      console.log("logout error", error);
-      return thunkAPI.rejectWithValue(error.response?.data?.message || "Logout failed");
-    }
-  }
-);
+//       return null; 
+//     } catch (error: any) {
+//       console.log("logout error", error);
+//       return thunkAPI.rejectWithValue(error.response?.data?.message || "Logout failed");
+//     }
+//   }
+// );
 
 
 export const {setActive,SetLogout} = loginSlice.actions;
