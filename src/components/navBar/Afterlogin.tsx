@@ -1,16 +1,35 @@
+<<<<<<< HEAD
 
 
 
+=======
+import { logoutUser, SetLogout } from "@/lib/store/features/loginSlice";
+import { useAppDispatch, useAppSelector } from "@/lib/store/hooks";
+>>>>>>> 0633bea806bfe40d6600a7aec3c8e2aa08e0a03d
 import { Menu, Transition } from "@headlessui/react";
 import { BellIcon } from "@heroicons/react/24/outline";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import React from "react";
+import { navigation } from "./Navbar";
+import Image from "next/image";
 
 
 function AfterLogin() {
+<<<<<<< HEAD
   const router=useRouter()
 
+=======
+
+  const dispatch = useAppDispatch()
+    const handilLogut = ()=>{
+      dispatch(SetLogout())
+      dispatch(logoutUser())
+    }
+    const {activeuser} = useAppSelector((state)=>state.login)
+    console.log("nabar",activeuser);
+    
+>>>>>>> 0633bea806bfe40d6600a7aec3c8e2aa08e0a03d
   return (
     <div className="flex">
       <Link href="/notification">
@@ -18,11 +37,13 @@ function AfterLogin() {
         <BellIcon className="h-6 w-6" />
       </button></Link>
       <Menu as="div" className="relative ml-3">
-        <Menu.Button className="flex text-sm rounded-full focus:outline-none">
-          <img
-            src="https://images.unsplash.com/photo-1472099645785-5658abf4ff4e"
+        <Menu.Button className="flex text-sm rounded-full focus:outline-none w-32">
+          <Image
+            src="/assets/profile.jpg"
             alt="User"
-            className="h-8 w-8 rounded-full"
+            width={200}
+            height={200}
+            className="h-10 w-10 rounded-full"
           />
         </Menu.Button>
         <Transition
@@ -46,42 +67,22 @@ function AfterLogin() {
                 </button>
               )}
             </Menu.Item>
-            <Menu.Item>
-              {({ active }) => (
-                <Link
-                  href="/profile"
-                  className={`block px-4 py-2 text-sm hover:bg-gray-300 ${
-                    active ? "bg-gray-300" : ""
-                  }`}
-                >
-                  Home
-                </Link>
-              )}
-            </Menu.Item>
-            <Menu.Item>
-              {({ active }) => (
-                <Link
-                  href="/profile"
-                  className={`block px-4 py-2 text-sm hover:bg-gray-300 ${
-                    active ? "bg-gray-300" : ""
-                  }`}
-                >
-                  About
-                </Link>
-              )}
-            </Menu.Item>
-            <Menu.Item>
-              {({ active }) => (
-                <Link
-                  href="/profile"
-                  className={`block px-4 py-2 text-sm hover:bg-gray-300 ${
-                    active ? "bg-gray-300" : ""
-                  }`}
-                >
-                  Contact
-                </Link>
-              )}
-            </Menu.Item>
+            {navigation.map((item)=>(
+                <Menu.Item key={item.name}>
+                  
+                {({ active }) => (
+                  <Link
+                  key={item.name}
+                  href={item.href}
+                    className={`block px-4 py-2 text-sm hover:bg-gray-300 ${
+                      active ? "bg-gray-300" : ""
+                    }`}
+                  >
+                    {item.name}
+                  </Link>
+                )}
+              </Menu.Item>
+              ))}
             <Menu.Item>
               {({ active }) => (
                 <Link
@@ -100,6 +101,7 @@ function AfterLogin() {
                   className={`block w-full text-left px-4 py-2 text-md hover:bg-gray-300 text-red-600 ${
                     active ? "bg-gray-100" : ""
                   }`}
+                  onClick={handilLogut}
                 >
                   Sign out
                 </button>
