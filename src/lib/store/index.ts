@@ -34,7 +34,7 @@ import { FLUSH, REHYDRATE, PAUSE, PERSIST, PURGE, REGISTER } from "redux-persist
 import themeReducer from "./features/them";
 import registerReducer from "./features/registerSlice";
 import paymentReducer from "./features/paymentSlice";
-import loginReducer from "./features/loginSlice";
+import loginReducer from "./features/userSlice";
 import userReducer from "./features/userSlice";
 
 // Create persist configs for specific reducers

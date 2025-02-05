@@ -3,11 +3,11 @@ import React, { useState } from "react";
 import { signIn, signOut } from "next-auth/react";
 import { FcGoogle } from "react-icons/fc";
 import { useAppDispatch } from "@/lib/store/hooks";
-import { logoutUser, setActive, SetLogout } from "@/lib/store/features/loginSlice";
+import { logoutUser, setActive, SetLogout } from "@/lib/store/features/userSlice";
 import { useRouter } from "next/navigation";
 import api from "@/utils/api";
 import Image from "next/image";
-// import { loginUser } from "@/lib/store/features/actions/userActions";
+import { loginUser } from "@/lib/store/features/actions/userActions";
 
 function Loginpage() {
   const router = useRouter()
@@ -20,24 +20,16 @@ function Loginpage() {
     setState({ ...state, [e.target.name]: e.target.value });
   }
 
-  const handleSubmit = async (e: React.FormEvent) => {
+  const handleSubmit = async(e: React.FormEvent) => {
     e.preventDefault();
-    try {
-      const response = await api.post("/user/login", state)
-      console.log("response", response?.data.logeduser);
+    const resultAction = await dispatch(loginUser(state));
 
-      alert("Login Successful!")
-      router.push("/home")
-      dispatch(setActive(response?.data?.logeduser))
-      localStorage.setItem("user", JSON.stringify(response?.data?.logeduser))
-    } catch (error: any) {
-      alert(error?.response.data?.message)
+    if (loginUser.fulfilled.match(resultAction)) {
+      router.push("/home");  
+      alert("Login Successful!");
     }
-
   };
-  // const handleSubmit=(e: React.FormEvent)=>{
-  //   dispatch(loginUser(state,router)(e))
-  // }
+  
   const googlelogin = () => {
     signIn("google");
   };
