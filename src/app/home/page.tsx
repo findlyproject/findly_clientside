@@ -4,7 +4,7 @@ import Navbar from "@/components/navBar/Navbar";
 
 function page() {
   return (
-    <div>
+    <div className='bg-slate-500'>
       <Navbar/>
       <HomePage/>
     </div>

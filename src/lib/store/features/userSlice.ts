@@ -1,7 +1,7 @@
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 
-// Define the shape of the user's active profile
-interface UserProfile {
+
+  export interface UserProfile {
   firstName: string;
   lastName: string;
   email: string;
@@ -42,10 +42,12 @@ interface UserProfile {
 
 interface LoginState {
   activeuser: UserProfile | null;
+  googlestate:boolean;
 }
 
 const initialState: LoginState = {
   activeuser: null,
+  googlestate:true
 };
 
 const loginSlice = createSlice({
@@ -55,12 +57,16 @@ const loginSlice = createSlice({
     setActive: (state, action: PayloadAction<UserProfile | null>) => {
       state.activeuser = action.payload;
     },
+    setGooglelogin: (state)=>{
+      state.googlestate = false
+    },
     SetLogout: (state) => {
       state.activeuser = null;
+      state.googlestate = true
     },
   },
 });
 
 
-export const { setActive, SetLogout } = loginSlice.actions;
+export const { setActive, SetLogout,setGooglelogin } = loginSlice.actions;
 export default loginSlice.reducer;
