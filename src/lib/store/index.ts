@@ -1,27 +1,3 @@
-// import { configureStore } from "@reduxjs/toolkit";
-
-// import themeReducer from "./features/them"
-// import registerReducer from './features/registerSlice'
-// import paymentReducer from "./features/paymentSlice"
-// import loginReducer from './features/loginSlice'
-// import userReducer from "./features/userSlice"
-// export const makeStore = () => {
-//     return configureStore({
-//      reducer:{
-       
-//        theme:themeReducer,
-//        register:registerReducer,
-//        payment:paymentReducer,
-//        login:loginReducer,
-//        user:userReducer
-//      }
-//     });
-//   };
-  
-//   export type AppStore = ReturnType<typeof makeStore>;
-//   export type RootState = ReturnType<AppStore["getState"]>;
-//   export type AppDispatch = AppStore["dispatch"];
-
 
 
 
@@ -30,33 +6,36 @@ import { persistStore, persistReducer } from "redux-persist";
 import storage from "redux-persist/lib/storage";
 import { FLUSH, REHYDRATE, PAUSE, PERSIST, PURGE, REGISTER } from "redux-persist";
 
-// Import your reducers
+
 import themeReducer from "./features/them";
 import registerReducer from "./features/registerSlice";
 import paymentReducer from "./features/paymentSlice";
 import loginReducer from "./features/userSlice";
 import userReducer from "./features/userSlice";
 import ratingReducer from "./features/ratingSlice"
-// Create persist configs for specific reducers
+
 const userPersistConfig = { key: "user", storage };
 const loginPersistConfig = { key: "login", storage };
 const ratingPersistConfig={key:"login",storage}
 const registerPersistConfig={key:"register",storage}
-// Wrap reducers with persistReducer
+const paymentPersistConfig={key:"payment",storage}
+
 const persistedUserReducer = persistReducer(userPersistConfig, userReducer);
 const persistedRegisterReducer = persistReducer(registerPersistConfig, registerReducer);
 const persistedLoginReducer = persistReducer(loginPersistConfig, loginReducer);
 const persistedRatingReducer=persistReducer(ratingPersistConfig,ratingReducer)
-// Configure the store
+const persistedPaymentReducer=persistReducer(paymentPersistConfig,paymentReducer)
+
 export const makeStore = () =>
   configureStore({
     reducer: {
       theme: themeReducer,
-      register: persistedRegisterReducer,//persisted
-      payment: paymentReducer,
-      login: persistedLoginReducer,  // Persist login state
-      user: persistedUserReducer, //persist
-      rating:persistedRatingReducer   // Persist rating state
+      register: persistedRegisterReducer,
+      payment: persistedPaymentReducer,
+      login: persistedLoginReducer,  
+      user: persistedUserReducer, 
+      rating:persistedRatingReducer  ,
+      
     },
     middleware: (getDefaultMiddleware) =>
       getDefaultMiddleware({
@@ -66,11 +45,11 @@ export const makeStore = () =>
       }),
   });
 
-// Create persistor
+
 export const store = makeStore();
 export const persistor = persistStore(store);
 
-// Define types
+
 export type AppStore = ReturnType<typeof makeStore>;
 export type RootState = ReturnType<AppStore["getState"]>;
 export type AppDispatch = AppStore["dispatch"];

@@ -58,6 +58,7 @@ const loginSlice = createSlice({
     SetLogout: (state) => {
       state.activeuser = null;
     },
+    
   },
 });
 

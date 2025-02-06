@@ -35,27 +35,7 @@ function Loginpage() {
     signIn("google");
   };
   
-//  useEffect(()=>{
-//   if(session){
-//     const verfygooglrlogin = async ()=>{
-//       console.log("session",{email:session?.user?.email,name:session?.user?.name});
-      
-//             try {
-//               const response =await api.post("/api/user/googleauthlogin",{email:session?.user?.email,name:session?.user?.name})
-//               alert("Login Successful!")
-//               router.push("/home")
-//               dispatch(setActive(response?.data?.logeduser))
-//               localStorage.setItem("user", JSON.stringify(response?.data?.logeduser))
-              
-//             } catch (error) {
-//               console.log(error);
-              
-//             }
-      
-//     }
-//     verfygooglrlogin()
-//    }
-//  },[session])
+
   
   return (
     <div className="flex h-screen items-center justify-center bg-gray-100">  
