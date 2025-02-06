@@ -1,9 +1,8 @@
 "use client";
 import React, { useState } from "react";
-import { signIn, signOut } from "next-auth/react";
+import { signIn} from "next-auth/react";
 import { FcGoogle } from "react-icons/fc";
 import { useAppDispatch } from "@/lib/store/hooks";
-import { logoutUser, setActive, SetLogout } from "@/lib/store/features/userSlice";
 import { useRouter } from "next/navigation";
 import api from "@/utils/api";
 import Image from "next/image";
@@ -15,6 +14,7 @@ function Loginpage() {
     email: "",
     password: ""
   })
+
   const dispatch = useAppDispatch()
   const handilchange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setState({ ...state, [e.target.name]: e.target.value });
@@ -33,9 +33,31 @@ function Loginpage() {
   const googlelogin = () => {
     signIn("google");
   };
+  
+//  useEffect(()=>{
+//   if(session){
+//     const verfygooglrlogin = async ()=>{
+//       console.log("session",{email:session?.user?.email,name:session?.user?.name});
+      
+//             try {
+//               const response =await api.post("/api/user/googleauthlogin",{email:session?.user?.email,name:session?.user?.name})
+//               alert("Login Successful!")
+//               router.push("/home")
+//               dispatch(setActive(response?.data?.logeduser))
+//               localStorage.setItem("user", JSON.stringify(response?.data?.logeduser))
+              
+//             } catch (error) {
+//               console.log(error);
+              
+//             }
+      
+//     }
+//     verfygooglrlogin()
+//    }
+//  },[session])
+  
   return (
     <div className="flex h-screen items-center justify-center bg-gray-100">  
-      {/* Logo in top-left */}
       <div className="absolute top-3 left-1">
         <Image
           src="/assets/findlylogo.png"
@@ -46,9 +68,7 @@ function Loginpage() {
 
       </div>
 
-      {/* Main Container */}
       <div className="flex flex-wrap bg-white shadow-xl rounded-3xl overflow-hidden w-3/4 max-w-5xl">
-        {/* Left Section - Login Form */}
         <div className="w-full md:w-1/2 p-10 flex flex-col justify-center">
           <h1 className="text-4xl md:text-5xl font-bold text-center text-gray-800">
             Sign In
@@ -58,7 +78,6 @@ function Loginpage() {
           </p>
 
           <form className="mt-6 space-y-5" onSubmit={handleSubmit} >
-            {/* Email Input */}
             <div>
               <label className="text-gray-700 font-medium">Email</label>
               <input

@@ -6,11 +6,11 @@ export default function LoginPage() {
       <div
         style={{
           backgroundImage:
-            "url('https://www.artavenue.com/cdn/shop/files/d4050a_8603d6c1dce748eda96429c1043c93f0_mv2_66ea8f12-0290-4c2d-954e-6da2297ff980.jpg?v=1723625285&width=1200')",
+            "url('https://img.freepik.com/free-vector/illustration-social-media-concept_53876-9147.jpg?t=st=1738738972~exp=1738742572~hmac=7697e2c58c301eb52bc2c15b15800f0be106ae22e573fdcdccbc9d856d6735ea&w=826')",
           backgroundSize: "cover",
           backgroundPosition: "center",
           backgroundRepeat: "no-repeat",
-          opacity: 0.3,
+          opacity: 0.6,
           position: "absolute",
           top: 0,
           left: 0,
@@ -20,23 +20,12 @@ export default function LoginPage() {
         }}
       ></div>
 
-      {/* Wrapper */}
-      <div className="flex flex-wrap lg:flex-nowrap w-full max-w-5xl rounded-lg overflow-hidden z-50">
-        {/* Left Section */}
-        <div className="w-full  lg:w-1/2 flex flex-col items-center justify-center p-6 bg-transparent">
-          <img
-        src='/assets/findlylogo.png'
-            alt="Logo"
-            className="w-1/2 h-1/2 cursor-pointer"
-          />
-          {/* <h1 className="text-7xl text-blue-900 font-bold">Findly</h1> */}
-        </div>
-
+      
+      
         
-        <div className="hidden lg:block w-px bg-gray-700"></div>
-
         
-        <div className="w-full lg:w-1/2 flex flex-col items-center justify-center p-8">
+        
+        <div className="w-full lg:w-1/2 flex flex-col items-center justify-center">
           <h2 className="text-2xl text-white font-semibold mb-2">Welcome</h2>
           <p className="text-sm  mb-6">
             Please login to Admin Dashboard.
@@ -83,14 +72,14 @@ export default function LoginPage() {
             
             <button
               type="submit"
-              className="w-full px-4 py-2 text-sm font-medium text-white bg-blue-900 hover:bg-white-600 rounded-md focus:outline-none focus:ring-2 focus:ring-orange-500"
+              className="w-full px-4 py-2 text-sm font-medium text-white bg-primary hover:bg-white-600 rounded-md focus:outline-none focus:ring-2 focus:ring-orange-500"
             //   onClick={handleSubmit}
             >
               Login
             </button>
           </form>
         </div>
-      </div>
+    
     </div>
   )
 }
