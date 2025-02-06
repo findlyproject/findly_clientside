@@ -1,11 +1,12 @@
 "use client"
 
 import { useAppSelector } from "@/lib/store/hooks";
-import { useEffect } from "react";
 
+import Image from "next/image";
 export default function ViewProfile() {
 
-
+const  currentUser=useAppSelector((state)=>state.user.activeuser)
+console.log("kk",currentUser)
 
 
   const institutes = [
@@ -40,17 +41,20 @@ export default function ViewProfile() {
     
       <div className="p-6 relative  ">
         <div className="w-24 h-24 rounded-full border-4 border-white absolute -top-12 left-6">
-          <img
-            className="w-full h-full object-cover rounded-full"
-            src="https://media.istockphoto.com/id/1437816897/photo/business-woman-manager-or-human-resources-portrait-for-career-success-company-we-are-hiring.jpg?s=612x612&w=0&k=20&c=tyLvtzutRh22j9GqSGI33Z4HpIwv9vL_MZw_xOE19NQ="
-            alt="Profile"
+        <Image
+            src={currentUser?.profileImage||""}
+            alt="Landing Page Illustration"
+            width={100}
+            height={200}
+            className="object-cover rounded-md"
           />
+          
         </div>
         <div className=" flex flex-col md:flex-row justify-between">
-  <div className="mt-12 flex flex-col items-center">
-    <h2 className="text-xl font-bold"></h2>
-    <p className="text-gray-600">Developer</p>
-    <p className="text-gray-500 text-sm">India • 148 connections</p>
+  <div className="mt-12 flex flex-col items-start">
+    <h2 className="text-xl font-bold">{currentUser?.firstName}</h2>
+    <p className="text-gray-900">{currentUser?.jobTitle?.map((title)=>title)}</p>
+    <p className="text-gray-900 text-sm">{currentUser?.jobLocation}• 148 connections</p>
   </div>
 
   <div className="p-6 ">

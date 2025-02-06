@@ -1,6 +1,6 @@
 
 import {  createSlice } from "@reduxjs/toolkit"
-import { LOGOUTUSER } from "./actions/userActions";
+import { logoutUser } from "./actions/userActions";
 
 
 interface loginType {
