@@ -6,6 +6,7 @@ import { AxiosResponse } from "axios";
 
 interface LoginResponse {
   logeduser: UserProfile
+  finduser: UserProfile
 }
 
 
@@ -22,11 +23,25 @@ export const loginUser = createAsyncThunk(
   }
 );
 
+            ///////////////// GOOLE AUTH LOGIN ////////////////
+
+export const googlloginUser = createAsyncThunk(
+  "auth/loginUser",
+  async (data: { email: string; name: string; image: string }, { dispatch, rejectWithValue }) => {
+    const response = await  api.post("/user/googleauthlogin", data);
+    if (!response) {
+      return rejectWithValue("Login failed. Please try again.");
+    }
+    dispatch(setActive(response?.data?.finduser as UserProfile));
+    return response?.data?.logeduser;
+  }
+);
+
 
 export const logoutUser = createAsyncThunk(
   "auth/logoutUser",
   async (_, { dispatch, rejectWithValue }) => {
-    
+
     const response = await handleAsync<AxiosResponse<LoginResponse>>(() => api.post("/user/logout"));
 
     if (!response) {
@@ -36,11 +51,11 @@ export const logoutUser = createAsyncThunk(
     const status: number = response.status;
     if (status >= 200 && status < 300) {
       dispatch(SetLogout());
-  
+
       return null;
     } else {
       throw new Error("Logout failed");
-      
+
     }
 
   }

@@ -1,20 +1,26 @@
 "use client";
-import React, { useState } from "react";
-import { signIn } from "next-auth/react";
+import React, { useEffect, useState } from "react";
+import { signIn, useSession } from "next-auth/react";
 
 import { FcGoogle } from "react-icons/fc";
-import { useAppDispatch } from "@/lib/store/hooks";
+import { useAppDispatch, useAppSelector } from "@/lib/store/hooks";
 import { useRouter } from "next/navigation";
 
 import Image from "next/image";
-import { loginUser } from "@/lib/store/features/actions/userActions";
+import { googlloginUser, loginUser } from "@/lib/store/features/actions/userActions";
+import { toast } from "react-toastify";
+import { setGooglelogin } from "@/lib/store/features/userSlice";
 
 function Loginpage() {
   const router = useRouter()
+  const {data:session} = useSession()
   const [state, setState] = useState({
     email: "",
     password: ""
   })
+  const {googlestate} = useAppSelector((state)=>state.login)
+console.log("googlestate",googlestate);
+
 
   const dispatch = useAppDispatch()
   const handilchange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -27,35 +33,43 @@ function Loginpage() {
 
     if (loginUser.fulfilled.match(resultAction)) {
       router.push("/home");
-      alert("Login Successful!");
+      toast.success("Login Successful!")
     }
   };
+
 
   const googlelogin = () => {
     signIn("google");
   };
+  const [hasLoggedIn, setHasLoggedIn] = useState(false);
+
+  useEffect(() => {
+    if (session && googlestate && !hasLoggedIn) {
+      const data = {
+        email: session.user?.email || "",  
+        name: session.user?.name || "",    
+        image: session.user?.image || "",
+      };
   
-//  useEffect(()=>{
-//   if(session){
-//     const verfygooglrlogin = async ()=>{
-//       console.log("session",{email:session?.user?.email,name:session?.user?.name});
-      
-//             try {
-//               const response =await api.post("/api/user/googleauthlogin",{email:session?.user?.email,name:session?.user?.name})
-//               alert("Login Successful!")
-//               router.push("/home")
-//               dispatch(setActive(response?.data?.logeduser))
-//               localStorage.setItem("user", JSON.stringify(response?.data?.logeduser))
-              
-//             } catch (error) {
-//               console.log(error);
-              
-//             }
-      
-//     }
-//     verfygooglrlogin()
-//    }
-//  },[session])
+      dispatch(googlloginUser(data))
+        .unwrap()
+        .then(() => {
+          if (!hasLoggedIn) {
+            toast.success("Login Success");
+            dispatch(setGooglelogin());
+            router.push("/home");
+            setHasLoggedIn(true);
+          }
+        })
+        .catch((error) => {
+          console.error("Login Failed:", error);
+        });
+    }
+  }, [googlestate]);
+  
+  
+  console.log(session);
+
   
   return (
     <div className="flex h-screen items-center justify-center bg-gray-100">  
