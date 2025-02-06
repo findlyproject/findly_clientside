@@ -1,16 +1,16 @@
-import { createSlice } from "@reduxjs/toolkit";
-
+import { createSlice ,PayloadAction} from "@reduxjs/toolkit";
+interface EducationType {  
+  college: string;  
+  startYear: string;  
+  endYear: string;  
+}  
 interface RegisterType {
     email: string
     password:string
     firstName:string
   lastName:string
   location:string
-  education:{
-    collage:string,
-    startYear:string,
-    endYear:string,
-  },
+  education:EducationType[]
   
   jobTitles:string[],
   jobLocations:string[]
@@ -22,12 +22,12 @@ const initialState: RegisterType = {
   firstName:"",
   lastName:"",
   location:"",
-  education:{
-    collage:"",
+  education:[{
+    college:"",
     startYear:"",
     endYear:"",
     
-  },
+  }],
   
   jobTitles:[],
   jobLocations:[]
@@ -53,15 +53,20 @@ state.firstName=action.payload
     setLocation:(state,action)=>{
       state.location=action.payload
     },
-    setCollage:(state,action)=>{
-  state.education.collage=action.payload
-    },
-    setstartYear:(state,action)=>{
-      state.education.startYear=action.payload
-    },
-    setendYear:(state,action)=>{
-      state.education.endYear=action.payload
-    },
+  //   setCollage:(state,action)=>{
+  // state.education.collage=action.payload
+  //   },
+  //   setstartYear:(state,action)=>{
+  //     state.education.startYear=action.payload
+  //   },
+  //   setendYear:(state,action)=>{
+  //     state.education.endYear=action.payload
+  //   },
+  setEducation: (state, action: PayloadAction<EducationType>) => {  
+    // Assuming only one educational experience is needed, otherwise, you would need to push to the array.  
+    const education = action.payload;  
+    state.education[0] = education; // Update the first education object, if you want to handle multiple, consider using a different approach.  
+  },  
     setjobTitles:(state,action)=>{
       state.jobTitles=action.payload
     },
@@ -71,5 +76,5 @@ state.firstName=action.payload
   },
 });
 
-export const { setEmail,setPassword ,setfirstName,setlastName,setLocation,setCollage,setstartYear,setendYear,setjobTitles,setjobLocations} = registerSlice.actions;
+export const { setEmail,setPassword ,setfirstName,setlastName,setLocation,setEducation,setjobTitles,setjobLocations} = registerSlice.actions;
 export default registerSlice.reducer;

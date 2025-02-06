@@ -10,13 +10,13 @@ function Beforlogin() {
   return (
     <div>
       <Link href="/login" className="flex justify-end">
-        <button className="bg-blue-800 p-2 px-7 rounded-full text-white hidden md:block">
+        <button className="bg-primary p-2 px-7 rounded-full text-white hidden md:block">
           Join
         </button>
       </Link>
       <div className="md:hidden flex gap-3">
         <Link href="/login" className="flex justify-end">
-          <button className="bg-blue-800 p-1 px-5 rounded-full text-white">
+          <button className="bg-primary p-1 px-5 rounded-full text-white">
             Join
           </button>
         </Link>

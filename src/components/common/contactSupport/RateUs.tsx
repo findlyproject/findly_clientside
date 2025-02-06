@@ -19,7 +19,7 @@ const RateUs: React.FC = () => {
     }
   
     try {
-      const response = await api.post(`/api/rating/createreview`, {review:message, starsRating:rating });
+      const response = await api.post(`/rating/createreview`, {review:message, starsRating:rating });
       console.log("Response rating:", response.data);
       
       setMessage("");  

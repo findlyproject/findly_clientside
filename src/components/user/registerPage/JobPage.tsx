@@ -46,7 +46,7 @@ const validateForm=()=>{
 
 if(validateForm()){
   try {
-    const response=await api.post(`/api/user/registration`,{ ...formData, 
+    const response=await api.post(`/user/registration`,{ ...formData, 
       jobTitles: JobTitles, 
       jobLocations: JobLocations })
     console.log("response",response);

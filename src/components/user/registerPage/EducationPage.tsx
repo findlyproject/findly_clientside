@@ -4,10 +4,9 @@ import React, { useState } from "react";
 import { useRouter } from "next/navigation";
 import { useAppDispatch } from "@/lib/store/hooks";
 import {
-  setCollage,
-  setendYear,
-  setLocation,
-  setstartYear,
+  setEducation,
+  setLocation
+ 
 } from "@/lib/store/features/registerSlice";
 
 export default function EducationPage() {
@@ -53,9 +52,8 @@ export default function EducationPage() {
 
     if (isValid) {
       dispatch(setLocation(Location));
-      dispatch(setCollage(College));
-      dispatch(setstartYear(StartYear));
-      dispatch(setendYear(EndYear));
+      dispatch(setEducation({ college: College, startYear: StartYear, endYear: EndYear }));
+
       router.push(`/register/namepage/educationpage/questionpage`);
     }
   };

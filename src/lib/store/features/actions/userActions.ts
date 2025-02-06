@@ -2,6 +2,9 @@ import { createAsyncThunk } from '@reduxjs/toolkit';
 import api from '@/utils/api'; // Assuming the API is set up
 import { setActive, SetLogout } from '../userSlice';
 
+
+
+
 // login
 export const loginUser = createAsyncThunk(
   "auth/loginUser",

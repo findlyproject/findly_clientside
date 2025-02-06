@@ -30,7 +30,7 @@ export default function Navbar() {
       const fetchUsers = async () => {
         try {
           const response = await api.get(
-            `/api/user/usersearch?firstName=${searchQuery}`
+            `/user/usersearch?firstName=${searchQuery}`
           );
           setSearchResults(response.data);
         } catch (error) {
@@ -56,18 +56,17 @@ export default function Navbar() {
             <Link href="/">
               <Image src={logo} alt="Logo" width={150} height={50} />
             </Link>
-<<<<<<< HEAD
 
-            <div className="relative w-52">
-             
-              <div className="w-full h-10 bg-slate-200 rounded-3xl outline-none">
-                <input
-                  type="text"
-                  placeholder="Search"
-                  value={searchQuery}
-                  onChange={handleSearchChange}
-                  className="w-full h-full bg-transparent outline-none p-2"
-                />
+            <div className="relative w-96">
+            
+                <div className="w-96 h-10 bg-slate-200 rounded-3xl outline-none">
+               <input 
+               type="text" 
+               placeholder="Search"
+               value={searchQuery}
+               onChange={handleSearchChange}
+               className="w-full h-full bg-transparent outline-none p-2 pl-4 "
+               />
               </div>
 
               
@@ -95,14 +94,7 @@ export default function Navbar() {
                   </ul>
                 </div>
               )}
-=======
-            
-            <div className="w-96 h-10 bg-slate-200 rounded-3xl outline-none">
-               <input type="text" 
-               placeholder="Search"
-               className="w-full h-full bg-transparent outline-none p-2 pl-4 "
-               />
->>>>>>> 88be1ced2c10f9cc228c17579e4777aeb61b7b83
+          
             </div>
           </div>
 
