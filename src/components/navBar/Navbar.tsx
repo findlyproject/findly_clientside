@@ -56,7 +56,6 @@ export default function Navbar() {
             <Link href="/">
               <Image src={logo} alt="Logo" width={150} height={50} />
             </Link>
-<<<<<<< HEAD
 
             <div className="relative w-52">
              
@@ -95,14 +94,6 @@ export default function Navbar() {
                   </ul>
                 </div>
               )}
-=======
-            
-            <div className="w-96 h-10 bg-slate-200 rounded-3xl outline-none">
-               <input type="text" 
-               placeholder="Search"
-               className="w-full h-full bg-transparent outline-none p-2 pl-4 "
-               />
->>>>>>> 88be1ced2c10f9cc228c17579e4777aeb61b7b83
             </div>
           </div>
 
@@ -126,3 +117,4 @@ export default function Navbar() {
     </nav>
   );
 }
+

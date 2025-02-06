@@ -1,10 +1,11 @@
 "use client";
 import React, { useState } from "react";
-import { signIn} from "next-auth/react";
+import { signIn } from "next-auth/react";
+
 import { FcGoogle } from "react-icons/fc";
 import { useAppDispatch } from "@/lib/store/hooks";
 import { useRouter } from "next/navigation";
-import api from "@/utils/api";
+
 import Image from "next/image";
 import { loginUser } from "@/lib/store/features/actions/userActions";
 
@@ -20,16 +21,16 @@ function Loginpage() {
     setState({ ...state, [e.target.name]: e.target.value });
   }
 
-  const handleSubmit = async(e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     const resultAction = await dispatch(loginUser(state));
 
     if (loginUser.fulfilled.match(resultAction)) {
-      router.push("/home");  
+      router.push("/home");
       alert("Login Successful!");
     }
   };
-  
+
   const googlelogin = () => {
     signIn("google");
   };
@@ -118,7 +119,7 @@ function Loginpage() {
           >
             <FcGoogle className="mr-2" /> <span className="mb-2">google</span>
           </button>
-      
+
         </div>
 
         <div className="hidden md:block md:w-1/2 bg-gray-300">

@@ -1,7 +1,7 @@
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 
-// Define the shape of the user's active profile
-interface UserProfile {
+
+  export interface UserProfile {
   firstName: string;
   lastName: string;
   email: string;
