@@ -4,9 +4,9 @@ import { signIn} from "next-auth/react";
 import { FcGoogle } from "react-icons/fc";
 import { useAppDispatch } from "@/lib/store/hooks";
 import { useRouter } from "next/navigation";
-import api from "@/utils/api";
 import Image from "next/image";
 import { loginUser } from "@/lib/store/features/actions/userActions";
+import { toast } from "react-toastify";
 
 function Loginpage() {
   const router = useRouter()
@@ -26,7 +26,7 @@ function Loginpage() {
 
     if (loginUser.fulfilled.match(resultAction)) {
       router.push("/home");  
-      alert("Login Successful!");
+      toast.success("Login Successful!")
     }
   };
   
