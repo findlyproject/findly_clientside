@@ -67,7 +67,8 @@ state.firstName=action.payload
     },
     setjobLocations:(state,action)=>{
       state.jobLocations=action.payload
-    }
+    },
+    
   },
 });
 

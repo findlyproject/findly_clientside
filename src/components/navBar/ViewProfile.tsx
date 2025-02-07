@@ -1,12 +1,13 @@
 "use client"
 
 import { useAppSelector } from "@/lib/store/hooks";
-
+import  verification from "../../../public/assets/verify.jpg"
 import Image from "next/image";
 export default function ViewProfile() {
 
 const  currentUser=useAppSelector((state)=>state.user.activeuser)
 console.log("kk",currentUser)
+console.log("lo",currentUser)
 
 
   const institutes = [
@@ -18,8 +19,8 @@ console.log("kk",currentUser)
       name: "indira gandhi national open university",
       image: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcStkIsZznuUBcOT2_hbUSeny3JcX3uUWblePw&s",
     },
-  
   ];
+console.log("dd",currentUser?.role === "premium");
 
 
   return (
@@ -52,16 +53,20 @@ console.log("kk",currentUser)
         </div>
         <div className=" flex flex-col md:flex-row justify-between">
   <div className="mt-12 flex flex-col items-start">
-    <h2 className="text-xl font-bold">{currentUser?.firstName}</h2>
+  <div className="flex items-center justify-between ">
+   <h2 className="text-xl font-bold">{currentUser?.firstName}</h2>
+<span>{currentUser?.role === "premium" && <Image src={verification} width={30}height={20} alt="Verified" />}</span>
+
+</div>
     <p className="text-gray-900">{currentUser?.jobTitle?.map((title)=>title)}</p>
-    <p className="text-gray-900 text-sm">{currentUser?.jobLocation}• 148 connections</p>
+    <p className="text-gray-900 text-sm">{currentUser?.location}• 148 connections</p>
   </div>
 
   <div className="p-6 ">
     <div className="mt-2 flex flex-col justify-center md:justify-start">
       {institutes.map((institute, index) => (
         <div key={index} className="w-full flex items-center justify-start md:justify-start mb-4">
-          <img className="w-14 mb-2" src={institute.image} alt={institute.name} />
+          <img className="w-14 mb-2" src={institute.image} alt={institute.name}/>
           <p className="text-center">{institute.name}</p>
         </div>
       ))}
@@ -137,7 +142,7 @@ console.log("kk",currentUser)
         </div>
       </div>
       
-      {/* Skills Section */}
+   
       <div className="p-6 border-t">
         <h3 className="text-lg font-semibold">Skills</h3>
         <ul className="mt-2 list-disc list-inside">
