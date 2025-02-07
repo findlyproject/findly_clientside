@@ -1,12 +1,13 @@
-import UploadForm from '@/components/user/ressume/Uploadpage'
+import FileUpload from '@/components/user/ressume/Upload'
 import React from 'react'
 
 const page = () => {
   return (
     <div>
-      <UploadForm/>
+      <FileUpload/>
     </div>
   )
 }
 
 export default page
+  
