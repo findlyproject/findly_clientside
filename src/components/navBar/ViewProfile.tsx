@@ -30,14 +30,15 @@ console.log("dd",currentUser?.role === "premium");
 
 <div className="max-w-4xl mx-auto bg-white shadow-lg rounded-lg overflow-hidden mt-5">
    
-      <div className="relative h-36 bg-gray-300">
-        <img
-          className="h-full w-full"
-          src="https://media.istockphoto.com/id/1086352374/photo/minimal-work-space-creative-flat-lay-photo-of-workspace-desk-top-view-office-desk-with-laptop.jpg?s=612x612&w=0&k=20&c=JYBNQsgeO13lU1rq3kUWfD-W0Xii3sFyYzijvsntplY="
-          alt="Profile Banner"
-        />
-        
-      </div>
+<div className="relative h-36 bg-gray-300">
+  <Image
+    className="object-cover"
+    src={currentUser?.banner || ""}
+    alt="Profile Banner"
+    fill
+  />
+</div>
+
       
     
       <div className="p-6 relative  ">
@@ -54,7 +55,7 @@ console.log("dd",currentUser?.role === "premium");
         <div className=" flex flex-col md:flex-row justify-between">
   <div className="mt-12 flex flex-col items-start">
   <div className="flex items-center justify-between ">
-   <h2 className="text-xl font-bold">{currentUser?.firstName}</h2>
+   <h2 className="text-xl font-bold">{currentUser?.firstName} {currentUser?.lastName}</h2>
 <span>{currentUser?.role === "premium" && <Image src={verification} width={30}height={20} alt="Verified" />}</span>
 
 </div>
