@@ -4,7 +4,7 @@ import { useState } from "react";
 import { setEmail, setPassword } from "@/lib/store/features/registerSlice";
 import { useAppDispatch } from "@/lib/store/hooks";
 import api from "@/utils/api";
-import { log } from "console";
+
 
 export default function RegisterPage() {
   const dispatch = useAppDispatch();
@@ -36,7 +36,9 @@ export default function RegisterPage() {
     console.log("emailll",email);
     
     try {
-      const response = await api.get(`/api/user/all?email=${email}`);
+      const response = await api.get(`/user/all?email=${email}`);
+      console.log("response check email",response);
+      
       return response.data.exists;
     } catch (error) {
       console.error("Error checking email:", error);
@@ -46,6 +48,7 @@ export default function RegisterPage() {
 
   const validateForm = async () => {
     let isValid = true;
+console.log("emaillllllllll" ,Email);
 
     if (!Email) {
       setEmailError("Email is required.");
@@ -55,6 +58,8 @@ export default function RegisterPage() {
       isValid = false;
     } else {
       const emailExists = await checkEmailExists(Email);
+      console.log("emailExists",emailExists);
+      
       if (emailExists) {
         setEmailError("Email already exists. Please use a different email.");
         isValid = false;

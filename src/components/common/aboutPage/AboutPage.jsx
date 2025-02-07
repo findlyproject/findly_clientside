@@ -1,25 +1,28 @@
 import React from "react";
 import Footer from "../footer/Footer";
-
+import Image from "next/image";
+import aboutimage1 from "../../../../public/assets/aboutimage1.jpg"
+import aboutimage2  from "../../../../public/assets/aboutimage2.jpg"
+import aboutimage3 from "../../../../public/assets/aboutimage3.jpg"
 export default function AboutPage() {
   return (
     <div>
       <section className="flex flex-col lg:flex-row items-center justify-center px-6 lg:px-20 py-10 gap-10">
       <div className="flex flex-col space-y-4">
-  <img
-    src="https://i.pinimg.com/736x/0a/57/bc/0a57bce7dd90b7ae5925db13dbf90996.jpg"
+  <Image
+    src={aboutimage1}
     className="rounded-lg shadow-md w-full lg:w-72 h-[300px] object-cover"
   />
-  <img
-    src="https://i.pinimg.com/736x/73/57/b4/7357b4cf1b3ad436a5122047051c2ce3.jpg"
+  <Image
+    src={aboutimage2}
     className="rounded-lg shadow-md w-full lg:w-72 h-[300px] object-cover"
   />
 </div>
 
         <div className="flex flex-col gap-6">
           <div className="relative">
-            <img
-              src="https://i.pinimg.com/736x/3f/0c/80/3f0c80a54cea36207842cda6ea31d08b.jpg" // Replace with actual image
+            <Image
+              src={aboutimage3}
               alt="Girl using tablet"
               className="rounded-lg shadow-md w-full lg:w-72"
             />

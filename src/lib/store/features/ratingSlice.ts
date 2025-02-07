@@ -1,7 +1,7 @@
 
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 
-interface Rating {
+ export interface Rating {
   _id: string;
   review: string;
   starsRating: number;

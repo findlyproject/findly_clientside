@@ -19,7 +19,8 @@ import { createSlice, PayloadAction } from "@reduxjs/toolkit";
     startYear: string;
     endYear: string;
     location: string;
-  };
+    college:string
+  }[]
   projects?: {
     title: string;
     description: string;
