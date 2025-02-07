@@ -4,7 +4,7 @@ import { useState } from "react";
 import { setEmail, setPassword } from "@/lib/store/features/registerSlice";
 import { useAppDispatch } from "@/lib/store/hooks";
 import api from "@/utils/api";
-import { log } from "console";
+// import { log } from "console";
 
 export default function RegisterPage() {
   const dispatch = useAppDispatch();
