@@ -82,6 +82,7 @@ const Testimonials = () => {
                   ))}
                 </div>
 
+
                 <p className="text-base text-gray-600 leading-6 pb-8 group-hover:text-gray-800">
                   {expandedIndex === index
                     ? rating.review

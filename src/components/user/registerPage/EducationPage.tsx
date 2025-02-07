@@ -15,11 +15,21 @@ export default function EducationPage() {
   const [College, setLocalcollege] = useState("");
   const [StartYear, setStartYear] = useState("");
   const [EndYear, setEndYear] = useState("");
+
+  
   const [locationError, setlocationError] = useState("");
   const [collegeError, setcollegeError] = useState("");
   const [startError, setstartError] = useState("");
   const [endError, setendError] = useState("");
+  
+  console.log("StartYear",StartYear,EndYear,College);
+  
+ 
+  
   const router = useRouter();
+  const validateYears = (year: string): boolean => {
+    return /^\d{4}$/.test(year); // Ensures 4-digit year
+  };
   const handleContinue = (e: React.MouseEvent<HTMLButtonElement>) => {
     e.preventDefault();
 
@@ -51,8 +61,16 @@ export default function EducationPage() {
     }
 
     if (isValid) {
+      const education={
+        college:College,
+        startYear:StartYear,
+        endYear:EndYear
+      }
+      console.log("educationeducation",education);
+      
       dispatch(setLocation(Location));
-      dispatch(setEducation({ college: College, startYear: StartYear, endYear: EndYear }));
+
+      dispatch(setEducation(education));
 
       router.push(`/register/namepage/educationpage/questionpage`);
     }

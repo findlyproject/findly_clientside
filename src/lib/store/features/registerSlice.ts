@@ -11,7 +11,6 @@ interface RegisterType {
   lastName:string
   location:string
   education:EducationType[]
-  
   jobTitles:string[],
   jobLocations:string[]
 }
@@ -22,12 +21,7 @@ const initialState: RegisterType = {
   firstName:"",
   lastName:"",
   location:"",
-  education:[{
-    college:"",
-    startYear:"",
-    endYear:"",
-    
-  }],
+  education:[],
   
   jobTitles:[],
   jobLocations:[]
@@ -53,20 +47,14 @@ state.firstName=action.payload
     setLocation:(state,action)=>{
       state.location=action.payload
     },
-  //   setCollage:(state,action)=>{
-  // state.education.collage=action.payload
-  //   },
-  //   setstartYear:(state,action)=>{
-  //     state.education.startYear=action.payload
-  //   },
-  //   setendYear:(state,action)=>{
-  //     state.education.endYear=action.payload
-  //   },
+ 
   setEducation: (state, action: PayloadAction<EducationType>) => {  
-    // Assuming only one educational experience is needed, otherwise, you would need to push to the array.  
-    const education = action.payload;  
-    state.education[0] = education; // Update the first education object, if you want to handle multiple, consider using a different approach.  
-  },  
+    if (!Array.isArray(state.education)) {
+      state.education = [];
+    }
+    state.education.push(action.payload);
+  },
+
     setjobTitles:(state,action)=>{
       state.jobTitles=action.payload
     },
