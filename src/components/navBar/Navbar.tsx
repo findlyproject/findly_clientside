@@ -15,7 +15,6 @@ export const navigation = [
 ];
 export default function Navbar() {
   const { activeuser } = useAppSelector((state) => state.login);
-  console.log("activeuser", activeuser);
   interface User {
     _id: string;
     firstName: string;
@@ -40,7 +39,7 @@ export default function Navbar() {
 
       fetchUsers();
     } else {
-      setSearchResults([]); 
+      setSearchResults([]);
     }
   }, [searchQuery]);
 
@@ -69,14 +68,14 @@ export default function Navbar() {
                />
               </div>
 
-              
+
               {searchQuery && searchResults.length > 0 && (
                 <div className="absolute top-full left-0 mt-2 w-full max-h-60 overflow-y-auto border border-gray-300 bg-white p-4 rounded-lg shadow-md z-10">
                   <ul className="mt-2 space-y-2">
                     {searchResults.map((user) => (
                       <li key={user._id} className="flex items-center gap-2">
                         <img
-                        
+
                           src={user.profileImage}
                           alt={`${user.firstName} ${user.lastName}`}
                           className="w-7 h-7 rounded-full"

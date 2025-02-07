@@ -43,6 +43,7 @@ export const registerUser = createAsyncThunk(
 interface LoginResponse {
   logeduser: UserProfile;
 }
+
 export const loginUser = createAsyncThunk(
   "auth/loginUser",
   async (
@@ -57,6 +58,20 @@ export const loginUser = createAsyncThunk(
     }
 
     dispatch(setActive(response?.data?.logeduser as UserProfile));
+    return response?.data?.logeduser;
+  }
+);
+
+            ///////////////// GOOLE AUTH LOGIN ////////////////
+
+export const googlloginUser = createAsyncThunk(
+  "auth/loginUser",
+  async (data: { email: string; name: string; image: string }, { dispatch, rejectWithValue }) => {
+    const response = await  api.post("/user/googleauthlogin", data);
+    if (!response) {
+      return rejectWithValue("Login failed. Please try again.");
+    }
+    dispatch(setActive(response?.data?.finduser as UserProfile));
     return response?.data?.logeduser;
   }
 );
@@ -76,6 +91,7 @@ export const logoutUser = createAsyncThunk(
     const status: number = response.status;
     if (status >= 200 && status < 300) {
       dispatch(SetLogout());
+
 
       return null;
     } else {
