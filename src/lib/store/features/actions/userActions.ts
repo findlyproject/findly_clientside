@@ -4,11 +4,11 @@ import { setActive, SetLogout, UserProfile } from '../userSlice';
 import handleAsync from '@/utils/handleAsync';
 import { AxiosResponse } from "axios";
 
+
 interface LoginResponse {
   logeduser: UserProfile
   finduser: UserProfile
 }
-
 
 export const loginUser = createAsyncThunk(
   "auth/loginUser",
@@ -58,7 +58,10 @@ export const logoutUser = createAsyncThunk(
 
     }
 
+
   }
 );
+
+
 
 
