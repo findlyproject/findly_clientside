@@ -1,13 +1,12 @@
-import FileUpload from '@/components/user/ressume/Upload'
 import React from 'react'
+import Checkoutpayment from "@/components/common/premium/PaymentPage"
 
 const page = () => {
   return (
     <div>
-      <FileUpload/>
+      <Checkoutpayment/>
     </div>
   )
 }
 
 export default page
-  

@@ -1,12 +1,12 @@
 
 
-import { useAppDispatch } from "@/lib/store/hooks";
+import { useAppDispatch, useAppSelector } from "@/lib/store/hooks";
 
 import { Menu, Transition } from "@headlessui/react";
 import { BellIcon } from "@heroicons/react/24/outline";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
-import React from "react";
+import React, { act } from "react";
 import { navigation } from "./Navbar";
 import Image from "next/image";
 import { logoutUser } from "@/lib/store/features/actions/userActions";
@@ -15,6 +15,7 @@ import { signOut } from "next-auth/react";
 
 function AfterLogin() {
   const router = useRouter()
+  const { activeuser } = useAppSelector((state) => state.login);
 
   const dispatch = useAppDispatch()
 
@@ -33,8 +34,8 @@ function AfterLogin() {
         </button></Link>
       <Menu as="div" className="relative ml-3">
         <Menu.Button className="flex text-sm rounded-full focus:outline-none w-32">
-          <Image
-            src="/assets/profile.jpg"
+          <img 
+            src={activeuser?.profileImage}
             alt="User"
             width={200}
             height={200}

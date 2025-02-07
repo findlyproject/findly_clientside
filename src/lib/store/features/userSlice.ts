@@ -64,6 +64,7 @@ const loginSlice = createSlice({
       state.activeuser = null;
       state.googlestate = true
     },
+    
   },
 });
 

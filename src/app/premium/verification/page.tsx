@@ -1,13 +1,12 @@
-import FileUpload from '@/components/user/ressume/Upload'
+import Verification from '@/components/common/premium/Verification'
 import React from 'react'
 
 const page = () => {
   return (
     <div>
-      <FileUpload/>
+      <Verification/>
     </div>
   )
 }
 
 export default page
-  
