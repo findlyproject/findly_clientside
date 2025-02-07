@@ -9,8 +9,6 @@ interface LoginResponse {
   logeduser: UserProfile
 }
 
-
-
 export const loginUser = createAsyncThunk(
   "auth/loginUser",
   async (state: { email: string; password: string }, { dispatch, rejectWithValue }) => {
@@ -44,6 +42,7 @@ export const logoutUser = createAsyncThunk(
       throw new Error("Logout failed");
       
     }
+
 
   }
 );
