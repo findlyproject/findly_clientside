@@ -1,20 +1,27 @@
 "use client";
-import React, { useState } from "react";
-import { signIn } from "next-auth/react";
+import React, { useEffect, useState } from "react";
+import { signIn, useSession } from "next-auth/react";
 
 import { FcGoogle } from "react-icons/fc";
-import { useAppDispatch } from "@/lib/store/hooks";
+import { useAppDispatch, useAppSelector } from "@/lib/store/hooks";
 import { useRouter } from "next/navigation";
 
 import Image from "next/image";
-import { loginUser } from "@/lib/store/features/actions/userActions";
+import { googlloginUser, loginUser } from "@/lib/store/features/actions/userActions";
+import { toast } from "react-toastify";
+import { setGooglelogin } from "@/lib/store/features/userSlice";
+// import Link from "next/link";
 
 function Loginpage() {
   const router = useRouter()
+  const {data:session} = useSession()
   const [state, setState] = useState({
     email: "",
     password: ""
   })
+  const {googlestate} = useAppSelector((state)=>state.login)
+console.log("googlestate",googlestate);
+
 
   const dispatch = useAppDispatch()
   const handilchange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -27,14 +34,42 @@ function Loginpage() {
 
     if (loginUser.fulfilled.match(resultAction)) {
       router.push("/home");
-      alert("Login Successful!");
+      toast.success("Login Successful!")
     }
   };
+
 
   const googlelogin = () => {
     signIn("google");
   };
+  const [hasLoggedIn, setHasLoggedIn] = useState(false);
+
+  useEffect(() => {
+    if (session && googlestate && !hasLoggedIn) {
+      const data = {
+        email: session.user?.email || "",  
+        name: session.user?.name || "",    
+        image: session.user?.image || "",
+      };
   
+      dispatch(googlloginUser(data))
+        .unwrap()
+        .then(() => {
+          if (!hasLoggedIn) {
+            toast.success("Login Success");
+            dispatch(setGooglelogin());
+            router.push("/home");
+            setHasLoggedIn(true);
+          }
+        })
+        .catch((error) => {
+          console.error("Login Failed:", error);
+        });
+    }
+  }, [googlestate]);
+  
+  
+  console.log(session);
 
   
   return (
@@ -99,6 +134,10 @@ function Loginpage() {
           >
             <FcGoogle className="mr-2" /> <span className="mb-2">google</span>
           </button>
+          <div className="flex mt-3">
+            <p>Don&apos;t have any account? <a href="/register" className="underline">create account</a></p>
+           
+          </div>
 
         </div>
 

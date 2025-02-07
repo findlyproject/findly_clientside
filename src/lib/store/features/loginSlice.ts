@@ -1,6 +1,7 @@
 
 import {  createSlice } from "@reduxjs/toolkit"
 import { logoutUser } from "./actions/userActions";
+import { stat } from "fs";
 
 
 interface loginType {
@@ -46,10 +47,13 @@ interface loginType {
         coverLetter?: string;
         isBlocked?: boolean;
         _id: string;}|null,
+
+        
 }
 
 const initialState:loginType={
     activeuser:null,
+
 }
 
 
@@ -66,6 +70,7 @@ const loginSlice = createSlice({
               state.activeuser=null
 
           }
+
         }
     }
 
