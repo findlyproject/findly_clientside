@@ -5,7 +5,8 @@ import { useRouter } from "next/navigation";
 import { useAppDispatch, useAppSelector } from "@/lib/store/hooks";
 import { setjobLocations, setjobTitles } from "@/lib/store/features/registerSlice";
 import api from "@/utils/api";
-
+import { setActive } from "@/lib/store/features/userSlice";
+import { registerUser } from "@/lib/store/features/actions/userActions";
 export default function JobPage() {
   const formData=useAppSelector((state)=>state.register)
   console.log("formData",formData);
@@ -41,26 +42,33 @@ const validateForm=()=>{
   return isValid
 }
 
-      const handleSubmit=async(e:React.FormEvent<HTMLFormElement>)=>{
-        e.preventDefault()
+const handleSubmit = async (e: React.FormEvent) => {
+  e.preventDefault();
 
-if(validateForm()){
-  try {
-    const response=await api.post(`/user/registration`,{ ...formData, 
-      jobTitles: JobTitles, 
-      jobLocations: JobLocations })
-    console.log("response",response);
-    
-   router.push(`/home`);
-    
-  } catch (error) {
-    console.error(error);
-    
+  if (validateForm()) {
+    const resultAction = await dispatch(
+      registerUser({
+        ...formData,
+        jobTitle: JobTitles,
+        jobLocation: JobLocations,
+      })
+    );
+console.log("resultAction",resultAction);
+
+    if (registerUser.fulfilled.match(resultAction)) {
+      // const user = resultAction.payload;
+      // if (user) {
+      //   dispatch(setActive(user)); // ✅ Explicitly setting active user again (if needed)
+      // }
+      router.push("/home");
+      alert("Registration Successful!");
+    }
   }
-}
+};
+
 
       
-      }
+      
 
   return (
     <div className="flex justify-center items-center min-h-screen  px-4">
