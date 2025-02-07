@@ -4,8 +4,14 @@ import React, { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
 import { useAppDispatch, useAppSelector } from "@/lib/store/hooks";
 import { setjobLocations, setjobTitles } from "@/lib/store/features/registerSlice";
+<<<<<<< HEAD
 import { registerUser } from "@/lib/store/features/actions/userActions";
 import { toast } from "react-toastify";
+=======
+import api from "@/utils/api";
+import { setActive } from "@/lib/store/features/userSlice";
+import { registerUser } from "@/lib/store/features/actions/userActions";
+>>>>>>> 72c55a170a0674af1032140a9b7e7260b08ba55b
 export default function JobPage() {
   const formData=useAppSelector((state)=>state.register)
   console.log("formData",formData);
@@ -55,8 +61,17 @@ const handleSubmit = async (e: React.FormEvent) => {
 console.log("resultAction",resultAction);
 
     if (registerUser.fulfilled.match(resultAction)) {
+<<<<<<< HEAD
       router.push("/home");
       toast.success("Registration Successful!");
+=======
+      // const user = resultAction.payload;
+      // if (user) {
+      //   dispatch(setActive(user)); // ✅ Explicitly setting active user again (if needed)
+      // }
+      router.push("/home");
+      alert("Registration Successful!");
+>>>>>>> 72c55a170a0674af1032140a9b7e7260b08ba55b
     }
   }
 };
