@@ -20,11 +20,12 @@ function AfterLogin() {
   const dispatch = useAppDispatch()
 
   const handilLogut = () => {
-
     dispatch(logoutUser())
     signOut()
     router.push("/")
+    
   }
+  
 
   return (
     <div className="flex">

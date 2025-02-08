@@ -1,13 +1,30 @@
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 import { UserProfile } from "./userSlice";
 
-interface IReport {
+export interface IReport {
   _id: string;
 }
 
-interface IComment {
+interface IReply {
   _id: string;
+  user: UserProfile | null;
+  reply: string;
+  repliedAt?: Date;
+  isDeleted: boolean;
 }
+
+export interface IComment {
+  _id: string;
+  user: UserProfile | null;
+  comment: string;
+  replies: IReply[];  
+  isDeleted: boolean;
+  createdAt:Date;
+  updatedAt:Date
+
+}
+
+
 
 export interface IPost {
   _id: string;
@@ -16,8 +33,8 @@ export interface IPost {
   video?:string;
   owner: UserProfile | null;
   likedBy: string[];
-  reports: (string | IReport)[];
-  comments: (string | IComment)[];
+  reports:  IReport[];
+  comments:  IComment[] ;
   isDeleted: boolean;
   createdAt: string;
   updatedAt: string;
@@ -30,8 +47,8 @@ interface FilterByPosts {
 }
 
 interface PostState {
-  baseUrl: string;
   posts: IPost[] | null;
+  comments:IComment[] | null;
   filterByPosts: FilterByPosts | null;
   currPage: string | null;
   pageNumber: number;
@@ -40,8 +57,8 @@ interface PostState {
 }
 
 const initialState: PostState = {
-  baseUrl: process.env.NODE_ENV === "production" ? "/" : "http://localhost:3030/",
   posts: null,
+  comments:null,
   filterByPosts: null,
   currPage: null,
   pageNumber: 1,
@@ -62,9 +79,34 @@ const postSlice = createSlice({
     setFilterByPosts: (state, action: PayloadAction<FilterByPosts | null>) => {
       state.filterByPosts = action.payload;
     },
+    //comment 
+    setComments: (state, action: PayloadAction<IComment[]>) => {
+      state.comments = action.payload;
+    },
+    addComment: (state, action: PayloadAction<{ postId: string; comment: IComment }>) => {
+      const { postId, comment } = action.payload;
+      
+      const post = state.posts?.find((p) => p._id === postId);
+      if (post) {
+        post.comments.push(comment);
+      }
+    },
+     updateComment: (state,action: PayloadAction<{ commentId: string; newComment: IComment }>) => {
+      const {commentId, newComment } = action.payload;
+      console.log(newComment)
+      console.log(commentId)
+      console.log(state.comments)
+
+      const comment = state.comments?.find((c) => c._id === commentId);
+      console.log(comment)
+      if (comment) {
+        comment.comment = newComment.comment; // ✅ Update the comment text
+      }
+    },
+    
   },
 });
 
-export const { setPosts, setIsPostsLoading, setFilterByPosts } = postSlice.actions;
+export const { setPosts, setIsPostsLoading, setFilterByPosts,addComment,updateComment,setComments } = postSlice.actions;
 
 export default postSlice.reducer;

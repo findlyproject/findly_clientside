@@ -11,8 +11,10 @@ import { FaUserPlus, FaUpload, FaCheckCircle } from "react-icons/fa";
 import goup from "../../../../public/landingPage-group-discussion.png"
 import landingTop from "../../../../public/landingpage-group.jpg"
 import Testimonials from "./Testimonial";
+import { useAppSelector } from "@/lib/store/hooks";
 
 function LandingPage() {
+  const { activeuser } = useAppSelector((state) => state.login);
 
   const router = useRouter()
   const steps = [
@@ -21,6 +23,7 @@ function LandingPage() {
     { title: "Find suitable job", desc: "Phasellus quis eleifend ex.", icon: <FaSearch /> },
     { title: "Apply job", desc: "Nam sodales purus.", icon: <FaCheckCircle /> },
   ];
+  console.log(activeuser)
 
   return (
     <div className="w-full h-full">
