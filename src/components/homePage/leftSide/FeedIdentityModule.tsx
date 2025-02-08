@@ -19,7 +19,7 @@ export const FeedIdentityModule = () => {
             className="flex justify-center cursor-pointer absolute left-1/2 transform -translate-x-1/2 translate-y-1/2"
             onClick={() => router.push(`profile/${activeuser._id}`)}
           >
-            <img src={activeuser.profileImage} alt="" className="w-[70px] h-[70px] rounded-full bg-yellow-200 object-cover" />
+            <img src={activeuser?.profileImage} alt="" className="w-[70px] h-[70px] rounded-full bg-yellow-200 object-cover" />
           </div>
         </div>
 

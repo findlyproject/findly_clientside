@@ -17,6 +17,9 @@ import { Swiper, SwiperSlide } from "swiper/react";
 import "swiper/css";
 import "swiper/css/navigation";
 import { Navigation } from "swiper/modules";
+import { useAppDispatch, useAppSelector } from "@/lib/store/hooks";
+import { Comments } from "./Comment";
+import { PostMenu } from "./PostMenu";
 
 interface PostPreviewProps {
   post: IPost;
@@ -25,15 +28,21 @@ interface PostPreviewProps {
 // ✅ PostPreview Component (Fully Responsive)
 export const PostPreview = ({ post }: PostPreviewProps) => {
   const router = useRouter();
+  const [isShowMenu, setIsShowMenu] = useState(false); // view the edit & delete menu bar
   const [isShowLikes, setIsShowLikes] = useState(false);
   const toggleLikes = () => setIsShowLikes((prev) => !prev);
+  const [isShowComments, setIsShowComments] = useState(false)
+  
 
   return (
     <section className="flex flex-col border border-gray-300 bg-white rounded-lg w-full max-w-3xl mx-auto p-4 shadow-md relative">
       {/* Menu Icon */}
-      <div className="absolute top-2 right-2 cursor-pointer">
-        <FontAwesomeIcon icon={faEllipsisH} className="text-gray-500 hover:text-gray-700" />
-      </div>
+      <div className=" bg-right-top top-2"><div className=" cursor-pointer" onClick={()=>setIsShowMenu((!isShowMenu))}>
+        <FontAwesomeIcon icon={faEllipsisH} className=" text-gray-500 hover:text-gray-700" />
+     
+      </div> {isShowMenu === true ? <PostMenu /> : null}</div>
+     
+    
 
       {/* User & Post Details */}
       <section className="flex items-center p-4">
@@ -125,28 +134,59 @@ export const PostPreview = ({ post }: PostPreviewProps) => {
       )}
 
       {/* Post Actions */}
-      <hr className="my-2 border-gray-200" />
-      <section className="flex items-center justify-around mb-2">
-        <button className="flex items-center text-gray-500 px-3 py-2 rounded-md hover:bg-gray-100 hover:text-black">
+      <section className="space-y-2">
+      {/* Action Buttons */}
+      <section className="flex items-center justify-around border-t border-gray-200 pt-2">
+        <button className="flex items-center text-gray-500 px-4 py-2 rounded-md hover:bg-gray-100 hover:text-black">
           <FontAwesomeIcon icon={faThumbsUp} className="w-5 h-5 mr-2 text-primary" />
           <span className="hidden sm:inline">Like</span>
         </button>
-        <button className="flex items-center text-gray-500 px-3 py-2 rounded-md hover:bg-gray-100 hover:text-black">
+        <button
+          className="flex items-center text-gray-500 px-4 py-2 rounded-md hover:bg-gray-100 hover:text-black"
+          onClick={()=>setIsShowComments((prev) => !prev)}
+        >
           <FontAwesomeIcon icon={faComment} className="w-5 h-5 mr-2 text-primary" />
           <span className="hidden sm:inline">Comment</span>
         </button>
-        <button className="flex items-center text-gray-500 px-3 py-2 rounded-md hover:bg-gray-100 hover:text-black">
+        <button className="flex items-center text-gray-500 px-4 py-2 rounded-md hover:bg-gray-100 hover:text-black">
           <FontAwesomeIcon icon={faShare} className="w-5 h-5 mr-2 text-primary" />
           <span className="hidden sm:inline">Share</span>
         </button>
         <button
-          className="flex items-center text-gray-500 px-3 py-2 rounded-md hover:bg-gray-100 hover:text-black"
+          className="flex items-center text-gray-500 px-4 py-2 rounded-md hover:bg-gray-100 hover:text-black"
           onClick={() => router.push(`/main/message/${post.owner?._id}`)}
         >
           <FontAwesomeIcon icon={faPaperPlane} className="w-5 h-5 mr-2 text-primary" />
           <span className="hidden sm:inline">Send</span>
         </button>
       </section>
+
+      {isShowComments && post && post.comments && (
+  <Comments 
+    postId={post._id} 
+    comments={post.comments} 
+  />
+)}
+
+      {/* Likes Modal */}
+      {isShowLikes && (
+        <div
+          className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center"
+          onClick={toggleLikes}
+        >
+          <div
+            className="bg-white p-6 rounded-lg shadow-lg max-w-md w-full"
+            onClick={(ev) => ev.stopPropagation()}
+          >
+            <h2 className="text-lg font-semibold">Liked by</h2>
+            <p className="text-gray-500">Feature coming soon...</p>
+          </div>
+        </div>
+      )}
+    </section>
+   
+
+   
     </section>
   );
 };
