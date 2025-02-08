@@ -3,13 +3,12 @@ import { createAsyncThunk } from '@reduxjs/toolkit';
 import { AxiosResponse } from "axios";
 import { IPost } from '../postSlice';
 import handleAsync from '@/utils/handleAsync';
-import { useEffect } from 'react';
 import api from '@/utils/api';
 import { setPosts, } from '../postSlice';
 import { useAppDispatch } from '../../hooks';
 
 
-
+// fetch all the posts
 export const fetchAllPosts = createAsyncThunk(
     "post/fetchAllPosts",
     async (_, { dispatch, rejectWithValue }) => {

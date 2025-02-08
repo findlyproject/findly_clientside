@@ -4,6 +4,7 @@ import { PostPreview } from "./postPreview/PostPreview";
 export const PostsList = () => {
   const { posts } = useAppSelector((state) => state.post);
 
+
   return (
     <section className="w-full max-w-3xl mx-auto px-4 sm:px-6 lg:px-8 space-y-3 border bg-white rounded-lg shadow-md py-4">
       {/* Posts List */}
