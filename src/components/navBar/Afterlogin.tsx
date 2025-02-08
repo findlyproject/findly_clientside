@@ -31,7 +31,7 @@ function AfterLogin() {
         <button className="relative text-gray-500 hover:text-gray-700 p-2">
           <BellIcon className="h-6 w-6" />
         </button></Link>
-      <Menu as="div" className="relative ml-3">
+      <Menu as="div" className="relative ml-3 z-40">
         <Menu.Button className="flex text-sm rounded-full focus:outline-none w-32">
           <Image
             src="/assets/profile.jpg"
