@@ -1,3 +1,4 @@
+import { connectionRequest } from './actions/userActions';
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 
 
@@ -21,12 +22,23 @@ import { createSlice, PayloadAction } from "@reduxjs/toolkit";
     location: string;
     college:string
   }[]
+
+  experience:{
+    jobRole:string
+      companyName:string,
+      companyLogo:string,
+      startYear:string,
+      endYear:string
+  }[]
   projects?: {
     title: string;
     description: string;
     link?: string;
   }[];
-  connecting: string[];  
+  connecting: {
+    connectionID:string
+    status:boolean;
+  }[];  
   about?: string;
   resume?: {
     fileUrl: string;
@@ -44,11 +56,17 @@ import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 interface LoginState {
   activeuser: UserProfile | null;
   googlestate:boolean;
+  userdetails:UserProfile| null
+  connectionRequest:UserProfile|null
+  
 }
 
 const initialState: LoginState = {
   activeuser: null,
-  googlestate:true
+  googlestate:true,
+  userdetails:null,
+  connectionRequest:null,
+  
 };
 
 const loginSlice = createSlice({
@@ -65,10 +83,15 @@ const loginSlice = createSlice({
       state.activeuser = null;
       state.googlestate = true
     },
-    
+    setDetailes:(state,action)=>{
+state.userdetails=action.payload
+    },
+    setConnectionRequest:(state,action:PayloadAction<UserProfile | null>)=>{
+state.connectionRequest=action.payload
+    }
   },
 });
 
 
-export const { setActive, SetLogout,setGooglelogin } = loginSlice.actions;
+export const { setActive, SetLogout,setGooglelogin ,setDetailes,setConnectionRequest} = loginSlice.actions;
 export default loginSlice.reducer;

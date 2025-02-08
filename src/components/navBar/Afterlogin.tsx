@@ -53,13 +53,25 @@ function AfterLogin() {
           <Menu.Items className="absolute right-0 mt-2 w-48 bg-white rounded-md shadow-lg py-1 ring-1 ring-black/5">
             <Menu.Item>
               {({ active }) => (
-                <button
-                  onClick={() => router.push(`/ownprofile`)}
+                <Link
+                  href='/ownprofile'
                   className={`block px-4 py-2 text-sm hover:bg-gray-300 ${active ? "bg-gray-300" : ""
                     }`}
                 >
                   Your Profile
-                </button>
+                </Link>
+              )}
+            </Menu.Item>
+
+            <Menu.Item>
+              {({ active }) => (
+                <Link
+                  href='/mynetwork'
+                  className={`block px-4 py-2 text-sm hover:bg-gray-300 ${active ? "bg-gray-300" : ""
+                    }`}
+                >
+                  My Network
+                </Link>
               )}
             </Menu.Item>
             {navigation.map((item) => (
