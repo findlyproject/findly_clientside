@@ -72,13 +72,13 @@ function LandingPage() {
 
 
           <div className="w-96 bg-red-400  flex justify-center">
-            {/* <Image
+            <Image
               src={landingTop}
               alt="Landing Page Illustration"
               width={500}
               height={300}
               className="object-cover max-w-full"
-            /> */}
+            />
           </div>
         </div>
       </div>

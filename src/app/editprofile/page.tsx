@@ -1,12 +1,12 @@
 import Navbar from '@/components/navBar/Navbar'
-import Editprofile from '@/components/user/profileupdate/Editprofile'
+import Edit from '@/components/user/profileupdate/Edit'
 import React from 'react'
 
 function page() {
   return (
     <div>
         <Navbar/>
-      <Editprofile/>
+      <Edit/>
     </div>
   )
 }
