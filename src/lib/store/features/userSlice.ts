@@ -1,8 +1,14 @@
 import { connectionRequest } from './actions/userActions';
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 
+export interface Education {
+  qualification: string;
+  startYear: string;
+  endYear: string;
+  location: string;
+}
 
-  export interface UserProfile {
+export interface UserProfile {
   firstName: string;
   lastName: string;
   email: string;
@@ -36,9 +42,9 @@ import { createSlice, PayloadAction } from "@reduxjs/toolkit";
     link?: string;
   }[];
   connecting: {
-    connectionID:string
-    status:boolean;
-  }[];  
+    connectionID:string;
+    status: boolean;
+    createdAt:Date}[]
   about?: string;
   resume?: {
     fileUrl: string;
@@ -55,21 +61,28 @@ import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 
 interface LoginState {
   activeuser: UserProfile | null;
-  googlestate:boolean;
-  userdetails:UserProfile| null
+  googlestate: boolean;
+  userdetails:UserProfile|null
   connectionRequest:UserProfile|null
   connections:UserProfile|[]
-  
 }
 
 const initialState: LoginState = {
   activeuser: null,
-  googlestate:true,
+  googlestate: true,
   userdetails:null,
   connectionRequest:null,
   connections:[]
-  
 };
+
+interface EditState {
+  firstName?: string;
+  lastName?: string;
+  email?: string;
+  phoneNumber?: string;
+  dateOfBirth?: Date;
+  about?: string;
+}
 
 const loginSlice = createSlice({
   name: "login",
@@ -78,8 +91,8 @@ const loginSlice = createSlice({
     setActive: (state, action: PayloadAction<UserProfile | null>) => {
       state.activeuser = action.payload;
     },
-    setGooglelogin: (state)=>{
-      state.googlestate = false
+    setGooglelogin: (state) => {
+      state.googlestate = false;
     },
     SetLogout: (state) => {
       console.log("heeeee",state.activeuser)
@@ -99,6 +112,13 @@ state.connections=action.payload
   },
 });
 
+export const {
+  setActive,
+  SetLogout,
+  setGooglelogin,
+  setAllConnections,
+  setConnectionRequest,
+  setDetailes
+} = loginSlice.actions;
 
-export const { setActive, SetLogout,setGooglelogin ,setDetailes,setConnectionRequest,setAllConnections} = loginSlice.actions;
 export default loginSlice.reducer;
