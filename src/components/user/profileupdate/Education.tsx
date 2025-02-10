@@ -1,8 +1,12 @@
+import { setEducation, setRemoveEducation } from '@/lib/store/features/userSlice';
+import { useAppDispatch, useAppSelector } from '@/lib/store/hooks';
 import React, { useState } from 'react'
 import { RxCross2 } from 'react-icons/rx'
 
 function Education() {
-    const [educationList, setEducationList] = useState([]);
+  const user = useAppSelector((state)=>state.user.activeuser)
+  const dispatch= useAppDispatch()
+
       const [newEducation, setNewEducation] = useState({
         qualification: "",
         startYear: "",
@@ -17,15 +21,16 @@ function Education() {
     
       const handleAddEducation = () => {
         if (newEducation.qualification && newEducation.startYear && newEducation.endYear && newEducation.college) {
-          setEducationList([...educationList, newEducation]);
+          dispatch(setEducation(newEducation))
           setNewEducation({ qualification: "", startYear: "", endYear: "", college: "" ,Subject:""});
         }
       };
     
       const handleRemoveEducation = (index) => {
-        setEducationList(educationList.filter((_, i) => i !== index));
+        dispatch(setRemoveEducation(index))
       };
     
+      
   return (
     <div>
       <div className="p-6 bg-gray-100 rounded-lg shadow-lg mt-4 w-full">
@@ -93,11 +98,11 @@ function Education() {
             </button>
       
             {/* Display Added Education */}
-            {educationList.length > 0 && (
+            {user?.education?.length > 0  && (
               <div className="mt-4">
                 <h3 className="text-xl font-semibold">Added Education</h3>
                 <ul className="mt-2">
-                  {educationList.map((edu, index) => (
+                  {user?.education.map((edu, index) => (
                     <li key={index} className="bg-gray-200 p-3 rounded-md mb-2 flex justify-between items-center">
                       <div>
                         <p className="font-semibold">{edu.qualification}</p>

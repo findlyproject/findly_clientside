@@ -1,8 +1,12 @@
 import React, { useState } from 'react';
 import { RxCross2 } from 'react-icons/rx';
 import { Country, State, City } from "country-state-city";
+import { useAppDispatch, useAppSelector } from '@/lib/store/hooks';
+import { setjobLocations, setRemovejoblocation } from '@/lib/store/features/userSlice';
 
 function JobLocation() {
+    const dispatch =useAppDispatch()
+    const user = useAppSelector((state)=>state.user.activeuser)
     const [locations, setLocations] = useState([]);
     const [newLocation, setNewLocation] = useState({
         country: "",
@@ -50,12 +54,13 @@ function JobLocation() {
                 stateName: newLocation.stateName,
                 city: newLocation.city
             }]);
+            dispatch(setjobLocations(newLocation))
             setNewLocation({ country: "", countryName: "", state: "", stateName: "", city: "" });
         }
     };
 
     const handleRemoveLocation = (index) => {
-        setLocations(locations.filter((_, i) => i !== index));
+        dispatch(setRemovejoblocation(index))
     };
 
     return (
@@ -114,11 +119,11 @@ function JobLocation() {
                 </button>
 
                 {/* Display Added Locations */}
-                {locations.length > 0 && (
+                {user.jobLocation.length > 0 && (
                     <div className="mt-4">
                         <h3 className="text-xl font-semibold">Added Locations</h3>
                         <ul className="mt-2">
-                            {locations.map((loc, index) => (
+                            {user.jobLocation.map((loc, index) => (
                                 <li key={index} className="bg-gray-200 p-3 rounded-md mb-2 flex justify-between items-center">
                                     <div>
                                         <p className="font-semibold">{loc.countryName} - {loc.stateName} - {loc.city}</p>

@@ -1,27 +1,26 @@
+import { setProject, setremovproject } from '@/lib/store/features/userSlice';
+import { useAppDispatch, useAppSelector } from '@/lib/store/hooks';
 import React, { useState } from 'react'
 import { RxCross2 } from 'react-icons/rx'
 
 function Project() {
-    
-  const [projects, setProjects] = useState([]);
+    const dispatch = useAppDispatch()
+    const user = useAppSelector((state)=>state.user.activeuser)
   const [newProject, setNewProject] = useState({ title: "", description: "", link: "" });
 
-  // Handle input change
   const handleChangeD = (e) => {
     setNewProject({ ...newProject, [e.target.name]: e.target.value });
   };
 
-  // Add Project
   const handleAddProject = () => {
     if (newProject.title && newProject.description && newProject.link) {
-      setProjects([...projects, newProject]);
-      setNewProject({ title: "", description: "", link: "" }); // Reset form
+      dispatch(setProject(newProject))
+      setNewProject({ title: "", description: "", link: "" }); 
     }
   };
 
-  // Remove Project
   const handleRemoveProject = (index) => {
-    setProjects(projects.filter((_, i) => i !== index));
+    dispatch(setremovproject(index))
 
   };
 
@@ -69,11 +68,11 @@ function Project() {
             </button>
       
             {/* Display Added Projects */}
-            {projects.length > 0 && (
+            {user.projects.length > 0 && (
               <div className="mt-4">
                 <h3 className="text-xl font-semibold">Added Projects</h3>
                 <ul className="mt-2">
-                  {projects.map((project, index) => (
+                  {user.projects.map((project, index) => (
                     <li key={index} className="bg-gray-200 p-3 rounded-md mb-2 flex justify-between items-center">
                       <div>
                         <p className="font-semibold">{project.title}</p>

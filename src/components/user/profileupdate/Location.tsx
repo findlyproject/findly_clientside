@@ -1,9 +1,12 @@
 import React, { useState } from 'react';
 import { RxCross2 } from 'react-icons/rx';
 import { Country, State, City } from "country-state-city";
+import { useAppDispatch, useAppSelector } from '@/lib/store/hooks';
+import { setLocation, setRemovejoblocation } from '@/lib/store/features/userSlice';
 
 function Location() {
-    const [locations, setLocations] = useState([]);
+    const dispatch = useAppDispatch()
+    const user = useAppSelector((state)=>state.user.activeuser)
     const [newLocation, setNewLocation] = useState({
         country: "",
         countryName: "",
@@ -43,19 +46,13 @@ function Location() {
 
     const handleAddLocation = () => {
         if (newLocation.country && newLocation.state && newLocation.city) {
-            setLocations([...locations, {
-                country: newLocation.country,
-                countryName: newLocation.countryName,
-                state: newLocation.state,
-                stateName: newLocation.stateName,
-                city: newLocation.city
-            }]);
+            dispatch(setLocation(newLocation))
             setNewLocation({ country: "", countryName: "", state: "", stateName: "", city: "" });
         }
     };
 
     const handleRemoveLocation = (index) => {
-        setLocations(locations.filter((_, i) => i !== index));
+        dispatch(setRemovejoblocation(index))
     };
 
     return (
@@ -63,7 +60,6 @@ function Location() {
             <div className="p-6 bg-gray-100 rounded-lg shadow-lg mt-4 w-full">
                 <h2 className="text-2xl font-semibold mb-4 text-gray-800">Locations</h2>
 
-                {/* Country Dropdown */}
                 <select
                     name="country"
                     className="border p-3 w-full rounded-lg mb-3 focus:outline-none focus:ring-2 focus:ring-blue-400"
@@ -114,11 +110,11 @@ function Location() {
                 </button>
 
                 {/* Display Added Locations */}
-                {locations.length > 0 && (
+                {user?.location?.length > 0 && (
                     <div className="mt-4">
                         <h3 className="text-xl font-semibold">Added Locations</h3>
                         <ul className="mt-2">
-                            {locations.map((loc, index) => (
+                            {user.location?.map((loc, index) => (
                                 <li key={index} className="bg-gray-200 p-3 rounded-md mb-2 flex justify-between items-center">
                                     <div>
                                         <p className="font-semibold">{loc.countryName} - {loc.stateName} - {loc.city}</p>
