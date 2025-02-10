@@ -1,6 +1,6 @@
 import PricingPlans from '@/components/common/premium/Premium'
 import ContactUs from '@/components/common/contactSupport/ContactUs'
-import CreatePost from '@/components/post/CreatePost'
+import CreatePost from '@/components/homePage/middle/CreatePost'
 import React from 'react'
 
 function page() {
