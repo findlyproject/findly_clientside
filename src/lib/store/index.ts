@@ -16,11 +16,15 @@ import ratingReducer from "./features/ratingSlice"
 import postReducer from "./features/postSlice"
 
 
+import editReducer from "./features/editinSlice"
+
 // Create persist configs for specific reducers
 const userPersistConfig = { key: "user", storage };
 const loginPersistConfig = { key: "login", storage };
-const ratingPersistConfig={key:"login",storage}
-const registerPersistConfig={key:"register",storage}
+const ratingPersistConfig={key:"login",storage};
+const registerPersistConfig={key:"register",storage};
+const editPersistConfig={key:"edit",storage};
+
 const postPersistConfig={key:"post",storage}
 
 

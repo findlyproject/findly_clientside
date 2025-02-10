@@ -1,7 +1,13 @@
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 
+export interface Education {
+  qualification: string;
+  startYear: string;
+  endYear: string;
+  location: string;
+}
 
-  export interface UserProfile {
+export interface UserProfile {
   firstName: string;
   lastName: string;
   email: string;
@@ -26,7 +32,7 @@ import { createSlice, PayloadAction } from "@reduxjs/toolkit";
     description: string;
     link?: string;
   }[];
-  connecting: string[];  
+  connecting: string[];
   about?: string;
   resume?: {
     fileUrl: string;
@@ -43,13 +49,22 @@ import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 
 interface LoginState {
   activeuser: UserProfile | null;
-  googlestate:boolean;
+  googlestate: boolean;
 }
 
 const initialState: LoginState = {
   activeuser: null,
-  googlestate:true
+  googlestate: true
 };
+
+interface EditState {
+  firstName?: string;
+  lastName?: string;
+  email?: string;
+  phoneNumber?: string;
+  dateOfBirth?: Date;
+  about?: string;
+}
 
 const loginSlice = createSlice({
   name: "login",
@@ -58,8 +73,8 @@ const loginSlice = createSlice({
     setActive: (state, action: PayloadAction<UserProfile | null>) => {
       state.activeuser = action.payload;
     },
-    setGooglelogin: (state)=>{
-      state.googlestate = false
+    setGooglelogin: (state) => {
+      state.googlestate = false;
     },
     SetLogout: (state) => {
       console.log("heeeee",state.activeuser)
@@ -71,6 +86,22 @@ const loginSlice = createSlice({
   },
 });
 
+export const {
+  setActive,
+  SetLogout,
+  setGooglelogin,
+  setEducation,
+  setRemoveEducation,
+  setjobLocations,
+  setRemovejoblocation,
+  setjobTItles,
+  setRemovjobTItles,
+  setLocation,
+  setPersonalDetails,
+  setProject,
+  setremovproject,
+  setskils,
+  setRemovskils,
+} = loginSlice.actions;
 
-export const { setActive, SetLogout,setGooglelogin } = loginSlice.actions;
 export default loginSlice.reducer;
