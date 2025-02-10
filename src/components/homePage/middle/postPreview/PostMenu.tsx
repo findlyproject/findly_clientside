@@ -4,15 +4,13 @@ import { useAppSelector } from "@/lib/store/hooks";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faCopy, faTrash } from "@fortawesome/free-solid-svg-icons";
 
-
-
 export const PostMenu = () => {  
   const { activeuser } = useAppSelector((state) => state.login);
-
-
+  
   return (
-    <section className="absolute">
-      
+    <section className="absolute inset-0 z-10">
+      {/* Background Overlay */}
+      <div className="absolute inset-0" ></div>
 
       {/* Post Menu */}
       <div className="relative bg-white rounded-lg shadow-lg w-72 p-4">

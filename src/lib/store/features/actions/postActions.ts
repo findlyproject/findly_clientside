@@ -1,11 +1,9 @@
 "use client"
 import { createAsyncThunk } from '@reduxjs/toolkit';
 import { AxiosResponse } from "axios";
-import { IPost } from '../postSlice';
+import {setPosts, addPost, IPost } from '../postSlice';
 import handleAsync from '@/utils/handleAsync';
 import api from '@/utils/api';
-import { setPosts, } from '../postSlice';
-import { useAppDispatch } from '../../hooks';
 
 
 // fetch all the posts
@@ -28,109 +26,56 @@ export const fetchAllPosts = createAsyncThunk(
     }
   );
 
-// // Load Posts
-// export const loadPosts = createAsyncThunk(
-//   'posts/loadPosts',
-//   async (_, { dispatch, getState, rejectWithValue }) => {
-//     const { filterByPosts } = (getState() as any).postModule;
-//     const response = await handleAsync<AxiosResponse<PostsResponse>>(() => 
-//       postService.query(filterByPosts)
-//     );
+ 
+    export const addPostByUser = createAsyncThunk(
+      "posts/addPost",
+      async ({ description, mediaFiles }: { description: string; mediaFiles: File[] }, { dispatch, rejectWithValue }) => {
 
-//     if (!response) {
-//       return rejectWithValue("Failed to load posts");
-//     }
+        const formData = new FormData();
+    
+          formData.append("description", description);
+          console.log("Media Files to Upload:", mediaFiles);
+          formData.append("media", mediaFiles[0]);
 
-//     dispatch(setPosts(response.data.posts));
-//     return response.data.posts;
-//   }
-// );
-// export const loadMorePosts = createAsyncThunk(
-//     'posts/loadMore',
-//     async (_, { dispatch, getState, rejectWithValue }) => {
-//       const { filterByPosts, pageNumber } = (getState() as any).postModule;
-//       const newFilterBy = {
-//         ...filterByPosts,
-//         page: pageNumber,
-//       };
+          // mediaFiles.forEach((file, index) => {
+          //   formData.append("media", file);
+          //   console.log("fils in append",file);
+            
+          //   console.log(`Appending File ${index + 1}:`, file.name, file.type, file.size);
+          // });
+          // console.log(formData)
+    
+          // for (let pair of formData.entries()) {
+          //   console.log("FormData Entry:", pair[0], pair[1]);
+          // }
+          
+        try {
+          
+          
+          const response = await api.post("/post/upload", formData);
+          console.log("jhdsgfhdgsjhfgjs",formData);
+
+    
+          if (response.status >= 200 && response.status < 300) {
+            alert("Post added successfully");
+    
+            dispatch(addPost(response.data.post));
+    
+            const allPostsResponse: AxiosResponse<{ posts: IPost[] }> = await api.get("/post/allposts");
+    
+            if (!allPostsResponse.data || !allPostsResponse.data.posts) {
+              return rejectWithValue("No posts found.");
+            }
+    
+            dispatch(setPosts(allPostsResponse.data.posts)); // ✅ Update Redux store
+            return allPostsResponse.data.posts;
+          } else {
+            throw new Error(`Error: ${response.data.message || "Failed to add post"}`);
+          }
+        } catch (error: any) {
+          console.error("API error:", error);
+          return rejectWithValue("Failed to create or fetch posts.");
+        }
+      }
+    );
   
-//       dispatch(setIsPostsLoading(true));
-      
-//       const response = await handleAsync<AxiosResponse<PostsResponse>>(() => 
-//         postService.query(newFilterBy)
-//       );
-  
-//       if (!response) {
-//         dispatch(setIsPostsLoading(false));
-//         return rejectWithValue("Failed to load more posts");
-//       }
-  
-//       dispatch(addPostsAction(response.data.posts));
-//       dispatch(setIsPostsLoading(false));
-//       return response.data.posts;
-//     }
-//   );
-
-
-// // Remove Post
-// export const removePost = createAsyncThunk(
-//   'posts/remove',
-//   async (postId: string, { dispatch, rejectWithValue }) => {
-//     const response = await handleAsync<AxiosResponse>(() => 
-//       postService.remove(postId)
-//     );
-
-//     if (!response) {
-//       return rejectWithValue("Failed to remove post");
-//     }
-
-//     socketService.emit('post-removed', postId);
-//     dispatch(removePostAction(postId));
-//     return postId;
-//   }
-// );
-
-// // Save Comment
-// export const saveComment = createAsyncThunk(
-//   'posts/saveComment',
-//   async (comment: any, { dispatch, rejectWithValue }) => {
-//     const response = await handleAsync<AxiosResponse>(() => 
-//       commentService.save(comment)
-//     );
-
-//     if (!response) {
-//       return rejectWithValue("Failed to save comment");
-//     }
-
-//     const savedComment = response.data;
-
-//     if (comment._id) {
-//       dispatch({ type: 'UPDATE_COMMENT', comment: savedComment });
-//       socketService.emit('comment-updated', savedComment);
-//     } else {
-//       dispatch({ type: 'ADD_COMMENT', comment: savedComment });
-//       socketService.emit('comment-added', savedComment);
-//     }
-
-//     return savedComment;
-//   }
-// );
-
-// // Remove Comment
-// export const removeComment = createAsyncThunk(
-//   'posts/removeComment',
-//   async (comment: any, { dispatch, rejectWithValue }) => {
-//     const response = await handleAsync<AxiosResponse>(() => 
-//       commentService.remove(comment)
-//     );
-
-//     if (!response) {
-//       return rejectWithValue("Failed to remove comment");
-//     }
-
-//     socketService.emit('comment-removed', comment);
-//     dispatch({ type: 'REMOVE_COMMENT', comment });
-//     return comment;
-//   }
-// );
-
