@@ -9,7 +9,7 @@ import  verification from "../../../public/assets/verify.jpg"
 import { useRouter } from "next/navigation";
 const DetailsUser = ({ id }: { id: string }) => {
  
-const[status,setStatus]=useState(false)
+
 console.log("statusstatus",status);
 
   const Requested=useAppSelector((state)=>state.user.connectionRequest)
@@ -46,7 +46,7 @@ const length=user?.connecting
 const response=await api.post(`/connecting/request/${id}`)
 console.log(" responsevresponse connection",response);
 dispatch(setDetailes(response.data.targetUser))
-setStatus(true)
+
 
   }
   return (
