@@ -2,16 +2,19 @@
 
 import { useAppDispatch } from '@/lib/store/hooks';
 import api from '@/utils/api';
+import { useRouter } from 'next/navigation';
 import React,{useEffect, useState} from 'react'
 
 export default function NetworkPage() {
+  const router=useRouter()
     const[invitations,setInvitations]=useState([])
+    const[connections,setConnections]=useState([])
     const dispatch=useAppDispatch()
     console.log("invitations",invitations);
     const s=invitations.map((item)=>item.connectionID._id)
     console.log("connectionID",s);
     
-
+    
     const [currentPage, setCurrentPage] = useState(1);
     const invitationsPerPage = 5;
   
@@ -28,6 +31,16 @@ export default function NetworkPage() {
             setInvitations(response.data.requests)
         }
         fetch()
+    },[])
+
+    useEffect(()=>{
+      const fetchConnections=async()=>{
+        const response=await api.get(`/connecting/getconnection`)
+        console.log("all connections of user response",response);
+       
+        setConnections(response.data.connections)
+      }
+      fetchConnections()
     },[])
 
     const handleAccept=async(requestId)=>{
@@ -54,7 +67,12 @@ export default function NetworkPage() {
       {/* Sidebar */}
       <div className="w-full md:w-1/4 bg-white p-6 rounded-xl shadow-md">
         <h2 className="text-xl font-semibold">Manage My Network</h2>
-        <p className="text-gray-500 mt-2">Connections                 25</p>
+        <button className='hover:bg-gray-300 w-full'
+        onClick={()=>router.push(`/mynetwork/networklist`)}>
+        <p className="text-gray-500 mt-2">Connections                 {connections?connections.length:0}</p>
+
+        </button>
+       
       </div>
       
       {/* Invitations Container */}
@@ -68,7 +86,9 @@ export default function NetworkPage() {
         <div className="overflow-hidden rounded-lg border border-gray-200">
           {invitations.map((invite) => (
             <div key={invite._id} className="flex justify-between items-center p-4 border-b">
-                <div>
+                <div 
+                onClick={()=>router.push(`/userdetails/${invite.connectionID._id}`)}
+                >
                 <div className="flex items-center gap-3">
                 <img src={invite.connectionID?.profileImage} alt="avatar" className="w-10 h-10 rounded-full" />
                 <span className="font-medium">{invite.connectionID?.firstName}</span>

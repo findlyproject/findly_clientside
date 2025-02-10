@@ -3,13 +3,40 @@
 import { useAppSelector } from "@/lib/store/hooks";
 import  verification from "../../../public/assets/verify.jpg"
 import Image from "next/image";
+import { useState,useEffect } from "react";
+import api from "@/utils/api";
+interface Connection {
+  connectionID: {
+    _id: string;
+    profileImage: string;
+    firstName: string;
+    jobTitle: string[];
+  };
+}
+
+const connections: Connection[] = []; // Example typing for connections array
+
 export default function ViewProfile() {
 
 const  currentUser=useAppSelector((state)=>state.user.activeuser)
 console.log("kk",currentUser)
 console.log("lo",currentUser)
 
+const [connections, setConnections] = useState<Connection[]>([]);
 
+  
+  console.log("connections",connections.map((item)=>item.connectionID._id));
+  
+ 
+  useEffect(()=>{
+    const fetchConnections=async()=>{
+      const response=await api.get(`/connecting/getconnection`)
+      console.log("all connections of user response",response);
+    
+      setConnections(response.data.connections)
+    }
+    fetchConnections()
+  },[])
   const institutes = [
     {
       name: "Bridgeon Solutions",
@@ -60,7 +87,7 @@ console.log("dd",currentUser?.role === "premium");
 
 </div>
     <p className="text-gray-900">{currentUser?.jobTitle?.map((title)=>title)}</p>
-    <p className="text-gray-900 text-sm">{currentUser?.location}• 148 connections</p>
+    <p className="text-gray-900 text-sm">{currentUser?.location}• {connections.length} connections</p>
   </div>
 
   <div className="p-6 ">
@@ -158,61 +185,32 @@ console.log("dd",currentUser?.role === "premium");
   <h3 className="text-lg font-semibold border-b pb-2">Interests</h3>
   <div className="flex space-x-1  overflow-x-auto p-2 justify-center flex-wrap ">
     {/* Person 1 */}
-    <div className="flex items-center space-x-3 p-3 border rounded-lg shadow-sm w-64 mb-4 sm:w-80 md:w-96">
+    {connections.length > 0 ? (
+  connections.map((connect) => (
+    <div
+      key={connect?.connectionID?._id} // Added unique key for React list rendering
+      className="flex items-center space-x-3 p-3 border rounded-lg shadow-sm w-64 mb-4 sm:w-80 md:w-96"
+    >
       <img
         className="w-12 h-12 rounded-full"
-        src="https://media.istockphoto.com/id/1682296067/photo/happy-studio-portrait-or-professional-man-real-estate-agent-or-asian-businessman-smile-for.jpg?s=612x612&w=0&k=20&c=9zbG2-9fl741fbTWw5fNgcEEe4ll-JegrGlQQ6m54rg="
-        alt="Person 1"
+        src={connect?.connectionID?.profileImage}
+        alt="Profile"
       />
       <div>
-        <p className="font-semibold">Anushree Jain</p>
-        <p className="text-sm text-gray-600">Co-founder, SocialTAG</p>
-        <p className="text-xs text-gray-500">150,808 followers</p>
-        <button className="mt-1 px-3 py-1 text-gray-700 border rounded-full text-sm">✓ Following</button>
+        <p className="font-semibold">{connect?.connectionID?.firstName}</p> {/* Dynamically display name */}
+        <p className="text-sm text-gray-600">{connect.connectionID?.jobTitle[0]}</p> {/* Dynamic position */}
+        <p className="text-xs text-gray-500">{connections.length} followers</p> {/* Dynamic followers count */}
+        <button className="mt-1 px-3 py-1 text-gray-700 border rounded-full text-sm">
+          ✓ Following
+        </button>
       </div>
     </div>
-    {/* Person 2 */}
-    <div className="flex items-center space-x-3 p-3 border rounded-lg shadow-sm w-64 mb-4 sm:w-80 md:w-96">
-      <img
-        className="w-12 h-12 rounded-full"
-        src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRBwgu1A5zgPSvfE83nurkuzNEoXs9DMNr8Ww&s"
-        alt="Person 2"
-      />
-      <div>
-        <p className="font-semibold">Nidhi Sharma</p>
-        <p className="text-sm text-gray-600">Tech Mentor | Top Voice</p>
-        <p className="text-xs text-gray-500">57,747 followers</p>
-        <button className="mt-1 px-3 py-1 text-gray-700 border rounded-full text-sm">✓ Following</button>
-      </div>
-    </div>
-    {/* Person 3 */}
-    <div className="flex  items-center space-x-3 p-3 border rounded-lg shadow-sm w-64 mb-4 sm:w-80 md:w-96">
-      <img
-        className="w-12 h-12 rounded-full"
-        src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRBwgu1A5zgPSvfE83nurkuzNEoXs9DMNr8Ww&s"
-        alt="Person 3"
-      />
-      <div>
-        <p className="font-semibold">Nidhi Sharma</p>
-        <p className="text-sm text-gray-600">Tech Mentor | Top Voice</p>
-        <p className="text-xs text-gray-500">57,747 followers</p>
-        <button className="mt-1 px-3 py-1 text-gray-700 border rounded-full text-sm">✓ Following</button>
-      </div>
-    </div>
-    {/* Person 4 */}
-    <div className="flex items-center space-x-3 p-3 border rounded-lg shadow-sm w-64 mb-4 sm:w-80 md:w-96">
-      <img
-        className="w-12 h-12 rounded-full"
-        src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRBwgu1A5zgPSvfE83nurkuzNEoXs9DMNr8Ww&s"
-        alt="Person 4"
-      />
-      <div>
-        <p className="font-semibold">Nidhi Sharma</p>
-        <p className="text-sm text-gray-600">Tech Mentor | Top Voice</p>
-        <p className="text-xs text-gray-500">57,747 followers</p>
-        <button className="mt-1 px-3 py-1 text-gray-700 border rounded-full text-sm">✓ Following</button>
-      </div>
-    </div>
+  ))
+) : (
+  <p>No connections available.</p> // Handling case where connections array is empty
+)}
+
+   
   </div>
   <button className="w-full text-blue-600 mt-3 text-sm">Show all Top Voices →</button>
 </div>

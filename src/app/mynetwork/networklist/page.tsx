@@ -1,11 +1,11 @@
 import React from 'react'
-import NetworkPage from '@/components/common/network/NetworkPage'
+import ConnectionsList from '@/components/common/network/ConnectionsList'
 import Navbar from '@/components/navBar/Navbar'
 export default function page() {
   return (
     <div>
-      <Navbar/>
-      <NetworkPage/>
+        <Navbar/>
+      <ConnectionsList/>
     </div>
   )
 }

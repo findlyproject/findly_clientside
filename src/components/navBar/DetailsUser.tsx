@@ -13,8 +13,8 @@ const DetailsUser = ({ id }: { id: string }) => {
 console.log("statusstatus",status);
 
   const Requested=useAppSelector((state)=>state.user.connectionRequest)
-
-  console.log("Requested");
+const connections=useAppSelector((state)=>state.user.connections)
+  console.log("connectionsconnectionsv",connections);
   
   
   console.log("id",id);
@@ -28,6 +28,8 @@ console.log("user",user);
 
   
 const length=user?.connecting
+
+
 
 
   useEffect(()=>{
@@ -49,6 +51,8 @@ dispatch(setDetailes(response.data.targetUser))
 
 
   }
+
+  
   return (
 
 
@@ -88,27 +92,28 @@ dispatch(setDetailes(response.data.targetUser))
 
 </div>
     <p className="text-gray-900">{user?.jobTitle?.map((title)=>title)}</p>
-    <p className="text-gray-900 text-sm">{user?.location}• {length?length.length:0} connections</p>
+    <p className="text-gray-900 text-sm">{user?.location}• {connections.length} connections</p>
     <div className="flex gap-4 mt-5">
-    
-    {user?.connecting?.some((conn) => conn.connectionID === activeuserid?._id)  ? (
-  <button
-    className="text-white font-semibold bg-primary py-1 px-2 rounded-full"
-    onClick={handleRequest}
-  >
-    Pending
-  </button>
-) :  (
-  <button
-    className="text-white font-semibold bg-primary py-1 px-2 rounded-full"
-    onClick={handleRequest}
-  >
-    Connect
-  </button>
-)  }
+  {/* Check if the connection status is NOT true, then show "Connect" or "Pending" */}
+  {!user?.connecting?.some((conn) => conn.connectionID === activeuserid?._id && conn.status === true) && (
+    user?.connecting?.some((conn) => conn.connectionID === activeuserid?._id && conn.status === false) ? (
+      <button
+        className="text-white font-semibold bg-primary py-1 px-2 rounded-full"
+        onClick={handleRequest}
+      >
+        Pending
+      </button>
+    ) : (
+      <button
+        className="text-white font-semibold bg-primary py-1 px-2 rounded-full"
+        onClick={handleRequest}
+      >
+        Connect
+      </button>
+    )
+  )}
 
-
-
+  {/* Always show "Message" and "More" buttons */}
   <button className="text-primary border border-primary font-semibold bg-white py-1 px-2 rounded-full">
     Message
   </button>
@@ -116,6 +121,7 @@ dispatch(setDetailes(response.data.targetUser))
     More
   </button>
 </div>
+
 
 
   </div>
@@ -250,61 +256,24 @@ dispatch(setDetailes(response.data.targetUser))
   <h3 className="text-lg font-semibold border-b pb-2">Interests</h3>
   <div className="flex space-x-1  overflow-x-auto p-2 justify-center flex-wrap ">
     {/* Person 1 */}
-    <div className="flex items-center space-x-3 p-3 border rounded-lg shadow-sm w-64 mb-4 sm:w-80 md:w-96">
-      <img
-        className="w-12 h-12 rounded-full"
-        src="https://media.istockphoto.com/id/1682296067/photo/happy-studio-portrait-or-professional-man-real-estate-agent-or-asian-businessman-smile-for.jpg?s=612x612&w=0&k=20&c=9zbG2-9fl741fbTWw5fNgcEEe4ll-JegrGlQQ6m54rg="
-        alt="Person 1"
-      />
-      <div>
-        <p className="font-semibold">Anushree Jain</p>
-        <p className="text-sm text-gray-600">Co-founder, SocialTAG</p>
-        <p className="text-xs text-gray-500">150,808 followers</p>
-        <button className="mt-1 px-3 py-1 text-gray-700 border rounded-full text-sm">✓ Following</button>
-      </div>
-    </div>
-    {/* Person 2 */}
-    <div className="flex items-center space-x-3 p-3 border rounded-lg shadow-sm w-64 mb-4 sm:w-80 md:w-96">
-      <img
-        className="w-12 h-12 rounded-full"
-        src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRBwgu1A5zgPSvfE83nurkuzNEoXs9DMNr8Ww&s"
-        alt="Person 2"
-      />
-      <div>
-        <p className="font-semibold">Nidhi Sharma</p>
-        <p className="text-sm text-gray-600">Tech Mentor | Top Voice</p>
-        <p className="text-xs text-gray-500">57,747 followers</p>
-        <button className="mt-1 px-3 py-1 text-gray-700 border rounded-full text-sm">✓ Following</button>
-      </div>
-    </div>
-    {/* Person 3 */}
-    <div className="flex  items-center space-x-3 p-3 border rounded-lg shadow-sm w-64 mb-4 sm:w-80 md:w-96">
-      <img
-        className="w-12 h-12 rounded-full"
-        src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRBwgu1A5zgPSvfE83nurkuzNEoXs9DMNr8Ww&s"
-        alt="Person 3"
-      />
-      <div>
-        <p className="font-semibold">Nidhi Sharma</p>
-        <p className="text-sm text-gray-600">Tech Mentor | Top Voice</p>
-        <p className="text-xs text-gray-500">57,747 followers</p>
-        <button className="mt-1 px-3 py-1 text-gray-700 border rounded-full text-sm">✓ Following</button>
-      </div>
-    </div>
-    {/* Person 4 */}
-    <div className="flex items-center space-x-3 p-3 border rounded-lg shadow-sm w-64 mb-4 sm:w-80 md:w-96">
-      <img
-        className="w-12 h-12 rounded-full"
-        src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRBwgu1A5zgPSvfE83nurkuzNEoXs9DMNr8Ww&s"
-        alt="Person 4"
-      />
-      <div>
-        <p className="font-semibold">Nidhi Sharma</p>
-        <p className="text-sm text-gray-600">Tech Mentor | Top Voice</p>
-        <p className="text-xs text-gray-500">57,747 followers</p>
-        <button className="mt-1 px-3 py-1 text-gray-700 border rounded-full text-sm">✓ Following</button>
-      </div>
-    </div>
+    {connections?.map((person)=>(
+  <div className="flex items-center space-x-3 p-3 border rounded-lg shadow-sm w-64 mb-4 sm:w-80 md:w-96">
+  <img
+    className="w-12 h-12 rounded-full"
+    src={person.connectionID.profileImage}
+    alt="Person 1"
+  />
+  <div>
+    <p className="font-semibold">{person.connectionID.firstName}</p>
+    <p className="text-sm text-gray-600">{person.connectionID.jobTitle[0]}</p>
+    <p className="text-xs text-gray-500">{person.connectionID.connecting?person.connectionID.connecting.length:0} followers</p>
+    <button className="mt-1 px-3 py-1 text-gray-700 border rounded-full text-sm">✓ Following</button>
+  </div>
+</div>
+   ))} 
+    
+  
+    
   </div>
   <button className="w-full text-blue-600 mt-3 text-sm">Show all Top Voices →</button>
 </div>
