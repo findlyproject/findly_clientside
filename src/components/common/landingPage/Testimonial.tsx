@@ -13,16 +13,16 @@ import { setAllRatings } from "@/lib/store/features/ratingSlice";
 const Testimonials = () => {
   const dispatch = useAppDispatch();
   const ratings = useAppSelector((state) => state.rating.ratings);
-  const [expandedIndex, setExpandedIndex] = useState<number | null>(null); // Track the expanded slide index
+  const [expandedIndex, setExpandedIndex] = useState<number | null>(null); 
 
   const handleReadMore = (index: number) => {
-    // Toggle the expanded state of the clicked slide
+   
     setExpandedIndex((prevIndex) => (prevIndex === index ? null : index));
   };
 
   useEffect(() => {
     const fetchRatings = async () => {
-      const response = await api.get(`/api/rating/findallreviews`);
+      const response = await api.get(`/rating/findallreviews`);
       if (response.status === 200) {
         dispatch(setAllRatings(response.data.allratings));
       }
@@ -30,7 +30,7 @@ const Testimonials = () => {
     fetchRatings();
   }, [dispatch]);
 
-  // Function to truncate the review content
+  
   const truncateReview = (review: string, maxLength: number) => {
     if (review.length <= maxLength) return review;
     return review.slice(0, maxLength) + "...";
@@ -82,13 +82,14 @@ const Testimonials = () => {
                   ))}
                 </div>
 
+
                 <p className="text-base text-gray-600 leading-6 pb-8 group-hover:text-gray-800">
                   {expandedIndex === index
                     ? rating.review
                     : truncateReview(rating.review, 150)}
                   {rating.review.length > 150 && (
                     <span
-                      className="text-indigo-600 cursor-pointer"
+                      className="text-primary cursor-pointer"
                       onClick={() => handleReadMore(index)}
                     >
                       {expandedIndex === index ? " Read Less" : " Read More"}
@@ -99,15 +100,15 @@ const Testimonials = () => {
                 <div className="flex items-center gap-5 border-t border-gray-200 pt-5">
                   <img
                     className="rounded-full h-10 w-10 object-cover"
-                    src={rating.userId.profileImage}
-                    alt={rating.userId.firstName}
+                    src={rating.userId?.profileImage}
+                    alt={rating.userId?.firstName}
                   />
                   <div>
                     <h5 className="text-gray-900 font-medium">
-                      {rating.userId.firstName} {rating.userId.lastName}
+                      {rating.userId?.firstName} {rating.userId?.lastName}
                     </h5>
                     <span className="text-sm text-gray-500">
-                      {rating.userId.jobTitle}
+                      {rating.userId?.jobTitle}
                     </span>
                   </div>
                 </div>
