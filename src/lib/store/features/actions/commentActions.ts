@@ -101,7 +101,8 @@ export const updateAComment = createAsyncThunk(
       }
       console.log(response.data.comment)
       dispatch(updateComment({commentId,newComment:response.data.comment}))
-
+      const responses: AxiosResponse<{ comments: IComment[] }> = await api.get("/post/allcomments");
+      dispatch(setComments(responses.data.comments));
       return response.data.comment;
     } catch (error) {
       console.error("Error fetching posts:", error);
