@@ -16,10 +16,18 @@ import { createSlice, PayloadAction } from "@reduxjs/toolkit";
   jobLocation?: string[];
   education: {
     qualification: string;
-    startYear: string;
-    endYear: string;
+    startYear:string;
+    endYear:string;
     location: string;
     college:string
+  }[]
+
+  experience: 
+  {
+    jobRole:string;
+    companyName:string,
+    startYear:string  
+    endYear:string       
   }[]
   projects?: {
     title: string;

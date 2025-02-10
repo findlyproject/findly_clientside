@@ -22,7 +22,7 @@ function AfterLogin() {
   const handilLogut = () => {
 
     dispatch(logoutUser())
-    signOut()
+    // signOut()
     router.push("/")
   }
 

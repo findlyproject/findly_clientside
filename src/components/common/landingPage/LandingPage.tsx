@@ -9,7 +9,7 @@ import register3 from "../../../../public/assets/register3.jpg"
 import { FaSearch, FaMapMarkerAlt } from "react-icons/fa";
 import { FaUserPlus, FaUpload, FaCheckCircle } from "react-icons/fa";
 import goup from "../../../../public/landingPage-group-discussion.png"
-import landingTop from "../../../../public/landingpage-group.jpg"
+
 import Testimonials from "./Testimonial";
 
 function LandingPage() {

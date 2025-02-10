@@ -100,15 +100,15 @@ const Testimonials = () => {
                 <div className="flex items-center gap-5 border-t border-gray-200 pt-5">
                   <img
                     className="rounded-full h-10 w-10 object-cover"
-                    src={rating.userId.profileImage}
-                    alt={rating.userId.firstName}
+                    src={rating.userId?.profileImage}
+                    alt={rating.userId?.firstName}
                   />
                   <div>
                     <h5 className="text-gray-900 font-medium">
-                      {rating.userId.firstName} {rating.userId.lastName}
+                      {rating.userId?.firstName} {rating.userId?.lastName}
                     </h5>
                     <span className="text-sm text-gray-500">
-                      {rating.userId.jobTitle}
+                      {rating.userId?.jobTitle}
                     </span>
                   </div>
                 </div>
