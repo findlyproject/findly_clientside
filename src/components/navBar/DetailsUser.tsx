@@ -14,7 +14,7 @@ console.log("statusstatus",status);
 
   const Requested=useAppSelector((state)=>state.user.connectionRequest)
 const connections=useAppSelector((state)=>state.user.connections)
-  console.log("connectionsconnectionsv",connections);
+  console.log("connectionsconnectionsv....",connections);
   
   
   console.log("id",id);
@@ -92,7 +92,7 @@ dispatch(setDetailes(response.data.targetUser))
 
 </div>
     <p className="text-gray-900">{user?.jobTitle?.map((title)=>title)}</p>
-    <p className="text-gray-900 text-sm">{user?.location}• {connections?connections.length:0} connections</p>
+    <p className="text-gray-900 text-sm">{user?.location}• {user?.connecting?user.connecting.length:0} connections</p>
     <div className="flex gap-4 mt-5">
   {/* Check if the connection status is NOT true, then show "Connect" or "Pending" */}
   {!user?.connecting?.some((conn) => conn.connectionID === activeuserid?._id && conn.status === true) && (
@@ -256,7 +256,7 @@ dispatch(setDetailes(response.data.targetUser))
   <h3 className="text-lg font-semibold border-b pb-2">Interests</h3>
   <div className="flex space-x-1  overflow-x-auto p-2 justify-center flex-wrap ">
     {/* Person 1 */}
-    {connections.map((person)=>(
+    {user?.connecting&&user.connecting.map((person)=>(
   <div className="flex items-center space-x-3 p-3 border rounded-lg shadow-sm w-64 mb-4 sm:w-80 md:w-96">
   <img
     className="w-12 h-12 rounded-full"
@@ -265,7 +265,7 @@ dispatch(setDetailes(response.data.targetUser))
   />
   <div>
     <p className="font-semibold">{person.connectionID.firstName}</p>
-    <p className="text-sm text-gray-600">{person.connectionID.jobTitle[0]}</p>
+    {/* <p className="text-sm text-gray-600">{person.connectionID.jobTitle[0]}</p> */}
     <p className="text-xs text-gray-500">{person.connectionID.connecting?person.connectionID.connecting.length:0} followers</p>
     <button className="mt-1 px-3 py-1 text-gray-700 border rounded-full text-sm">✓ Following</button>
   </div>

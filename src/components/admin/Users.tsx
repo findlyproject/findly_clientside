@@ -2,7 +2,18 @@
 
 
 "use client"
+
+import api from "@/utils/api";
+import { useEffect } from "react";
+
 const Users = () => {
+
+
+    useEffect(()=>{
+     const  fetchallUsers=async()=>{
+        const response=await api.get(`/`)
+     }
+    },[])
   return (
     <div className="flex flex-col">
 <div className=" overflow-x-auto pb-4">
