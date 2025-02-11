@@ -6,17 +6,7 @@ import { setPersonalDetails } from '@/lib/store/features/userSlice';
 
 function Personaldetails() {
     const user = useAppSelector((state) => state.user.activeuser)
-    console.log(user.activeuser);
-    const [banner, setBanner] = useState(user?.banner ? (user.banner):("/assets/loginbanner.jpg"));
-    const [profile, setProfile] = useState("/assets/loginbanner.jpg");
-
-    // Function to handle image selection
-    const handleImageChange = (e, setImage) => {
-        const file = e.target.files[0];
-        if (file) {
-            setImage(URL.createObjectURL(file));
-        }
-    };
+    
     const dispatch = useAppDispatch()
     const [input,setInput]=useState({
         firstName:user.firstName,
@@ -25,13 +15,27 @@ function Personaldetails() {
         phoneNumber:user.phoneNumber,
         dateOfBirth:user.dateOfBirth,
         about:user.about,
+        profileImage:user?.profileImage,
+        banner:user?.banner
     })
+    console.log("input user personal input",input);
+    
     const handilchange = (e)=>{
             const { name, value } = e.target;
             setInput((prev)=>({
                 ...prev,
                 [name]:value,
             }))
+    }
+    const handilImage = (e)=>{
+        const {name} = e.target;
+        const file = e.target.files[0]
+        setInput((priv)=>({
+            ...priv,
+            [name]:file,
+
+        }))
+        
     }
 
     const handilsubmit = ()=>{
@@ -41,7 +45,14 @@ function Personaldetails() {
         <div>
             <div className="py-2 relative">
             <Image
-                src={banner}
+                // src={input.banner ? (input?.banner):("/assets/loginbanner.jpg")}
+                src={
+                    input?.banner 
+                      ? (typeof input?.banner === "string" 
+                          ? input?.banner 
+                          : URL.createObjectURL(input?.banner)) 
+                      : "/assets/loginbanner.jpg"
+                  } 
                 alt="banner image"
                 width={500}
                 height={50}
@@ -51,9 +62,10 @@ function Personaldetails() {
             <input
                 type="file"
                 accept="image/*"
+                name='banner'
                 className="hidden"
                 id="bannerUpload"
-                onChange={(e) => handleImageChange(e, setBanner)}
+                onChange={handilImage}
             />
             <button onClick={() => document.getElementById("bannerUpload").click()}>
                 <FaRegEdit className="absolute top-5 right-5 text-white bg-gray-800 p-2 rounded-full cursor-pointer text-4xl" />
@@ -61,8 +73,15 @@ function Personaldetails() {
 
             {/* Profile Image Section */}
             <div className="absolute top-24 left-5 flex flex-col items-center">
-                <Image
-                    src={profile}
+                <Image 
+                // src={input.profileImage ? (input?.profileImage):("/assets/profile.png")}
+                src={
+                    input?.profileImage 
+                      ? (typeof input?.profileImage === "string" 
+                          ? input?.profileImage 
+                          : URL.createObjectURL(input?.profileImage)) 
+                      : "/assets/profile.png"
+                  } 
                     alt="profile image"
                     width={100}
                     height={100}
@@ -72,9 +91,10 @@ function Personaldetails() {
                 <input
                     type="file"
                     accept="image/*"
+                    name='profileImage'
                     className="hidden"
                     id="profileUpload"
-                    onChange={(e) => handleImageChange(e, setProfile)}
+                    onChange={handilImage}
                 />
                 <button onClick={() => document.getElementById("profileUpload").click()}>
                     <FaRegEdit className="absolute top-20 left-24 text-white bg-gray-800 p-2 rounded-full cursor-pointer text-3xl" />
