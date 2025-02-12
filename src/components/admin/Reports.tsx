@@ -44,6 +44,8 @@ const ReportedPosts = () => {
 
   // delete a report
   const handleDismissReport = async (postId: string) => {
+    console.log('hadd',postId);
+    
     const response = await api.post(`/admin/dismissreports/${postId}`);
     console.log(response.data);
 

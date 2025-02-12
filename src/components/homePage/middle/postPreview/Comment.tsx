@@ -22,10 +22,10 @@ interface CommentsProps {
 }
 
 export const Comments = ({ postId, comments }: CommentsProps) => {
-  console.log("commentsss", comments);
+ 
 
   const myComments = useAppSelector((state) => state.post.commentsReplay) || []
-  console.log("myComments", myComments);
+
 
 
   useEffect(() => {
@@ -33,10 +33,10 @@ export const Comments = ({ postId, comments }: CommentsProps) => {
   }, [])
 
   const display = async () => {
-    console.log("helloooooiioioi");
+
 
     const resultcometsreplay = await dispatch(getcommentswithreplies())
-    console.log("resultcometsreplay", resultcometsreplay);
+
   }
 
 
@@ -66,7 +66,7 @@ export const Comments = ({ postId, comments }: CommentsProps) => {
 
   const dispatch = useAppDispatch();
   const replay = useAppSelector((state) => state.post.commentReplay)
-  console.log("replay", replay);
+
 
 
   if (!comments) return <div className="text-center p-4">Loading...</div>;
@@ -132,7 +132,7 @@ export const Comments = ({ postId, comments }: CommentsProps) => {
     const resultUpdate = await dispatch(updateReplay({ replayedId, commentId, newReplyText: editReplyText }))
     console.log("ress update", resultUpdate);
     if (resultUpdate.type === "updateReplay/fulfilled") {
-      console.log("kadskasdjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjj");
+     
 
       setIsOptionsMenuOpen(null)
       const result = await dispatch(findReplies(commentId))

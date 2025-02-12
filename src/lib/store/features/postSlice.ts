@@ -11,7 +11,7 @@ updatedAt:Date;
 
 }
 
-interface IReply {
+export interface IReply {
   _id: string;
   user: UserProfile | null;
   reply: string;
@@ -137,6 +137,6 @@ const postSlice = createSlice({
   },
 });
 
-export const { setPosts,addPost,addComment,updateComment,setComments,findCommentReplay,removeDeletedReply,setCommentWithReplay,setLikes} = postSlice.actions;
+export const { setPosts,addPost,addComment,updateComment,setComments,findCommentReplay,removeDeletedReply,setCommentWithReplay,setLikes,updatePost} = postSlice.actions;
 
 export default postSlice.reducer;
