@@ -44,15 +44,15 @@ export const Comments = ({ postId, comments }: CommentsProps) => {
 
   const { activeuser } = useAppSelector((state) => state.login);
 
-  const [isShowMenu, setIsShowMenu] = useState(false); // view the edit & delete menu bar
-  const [commentData, setCommentData] = useState(""); // use for updating a comment
-  const [newCommentData, setnewCommentData] = useState(""); // for adding a new  comment
+  const [isShowMenu, setIsShowMenu] = useState(false); 
+  const [commentData, setCommentData] = useState(""); 
+  const [newCommentData, setnewCommentData] = useState(""); 
   const [showPicker, setShowPicker] = useState(false); 
   const [showPickerImogi, setShowPickerImogi] = useState(false); 
 
-  const [edit, setEdit] = useState(false); //setting up a comment for editing
-  const [openCommentId, setOpenCommentId] = useState(""); // setup a specific id of a comment 
-  const [editingCommentId, setEditingCommentId] = useState(""); //get the id editing comment
+  const [edit, setEdit] = useState(false); 
+  const [openCommentId, setOpenCommentId] = useState(""); 
+  const [editingCommentId, setEditingCommentId] = useState("");
   const [isShowReplyList, setIsShowReplyList] = useState(false)
   const [replyText, setReplyText] = useState("");
   const [commentID, setCommentID] = useState<string | null>(null);
