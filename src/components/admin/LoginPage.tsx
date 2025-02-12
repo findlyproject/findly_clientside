@@ -19,12 +19,6 @@ export default function LoginPage() {
           zIndex: -1,
         }}
       ></div>
-
-      
-      
-        
-        
-        
         <div className="w-full lg:w-1/2 flex flex-col items-center justify-center">
           <h2 className="text-2xl text-white font-semibold mb-2">Welcome</h2>
           <p className="text-sm  mb-6">
