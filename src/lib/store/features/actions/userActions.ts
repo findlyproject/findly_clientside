@@ -1,6 +1,10 @@
+
+
+
+
 import { createAsyncThunk } from "@reduxjs/toolkit";
 import api from "@/utils/api";
-import { setActive, SetLogout, UserProfile } from "../userSlice";
+import { setActive, setConnectionRequest, SetLogout, UserProfile } from "../userSlice";
 import handleAsync from "@/utils/handleAsync";
 import { AxiosResponse } from "axios";
 import {setAllRatings,Rating} from '../ratingSlice'
@@ -128,5 +132,30 @@ export const RateFindly = createAsyncThunk(
     } catch (error) {
       return rejectWithValue("An error occurred while submitting the rating.");
     }
+  }
+);
+
+
+
+//request to connect
+interface ConnectRequestResponse {
+  finduser: UserProfile;
+}
+
+export const connectionRequest = createAsyncThunk(
+  "auth/connectionRequest",
+  async (
+    { id, connecting }: { id: string; connecting: { connectionID: string; status: boolean }[] },
+    { dispatch, rejectWithValue }
+  ) => {
+    const response = await handleAsync<AxiosResponse<ConnectRequestResponse>>(() =>
+      api.post(`/connecting/conectting/${id}`, { connecting })
+    );
+    if (!response) {
+      return rejectWithValue("Login failed. Please try again.");
+    }
+
+    dispatch(setConnectionRequest(response?.data?.finduser as UserProfile));
+    return response?.data?.finduser;
   }
 );

@@ -2,7 +2,13 @@ import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 import { UserProfile } from "./userSlice";
 
 export interface IReport {
-  _id: string;
+_id: string; 
+reportedBy:UserProfile;
+reason:string;
+isDeleted:boolean;
+createdAt:Date;
+updatedAt:Date;
+
 }
 
 interface IReply {
@@ -34,7 +40,7 @@ export interface IPost {
   video?:string;
   owner: UserProfile | null;
   likedBy?: string[];
-  reports?:  IReport[];
+  reports?:  IReport[]| null|undefined;
   comments?:  IComment[] ;
   isDeleted?: boolean;
   createdAt?: string;
@@ -48,12 +54,14 @@ interface PostState {
   postsLength: number | null;
   commentReplay:IReply[]
   commentsReplay:IComment[] | null;
+  
 }
 
 const initialState: PostState = {
   posts: null,
   comments:null,
   postsLength: null,
+  likes:[]
 };
 
 const postSlice = createSlice({
@@ -67,7 +75,17 @@ const postSlice = createSlice({
       if(state.posts!==null)
         state.posts=state.posts.concat(action.payload);
     },
-
+    updatePost: (state, action: PayloadAction<{ postId: string; updatedData: Partial<IPost> }>) => {
+      if (!state.posts) return; // Return early if posts list is null
+    
+      const { postId, updatedData } = action.payload;
+      const postIndex = state.posts.findIndex((post) => post._id === postId);
+    
+      if (postIndex !== -1) {
+        state.posts[postIndex] = { ...state.posts[postIndex], ...updatedData };
+      }
+    },
+    
     //comment 
     setComments: (state, action: PayloadAction<IComment[]>) => {
       state.comments = action.payload;
@@ -111,10 +129,14 @@ const postSlice = createSlice({
     },
     setCommentWithReplay:(state,action)=>{
       state.commentsReplay=action.payload
+    },
+    setLikes: (state, action: PayloadAction<[]>) => {
+      state.likes = action.payload// Ensure likes is an array
     }
+    
   },
 });
 
-export const { setPosts,addPost,addComment,updateComment,setComments,findCommentReplay,removeDeletedReply,setCommentWithReplay} = postSlice.actions;
+export const { setPosts,addPost,addComment,updateComment,setComments,findCommentReplay,removeDeletedReply,setCommentWithReplay,setLikes} = postSlice.actions;
 
 export default postSlice.reducer;

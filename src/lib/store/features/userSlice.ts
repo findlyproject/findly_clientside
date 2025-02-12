@@ -1,3 +1,4 @@
+import { connectionRequest } from './actions/userActions';
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 
 export interface Education {
@@ -40,7 +41,10 @@ export interface UserProfile {
     description: string;
     link?: string;
   }[];
-  connecting: string[];
+  connecting: {
+    connectionID:string;
+    status: boolean;
+    createdAt:Date}[]
   about?: string;
   resumePDF?: {
     fileUrl: string;
@@ -65,11 +69,17 @@ export interface UserProfile {
 interface LoginState {
   activeuser: UserProfile | null;
   googlestate: boolean;
+  userdetails:UserProfile|null
+  connectionRequest:UserProfile|null
+  connections:UserProfile[]
 }
 
 const initialState: LoginState = {
   activeuser: null,
-  googlestate: true
+  googlestate: true,
+  userdetails:null,
+  connectionRequest:null,
+  connections:[]
 };
 
 interface EditState {
@@ -190,7 +200,15 @@ const loginSlice = createSlice({
       }
     },
     
-    
+    setDetailes:(state,action)=>{
+state.userdetails=action.payload
+    },
+    setConnectionRequest:(state,action:PayloadAction<UserProfile | null>)=>{
+state.connectionRequest=action.payload
+    },
+    setAllConnections:(state,action:PayloadAction<UserProfile []>)=>{
+state.connections=action.payload
+    }
   },
 });
 
@@ -200,18 +218,9 @@ export const {
   setActive,
   SetLogout,
   setGooglelogin,
-  setEducation,
-  setRemoveEducation,
-  setjobLocations,
-  setRemovejoblocation,
-  setjobTItles,
-  setRemovjobTItles,
-  setLocation,
-  setPersonalDetails,
-  setProject,
-  setremovproject,
-  setskils,
-  setRemovskils,
+  setAllConnections,
+  setConnectionRequest,
+  setDetailes
 } = loginSlice.actions;
 
 export default loginSlice.reducer;

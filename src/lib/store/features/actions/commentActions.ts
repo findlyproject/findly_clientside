@@ -16,7 +16,6 @@ interface AddCommentArgs {
 interface updateCommentArgs {
   commentId: string;
   newComment: string;
-  
 }
 
 
@@ -25,12 +24,12 @@ export const fetchAllComments = createAsyncThunk(
   "post/fetchAllComments",
   async (_, { dispatch, rejectWithValue }) => {
     try {
-      const response: AxiosResponse<{ comments: IComment[] }> = await api.get("/post/allcomments");
-
+      const response: AxiosResponse<{ comments: IComment[] }> = await api.get(
+        "/post/allcomments"
+      );
       if (!response.data || !response.data.comments) {
         return rejectWithValue("No posts found.");
       }
-
       dispatch(setComments(response.data.comments));
       return response.data.comments;
     } catch (error) {
@@ -45,22 +44,17 @@ export const addCommentonPost = createAsyncThunk(
   "post/addComment",
   async (
     { postId, comment }: AddCommentArgs,
-   
-    { dispatch, rejectWithValue }
+
+    { rejectWithValue }
   ) => {
     try {
-      console.log(postId, comment)
       const response: AxiosResponse<CommentResponse> = await api.post(
         `/post/comment`,
         { postId, comment }
       );
-
       if (!response.data || !response.data.comment) {
         return rejectWithValue("Failed to add comment.");
       }
-
-      dispatch(addComment({ postId, comment: response.data.comment }));
-
       return response.data.comment;
     } catch (error) {
       console.error("Error adding comment:", error);
@@ -77,7 +71,6 @@ export const fetchCommentById = createAsyncThunk(
       const response: AxiosResponse<CommentResponse> = await api.get(
         `/post/viewcomment/${id}`
       );
-
       if (!response.data || !response.data.comment) {
         return rejectWithValue("No posts found.");
       }
@@ -92,17 +85,22 @@ export const fetchCommentById = createAsyncThunk(
 
 export const updateAComment = createAsyncThunk(
   "post/updateComment",
-  async ({commentId,newComment}:updateCommentArgs, {dispatch, rejectWithValue }) => {
+  async (
+    { commentId, newComment }: updateCommentArgs,
+    { dispatch, rejectWithValue }
+  ) => {
     try {
       const response: AxiosResponse<CommentResponse> = await api.put(
-        `/post/edit-comment/${commentId}`,{newComment}
+        `/post/edit-comment/${commentId}`,
+        { newComment }
       );
       if (!response.data || !response.data.comment) {
         return rejectWithValue("No posts found.");
       }
-      console.log(response.data.comment)
-      dispatch(updateComment({commentId,newComment:response.data.comment}))
-      const responses: AxiosResponse<{ comments: IComment[] }> = await api.get("/post/allcomments");
+      console.log(response.data.comment);
+      const responses: AxiosResponse<{ comments: IComment[] }> = await api.get(
+        "/post/allcomments"
+      );
       dispatch(setComments(responses.data.comments));
       return response.data.comment;
     } catch (error) {
@@ -115,7 +113,10 @@ export const updateAComment = createAsyncThunk(
 //delete a comment by the owner
 export const deleteAComment = createAsyncThunk(
   "post/deleteAComment",
-  async ({commentId}:{commentId:string}, {dispatch, rejectWithValue }) => {
+  async (
+    { commentId }: { commentId: string },
+    { rejectWithValue }
+  ) => {
     try {
       const response: AxiosResponse<CommentResponse> = await api.post(
         `/post/delete-comment/${commentId}`
@@ -123,9 +124,7 @@ export const deleteAComment = createAsyncThunk(
       if (!response.data || !response.data.comment) {
         return rejectWithValue("No posts found.");
       }
-      console.log(response.data.comment)
-      dispatch(updateComment({commentId,newComment:response.data.comment}))
-      
+      console.log(response.data.comment);
 
       return response.data.comment;
     } catch (error) {
@@ -246,7 +245,7 @@ export const updateReplay=createAsyncThunk(
     
     
     
-   
+
     const response = await handleAsync<AxiosResponse>(() => api.put("/post/user/editreplay",{commentId,replayedId,newReplyText}));
 
 console.log("updateReplay",response)
