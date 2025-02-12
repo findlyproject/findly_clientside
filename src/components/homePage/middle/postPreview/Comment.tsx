@@ -222,7 +222,7 @@ export const Comments = ({ postId, comments }: CommentsProps) => {
       const result = await dispatch(findReplies(commentId))
       console.log("result", result);
 
-                      
+
     }
 
   }
@@ -519,7 +519,7 @@ export const Comments = ({ postId, comments }: CommentsProps) => {
                                         >
                                           Delete
                                         </button>
-                                      </div>      
+                                      </div>
                                     )}
                                   </div>
                                   <div>
@@ -546,7 +546,7 @@ export const Comments = ({ postId, comments }: CommentsProps) => {
                 )}
 
 
-                                      
+
 
               </div>
             ))}
