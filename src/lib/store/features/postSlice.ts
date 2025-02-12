@@ -79,7 +79,7 @@ const postSlice = createSlice({
       if (post?.comments) {
         post.comments.push(comment);
       }
-    },
+    },         
     updateComment: (state, action) => {
       const { commentId, newComment } = action.payload;
     
