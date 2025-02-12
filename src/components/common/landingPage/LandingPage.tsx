@@ -15,7 +15,8 @@ import { useAppSelector } from "@/lib/store/hooks";
 
 function LandingPage() {
   const { activeuser } = useAppSelector((state) => state.login);
-
+  const toggleTheme= useAppSelector((state)=>state.theme.dark)
+  console.log("theem",toggleTheme);
   const router = useRouter()
   const steps = [
     { title: "Create account", desc: "Aliquam facilisis egestas sapien.", icon: <FaUserPlus /> },
@@ -26,7 +27,7 @@ function LandingPage() {
   console.log(activeuser)
 
   return (
-    <div className="w-full h-full">
+    <div className={toggleTheme? "bg-gray-800":"w-full h-full"}>
       <div className="flex flex-col md:flex-row items-center justify-center   w-full  pt-20 ">
 
 

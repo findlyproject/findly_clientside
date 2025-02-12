@@ -64,6 +64,8 @@ interface EditState {
   phoneNumber?: string;
   dateOfBirth?: Date;
   about?: string;
+  profileImage?: string;
+  banner?: string;
 }
 
 const loginSlice = createSlice({
@@ -111,20 +113,16 @@ const loginSlice = createSlice({
         state.activeuser.location = action.payload;
       }
     },
-    setPersonalDetails: (state, action: PayloadAction<Partial<EditState>>) => {
-      if (state.activeuser) {
-        state.activeuser.firstName = action.payload.firstName ?? state.activeuser.firstName;
-        state.activeuser.lastName = action.payload.lastName ?? state.activeuser.lastName;
-        state.activeuser.email = action.payload.email ?? state.activeuser.email;
-        state.activeuser.phoneNumber = action.payload.phoneNumber ?? state.activeuser.phoneNumber;
-        state.activeuser.dateOfBirth = action.payload.dateOfBirth ?? state.activeuser.dateOfBirth;
-        state.activeuser.about = action.payload.about ?? state.activeuser.about;
-        state.activeuser.profileImage = action.payload.profileImage ?? state.activeuser.profileImage;
-        state.activeuser.banner = action.payload.banner ?? state.activeuser.banner;
-
-
-      }
-    },
+    // setPersonalDetails: (state, action: PayloadAction<Partial<EditState>>) => {
+    //   if (state.activeuser) {
+    //     state.activeuser.firstName = action.payload.details.firstName ?? state.activeuser.firstName;
+    //     state.activeuser.lastName = action.payload.details.lastName ?? state.activeuser.lastName;
+    //     state.activeuser.email = action.payload.details.email ?? state.activeuser.email;
+    //     state.activeuser.phoneNumber = action.payload.details.phoneNumber ?? state.activeuser.phoneNumber;
+    //     state.activeuser.dateOfBirth = action.payload.details.dateOfBirth ?? state.activeuser.dateOfBirth;
+    //     state.activeuser.about = action.payload.details.about ?? state.activeuser.about;
+    //   }
+    // },
     setProject: (state, action: PayloadAction<{ title: string; description: string; link?: string }>) => {
       state.activeuser?.projects?.push(action.payload);
     },
@@ -141,6 +139,19 @@ const loginSlice = createSlice({
         state.activeuser.skills = state.activeuser.skills.filter((_, index) => index !== action.payload);
       }
     },
+    setPersonalDetails:(state, action: PayloadAction<number>) => {
+      state.activeuser.profileImage = action.payload.profileImage;
+      state.activeuser.banner = action.payload.bannerImage
+      if (state.activeuser) {
+        state.activeuser.firstName = action.payload.details.firstName ?? state.activeuser.firstName;
+        state.activeuser.lastName = action.payload.details.lastName ?? state.activeuser.lastName;
+        state.activeuser.email = action.payload.details.email ?? state.activeuser.email;
+        state.activeuser.phoneNumber = action.payload.details.phoneNumber ?? state.activeuser.phoneNumber;
+        state.activeuser.dateOfBirth = action.payload.details.dateOfBirth ?? state.activeuser.dateOfBirth;
+        state.activeuser.about = action.payload.details.about ?? state.activeuser.about;
+      }
+      
+    }
     
   },
 });

@@ -11,6 +11,7 @@ import { navigation } from "./Navbar";
 import Image from "next/image";
 import { logoutUser } from "@/lib/store/features/actions/userActions";
 import { signOut } from "next-auth/react";
+import { toggleTheme } from "@/lib/store/features/them";
 
 
 function AfterLogin() {
@@ -25,7 +26,9 @@ function AfterLogin() {
     router.push("/")
     
   }
-  
+  const handilTheem = ()=>{
+    dispatch(toggleTheme())
+  }
 
   return (
     <div className="flex">
@@ -36,7 +39,7 @@ function AfterLogin() {
       <Menu as="div" className="relative ml-3 z-40 w-20">
         <Menu.Button className="flex text-sm rounded-full focus:outline-none w-auto">
           <Image 
-            src={activeuser?.profileImage}
+            src={activeuser?.profileImage == {} ? "/assets/profile.png" : activeuser?.profileImage}
             alt="User profile"
             width={200}
             height={200}
@@ -78,7 +81,17 @@ function AfterLogin() {
                 )}
               </Menu.Item>
             ))}
-            
+            <Menu.Item>
+              {({ active }) => (
+                <button
+                  className={`block w-full text-left px-4 py-2 text-md hover:bg-gray-300 text-red-600 ${active ? "bg-gray-100" : ""
+                    }`}
+                  onClick={handilTheem}
+                >
+                  Theem
+                </button>
+              )}
+            </Menu.Item>
             <Menu.Item>
               {({ active }) => (
                 <button

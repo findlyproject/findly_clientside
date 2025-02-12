@@ -2,11 +2,15 @@ import React, { useState } from 'react'
 import Image from 'next/image';
 import { FaRegEdit } from "react-icons/fa";
 import { useAppDispatch, useAppSelector } from '@/lib/store/hooks';
+import api from '@/utils/api';
 import { setPersonalDetails } from '@/lib/store/features/userSlice';
 
 function Personaldetails() {
     const user = useAppSelector((state) => state.user.activeuser)
-    
+    const [image,setImage]=useState({
+        profileImage:user.profileImage,
+        banner:user.banner,
+    })
     const dispatch = useAppDispatch()
     const [input,setInput]=useState({
         firstName:user.firstName,
@@ -15,8 +19,6 @@ function Personaldetails() {
         phoneNumber:user.phoneNumber,
         dateOfBirth:user.dateOfBirth,
         about:user.about,
-        profileImage:user?.profileImage,
-        banner:user?.banner
     })
     console.log("input user personal input",input);
     
@@ -30,7 +32,7 @@ function Personaldetails() {
     const handilImage = (e)=>{
         const {name} = e.target;
         const file = e.target.files[0]
-        setInput((priv)=>({
+        setImage((priv)=>({
             ...priv,
             [name]:file,
 
@@ -38,8 +40,72 @@ function Personaldetails() {
         
     }
 
+    ///////////////////////////////////////////////////
+    const handleImageeChange = async () => {
+        try {
+          if (!image.profileImage || !image.banner) {
+            console.error("Both profile and banner images must be selected");
+            return;
+          }
+      
+          const uploadImage = async (image: File) => {
+            // ✅ Step 1: Get Signed Credentials from Backend
+            const response = await api.get(`/user/generate-signed-url`, {
+              params: { fileType: image.type },
+            });
+      
+            const { api_key, timestamp, signature, folder, cloudName } = response.data;
+      
+            console.log("Uploading image:", image);
+      
+            // ✅ Step 2: Prepare FormData for Cloudinary
+            const formData = new FormData();
+            formData.append("file", image);
+            formData.append("api_key", api_key);
+            formData.append("timestamp", timestamp.toString());
+            formData.append("signature", signature);
+            formData.append("folder", folder);
+      
+            // ✅ Step 3: Upload Image to Cloudinary
+            const uploadResponse = await fetch(
+              `https://api.cloudinary.com/v1_1/${cloudName}/image/upload`,
+              {
+                method: "POST",
+                body: formData,
+              }
+            );
+      
+            const data = await uploadResponse.json();
+            if (!data.secure_url) {
+              throw new Error("Upload failed");
+            }
+      
+            return data.secure_url;
+          };
+      
+          // ✅ Upload both images simultaneously
+          const [profileImageUrl, banner] = await Promise.all([
+            uploadImage(image.profileImage),
+            uploadImage(image.banner),
+          ]);
+      
+          console.log("Profile Image URL:", profileImageUrl);
+          console.log("Banner Image URL:", banner);
+      
+          // ✅ Dispatch both image URLs to state
+          await dispatch(setPersonalDetails({ profileImage: profileImageUrl, bannerImage: banner, details:input}));
+          
+        } catch (error) {
+          console.error("Error uploading images:", error);
+        }
+      };
+      
+      
+    
+
     const handilsubmit = ()=>{
-        dispatch(setPersonalDetails(input))
+        handleImageeChange(image)
+        // dispatch(setPersonalDetails(input))
     }
     return (
         <div>
@@ -47,10 +113,10 @@ function Personaldetails() {
             <Image
                 // src={input.banner ? (input?.banner):("/assets/loginbanner.jpg")}
                 src={
-                    input?.banner 
-                      ? (typeof input?.banner === "string" 
-                          ? input?.banner 
-                          : URL.createObjectURL(input?.banner)) 
+                    image?.banner 
+                      ? (typeof image?.banner === "string" 
+                          ? image.banner 
+                          : URL.createObjectURL(image?.banner)) 
                       : "/assets/loginbanner.jpg"
                   } 
                 alt="banner image"
@@ -76,10 +142,10 @@ function Personaldetails() {
                 <Image 
                 // src={input.profileImage ? (input?.profileImage):("/assets/profile.png")}
                 src={
-                    input?.profileImage 
-                      ? (typeof input?.profileImage === "string" 
-                          ? input?.profileImage 
-                          : URL.createObjectURL(input?.profileImage)) 
+                    image?.profileImage 
+                      ? (typeof image?.profileImage === "string" 
+                          ? image?.profileImage 
+                          : URL.createObjectURL(image?.profileImage)) 
                       : "/assets/profile.png"
                   } 
                     alt="profile image"

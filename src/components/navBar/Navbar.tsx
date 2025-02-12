@@ -14,6 +14,7 @@ export const navigation = [
   { name: "Contact", href: "/contactus" },
 ];
 export default function Navbar() {
+  const toggleTheme= useAppSelector((state)=>state.theme.dark)
   const { activeuser } = useAppSelector((state) => state.login);
   interface User {
     _id: string;
@@ -48,7 +49,7 @@ export default function Navbar() {
   };
 
   return (
-    <nav className="bg-white border border-b-2">
+    <nav className={toggleTheme ? "bg-gray-900":"bg-white border border-b-2"}>
       <div className=" sm:px-6">
         <div className="flex justify-between h-16 items-center">
           <div className="flex items-center">
@@ -58,7 +59,7 @@ export default function Navbar() {
 
             <div className="relative w-96">
 
-              <div className="w-96 h-10 bg-slate-200 rounded-3xl outline-none ">
+              <div className="w-96 h-10 bg-slate-200 rounded-3xl outline-none bg-gray-700">
                 <input
                   type="text"
                   placeholder="Search"

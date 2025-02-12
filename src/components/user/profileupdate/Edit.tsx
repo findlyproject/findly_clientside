@@ -9,7 +9,6 @@ import Location from './Location';
 import Jobtitle from './Jobtitle';
 import api from '@/utils/api';
 import { useAppDispatch, useAppSelector } from '@/lib/store/hooks';
-import { profile } from 'console';
 import { setActive } from '@/lib/store/features/userSlice';
 import { useRouter } from 'next/navigation';
 
@@ -19,28 +18,20 @@ function Edit() {
     console.log("activ user ",activeuser);
     const dispatch = useAppDispatch()
   
+      
     
 const handilclik =async ()=>{
-    const formData = new FormData();
-formData.append("profileImage", activeuser?.profileImage || "");
-formData.append("banner", activeuser?.banner || "");
-formData.append("firstName",activeuser?.firstName || "")
-formData.append("lastName",activeuser?.lastName || "")
-formData.append("about",activeuser?.about || "")
-formData.append("email",activeuser?.email || "")
-formData.append("phoneNumber",activeuser?.phoneNumber || "")
-formData.append("dateOfBirth",activeuser?.dateOfBirth || "")
-// console.log(formData.get());
+
     try {
-        const respons =await api.put("/user/profile",formData)
+        const respons =await api.put("/user/profile",activeuser)
     console.log("response",respons);
     } catch (error) {
         console.log(error);
         
     }
     
-
 }
+
 
 const getuserprfilr = async ()=>{
     try {
@@ -53,9 +44,15 @@ const getuserprfilr = async ()=>{
     }
     
 }
+
 useEffect(()=>{
-getuserprfilr()
-},[])  
+        console.log("activeuser")
+        
+    if(activeuser){
+        getuserprfilr()
+    }
+    },[])
+
   return (
         <div className="w-full h-auto flex justify-center py-4">
             <div className="w-5/6 border rounded-2xl shadow-2xl p-6 relative">
