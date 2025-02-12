@@ -1,18 +1,19 @@
 "use client";
-import { faSmile, faImage, faEllipsis, } from "@fortawesome/free-solid-svg-icons";
+import { faSmile, faEllipsis, } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { useState, useRef, ChangeEvent, useEffect } from "react";
+import { useState, useRef, useEffect } from "react";
 import { useAppDispatch, useAppSelector } from "@/lib/store/hooks";
 import dayjs from "dayjs";
 import relativeTime from "dayjs/plugin/relativeTime";
-import { IComment, IPost } from "@/lib/store/features/postSlice";
+import { IComment } from "@/lib/store/features/postSlice";
 import { deleteAComment, deleteReplay, findReplies, getcommentswithreplies, postReplay, updateAComment, updateReplay } from "@/lib/store/features/actions/commentActions"
 import { addCommentonPost, fetchCommentById } from "@/lib/store/features/actions/commentActions";
 import EmojiPicker from "emoji-picker-react";
 import { EmojiClickData } from "emoji-picker-react";
-import { FormEvent } from "react";
-import api from "@/utils/api";
 import { BsThreeDots } from "react-icons/bs";
+import Image from "next/image";
+import { fetchAllPosts } from "@/lib/store/features/actions/postActions";
+import OutsideClickHandler from "react-outside-click-handler";
 dayjs.extend(relativeTime);
 
 interface CommentsProps {
@@ -165,11 +166,14 @@ export const Comments = ({ postId, comments }: CommentsProps) => {
     if (!commentData.trim()) return;
     dispatch(updateAComment({ commentId: editingCommentId, newComment: commentData }))
     setEdit(false)
+    dispatch(fetchAllPosts())
+
 
   };
   //delete comment
   const deleteComment = async (commentid: string) => {
     dispatch(deleteAComment({ commentId: commentid }))
+    dispatch(fetchAllPosts())
   };
 
 
@@ -233,13 +237,14 @@ export const Comments = ({ postId, comments }: CommentsProps) => {
         <form className="flex flex-col space-y-2 p-3 border rounded-lg shadow-sm bg-white">
           <div className="flex items-center space-x-3">
             <div className="w-10 h-10">
-              <img
+              <Image
                 src={
                   activeuser?.profileImage ||
                   "https://res.cloudinary.com/dq1auwpkm/image/upload/v1738735360/profile_jtwxaj.png"
                 }
                 alt="Profile"
                 width={30}
+                height={30}
                 className="w-full h-full rounded-full object-cover"
               />
             </div>
@@ -259,16 +264,19 @@ export const Comments = ({ postId, comments }: CommentsProps) => {
                 <span className="text-gray-500 cursor-pointer hover:text-gray-700">
                   <FontAwesomeIcon icon={faSmile} />
                 </span>
-                {showPicker && (
+              </button>
+              {showPicker && (
+
+              <OutsideClickHandler onOutsideClick={()=>setShowPicker(false)}>
+
                   <div className="absolute z-10 w-[300px] sm:w-[250px] md:w-[350px] lg:w-[400px]  transform -translate-x-1/2">
                     <EmojiPicker onEmojiClick={handleEmojiClick} />
                   </div>
+                  </OutsideClickHandler>
                 )}
-              </button>
 
-              <span className="text-gray-500 cursor-pointer hover:text-gray-700">
-                <FontAwesomeIcon icon={faImage} />
-              </span>
+
+              
             </div>
           </div>
 
@@ -333,7 +341,7 @@ export const Comments = ({ postId, comments }: CommentsProps) => {
                   <div className="flex items-start space-x-3">
                     {/* ✅ Commenter Profile */}
                     <div className="w-10 h-10">
-                      <img
+                      <Image
                         src={
                           comment.user?.profileImage ||
                           "https://res.cloudinary.com/dq1auwpkm/image/upload/v1738735360/profile_jtwxaj.png"
@@ -410,9 +418,11 @@ export const Comments = ({ postId, comments }: CommentsProps) => {
 
                     <div className="flex items-center space-x-2">
 
-                      <img
+                      <Image
                         src={activeuser?.profileImage || "/default-profile.png"}
                         alt="User"
+                        height={30}
+                        width={30}
                         className="w-8 h-8 rounded-full object-cover"
                       />
                       <div className="relative flex border rounded-lg px-4 py-2">
@@ -426,9 +436,11 @@ export const Comments = ({ postId, comments }: CommentsProps) => {
                         />
 
                         {showPickerImogi && commentID === comment._id&&(
+              <OutsideClickHandler onOutsideClick={()=>setShowPickerImogi(false)}>
                           <div className="absolute z-10 w-[300px] sm:w-[250px] md:w-[350px] lg:w-[400px] left-80 top-40  transform -translate-x-1/2">
                             <EmojiPicker onEmojiClick={handleEmojiClickReplay} />
                           </div>
+                          </OutsideClickHandler>
                         )}
 
 
