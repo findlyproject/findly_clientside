@@ -1,4 +1,4 @@
-import { connectionRequest } from './actions/userActions';
+
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 
 export interface Education {

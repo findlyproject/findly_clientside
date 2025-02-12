@@ -8,12 +8,13 @@ import { useRouter } from "next/navigation";
 import { useAppDispatch, useAppSelector } from "@/lib/store/hooks";
 import logo from "../../../public/assets/findlylogo.png";
 import api from "@/utils/api";
-import { setDetailes } from "@/lib/store/features/userSlice";
+
 export const navigation = [
   { name: "Home", href: "/" },
   { name: "About", href: "/about" },
   { name: "RateUs", href: "/rateus" },
   { name: "Contact", href: "/contactus" },
+  { name: "Subscription", href: "/premium" },
 ];
 export default function Navbar() {
  

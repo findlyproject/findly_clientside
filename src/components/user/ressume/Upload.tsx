@@ -199,7 +199,7 @@ const FileUpload = () => {
   const [modalContent, setModalContent] = useState<string | null>(null);
   const [isModalOpen, setIsModalOpen] = useState<boolean>(false);
 
-  // Set initial files if resumePdf or resumevideo is available
+
   useEffect(() => {
     setFiles({
       resume: resumePdf?.[0] ? new File([""], "Existing Resume.pdf", { type: "application/pdf" }) : null,
@@ -233,6 +233,8 @@ const FileUpload = () => {
     if (introductionVideo) formData.append("video", introductionVideo);
 
     try {
+      console.log("formdata",formData);
+      
       setLoading(true);
       setErrorMessage("");
       const result = await dispatch(postresume(formData));
@@ -265,10 +267,7 @@ const FileUpload = () => {
    console.log("removeResult",removeResult);
    
   
-  
-    // const response=await api.delete(`/user/removeresume?fileType=${type}`)
-    // console.log("resss",response);
-    
+
       
   };
 
