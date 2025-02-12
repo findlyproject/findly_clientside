@@ -222,7 +222,7 @@ export const Comments = ({ postId, comments }: CommentsProps) => {
       const result = await dispatch(findReplies(commentId))
       console.log("result", result);
 
-     
+                      
     }
 
   }
