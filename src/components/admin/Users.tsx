@@ -4,15 +4,31 @@
 "use client"
 
 import api from "@/utils/api";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
+ interface UserDetails{
+    _id:string,
+    firstName:string,
+    role:string,
+    createdAt:string,
+    profileImage:string,
+    email:string,
+    isBlocked:boolean,
+    location:string,
+    jobTitle:string[]
 
+ }
 const Users = () => {
+    const [users,setAllUsers]=useState<UserDetails[]>([])
+console.log("users...",users);
 
 
     useEffect(()=>{
      const  fetchallUsers=async()=>{
-        const response=await api.get(`/`)
+        const response=await api.get(`/admin/users`)
+        console.log("response all users",response);
+        setAllUsers(response.data.users)
      }
+     fetchallUsers()
     },[])
   return (
     <div className="flex flex-col">
@@ -27,49 +43,48 @@ const Users = () => {
                                 <input type="checkbox" value="" className="w-5 h-5 appearance-none border border-gray-300  rounded-md mr-2 hover:border-indigo-500 hover:bg-indigo-100 checked:bg-no-repeat checked:bg-center checked:border-indigo-500 checked:bg-indigo-100"/>
                             </div>
                         </th>
-                        <th scope="col" className="p-5 text-left whitespace-nowrap text-sm leading-6 font-semibold text-gray-900 capitalize"> Company </th>
+                        
                         <th scope="col" className="p-5 text-left whitespace-nowrap text-sm leading-6 font-semibold text-gray-900 capitalize"> User ID </th>
                         <th scope="col" className="p-5 text-left whitespace-nowrap text-sm leading-6 font-semibold text-gray-900 capitalize min-w-[150px]"> Full Name &amp; Email </th>
                         <th scope="col" className="p-5 text-left whitespace-nowrap text-sm leading-6 font-semibold text-gray-900 capitalize"> Type </th>
-                        <th scope="col" className="p-5 text-left whitespace-nowrap text-sm leading-6 font-semibold text-gray-900 capitalize"> Industry Type </th>
+                        <th scope="col" className="p-5 text-left whitespace-nowrap text-sm leading-6 font-semibold text-gray-900 capitalize"> Job Title </th>
                         <th scope="col" className="p-5 text-left whitespace-nowrap text-sm leading-6 font-semibold text-gray-900 capitalize"> Join Date </th>
-                        <th scope="col" className="p-5 text-left whitespace-nowrap text-sm leading-6 font-semibold text-gray-900 capitalize"> Budget </th>
-                        <th scope="col" className="p-5 text-left whitespace-nowrap text-sm leading-6 font-semibold text-gray-900 capitalize"> Country </th>
+
+                        <th scope="col" className="p-5 text-left whitespace-nowrap text-sm leading-6 font-semibold text-gray-900 capitalize"> Location </th>
                         <th scope="col" className="p-5 text-left whitespace-nowrap text-sm leading-6 font-semibold text-gray-900 capitalize"> Status </th>
                         <th scope="col" className="p-5 text-left whitespace-nowrap text-sm leading-6 font-semibold text-gray-900 capitalize"> Actions </th>
                     </tr>
                 </thead>
                 <tbody className="divide-y divide-gray-300 ">
                     
-                   
+                   {users.map((user)=>(
                     <tr className="bg-white transition-all duration-500 hover:bg-gray-50">
                         <td className="">
                             <div className="flex items-center py-5 px-5 ">
                                 <input type="checkbox" value="" className="w-5 h-5 appearance-none border border-gray-300  rounded-md mr-2 hover:border-indigo-500 hover:bg-indigo-100 checked:bg-no-repeat checked:bg-center checked:border-indigo-500 checked:bg-indigo-100"/>
                             </div>
                         </td>
-                        <td className="p-5 whitespace-nowrap text-sm leading-6 font-medium text-gray-900 "> Dell</td>
-                        <td className="p-5 whitespace-nowrap text-sm leading-6 font-medium text-gray-900"> 20010518 </td>
+                       
+                        <td className="p-5 whitespace-nowrap text-sm leading-6 font-medium text-gray-900"> {user._id} </td>
                         <td className="w-48 px-5 py-3 whitespace-nowrap">
                             <div className="flex items-center gap-3">
-                                <img src="https://pagedone.io/asset/uploads/1697536552.png" alt="Richard image"/>
+                                <img src={user?.profileImage} alt="profile image " className="w-10 h-10"/>
                                 <div className="data min-w-[150px]">
-                                    <p className="font-normal text-sm text-gray-900 whitespace-nowrap">Richard Riccio </p>
-                                    <p className="font-normal text-xs leading-5 text-gray-400 whitespace-nowrap"> richardriccio@pagedone.io </p>
+                                    <p className="font-normal text-sm text-gray-900 whitespace-nowrap">{user?.firstName} </p>
+                                    <p className="font-normal text-xs leading-5 text-gray-400 whitespace-nowrap"> {user?.email} </p>
                                 </div>
                             </div>
                         </td>
-                        <td className="p-5 whitespace-nowrap text-sm leading-6 font-medium text-gray-900"> Customer</td>
-                        <td className="p-5 whitespace-nowrap text-sm leading-6 font-medium text-gray-900"> Manufacturing</td>
-                        <td className="p-5 whitespace-nowrap text-sm leading-6 font-medium text-gray-900"> Apr. 02, 2023 </td>
-                        <td className="p-5 whitespace-nowrap text-sm leading-6 font-medium text-gray-900"> $99,999 </td>
-                        <td className="p-5 whitespace-nowrap text-sm leading-6 font-medium text-gray-900"> France </td>
+                        <td className="p-5 whitespace-nowrap text-sm leading-6 font-medium text-gray-900"> {user.role}</td>
+                        <td className="p-5 whitespace-nowrap text-sm leading-6 font-medium text-gray-900"> {user.jobTitle[0]}</td>
+                        <td className="p-5 whitespace-nowrap text-sm leading-6 font-medium text-gray-900"> {new Date(user.createdAt).toLocaleDateString()} </td>
+                        <td className="p-5 whitespace-nowrap text-sm leading-6 font-medium text-gray-900"> {user.location} </td>
                         <td className="p-5 whitespace-nowrap text-sm leading-6 font-medium text-gray-900">
                             <div className="py-1.5 px-2.5 bg-amber-50 rounded-full flex items-center justify-center w-20 gap-1">
                                 <svg width="5" height="6" viewBox="0 0 5 6" fill="none" xmlns="http://www.w3.org/2000/svg">
                                     <circle cx="2.5" cy="3" r="2.5" fill="#D97706"></circle>
                                 </svg>
-                                <span className="font-medium text-xs text-amber-600 ">Pending</span>
+                                <span className="font-medium text-xs text-amber-600 ">{user.isBlocked===false?<p className="text-green-500">Active</p>:<p className="text-yellow-700">Inactive</p>}</span>
                             </div>
                         </td>
                         <td className="flex p-5 items-center gap-0.5">
@@ -90,6 +105,8 @@ const Users = () => {
                             </button>
                         </td>
                     </tr>
+                   ))}
+                    
                 </tbody>
             </table>
         </div>

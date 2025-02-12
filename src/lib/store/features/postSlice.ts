@@ -44,12 +44,14 @@ interface PostState {
   posts: IPost[] | null;
   comments:IComment[] | null;
   postsLength: number | null;
+  likes:IPost|[]
 }
 
 const initialState: PostState = {
   posts: null,
   comments:null,
   postsLength: null,
+  likes:[]
 };
 
 const postSlice = createSlice({
@@ -90,9 +92,13 @@ const postSlice = createSlice({
         };
       }
     },
+    setLikes: (state, action: PayloadAction<[]>) => {
+      state.likes = action.payload// Ensure likes is an array
+    }
+    
   },
 });
 
-export const { setPosts,addPost,addComment,updateComment,setComments } = postSlice.actions;
+export const { setPosts,addPost,addComment,updateComment,setComments ,setLikes} = postSlice.actions;
 
 export default postSlice.reducer;

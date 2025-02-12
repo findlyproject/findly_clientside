@@ -64,7 +64,7 @@ interface LoginState {
   googlestate: boolean;
   userdetails:UserProfile|null
   connectionRequest:UserProfile|null
-  connections:UserProfile|[]
+  connections:UserProfile[]
 }
 
 const initialState: LoginState = {
@@ -106,7 +106,7 @@ state.userdetails=action.payload
     setConnectionRequest:(state,action:PayloadAction<UserProfile | null>)=>{
 state.connectionRequest=action.payload
     },
-    setAllConnections:(state,action:PayloadAction<UserProfile | []>)=>{
+    setAllConnections:(state,action:PayloadAction<UserProfile []>)=>{
 state.connections=action.payload
     }
   },

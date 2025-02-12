@@ -1,20 +1,30 @@
 "use client";
-
+import { useState } from "react";
 import { useAppSelector } from "@/lib/store/hooks";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faCopy, faTrash } from "@fortawesome/free-solid-svg-icons";
-
-export const PostMenu = () => {  
-  const { activeuser } = useAppSelector((state) => state.login);
+import { IPost } from "@/lib/store/features/postSlice";
+import api from "@/utils/api";
+import { useRouter } from "next/navigation";
+import {ReportPostModal} from '@/components/homePage/middle/postPreview/ReportModal'
+interface PostPreviewProps {
+  post: IPost;
+}
+export const PostMenu = ({ post }: PostPreviewProps) => {  
+  console.log("postpostpost",post);
   
+  const [isModalOpen, setIsModalOpen] = useState(false);
+ 
+
+ 
   return (
     <section className="absolute inset-0 z-10">
-      {/* Background Overlay */}
+     
       <div className="absolute inset-0" ></div>
 
-      {/* Post Menu */}
+     
       <div className="relative bg-white rounded-lg shadow-lg w-72 p-4">
-        {/* Copy Link Button */}
+        
         <button
           className="flex items-center w-full text-gray-700 hover:bg-gray-100 p-2 rounded-md transition"
           
@@ -23,14 +33,18 @@ export const PostMenu = () => {
           <span>Copy link to post</span>
         </button>
 
-        {/* Delete Post Button (Optional) */}
+        
         <button
           className="flex items-center w-full text-gray-700 hover:bg-gray-100 p-2 rounded-md transition mt-2"
-          onClick={() => alert("Delete post functionality pending!")}
+          onClick={() => setIsModalOpen(true)}
         >
-          <FontAwesomeIcon icon={faTrash} className="mr-2 text-red-500" />
-          <span>Delete Post</span>
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" className="size-6 text-primary">
+  <path fillRule="evenodd" d="M3 2.25a.75.75 0 0 1 .75.75v.54l1.838-.46a9.75 9.75 0 0 1 6.725.738l.108.054A8.25 8.25 0 0 0 18 4.524l3.11-.732a.75.75 0 0 1 .917.81 47.784 47.784 0 0 0 .005 10.337.75.75 0 0 1-.574.812l-3.114.733a9.75 9.75 0 0 1-6.594-.77l-.108-.054a8.25 8.25 0 0 0-5.69-.625l-2.202.55V21a.75.75 0 0 1-1.5 0V3A.75.75 0 0 1 3 2.25Z" clipRule="evenodd" />
+</svg>
+
+          <span>Report post</span>
         </button>
+        {isModalOpen && <ReportPostModal postId={post._id} onClose={() => setIsModalOpen(false)} />}
       </div>
     </section>
   );
