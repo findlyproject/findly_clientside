@@ -4,9 +4,11 @@ import Link from "next/link";
 import AfterLogin from "./Afterlogin";
 import Beforlogin from "./Navbiforlogin";
 import Image from "next/image";
-import { useAppSelector } from "@/lib/store/hooks";
+import { useRouter } from "next/navigation";
+import { useAppDispatch, useAppSelector } from "@/lib/store/hooks";
 import logo from "../../../public/assets/findlylogo.png";
 import api from "@/utils/api";
+import { setDetailes } from "@/lib/store/features/userSlice";
 export const navigation = [
   { name: "Home", href: "/" },
   { name: "About", href: "/about" },
@@ -14,6 +16,10 @@ export const navigation = [
   { name: "Contact", href: "/contactus" },
 ];
 export default function Navbar() {
+ 
+  const router=useRouter()
+  const dispatch=useAppDispatch()
+  
   const { activeuser } = useAppSelector((state) => state.login);
   interface User {
     _id: string;
@@ -47,6 +53,7 @@ export default function Navbar() {
     setSearchQuery(e.target.value);
   };
 
+
   return (
     <nav className="bg-white border border-b-2">
       <div className=" sm:px-6">
@@ -70,13 +77,15 @@ export default function Navbar() {
 
 
               {searchQuery && searchResults.length > 0 && (
-                <div className="absolute top-full left-0 mt-2 w-full max-h-60 overflow-y-auto border border-gray-300 bg-white p-4 rounded-lg shadow-md z-10">
-                  <ul className="mt-2 space-y-2">
+                <div className="absolute top-full left-0 mt-2 w-full max-h-60 overflow-y-auto border border-gray-300 bg-white p-4 rounded-lg shadow-md z-10 ">
+                  <ul className="mt-2 space-y-2 ">
                     {searchResults.map((user) => (
-                      <li key={user._id} className="flex items-center gap-2">
-                        <Image
-                          width={100}
-                          height={100}
+                      <li key={user._id} className="flex items-center gap-2 hover:bg-slate-200 "
+                      
+                      onClick={()=>router.push(`/userdetails/${user._id}`)}
+                      >
+                        <img
+
                           src={user.profileImage}
                           alt={`${user.firstName} ${user.lastName}`}
                           className="w-7 h-7 rounded-full"

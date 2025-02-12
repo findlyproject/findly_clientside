@@ -14,7 +14,7 @@ import loginReducer from "./features/userSlice";
 import userReducer from "./features/userSlice";
 import ratingReducer from "./features/ratingSlice"
 import postReducer from "./features/postSlice"
-
+import adminReducer from './features/adminSlice'
 
 import editReducer from "./features/editinSlice"
 
@@ -26,6 +26,7 @@ const registerPersistConfig={key:"register",storage};
 const editPersistConfig={key:"edit",storage};
 
 const postPersistConfig={key:"post",storage}
+const adminPersistConfig={key:"admin",storage}
 
 
 // Wrap reducers with persistReducer
@@ -34,8 +35,7 @@ const persistedRegisterReducer = persistReducer(registerPersistConfig, registerR
 const persistedLoginReducer = persistReducer(loginPersistConfig, loginReducer);
 const persistedRatingReducer=persistReducer(ratingPersistConfig,ratingReducer)
 const persistedpostReducer=persistReducer(postPersistConfig,postReducer)
-
-
+const persistedadminReducer=persistReducer(adminPersistConfig,adminReducer)
 // Configure the store
 export const makeStore = () =>
   configureStore({
@@ -46,7 +46,9 @@ export const makeStore = () =>
       login: persistedLoginReducer,  // Persist login state
       user: persistedUserReducer, //persist
       rating:persistedRatingReducer ,  // Persist rating state
-      post:persistedpostReducer ,
+      post:persistedpostReducer  , // Persist rating state
+      admin:persistedadminReducer
+      
        
 
     },
