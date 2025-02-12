@@ -11,6 +11,8 @@ interface IReply {
   reply: string;
   repliedAt?: Date;
   isDeleted: boolean;
+  updatedAt:Date
+ 
 }
 
 export interface IComment {
@@ -44,7 +46,9 @@ interface PostState {
   posts: IPost[] | null;
   comments:IComment[] | null;
   postsLength: number | null;
-  likes:IPost|[]
+  commentReplay:IReply[]
+  commentsReplay:IComment[] | null;
+  
 }
 
 const initialState: PostState = {
@@ -77,7 +81,7 @@ const postSlice = createSlice({
       if (post?.comments) {
         post.comments.push(comment);
       }
-    },
+    },         
     updateComment: (state, action) => {
       const { commentId, newComment } = action.payload;
     
@@ -92,6 +96,24 @@ const postSlice = createSlice({
         };
       }
     },
+    findCommentReplay:(state,action)=>{
+      console.log("action.payload",action.payload);
+      
+    state.commentReplay=action.payload
+    console.log("state.commentReplay",state.commentReplay);
+    },
+     removeDeletedReply:(state, action) => {
+      const deletedReplyId = action.payload; 
+      console.log("deletedReplyId",deletedReplyId);
+      
+
+      state.commentReplay = state.commentReplay.filter(reply => reply._id !== deletedReplyId);
+      console.log("state.commentReplay", state.commentReplay);
+
+    },
+    setCommentWithReplay:(state,action)=>{
+      state.commentsReplay=action.payload
+    },
     setLikes: (state, action: PayloadAction<[]>) => {
       state.likes = action.payload// Ensure likes is an array
     }
@@ -99,6 +121,6 @@ const postSlice = createSlice({
   },
 });
 
-export const { setPosts,addPost,addComment,updateComment,setComments ,setLikes} = postSlice.actions;
+export const { setPosts,addPost,addComment,updateComment,setComments,findCommentReplay,removeDeletedReply,setCommentWithReplay,setLikes} = postSlice.actions;
 
 export default postSlice.reducer;

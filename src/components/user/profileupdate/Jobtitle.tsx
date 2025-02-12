@@ -32,7 +32,6 @@ function Jobtitle() {
       const handleRemoveSkill = (index) => {
        dispatch(setRemovjobTItles(index))
       };
-    
   return (
     <div>
       <div className="p-6 bg-gray-100 rounded-lg shadow-lg mt-4 w-full">

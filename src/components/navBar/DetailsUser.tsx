@@ -34,8 +34,17 @@ interface Experience{
 const DetailsUser = ({ id }: { id: string }) => {
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
   const dropdownRef = useRef<HTMLDivElement | null>(null);
+  const [isModalOpen, setIsModalOpen] = useState(false);
+ // Function to open modal
+ const openModal = () => {
+  setIsModalOpen(true);
+  setIsDropdownOpen(false); // Close dropdown when opening modal
+};
 
-
+// Function to close modal
+const closeModal = () => {
+  setIsModalOpen(false);
+};
   const toggleDropdown = () => {
     setIsDropdownOpen((prev) => !prev);
   };
@@ -84,7 +93,7 @@ const DetailsUser = ({ id }: { id: string }) => {
 //   });
 // console.log("userdetailes",userdetailes);
 // const user: { connecting: Connection[] } | null = useAppSelector((state) => state.user.userdetails);
-const user: { connecting: Connection[]; skills?: string[];education?:Education[];about:string;banner:string;profileImage:string;jobTitle:string[];role:string;firstName:string;lastName:string;location:string;experience:Experience[]} | null = useAppSelector((state) => state.user.userdetails);
+const user: { connecting: Connection[]; skills?: string[];education?:Education[];about:string;banner:string;profileImage:string;jobTitle:string[];role:string;firstName:string;lastName:string;location:string;experience:Experience[];email:string;createdAt:string;updatedAt:string} | null = useAppSelector((state) => state.user.userdetails);
 // const user: UserProfile | null = useAppSelector((state) => state.user.userdetails);
 
 
@@ -113,7 +122,7 @@ const userdetailes = user?.connecting.map((person) => person.connectionID?._id);
 
   return (
     <div className="max-w-4xl mx-auto bg-white shadow-lg rounded-lg overflow-hidden mt-5">
-      <div className="max-w-4xl mx-auto bg-white shadow-lg rounded-lg overflow-hidden mt-5">
+      <div className="max-w-4xl mx-auto bg-white shadow-lg rounded-lg overflow-visible mt-5">
         <div className="relative h-36 bg-gray-300">
           <Image
             className="object-cover"
@@ -198,42 +207,10 @@ const userdetailes = user?.connecting.map((person) => person.connectionID?._id);
 
                 
                 
-                
-                {/* {!user?.connecting?.some(
-                  (conn) =>
-                    conn.connectionID._id === activeuserid?._id &&
-                    conn.status === true
-                ) &&
-                  (user?.connecting?.some(
-                    (conn) =>
-                      conn.connectionID === activeuserid?._id &&
-                      conn.status === false
-                  ) ? (
-                    <button
-                      className="text-white font-semibold bg-primary py-1 px-2 rounded-full"
-                      onClick={handleRequest}
-                    >
-                      Pending
-                    </button>
-                  ) : (
-                    <button
-                      className="text-white font-semibold bg-primary py-1 px-2 rounded-full"
-                      onClick={handleRequest}
-                    >
-                      Connect
-                    </button>
-                  ))}
-
-                
-                <button className="text-primary border border-primary font-semibold bg-white py-1 px-2 rounded-full">
-                  Message
-                </button> */}
-
-                
                 <div className="relative">
                   <button
                     onClick={toggleDropdown}
-                    className=" relative text-primary border border-primary font-semibold bg-gray-100 py-1 px-3 rounded-full hover:bg-gray-300 transition z-50"
+                    className=" relative text-primary border border-primary font-semibold bg-gray-100 py-1 px-3 rounded-full hover:bg-gray-300 transition"
                   >
                     More
                   </button>
@@ -246,17 +223,62 @@ const userdetailes = user?.connecting.map((person) => person.connectionID?._id);
                     >
                       <ul className="text-gray-700">
                         <li className="px-4 py-2 hover:bg-gray-100 cursor-pointer">
+                        
+
                           Remove Connection
                         </li>
                         <li className="px-4 py-2 hover:bg-gray-100 cursor-pointer">
                           Report
                         </li>
-                        <li className="px-4 py-2 hover:bg-gray-100 cursor-pointer">
+                        <li className="px-4 py-2 hover:bg-gray-100 cursor-pointer"
+                         onClick={openModal}
+                        >
                           About This Profile
                         </li>
                       </ul>
                     </div>
                   )}
+                     {/* Modal */}
+      {isModalOpen && (
+        <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
+          <div className="relative bg-white p-6 rounded-lg shadow-lg w-80">
+          <button
+              onClick={closeModal}
+              className=" absolute top-0 right-2 mt-4 text-black px-4 py-2 rounded hover:bg-gray-300 transition"
+            >
+              ❌
+            </button>
+            <h2 className=" text-2xl font-bold">About this Profile</h2>
+            <p className="mt-2 text-lg font-semibold text-gray-700">{user?.firstName} {user?.lastName}</p>
+            <p className="text-gray-700"> {user?.email}</p>
+            <p className="text-gray-700"><span className="text-black font-semibold">Location:</span> {user?.location}</p>
+            <p className="text-gray-700"><span className="text-black font-semibold">Joined:</span>{user?.createdAt
+              ? new Date(user.createdAt).toLocaleDateString("en-US", {
+                  year: "numeric",
+                  month: "short",
+                  day: "numeric",
+                })
+              : "No date available"}</p>
+
+<p className="text-gray-700"><span className="text-black font-semibold">Updated:</span>{user?.updatedAt
+              ? new Date(user.updatedAt).toLocaleDateString("en-US", {
+                  year: "numeric",
+                  month: "short",
+                  day: "numeric",
+                })
+              : "No date available"}</p>
+
+<div>
+
+</div>
+
+             
+
+
+            
+          </div>
+        </div>
+      )}
                 </div>
               </div>
             </div>
@@ -392,11 +414,7 @@ const userdetailes = user?.connecting.map((person) => person.connectionID?._id);
     </div>
   ))}
 
-        <button 
-        onClick={()=>router.push(`/mynetwork/networklist`)}
-        className="w-full text-blue-600 mt-3 text-sm">
-          Show all Top Voices →
-        </button>
+        
       </div>
     </div>
     </div>

@@ -127,7 +127,7 @@ export const RateFindly = createAsyncThunk(
         return rejectWithValue("Rating failed. Please try again.");
       }
 
-      dispatch(setAllRatings([response.data.newRating])); // Wrap in array
+      dispatch(setAllRatings([response.data.newRating]));
       return response.data.newRating;
     } catch (error) {
       return rejectWithValue("An error occurred while submitting the rating.");

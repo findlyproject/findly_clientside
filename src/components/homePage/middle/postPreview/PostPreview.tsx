@@ -297,6 +297,7 @@ export const PostPreview = ({ post }: PostPreviewProps) => {
               <div className="max-h-60 overflow-y-auto space-y-4 z-50 ">
                 {Array.isArray(post.likedBy) && post.likedBy.length > 0 ? (
                   post.likedBy.map((item) => (
+                    
                     <div
                       key={item._id}
                       className="flex items-center space-x-4 bg-gray-100 p-3 rounded-lg"
