@@ -6,10 +6,11 @@ import { useRouter } from "next/navigation";
 import jobImage from "../../../../public/job.png";
 import register4 from "../../../../public/assets/register4.jpg"
 import register3 from "../../../../public/assets/register3.jpg"
+import landingTop from "../../../../public/assets/register3.jpg"
 import { FaSearch, FaMapMarkerAlt } from "react-icons/fa";
 import { FaUserPlus, FaUpload, FaCheckCircle } from "react-icons/fa";
 import goup from "../../../../public/landingPage-group-discussion.png"
-import landingTop from "../../../../public/landingpage-group.jpg"
+
 import Testimonials from "./Testimonial";
 import { useAppSelector } from "@/lib/store/hooks";
 
@@ -72,13 +73,13 @@ function LandingPage() {
 
 
           <div className="w-96 bg-red-400  flex justify-center">
-            {/* <Image
+            <Image
               src={landingTop}
               alt="Landing Page Illustration"
               width={500}
               height={300}
               className="object-cover max-w-full"
-            /> */}
+            />
           </div>
         </div>
       </div>

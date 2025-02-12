@@ -49,23 +49,23 @@ export default function Navbar() {
 
   return (
     <nav className="bg-white border border-b-2">
-      <div className="max-w-7xl mx-auto px-4 sm:px-6">
+      <div className=" sm:px-6">
         <div className="flex justify-between h-16 items-center">
           <div className="flex items-center">
             <Link href="/">
-              <Image src={logo} alt="Logo" width={150} height={50} />
+              <Image src={logo} alt="Logo" width={150} height={50}  className="min-w-20"/>
             </Link>
 
             <div className="relative w-96">
-            
-                <div className="w-96 h-10 bg-slate-200 rounded-3xl outline-none">
-               <input 
-               type="text" 
-               placeholder="Search"
-               value={searchQuery}
-               onChange={handleSearchChange}
-               className="w-full h-full bg-transparent outline-none p-2 pl-4 "
-               />
+
+              <div className="w-96 h-10 bg-slate-200 rounded-3xl outline-none ">
+                <input
+                  type="text"
+                  placeholder="Search"
+                  value={searchQuery}
+                  onChange={handleSearchChange}
+                  className="w-full h-full bg-transparent outline-none p-2 pl-4 "
+                />
               </div>
 
 
@@ -74,8 +74,9 @@ export default function Navbar() {
                   <ul className="mt-2 space-y-2">
                     {searchResults.map((user) => (
                       <li key={user._id} className="flex items-center gap-2">
-                        <img
-
+                        <Image
+                          width={100}
+                          height={100}
                           src={user.profileImage}
                           alt={`${user.firstName} ${user.lastName}`}
                           className="w-7 h-7 rounded-full"
@@ -93,7 +94,7 @@ export default function Navbar() {
                   </ul>
                 </div>
               )}
-          
+
             </div>
           </div>
 

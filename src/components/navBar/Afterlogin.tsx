@@ -21,7 +21,7 @@ function AfterLogin() {
 
   const handilLogut = () => {
     dispatch(logoutUser())
-    signOut()
+    // signOut()
     router.push("/")
     
   }
@@ -33,11 +33,11 @@ function AfterLogin() {
         <button className="relative text-gray-500 hover:text-gray-700 p-2">
           <BellIcon className="h-6 w-6" />
         </button></Link>
-      <Menu as="div" className="relative ml-3">
-        <Menu.Button className="flex text-sm rounded-full focus:outline-none w-32">
-          <img 
+      <Menu as="div" className="relative ml-3 z-40 w-20">
+        <Menu.Button className="flex text-sm rounded-full focus:outline-none w-auto">
+          <Image 
             src={activeuser?.profileImage}
-            alt="User"
+            alt="User profile"
             width={200}
             height={200}
             className="h-10 w-10 rounded-full"
@@ -78,17 +78,7 @@ function AfterLogin() {
                 )}
               </Menu.Item>
             ))}
-            <Menu.Item>
-              {({ active }) => (
-                <Link
-                  href="/settings"
-                  className={`block px-4 py-2 text-sm hover:bg-gray-300 ${active ? "bg-gray-100" : ""
-                    }`}
-                >
-                  Settings
-                </Link>
-              )}
-            </Menu.Item>
+            
             <Menu.Item>
               {({ active }) => (
                 <button
