@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 "use client";
 
 import { UserProfile } from "@/lib/store/features/userSlice";
@@ -105,3 +106,5 @@ const Users = () => {
 };
 
 export default Users;
+=======
+>>>>>>> 3ec2d79b80589a422a2ac953d6865a24e4c63c92

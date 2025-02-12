@@ -48,12 +48,10 @@ state.firstName=action.payload
       state.location=action.payload
     },
  
-  setEducation: (state, action: PayloadAction<EducationType>) => {  
-    if (!Array.isArray(state.education)) {
-      state.education = [];
-    }
-    state.education.push(action.payload);
-  },
+    setEducation: (state, action: PayloadAction<EducationType[]>) => {  
+      state.education = action.payload; // ✅ Replace the entire array instead of pushing
+    },
+    
 
     setjobTitles:(state,action)=>{
       state.jobTitles=action.payload

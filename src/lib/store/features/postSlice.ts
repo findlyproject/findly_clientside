@@ -54,12 +54,14 @@ interface PostState {
   postsLength: number | null;
   commentReplay:IReply[]
   commentsReplay:IComment[] | null;
+  
 }
 
 const initialState: PostState = {
   posts: null,
   comments:null,
   postsLength: null,
+  likes:[]
 };
 
 const postSlice = createSlice({
@@ -127,10 +129,14 @@ const postSlice = createSlice({
     },
     setCommentWithReplay:(state,action)=>{
       state.commentsReplay=action.payload
+    },
+    setLikes: (state, action: PayloadAction<[]>) => {
+      state.likes = action.payload// Ensure likes is an array
     }
+    
   },
 });
 
-export const { setPosts,addPost,addComment,updateComment,setComments,findCommentReplay,removeDeletedReply,setCommentWithReplay} = postSlice.actions;
+export const { setPosts,addPost,addComment,updateComment,setComments,findCommentReplay,removeDeletedReply,setCommentWithReplay,setLikes} = postSlice.actions;
 
 export default postSlice.reducer;
