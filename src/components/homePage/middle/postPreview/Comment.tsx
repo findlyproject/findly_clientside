@@ -12,6 +12,7 @@ import EmojiPicker from "emoji-picker-react";
 import { EmojiClickData } from "emoji-picker-react"; 
 import Image from "next/image";
 import { fetchAllPosts } from "@/lib/store/features/actions/postActions";
+import OutsideClickHandler from "react-outside-click-handler";
 
 dayjs.extend(relativeTime); //setting up the date 
 
@@ -41,11 +42,11 @@ export const Comments = ({ postId, comments }: CommentsProps) => {
 
 
   // adding a new comment by active user
-  
-
-  const handleSubmit = (postId: string) => {
+  const handleSubmit = async(postId: string) => {
     if (!newCommentData.trim()) return;
     dispatch(addCommentonPost({ postId, comment:newCommentData }));
+   dispatch(fetchAllPosts());
+
     setnewCommentData("");
   };
 
@@ -71,6 +72,7 @@ export const Comments = ({ postId, comments }: CommentsProps) => {
       dispatch(fetchCommentById(id)).unwrap()
       .then((fetchedComment) => {
         setCommentData(fetchedComment); 
+        console.log(fetchedComment)
       })
       .catch((error) => {
         console.error("Error fetching comment:", error);
@@ -104,7 +106,7 @@ export const Comments = ({ postId, comments }: CommentsProps) => {
     <>
       <section className="mt-2">
         {/* Add Comment Form */}
-        <form className="flex flex-col space-y-2 p-3 border rounded-lg shadow-sm bg-white">
+        <form className="flex flex-col space-y-2 p-3 border rounded-lg shadow-sm bg-white" onSubmit={() => handleSubmit(postId)}>
           <div className="flex items-center space-x-3">
             <div className="w-10 h-10">
               <Image
@@ -134,12 +136,16 @@ export const Comments = ({ postId, comments }: CommentsProps) => {
                 <span className="text-gray-500 cursor-pointer hover:text-gray-700">
                   <FontAwesomeIcon icon={faSmile} />
                 </span>
+                </button>
                 {showPicker && (
+                <OutsideClickHandler onOutsideClick={()=>setShowPicker(false)}>
+
                   <div className="absolute z-10 w-[300px] sm:w-[250px] md:w-[350px] lg:w-[400px]  transform -translate-x-1/2">
                     <EmojiPicker onEmojiClick={handleEmojiClick} />
                   </div>
+                  </OutsideClickHandler>
                 )}
-              </button>
+             
 
               <span className="text-gray-500 cursor-pointer hover:text-gray-700">
                 <FontAwesomeIcon icon={faImage} />
@@ -150,7 +156,6 @@ export const Comments = ({ postId, comments }: CommentsProps) => {
           <div className="flex justify-end">
             <button
               className="bg-blue-600 text-white px-4 py-2 rounded-lg text-sm hover:bg-blue-700 transition"
-              onClick={() => handleSubmit(postId)}
             >
               Post
             </button>

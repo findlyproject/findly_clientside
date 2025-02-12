@@ -45,7 +45,7 @@ export const addCommentonPost = createAsyncThunk(
   async (
     { postId, comment }: AddCommentArgs,
 
-    { dispatch, rejectWithValue }
+    { rejectWithValue }
   ) => {
     try {
       const response: AxiosResponse<CommentResponse> = await api.post(
@@ -55,7 +55,6 @@ export const addCommentonPost = createAsyncThunk(
       if (!response.data || !response.data.comment) {
         return rejectWithValue("Failed to add comment.");
       }
-      dispatch(addComment({ postId, comment: response.data.comment }));
       return response.data.comment;
     } catch (error) {
       console.error("Error adding comment:", error);
