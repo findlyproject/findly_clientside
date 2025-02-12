@@ -519,7 +519,7 @@ export const Comments = ({ postId, comments }: CommentsProps) => {
                                         >
                                           Delete
                                         </button>
-                                      </div>
+                                      </div>      
                                     )}
                                   </div>
                                   <div>
