@@ -2,7 +2,13 @@ import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 import { UserProfile } from "./userSlice";
 
 export interface IReport {
-  _id: string;
+_id: string; 
+reportedBy:UserProfile;
+reason:string;
+isDeleted:boolean;
+createdAt:Date;
+updatedAt:Date;
+
 }
 
 interface IReply {
@@ -32,7 +38,7 @@ export interface IPost {
   video?:string;
   owner: UserProfile | null;
   likedBy?: string[];
-  reports?:  IReport[];
+  reports?:  IReport[]| null|undefined;
   comments?:  IComment[] ;
   isDeleted?: boolean;
   createdAt?: string;
@@ -63,7 +69,17 @@ const postSlice = createSlice({
       if(state.posts!==null)
         state.posts=state.posts.concat(action.payload);
     },
-
+    updatePost: (state, action: PayloadAction<{ postId: string; updatedData: Partial<IPost> }>) => {
+      if (!state.posts) return; // Return early if posts list is null
+    
+      const { postId, updatedData } = action.payload;
+      const postIndex = state.posts.findIndex((post) => post._id === postId);
+    
+      if (postIndex !== -1) {
+        state.posts[postIndex] = { ...state.posts[postIndex], ...updatedData };
+      }
+    },
+    
     //comment 
     setComments: (state, action: PayloadAction<IComment[]>) => {
       state.comments = action.payload;
@@ -76,23 +92,10 @@ const postSlice = createSlice({
         post.comments.push(comment);
       }
     },
-    updateComment: (state, action) => {
-      const { commentId, newComment } = action.payload;
     
-      if (!state.comments) return; // Ensure comments exist
-    
-      const commentIndex = state.comments.findIndex(comment => comment._id === commentId);
-      
-      if (commentIndex !== -1) {
-        state.comments[commentIndex] = { 
-          ...state.comments[commentIndex], 
-          text: newComment // Assuming `text` is the property storing comment content
-        };
-      }
-    },
   },
 });
 
-export const { setPosts,addPost,addComment,updateComment,setComments } = postSlice.actions;
+export const { setPosts,addPost,addComment,setComments,updatePost } = postSlice.actions;
 
 export default postSlice.reducer;

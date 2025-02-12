@@ -1,16 +1,18 @@
 "use client";
 import {faSmile,faImage,faEllipsis,} from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { useState, useRef, ChangeEvent } from "react";
+import { useState, useRef } from "react";
 import { useAppDispatch, useAppSelector } from "@/lib/store/hooks";
 import dayjs from "dayjs";
 import relativeTime from "dayjs/plugin/relativeTime";
-import { IComment, IPost } from "@/lib/store/features/postSlice";
+import { IComment } from "@/lib/store/features/postSlice";
 import {deleteAComment, updateAComment} from "@/lib/store/features/actions/commentActions"
 import { addCommentonPost, fetchCommentById } from "@/lib/store/features/actions/commentActions";
 import EmojiPicker from "emoji-picker-react";
 import { EmojiClickData } from "emoji-picker-react"; 
-import { FormEvent } from "react";
+import Image from "next/image";
+import { fetchAllPosts } from "@/lib/store/features/actions/postActions";
+
 dayjs.extend(relativeTime); //setting up the date 
 
 interface CommentsProps {
@@ -69,6 +71,7 @@ export const Comments = ({ postId, comments }: CommentsProps) => {
       dispatch(fetchCommentById(id)).unwrap()
       .then((fetchedComment) => {
         setCommentData(fetchedComment); 
+        console.log(fetchedComment)
       })
       .catch((error) => {
         console.error("Error fetching comment:", error);
@@ -87,11 +90,14 @@ export const Comments = ({ postId, comments }: CommentsProps) => {
   if (!commentData.trim()) return;
     dispatch(updateAComment({commentId:editingCommentId,newComment:commentData }))
     setEdit(false)
+   dispatch(fetchAllPosts());  
    
   };
   //delete comment
   const deleteComment = async (commentid:string) => {
     dispatch(deleteAComment({commentId:commentid} ))
+    dispatch(fetchAllPosts());
+
 };
 
   return (
@@ -101,13 +107,14 @@ export const Comments = ({ postId, comments }: CommentsProps) => {
         <form className="flex flex-col space-y-2 p-3 border rounded-lg shadow-sm bg-white">
           <div className="flex items-center space-x-3">
             <div className="w-10 h-10">
-              <img
+              <Image
                 src={
                   activeuser?.profileImage ||
                   "https://res.cloudinary.com/dq1auwpkm/image/upload/v1738735360/profile_jtwxaj.png"
                 }
                 alt="Profile"
                 width={30}
+                height={30}
                 className="w-full h-full rounded-full object-cover"
               />
             </div>
@@ -201,7 +208,7 @@ export const Comments = ({ postId, comments }: CommentsProps) => {
               <div className="flex items-start space-x-3">
                 {/* ✅ Commenter Profile */}
                 <div className="w-10 h-10">
-                  <img
+                  <Image
                     src={
                       comment.user?.profileImage ||
                       "https://res.cloudinary.com/dq1auwpkm/image/upload/v1738735360/profile_jtwxaj.png"

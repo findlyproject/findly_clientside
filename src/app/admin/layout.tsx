@@ -1,20 +1,16 @@
-import Sidebar from "@/components/admin/SideBar"; // Import Sidebar component
-import "@/styles/globals.css"; // Import global styles (optional)
+import Sidebar from "@/components/admin/SideBar";
+import "@/styles/globals.css";
 
-export default function RootLayout({ children }: { children: React.ReactNode }) {
+export default function AdminLayout({ children }: { children: React.ReactNode }) {
   return (
-    <html lang="en">
-      <body>
-        <div className="flex ">
-          {/* Sidebar (Left) */}
-          <aside className="w-70 shadow-md">
-            <Sidebar />
-          </aside>
+    <div className="flex bg-[#f1f5f9]">
+      {/* Sidebar (Left) */}
+      <aside className="w-14  bg-white md:w-15 lg:w-[230px]  shadow-md">
+        <Sidebar />
+      </aside>
 
-          {/* Main Content (Right) */}
-          <main className="flex-1 p-6 overflow-auto bg-[#f1f5f9]">{children}</main>
-        </div>
-      </body>
-    </html>
+      {/* Main Content (Right) */}
+      <main className="ml-10 overflow-auto w-full bg-[#f1f5f9]">{children}</main>
+    </div>
   );
 }
