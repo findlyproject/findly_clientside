@@ -112,11 +112,15 @@ const FileUpload = () => {
    console.log("removeResult",removeResult);
    if(removeResult.type==="remove/resume/fulfilled"){
     setFiles({ resume: null, introductionVideo: null });
+<<<<<<< HEAD
+   }   
+=======
    }
    
   
 
       
+>>>>>>> f56af03f37c3d22f41985ce7aa064bc5454b9713
   };
 
   return (
@@ -183,7 +187,13 @@ const FileUpload = () => {
               X
             </button>
             {modalContent.includes(".pdf") ? (
-              <iframe src={modalContent} width="100%" height="500px"></iframe>
+          <iframe 
+          className="text-black"
+          src={`https://docs.google.com/gview?url=${modalContent}&embedded=true`} 
+          width="100%" 
+          height="500px"
+          style={{ border: "none" }} 
+        />
             ) : (
               <video controls width="100%" height="500px">
                 <source src={modalContent} type="video/mp4" />
