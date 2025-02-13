@@ -1,7 +1,7 @@
 import { createAsyncThunk } from "@reduxjs/toolkit";
 import { AxiosResponse } from "axios";
 import api from "../../../../utils/api"; 
-import {  findCommentReplay, IComment, IReply, setComments,setCommentWithReplay } from "../postSlice";
+import {  addComment, findCommentReplay, IComment, IReply, setComments,setCommentWithReplay } from "../postSlice";
 import handleAsync from "@/utils/handleAsync";
 
 export interface CommentResponse {
@@ -48,7 +48,7 @@ export const addCommentonPost = createAsyncThunk(
   async (
     { postId, comment }: AddCommentArgs,
 
-    { rejectWithValue }
+    { dispatch,rejectWithValue }
   ) => {
     try {
       const response: AxiosResponse<CommentResponse> = await api.post(
@@ -58,6 +58,7 @@ export const addCommentonPost = createAsyncThunk(
       if (!response.data || !response.data.comment) {
         return rejectWithValue("Failed to add comment.");
       }
+      dispatch(addComment({postId:postId,comment:response.data.comment}))
       return response.data.comment;
     } catch (error) {
       console.error("Error adding comment:", error);
@@ -77,7 +78,8 @@ export const fetchCommentById = createAsyncThunk(
       if (!response.data || !response.data.comment) {
         return rejectWithValue("No posts found.");
       }
-      return response.data.comment;
+      console.log("dddddd",response.data)
+      return response.data.comment.comment;
     } catch (error) {
       console.error("Error fetching posts:", error);
       return rejectWithValue("Failed to fetch posts.");

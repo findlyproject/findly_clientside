@@ -6,6 +6,8 @@ import { useRouter } from "next/navigation";
 
 const Posts = () => {
   const { posts } = useAppSelector((state) => state.post);
+  
+  
 const router =useRouter()
   return (
     <div className="flex flex-col p-4">

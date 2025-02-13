@@ -266,7 +266,7 @@ const Sidebar = () => {
             </Link>
           </li>
           <li>
-            <Link href="" onClick={()=>handleAdminLogout}>
+            <button  onClick={handleAdminLogout}>
               <div className="p-3 rounded-lg items-center inline-flex">
                 <div className="h-5 items-center gap-3 flex">
                   <div className="relative" title="Logout">
@@ -294,7 +294,7 @@ const Sidebar = () => {
                   </h2>
                 </div>
               </div>
-            </Link>
+            </button>
           </li>
         </ul>
       </div>

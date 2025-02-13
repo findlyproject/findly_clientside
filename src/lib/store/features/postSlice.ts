@@ -5,7 +5,7 @@ export interface IReport {
 _id: string; 
 reportedBy:UserProfile;
 reason:string;
-isDeleted:boolean;
+isDeleted:boolean;  
 createdAt:Date;
 updatedAt:Date;
 
