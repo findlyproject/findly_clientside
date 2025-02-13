@@ -11,7 +11,7 @@ updatedAt:Date;
 
 }
 
-interface IReply {
+export interface IReply {
   _id: string;
   user: UserProfile | null;
   reply: string;

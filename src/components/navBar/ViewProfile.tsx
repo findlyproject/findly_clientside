@@ -15,7 +15,7 @@ interface Connection {
   };
 }
 
-const connections: Connection[] = []; 
+
 export default function ViewProfile() {
   const router = useRouter();
 
