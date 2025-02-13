@@ -1,7 +1,7 @@
 import { createAsyncThunk } from "@reduxjs/toolkit";
 import { AxiosResponse } from "axios";
 import api from "../../../../utils/api"; 
-import { addComment, findCommentReplay, IComment, removeDeletedReply, setComments,setCommentWithReplay,updateComment } from "../postSlice";
+import { addComment, findCommentReplay, IComment, removeDeletedReply, setComments,setCommentWithReplay } from "../postSlice";
 import handleAsync from "@/utils/handleAsync";
 
 export interface CommentResponse {
@@ -101,7 +101,7 @@ export const updateAComment = createAsyncThunk(
         return rejectWithValue("No posts found.");
       }
       console.log(response.data.comment)
-      dispatch(updateComment({commentId,newComment:response.data.comment}))
+      
       const responses: AxiosResponse<{ comments: IComment[] }> = await api.get("/post/allcomments");
       dispatch(setComments(responses.data.comments));
       return response.data.comment;
@@ -124,7 +124,7 @@ export const deleteAComment = createAsyncThunk(
         return rejectWithValue("No posts found.");
       }
       console.log(response.data.comment)
-      dispatch(updateComment({commentId,newComment:response.data.comment}))
+      
       
 
       return response.data.comment;

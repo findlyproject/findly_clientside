@@ -48,6 +48,9 @@ export const PostPreview = ({ post }: PostPreviewProps) => {
   console.log("post post...", post);
   const [localPost, setLocalPost] = useState(post);
 
+
+ 
+  
   const dispatch = useAppDispatch();
   const router = useRouter();
   const [isShowMenu, setIsShowMenu] = useState(false);
@@ -61,6 +64,13 @@ export const PostPreview = ({ post }: PostPreviewProps) => {
   console.log("like.....", like);
   console.log("localPost.likedBy", localPost.likedBy);
   console.log("currentUser._id", currentUser?._id);
+
+
+
+ 
+
+  
+  
   
   const handleLike = async (postId: string) => {
     console.log("Liking postId:", postId);
@@ -68,7 +78,7 @@ export const PostPreview = ({ post }: PostPreviewProps) => {
     const response = await api.post(`/post/user/likepost/${postId}`);
     console.log("Like response.........:", response);
     
-
+     
     dispatch(setLikes(response.data.post));
     setLocalPost(response.data.post);
     dispatch(fetchAllPosts())
@@ -195,9 +205,11 @@ export const PostPreview = ({ post }: PostPreviewProps) => {
         <section className="flex items-center justify-around border-t border-gray-200 pt-2">
           {Array.isArray(localPost.likedBy) &&
           localPost.likedBy.find((item) => {
-            console.log("item", item);
+            console.log("item...", item);
 
-            return item === currentUser?._id;
+            // return item === currentUser?._id;
+            return typeof item === "string" && item == currentUser?._id;
+
           }) ? (
             <div>
               <button
@@ -239,6 +251,9 @@ export const PostPreview = ({ post }: PostPreviewProps) => {
           )}
 
          
+
+
+
 
 
 

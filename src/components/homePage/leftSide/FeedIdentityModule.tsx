@@ -1,17 +1,27 @@
 "use client"
 import { useRouter } from "next/navigation";
 import { useAppSelector } from '@/lib/store/hooks';
-
+import { useEffect, useState } from "react";
+import api from "@/utils/api";
 export const FeedIdentityModule = () => {
+  const[connections,setConnections]=useState([])
   const router = useRouter();
   const { activeuser } = useAppSelector((state) => state.login);
   console.log("activeuser",{activeuser});
   
-const connections=useAppSelector((state)=>state.user.connections)
+
   if (!activeuser) {
     return <section className="rounded-lg border border-gray-300 min-h-[240px] bg-white flex items-center justify-center">Loading...</section>
   }
-
+  useEffect(()=>{
+    const fetchConnections=async()=>{
+      const response=await api.get(`/connecting/getconnection`)
+      console.log("all connections of user response",response);
+     
+      setConnections(response.data.connections)
+    }
+    fetchConnections()
+  },[])
   return (
     <section className="rounded-lg border border-gray-300 min-h-[240px] bg-white">
       <div>

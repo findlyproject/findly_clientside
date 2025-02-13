@@ -6,6 +6,7 @@ import Image from "next/image";
 import { useState, useEffect } from "react";
 import api from "@/utils/api";
 import { useRouter } from "next/navigation";
+import Link from "next/link";
 interface Connection {
   connectionID: {
     _id: string;
@@ -88,11 +89,17 @@ export default function ViewProfile() {
                 {currentUser?.jobTitle?.map((title) => title)}
               </p>
               <p className="text-gray-900 text-sm">
-                {currentUser?.location}• {connections.length} connections
+                {currentUser?.location?.city}• {connections.length} connections
               </p>
             </div>
 
             <div className="p-6">
+           <button onClick={()=>router.push(`/editprofile`)}>
+           <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="size-6">
+  <path stroke-linecap="round" stroke-linejoin="round" d="m16.862 4.487 1.687-1.688a1.875 1.875 0 1 1 2.652 2.652L10.582 16.07a4.5 4.5 0 0 1-1.897 1.13L6 18l.8-2.685a4.5 4.5 0 0 1 1.13-1.897l8.932-8.931Zm0 0L19.5 7.125M18 14v4.75A2.25 2.25 0 0 1 15.75 21H5.25A2.25 2.25 0 0 1 3 18.75V8.25A2.25 2.25 0 0 1 5.25 6H10" />
+</svg>
+           </button>
+
               <div className="mt-2 flex flex-col justify-center md:justify-start">
                 {currentUser?.education?.length ? (
                   currentUser.education.map((institute, index) => (
@@ -183,6 +190,34 @@ export default function ViewProfile() {
         </div>
       </div>
 
+
+      {currentUser?.projects && currentUser.projects.length > 0 ? (
+        <div className="p-6 border-t">
+          <h3 className="text-lg font-semibold">Projects</h3>
+          <div className="mt-2">
+            {currentUser.projects.map((item, index) => (
+              <div key={index} className="mb-4">
+                <p className="font-bold">{item.title}</p>
+                <p className="text-gray-600">
+                  {item.description}
+                  
+                </p>
+                
+                <Link className="text-blue-500 underline" href={item.link ?? "/"} target="_blank" rel="noopener noreferrer">
+  Project Link
+</Link>
+
+              </div>
+            ))}
+          </div>
+        </div>
+      ) : (
+        <div className="p-6 border-t">
+          <h3 className="text-lg font-semibold">Project</h3>
+          <p>No Project available</p>
+        </div>
+      )}
+
       <div className="p-6 border-t">
         <h3 className="text-lg font-semibold">Skills</h3>
         <ul className="mt-2 list-disc list-inside">
@@ -207,11 +242,16 @@ export default function ViewProfile() {
                 key={connect?.connectionID?._id}
                 className="flex items-center space-x-3 p-3 border rounded-lg shadow-sm w-64 mb-4 sm:w-80 md:w-96"
               >
-                <img
+                <div onClick={()=>router.push(`/userdetails/${connect?.connectionID?._id}`)}>
+                <Image
                   className="w-12 h-12 rounded-full"
                   src={connect?.connectionID?.profileImage}
                   alt="Profile"
+                  width={100}
+                  height={100}
                 />
+                </div>
+               
                 <div>
                   <p className="font-semibold">
                     {connect?.connectionID?.firstName}

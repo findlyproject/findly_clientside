@@ -98,7 +98,7 @@ function Education() {
             </button>
       
             {/* Display Added Education */}
-            {user?.education?.length > 0  && (
+            {user?.education && user.education.length > 0 && (
               <div className="mt-4">
                 <h3 className="text-xl font-semibold">Added Education</h3>
                 <ul className="mt-2">
