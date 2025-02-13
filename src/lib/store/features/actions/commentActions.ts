@@ -74,7 +74,8 @@ export const fetchCommentById = createAsyncThunk(
       if (!response.data || !response.data.comment) {
         return rejectWithValue("No posts found.");
       }
-      return response.data.comment;
+      console.log("dddddd",response.data)
+      return response.data.comment.comment;
     } catch (error) {
       console.error("Error fetching posts:", error);
       return rejectWithValue("Failed to fetch posts.");

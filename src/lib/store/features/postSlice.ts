@@ -5,7 +5,7 @@ export interface IReport {
 _id: string; 
 reportedBy:UserProfile;
 reason:string;
-isDeleted:boolean;
+isDeleted:boolean;  
 createdAt:Date;
 updatedAt:Date;
 
@@ -137,6 +137,6 @@ const postSlice = createSlice({
   },
 });
 
-export const { setPosts,addPost,addComment,updateComment,setComments,findCommentReplay,removeDeletedReply,setCommentWithReplay,setLikes} = postSlice.actions;
+export const { setPosts,addPost,addComment,updateComment,setComments,findCommentReplay,removeDeletedReply,setCommentWithReplay,setLikes,updatePost} = postSlice.actions;
 
 export default postSlice.reducer;

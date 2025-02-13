@@ -148,12 +148,13 @@ export const Comments = ({ postId, comments }: CommentsProps) => {
     dispatch(fetchCommentById(id)).unwrap()
       .then((fetchedComment) => {
         setCommentData(fetchedComment);
+       
       })
       .catch((error) => {
         console.error("Error fetching comment:", error);
       });
   }
-
+console.log(commentData)
 
   // Toggle Comment Menu
   const toggleMenu = (id: string) => {
