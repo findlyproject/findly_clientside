@@ -22,7 +22,6 @@ import { Comments } from "./Comment";
 import { PostMenu } from "./PostMenu";
 import api from "@/utils/api";
 import { fetchAllPosts } from "@/lib/store/features/actions/postActions";
-import { setPosts } from "@/lib/store/features/postSlice";
 interface PostPreviewProps {
   post: IPost;
   

@@ -9,7 +9,6 @@ export const FeedIdentityModule = () => {
   const { activeuser } = useAppSelector((state) => state.login);
   console.log("activeuser",{activeuser});
   
-
   if (!activeuser) {
     return <section className="rounded-lg border border-gray-300 min-h-[240px] bg-white flex items-center justify-center">Loading...</section>
   }

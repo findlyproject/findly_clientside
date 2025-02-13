@@ -1,8 +1,10 @@
 "use client";
 
+
+
 import React, { useEffect, useState, useRef } from "react";
 import api from "@/utils/api";
-import { setDetailes } from "@/lib/store/features/userSlice";
+import {setDetailes} from "@/lib/store/features/userSlice";
 import { useAppDispatch, useAppSelector } from "@/lib/store/hooks";
 import Image from "next/image";
 import verification from "../../../public/assets/verify.jpg";
