@@ -43,12 +43,9 @@ export const Comments = ({ postId, comments }: CommentsProps) => {
 
 
     const resultcometsreplay = await dispatch(getcommentswithreplies())
-<<<<<<< HEAD
     console.log(resultcometsreplay);
     
     
-=======
->>>>>>> f56af03f37c3d22f41985ce7aa064bc5454b9713
 
   }
 
@@ -100,9 +97,7 @@ export const Comments = ({ postId, comments }: CommentsProps) => {
     if (!newCommentData.trim()) {
       return;
     }
-    console.log(newCommentData)
     dispatch(addCommentonPost({ postId, comment: newCommentData }));
-    console.log(newCommentData)
     setnewCommentData("");
   };
 
