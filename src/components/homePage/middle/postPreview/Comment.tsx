@@ -36,6 +36,9 @@ export const Comments = ({ postId, comments }: CommentsProps) => {
 
 
     const resultcometsreplay = await dispatch(getcommentswithreplies())
+    console.log(resultcometsreplay);
+    
+    
 
   }
 
