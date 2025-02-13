@@ -183,7 +183,13 @@ const FileUpload = () => {
               X
             </button>
             {modalContent.includes(".pdf") ? (
-              <iframe src={modalContent} width="100%" height="500px"></iframe>
+          <iframe 
+          className="text-black"
+          src={`https://docs.google.com/gview?url=${modalContent}&embedded=true`} 
+          width="100%" 
+          height="500px"
+          style={{ border: "none" }} 
+        />
             ) : (
               <video controls width="100%" height="500px">
                 <source src={modalContent} type="video/mp4" />
