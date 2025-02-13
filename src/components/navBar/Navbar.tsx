@@ -8,7 +8,6 @@ import { useRouter } from "next/navigation";
 import { useAppDispatch, useAppSelector } from "@/lib/store/hooks";
 import logo from "../../../public/assets/findlylogo.png";
 import api from "@/utils/api";
-
 export const navigation = [
   { name: "Home", href: "/" },
   { name: "About", href: "/about" },

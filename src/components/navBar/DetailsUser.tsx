@@ -4,14 +4,15 @@
 
 import React, { useEffect, useState, useRef } from "react";
 import api from "@/utils/api";
-import {setDetailes, UserProfile} from "@/lib/store/features/userSlice";
+import {setDetailes} from "@/lib/store/features/userSlice";
 import { useAppDispatch, useAppSelector } from "@/lib/store/hooks";
 import Image from "next/image";
 import verification from "../../../public/assets/verify.jpg";
 import { useRouter } from "next/navigation";
+import Link from "next/link";
 interface Connection {
   connectionID: {
-    connecting:string[]
+    connecting: string[];
     _id: string;
     profileImage: string;
     firstName: string;
@@ -25,34 +26,61 @@ interface Education {
   startYear: number;
   endYear: number;
 }
-interface Experience{
-  companyName:string
-  jobRole:string
+interface Experience {
+  companyName: string;
+  jobRole: string;
   startYear: number;
   endYear: number;
 }
+
+interface Projects{
+  title:string;
+  description:string;
+  link:string;
+}
+
+interface UserProfile {
+  connecting: Connection[];
+  skills?: string[];
+  education?: Education[];
+  about: string;
+  banner: string;
+  profileImage: string;
+  jobTitle: string[];
+  role: string;
+  firstName: string;
+  lastName: string;
+  location: string;
+  experience: Experience[];
+  email: string;
+  createdAt: string;
+  updatedAt: string;
+  projects:Projects[]
+}
+
 const DetailsUser = ({ id }: { id: string }) => {
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
   const dropdownRef = useRef<HTMLDivElement | null>(null);
   const [isModalOpen, setIsModalOpen] = useState(false);
- // Function to open modal
- const openModal = () => {
-  setIsModalOpen(true);
-  setIsDropdownOpen(false); // Close dropdown when opening modal
-};
 
-// Function to close modal
-const closeModal = () => {
-  setIsModalOpen(false);
-};
+  const openModal = () => {
+    setIsModalOpen(true);
+    setIsDropdownOpen(false);
+  };
+
+  const closeModal = () => {
+    setIsModalOpen(false);
+  };
   const toggleDropdown = () => {
     setIsDropdownOpen((prev) => !prev);
   };
 
-  
   useEffect(() => {
-    const handleClickOutside = (event:MouseEvent) => {
-      if (dropdownRef.current && !dropdownRef.current.contains(event.target as Node)) {
+    const handleClickOutside = (event: MouseEvent) => {
+      if (
+        dropdownRef.current &&
+        !dropdownRef.current.contains(event.target as Node)
+      ) {
         setIsDropdownOpen(false);
       }
     };
@@ -63,18 +91,9 @@ const closeModal = () => {
     };
   }, []);
 
- 
-
   const Requested = useAppSelector((state) => state.user.connectionRequest);
 
-
-
-
-  const connections= useAppSelector((state) => state.user.connections);
-//   const Requested: Connection[] = useAppSelector((state) => state.user.connectionRequest);
-// const connections: Connection[] = useAppSelector((state) => state.user.connections);
-
-  
+  const connections = useAppSelector((state) => state.user.connections);
 
   console.log("id", id);
   const router = useRouter();
@@ -82,24 +101,13 @@ const closeModal = () => {
   const activeuserid = useAppSelector((state) => state.user.activeuser);
   console.log("activeuseridactiveuserid", activeuserid);
 
-//   const user = useAppSelector((state) => state.user.userdetails);
-//   console.log("user",user);
-  
+  const user = useAppSelector(
+    (state) => state.user.userdetails
+  ) as UserProfile | null;
 
-
-
-//   const userdetailes = user?.connecting.map((person) => {
-//     person.connectionID._id;
-//   });
-// console.log("userdetailes",userdetailes);
-// const user: { connecting: Connection[] } | null = useAppSelector((state) => state.user.userdetails);
-const user: { connecting: Connection[]; skills?: string[];education?:Education[];about:string;banner:string;profileImage:string;jobTitle:string[];role:string;firstName:string;lastName:string;location:string;experience:Experience[];email:string;createdAt:string;updatedAt:string} | null = useAppSelector((state) => state.user.userdetails);
-// const user: UserProfile | null = useAppSelector((state) => state.user.userdetails);
-
-
-const userdetailes = user?.connecting.map((person) => person.connectionID?._id);
-
- 
+  const userdetailes = user?.connecting.map(
+    (person) => person.connectionID?._id
+  );
 
   useEffect(() => {
     const fetch = async () => {
@@ -111,7 +119,6 @@ const userdetailes = user?.connecting.map((person) => person.connectionID?._id);
     fetch();
   }, [dispatch]);
 
-  
   const handleRequest = async () => {
     console.log("connection userid from params");
 
@@ -134,7 +141,7 @@ const userdetailes = user?.connecting.map((person) => person.connectionID?._id);
 
         <div className="p-6 relative  ">
           <div className="w-24 h-24 rounded-full border-4 border-white absolute -top-12 left-6">
-            <img
+            <Image
               src={user?.profileImage || ""}
               alt="Landing Page Illustration"
               width={100}
@@ -163,50 +170,50 @@ const userdetailes = user?.connecting.map((person) => person.connectionID?._id);
                 {user?.jobTitle?.map((title) => title)}
               </p>
               <p className="text-gray-900 text-sm">
-                {user?.location}•{" "}
-                {user?.connecting?.filter((item) => item.status === true).length || 0} connections
-
+                {user?.location?.city}•{" "}
+                {user?.connecting?.filter((item) => item.status === true)
+                  .length || 0}{" "}
+                connections
               </p>
 
-             
-
-              
               <div className="relative flex gap-4 mt-5">
-               
-              {user?.connecting?.some(
-  (conn) => conn.connectionID._id === activeuserid?._id && conn.status === false
-) ? (
-  <button
-    className="text-white font-semibold bg-primary py-1 px-2 rounded-full"
-    onClick={handleRequest}
-  >
-    Pending
-  </button>
-) : (
-  !user?.connecting?.some((conn) => conn.connectionID?._id === activeuserid?._id) && (
-    <button
-      className="text-white font-semibold bg-primary py-1 px-2 rounded-full"
-      onClick={handleRequest}
-    >
-      Connect
-    </button>
-  )
-)}
-  {user?.connecting?.some(
-  (conn) => conn.connectionID?._id === activeuserid?._id && conn.status === true
-) ? (
-  <button className="text-primary border border-primary font-semibold bg-white py-1 px-2 rounded-full">
-    Message
-  </button>
-):(
-  <button className="text-primary border border-primary font-semibold bg-white py-1 px-2 rounded-full">
-  Message
-</button> 
-)}
+                {user?.connecting?.some(
+                  (conn) =>
+                    conn.connectionID._id === activeuserid?._id &&
+                    conn.status === false
+                ) ? (
+                  <button
+                    className="text-white font-semibold bg-primary py-1 px-2 rounded-full"
+                    onClick={handleRequest}
+                  >
+                    Pending
+                  </button>
+                ) : (
+                  !user?.connecting?.some(
+                    (conn) => conn.connectionID?._id === activeuserid?._id
+                  ) && (
+                    <button
+                      className="text-white font-semibold bg-primary py-1 px-2 rounded-full"
+                      onClick={handleRequest}
+                    >
+                      Connect
+                    </button>
+                  )
+                )}
+                {user?.connecting?.some(
+                  (conn) =>
+                    conn.connectionID?._id === activeuserid?._id &&
+                    conn.status === true
+                ) ? (
+                  <button className="text-primary border border-primary font-semibold bg-white py-1 px-2 rounded-full">
+                    Message
+                  </button>
+                ) : (
+                  <button className="text-primary border border-primary font-semibold bg-white py-1 px-2 rounded-full">
+                    Message
+                  </button>
+                )}
 
-
-                
-                
                 <div className="relative">
                   <button
                     onClick={toggleDropdown}
@@ -215,7 +222,6 @@ const userdetailes = user?.connecting.map((person) => person.connectionID?._id);
                     More
                   </button>
 
-                 
                   {isDropdownOpen && (
                     <div
                       ref={dropdownRef}
@@ -223,62 +229,79 @@ const userdetailes = user?.connecting.map((person) => person.connectionID?._id);
                     >
                       <ul className="text-gray-700">
                         <li className="px-4 py-2 hover:bg-gray-100 cursor-pointer">
-                        
-
                           Remove Connection
                         </li>
                         <li className="px-4 py-2 hover:bg-gray-100 cursor-pointer">
                           Report
                         </li>
-                        <li className="px-4 py-2 hover:bg-gray-100 cursor-pointer"
-                         onClick={openModal}
+                        <li
+                          className="px-4 py-2 hover:bg-gray-100 cursor-pointer"
+                          onClick={openModal}
                         >
                           About This Profile
                         </li>
                       </ul>
                     </div>
                   )}
-                     {/* Modal */}
-      {isModalOpen && (
-        <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
-          <div className="relative bg-white p-6 rounded-lg shadow-lg w-80">
-          <button
-              onClick={closeModal}
-              className=" absolute top-0 right-2 mt-4 text-black px-4 py-2 rounded hover:bg-gray-300 transition"
-            >
-              ❌
-            </button>
-            <h2 className=" text-2xl font-bold">About this Profile</h2>
-            <p className="mt-2 text-lg font-semibold text-gray-700">{user?.firstName} {user?.lastName}</p>
-            <p className="text-gray-700"> {user?.email}</p>
-            <p className="text-gray-700"><span className="text-black font-semibold">Location:</span> {user?.location}</p>
-            <p className="text-gray-700"><span className="text-black font-semibold">Joined:</span>{user?.createdAt
-              ? new Date(user.createdAt).toLocaleDateString("en-US", {
-                  year: "numeric",
-                  month: "short",
-                  day: "numeric",
-                })
-              : "No date available"}</p>
+                  {/* Modal */}
+                  {isModalOpen && (
+                    <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
+                      <div className="relative bg-white p-6 rounded-lg shadow-lg w-80">
+                        <button
+                          onClick={closeModal}
+                          className=" absolute top-0 right-2 mt-4 text-black px-4 py-2 rounded hover:bg-gray-300 transition"
+                        >
+                          ❌
+                        </button>
+                        <h2 className=" text-2xl font-bold">
+                          About this Profile
+                        </h2>
+                        <p className="mt-2 text-lg font-semibold text-gray-700">
+                          {user?.firstName} {user?.lastName}
+                        </p>
+                        <p className="text-gray-700"> {user?.email}</p>
+                        <p className="text-gray-700">
+                          <span className="text-black font-semibold">
+                            Location:
+                          </span>{" "}
+                          {user?.location}
+                        </p>
+                        <p className="text-gray-700">
+                          <span className="text-black font-semibold">
+                            Joined:
+                          </span>
+                          {user?.createdAt
+                            ? new Date(user.createdAt).toLocaleDateString(
+                                "en-US",
+                                {
+                                  year: "numeric",
+                                  month: "short",
+                                  day: "numeric",
+                                }
+                              )
+                            : "No date available"}
+                        </p>
 
-<p className="text-gray-700"><span className="text-black font-semibold">Updated:</span>{user?.updatedAt
-              ? new Date(user.updatedAt).toLocaleDateString("en-US", {
-                  year: "numeric",
-                  month: "short",
-                  day: "numeric",
-                })
-              : "No date available"}</p>
+                        <p className="text-gray-700">
+                          <span className="text-black font-semibold">
+                            Updated:
+                          </span>
+                          {user?.updatedAt
+                            ? new Date(user.updatedAt).toLocaleDateString(
+                                "en-US",
+                                {
+                                  year: "numeric",
+                                  month: "short",
+                                  day: "numeric",
+                                }
+                              )
+                            : "No date available"}
+                        </p>
 
-<div>
-
-</div>
-
-             
-
-
-            
-          </div>
-        </div>
-      )}
+                        <div></div>
+                      </div>
+                    </div>
+                  )}
                 </div>
               </div>
             </div>
@@ -291,7 +314,6 @@ const userdetailes = user?.connecting.map((person) => person.connectionID?._id);
                       key={index}
                       className="w-full flex items-center justify-start md:justify-start mb-4"
                     >
-                      {/* <img className="w-14 mb-2" src={institute.image} alt={institute.college}/> */}
                       <p className="text-center">{institute.college}</p>
                     </div>
                   ))}
@@ -350,27 +372,53 @@ const userdetailes = user?.connecting.map((person) => person.connectionID?._id);
         </div>
       )}
 
-{user?.education && user.education.length > 0 ? (
-  <div className="p-6 border-t">
-    <h3 className="text-lg font-semibold">Education</h3>
-    <div className="mt-2">
-      {user.education.map((item, index) => (
-        <div key={index} className="mb-4">
-          <p className="font-bold">{item.college}</p>
-          <p className="text-gray-600">
-            {item.qualification ? item.qualification + " • " : ""}
-            {item.startYear} - {item.endYear}
-          </p>
+      {user?.education && user.education.length > 0 ? (
+        <div className="p-6 border-t">
+          <h3 className="text-lg font-semibold">Education</h3>
+          <div className="mt-2">
+            {user.education.map((item, index) => (
+              <div key={index} className="mb-4">
+                <p className="font-bold">{item.college}</p>
+                <p className="text-gray-600">
+                  {item.qualification ? item.qualification + " • " : ""}
+                  {item.startYear} - {item.endYear}
+                </p>
+              </div>
+            ))}
+          </div>
         </div>
-      ))}
-    </div>
-  </div>
-) : (
-  <div className="p-6 border-t">
-    <h3 className="text-lg font-semibold">Education</h3>
-  </div>
-)}
+      ) : (
+        <div className="p-6 border-t">
+          <h3 className="text-lg font-semibold">Education</h3>
+        </div>
+      )}
 
+
+{user?.projects && user.projects.length > 0 ? (
+        <div className="p-6 border-t">
+          <h3 className="text-lg font-semibold">Projects</h3>
+          <div className="mt-2">
+            {user.projects.map((item, index) => (
+              <div key={index} className="mb-4">
+                <p className="font-bold">{item.title}</p>
+                <p className="text-gray-600">
+                  {item.description}
+                  
+                </p>
+                
+                <Link className="text-blue-500 underline" href={item.link ?? "/"} target="_blank" rel="noopener noreferrer">
+  Project Link
+</Link>
+
+              </div>
+            ))}
+          </div>
+        </div>
+      ) : (
+        <div className="p-6 border-t">
+          <h3 className="text-lg font-semibold">Project</h3>
+        </div>
+      )}
 
       {user?.skills && user.skills.length > 0 ? (
         <div className="p-6 border-t">
@@ -390,33 +438,41 @@ const userdetailes = user?.connecting.map((person) => person.connectionID?._id);
       <div className="p-6 border-t">
         <h3 className="text-lg font-semibold border-b pb-2">Interests</h3>
         <div className="flex space-x-1  overflow-x-auto p-2 justify-center flex-wrap ">
-        {user?.connecting
-  ?.filter((person) => person.status === true) 
-  .map((person) => (
-    <div
-      key={person.connectionID._id} 
-      className="flex items-center space-x-3 p-3 border rounded-lg shadow-sm w-64 mb-4 sm:w-80 md:w-96"
-    >
-      <img
-        className="w-12 h-12 rounded-full"
-        src={person.connectionID.profileImage}
-        alt={person.connectionID.firstName}
-      />
-      <div>
-        <p className="font-semibold">{person.connectionID.firstName}</p>
-        <p className="text-xs text-gray-500">
-          {person.connectionID.connecting ? person.connectionID.connecting.length : 0} followers
-        </p>
-        <button className="mt-1 px-3 py-1 text-gray-700 border rounded-full text-sm">
-          ✓ Following
-        </button>
+          {user?.connecting
+            ?.filter((person) => person.status === true)
+            .map((person) => (
+              <div
+                key={person.connectionID._id}
+                className="flex items-center space-x-3 p-3 border rounded-lg shadow-sm w-64 mb-4 sm:w-80 md:w-96"
+              >
+                <div onClick={()=>router.push(`/userdetails/${person?.connectionID?._id}`)}>
+                <Image
+                  className="w-12 h-12 rounded-full"
+                  src={person.connectionID.profileImage}
+                  alt={person.connectionID.firstName}
+                  width={100}
+                  height={100}
+                />
+                </div>
+                
+                <div>
+                  <p className="font-semibold">
+                    {person.connectionID.firstName}
+                  </p>
+                  <p className="text-xs text-gray-500">
+                    {person.connectionID.connecting
+                      ? person.connectionID.connecting.length
+                      : 0}{" "}
+                    followers
+                  </p>
+                  <button className="mt-1 px-3 py-1 text-gray-700 border rounded-full text-sm">
+                    ✓ Following
+                  </button>
+                </div>
+              </div>
+            ))}
+        </div>
       </div>
-    </div>
-  ))}
-
-        
-      </div>
-    </div>
     </div>
   );
 };

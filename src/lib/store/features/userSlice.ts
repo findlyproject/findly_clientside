@@ -1,5 +1,6 @@
 
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
+import { Url } from "url";
 
 export interface Education {
   qualification: string;
@@ -15,7 +16,7 @@ export interface UserProfile {
   password: string;
   phoneNumber?: string;
   dateOfBirth?: Date;
-  location?: string;
+  location?: string[];
   profileImage?: string;
   banner?: string;
   skills?: string[];
@@ -39,7 +40,7 @@ export interface UserProfile {
   projects?: {
     title: string;
     description: string;
-    link?: string;
+    link?: string | Url | undefined;
   }[];
   connecting: {
     connectionID:string;
@@ -155,10 +156,8 @@ const loginSlice = createSlice({
         state.activeuser.phoneNumber = action.payload.phoneNumber ?? state.activeuser.phoneNumber;
         state.activeuser.dateOfBirth = action.payload.dateOfBirth ?? state.activeuser.dateOfBirth;
         state.activeuser.about = action.payload.about ?? state.activeuser.about;
-        state.activeuser.profileImage = action.payload.profileImage ?? state.activeuser.profileImage;
-        state.activeuser.banner = action.payload.banner ?? state.activeuser.banner;
-
-
+        console.log("action.payload",action.payload);
+        
       }
     },
     setProject: (state, action: PayloadAction<{ title: string; description: string; link?: string }>) => {
@@ -208,7 +207,11 @@ state.connectionRequest=action.payload
     },
     setAllConnections:(state,action:PayloadAction<UserProfile []>)=>{
 state.connections=action.payload
-    }
+    },
+    setImages:(state,action)=>{
+      state.activeuser.profileImage = action.payload.profileImage;
+      state.activeuser.banner = action.payload.banner      
+  },
   },
 });
 
@@ -220,7 +223,20 @@ export const {
   setGooglelogin,
   setAllConnections,
   setConnectionRequest,
-  setDetailes
+  setDetailes,
+  setEducation,
+  setLocation,
+  setRemovskils,
+  setProject,
+  setremovproject,
+  setRemoveEducation,
+  setjobLocations,
+  setskils,
+  setPersonalDetails,
+  setRemovjobTItles,
+  setjobTItles,
+  setRemovejoblocation,
+  setImages,
 } = loginSlice.actions;
 
 export default loginSlice.reducer;
