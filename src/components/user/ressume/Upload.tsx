@@ -112,20 +112,14 @@ const FileUpload = () => {
    console.log("removeResult",removeResult);
    if(removeResult.type==="remove/resume/fulfilled"){
     setFiles({ resume: null, introductionVideo: null });
-<<<<<<< HEAD
+
    }   
-=======
-<<<<<<< HEAD
-   }   
-=======
+
    }
    
   
 
-      
->>>>>>> f56af03f37c3d22f41985ce7aa064bc5454b9713
->>>>>>> a36e484da0b47e8004f1b58b7e8aa7defd969ef3
-  };
+
 
   return (
     <div className="flex flex-col items-center justify-center h-screen p-10 bg-gray-100">
