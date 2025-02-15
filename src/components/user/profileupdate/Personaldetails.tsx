@@ -20,7 +20,7 @@ function Personaldetails() {
     // console.log("input user personal input",input);
     
     // const handilchange = (e)=>{
-    //         const { name, value } = e.target;
+    //         const { name, vAalue } = e.target;
     //         setInput((prev)=>({
     //             ...prev,
     //             [name]:value,

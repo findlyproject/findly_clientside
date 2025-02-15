@@ -114,10 +114,11 @@ const loginSlice = createSlice({
       state.googlestate = false;
     },
     SetLogout: (state) => {
-      console.log("heeeee",state.activeuser)
       state.activeuser = null;
-      state.googlestate = true
-      console.log("state.activeuser",state.activeuser)
+  state.userdetails = null;
+  state.connectionRequest = null;
+  state.connections = [];
+  state.googlestate = true;
     },
     setEducation: (state, action: PayloadAction<Education>) => {
       state.activeuser?.education.push(action.payload);

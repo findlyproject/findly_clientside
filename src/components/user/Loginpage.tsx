@@ -10,7 +10,6 @@ import Image from "next/image";
 import { googlloginUser, loginUser } from "@/lib/store/features/actions/userActions";
 import { toast } from "react-toastify";
 import { setGooglelogin } from "@/lib/store/features/userSlice";
-import Link from "next/link";
 
 function Loginpage() {
   const router = useRouter()

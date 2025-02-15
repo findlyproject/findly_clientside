@@ -105,9 +105,11 @@ const DetailsUser = ({ id }: { id: string }) => {
     (state) => state.user.userdetails
   ) as UserProfile | null;
 
-  const userdetailes = user?.connecting.map(
-    (person) => person.connectionID?._id
-  );
+  console.log("log user",user);
+  
+  // const userdetailes = user?.connecting.map(
+  //   (person) => person.connectionID?._id
+  // );
 
   useEffect(() => {
     const fetch = async () => {

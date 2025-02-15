@@ -22,6 +22,7 @@ const handilclik =async ()=>{
    
     try {
         const respons =await api.put("/user/profile",activeuser)
+        route.push("/ownprofile")
     console.log("response",respons);
     } catch (error) {
         console.log(error);

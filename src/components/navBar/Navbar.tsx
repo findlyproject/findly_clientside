@@ -5,7 +5,7 @@ import AfterLogin from "./Afterlogin";
 import Beforlogin from "./Navbiforlogin";
 import Image from "next/image";
 import { useRouter } from "next/navigation";
-import { useAppDispatch, useAppSelector } from "@/lib/store/hooks";
+import { useAppSelector } from "@/lib/store/hooks";
 import logo from "../../../public/assets/findlylogo.png";
 import api from "@/utils/api";
 export const navigation = [
@@ -18,7 +18,6 @@ export const navigation = [
 export default function Navbar() {
  
   const router=useRouter()
-  const dispatch=useAppDispatch()
   
   const { activeuser } = useAppSelector((state) => state.login);
   interface User {
@@ -84,7 +83,9 @@ export default function Navbar() {
                       
                       onClick={()=>router.push(`/userdetails/${user._id}`)}
                       >
-                        <img
+                        <Image
+                        width={100}
+                        height={100}
 
                           src={user.profileImage}
                           alt={`${user.firstName} ${user.lastName}`}
