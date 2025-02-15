@@ -77,9 +77,9 @@ console.log(resultcometsreplay);
   if (!comments) return <div className="text-center p-4">Loading...</div>;
 
   const handleListCommentReplays = async (commentId: string) => {
-    console.log("comments id", commentId);
+  
     const result = await dispatch(findReplies(commentId));
-    console.log("result", result);
+    
     if (result.type === "get/findReplies/fulfilled") {
       setIsShowReplyList((prev) => !prev);
       setCommentID(commentId);
@@ -132,8 +132,8 @@ console.log(resultcometsreplay);
     console.log("ress update", resultUpdate);
     if (resultUpdate.type === "updateReplay/fulfilled") {
       setIsOptionsMenuOpen(null);
-      const result = await dispatch(findReplies(commentId));
-      console.log("result", result);
+      await dispatch(findReplies(commentId));
+      
       setEdit(false);
     }
 
@@ -185,13 +185,13 @@ console.log(resultcometsreplay);
         postReplay({ postId, commentId, replyText })
       );
 
-      console.log("resultPostReplies", resultPostReplies);
+ 
 
       if (resultPostReplies.type === "post/replay/fulfilled") {
         setReplyText("");
 
-        const result = await dispatch(findReplies(commentId));
-        console.log("result", result);
+        await dispatch(findReplies(commentId));
+  
         getCommentById(commentId);
       } else {
         console.log("error");
@@ -208,21 +208,21 @@ console.log(resultcometsreplay);
     );
   };
   const handleDeleteReply = async (replayId: string, commentId: string) => {
-    console.log("commentIddddddd", commentId);
+   
 
     const resultDelete = await dispatch(deleteReplay({ commentId, replayId }));
     console.log("result delete", resultDelete);
     if (resultDelete.type === "delete/replay/fulfilled") {
-      console.log("hey worked");
+    
 
-      const result = await dispatch(findReplies(commentId));
-      console.log("result", result);
+     await dispatch(findReplies(commentId));
+      
     }
   };
   return (
     <>
       <section className="mt-2">
-        {/* Add Comment Form */}
+     
         <form
           className="flex flex-col space-y-2 p-3 border rounded-lg shadow-sm bg-white"
           onSubmit={(event) => handleSubmit(postId, event)}
@@ -276,7 +276,7 @@ console.log(resultcometsreplay);
           </div>
         </form>
 
-        {/* List Comments */}
+   
         <section className="mt-3 space-y-4">
           {comments
             .slice()
@@ -291,7 +291,7 @@ console.log(resultcometsreplay);
                 className="p-3 border rounded-lg shadow-sm bg-white"
               >
                 {edit && editingCommentId === comment._id ? (
-                  // Edit Mode
+                  
                   <div>
                     <div className="relative flex border rounded-lg px-4 py-2">
                       <input
@@ -340,7 +340,7 @@ console.log(resultcometsreplay);
                   </div>
                 ) : (
                   <div className="flex items-start space-x-3">
-                    {/* ✅ Commenter Profile */}
+                   
                     <div className="w-10 h-10">
                       <Image
                         src={
@@ -354,7 +354,7 @@ console.log(resultcometsreplay);
                       />
                     </div>
 
-                    {/* ✅ Comment Content */}
+                 
                     <div className="flex-grow">
                       <div className="flex justify-between">
                         <div>
@@ -369,7 +369,7 @@ console.log(resultcometsreplay);
 
                       <p className="text-gray-700 mt-1">{comment.comment}</p>
 
-                      {/* Comment Actions */}
+                 
                       <div className="flex space-x-3 mt-2 text-gray-500 text-sm">
                         <button className="hover:underline">Like</button>
                         <button
@@ -533,7 +533,18 @@ console.log(resultcometsreplay);
                               </div>
                             ) : (
                               <div className="flex justify-between p-2">
+                                <div className="flex flex-col items-start">
+                                 <div className="flex space-x-2">
+                                 <Image 
+                                  src={r.user?.profileImage || "/default-profile.png"} 
+                                  alt="User"
+                        height={30}
+                        width={30}
+                        className="w-8 h-8 rounded-full object-cover"/>
+                                <p className="">{r.user?.firstName}</p>
+                                 </div>
                                 <p className="text-gray-700 pl-8 ">{r.reply}</p>
+                                </div>
                                 <div className="flex flex-col items-end ">
                                   <div className=" flex justify-between ">
                                     <button
@@ -544,7 +555,8 @@ console.log(resultcometsreplay);
                                     </button>
 
                                     {isOptionsMenuOpen === r._id && (
-                                      <div className="absolute right-0 mt-2 w-32 bg-white border border-gray-300 rounded-lg shadow-md">
+                                     <OutsideClickHandler onOutsideClick={()=>setIsOptionsMenuOpen(null)}>
+                                       <div className="absolute right-0 mt-2 w-32 bg-white border border-gray-300 rounded-lg shadow-md">
                                         <button
                                           onClick={() =>
                                             handleEditReply(r._id, r.reply)
@@ -565,6 +577,7 @@ console.log(resultcometsreplay);
                                           Delete
                                         </button>
                                       </div>
+                                     </OutsideClickHandler>
                                     )}
                                   </div>
                                   <div>
