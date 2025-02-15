@@ -61,8 +61,10 @@ const Users = () => {
                         <img
                           src={
                             user.profileImage ||
-                            "https://via.placeholder.com/40"
+                            "ass"
                           }
+                          height={30}
+                          width={30}
                           alt={user.firstName}
                           className="w-10 h-10 rounded-full"
                         />
