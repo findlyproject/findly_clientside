@@ -26,15 +26,7 @@ export const FeedIdentityModule = () => {
   if (!activeuser) {
     return <section className="rounded-lg border border-gray-300 min-h-[240px] bg-white flex items-center justify-center">Loading...</section>
   }
-  useEffect(()=>{
-    const fetchConnections=async()=>{
-      const response=await api.get(`/connecting/getconnection`)
-      console.log("all connections of user response",response);
-     
-      setConnections(response.data.connections)
-    }
-    fetchConnections()
-  },[])
+
   return (
     <section className="rounded-lg border border-gray-300 min-h-[240px] bg-white">
       <div>
