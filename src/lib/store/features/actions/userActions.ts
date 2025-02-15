@@ -22,10 +22,18 @@ export const registerUser = createAsyncThunk(
       password: string;
       firstName: string;
       lastName: string;
-      location: string;
+      location:{country: string,
+        countryName: string,
+        state: string,
+        stateName: string,
+        city: string};
       education: { college: string; startYear: string; endYear: string }[];
       jobTitle: string[];
-      jobLocation: string[];
+      jobLocation:{country: string,
+        countryName: string,
+        state: string,
+        stateName: string,
+        city: string}[]
     },
     { dispatch, rejectWithValue }
   ) => {

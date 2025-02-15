@@ -8,6 +8,20 @@ export interface Education {
   endYear: string;
   location: string;
 }
+export interface LocationType {
+  city:string;
+  state:string;
+  country:string;
+  countryName:string;
+  stateName:string;
+};
+export interface JobLocationType {
+  country: string;
+  countryName: string;
+  state: string;
+  stateName: string;
+  city: string;
+}
 
 export interface UserProfile {
   firstName: string;
@@ -16,12 +30,16 @@ export interface UserProfile {
   password: string;
   phoneNumber?: string;
   dateOfBirth?: Date;
-  location?: string[];
+
+  location?: LocationType;
+
+ 
+
   profileImage?: string;
   banner?: string;
   skills?: string[];
   jobTitle?: string[];
-  jobLocation?: string[];
+  jobLocation?: JobLocationType[];
   education: {
     qualification: string;
     startYear:string;
@@ -119,7 +137,7 @@ const loginSlice = createSlice({
       state.googlestate = true
       console.log("state.activeuser",state.activeuser)
     },
-    setEducation: (state, action: PayloadAction<Education>) => {
+    setEducation: (state, action: PayloadAction<Education[]>) => {
       state.activeuser?.education.push(action.payload);
     },
     setRemoveEducation: (state, action: PayloadAction<number>) => {
@@ -127,7 +145,7 @@ const loginSlice = createSlice({
         state.activeuser.education = state.activeuser.education.filter((_, index) => index !== action.payload);
       }
     },
-    setjobLocations: (state, action: PayloadAction<string>) => {
+    setjobLocations: (state, action: PayloadAction<JobLocationType[]>) => {
       state.activeuser?.jobLocation?.push(action.payload);
     },
     setRemovejoblocation: (state, action: PayloadAction<number>) => {
@@ -143,7 +161,7 @@ const loginSlice = createSlice({
         state.activeuser.jobTitle = state.activeuser.jobTitle.filter((_, index) => index !== action.payload);
       }
     },
-    setLocation: (state, action: PayloadAction<string>) => {
+    setLocation: (state, action: PayloadAction<LocationType>) => {
       if (state.activeuser) {
         state.activeuser.location = action.payload;
       }

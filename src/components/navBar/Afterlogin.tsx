@@ -36,7 +36,7 @@ function AfterLogin() {
       <Menu as="div" className="relative ml-3 z-40 w-20">
         <Menu.Button className="flex text-sm rounded-full focus:outline-none w-auto">
           <Image 
-            src={activeuser?.profileImage}
+            src={activeuser?.profileImage|| "/default-avatar.png"}
             alt="User profile"
             width={200}
             height={200}
