@@ -58,7 +58,7 @@ export default function Navbar() {
 
 
   return (
-    <nav className="bg-white border border-b-2">
+    <nav className="bg-gray-950 border border-b-2">
       <div className=" sm:px-6">
         <div className="flex justify-between h-16 items-center">
           <div className="flex items-center">

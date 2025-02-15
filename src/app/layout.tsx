@@ -32,7 +32,7 @@ export default async function RootLayout({
   return (
     <html lang="en">
       <body
-        className={`${geistSans.variable} ${geistMono.variable} antialiased`}
+        style={{ background: "red", width: "100%", height: "100%" }}
       >
         <StoreProvider>
           <SessionProvider session={session}>{children}</SessionProvider>
