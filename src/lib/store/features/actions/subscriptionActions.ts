@@ -19,11 +19,14 @@ interface Plan {
 export const subscription=createAsyncThunk(
     "subscription",
     async (plan:Plan, { dispatch, rejectWithValue }) => {
+      console.log("plan",plan);
       
-      const response = await handleAsync<AxiosResponse>(() => api.post("/payment/createSubscription",{ planName: plan.name,
+      const response = await handleAsync<AxiosResponse>(() => api.post("/payment/createSubscription",{ 
+        plan: plan.name,
         price: plan.price,
         features: plan.features,
-        type: "subscription",}));
+      
+      }));
   
   console.log("subscrio",response)
       if (!response) {
