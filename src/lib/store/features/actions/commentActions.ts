@@ -1,7 +1,7 @@
 import { createAsyncThunk } from "@reduxjs/toolkit";
 import { AxiosResponse } from "axios";
 import api from "../../../../utils/api"; 
-import {  findCommentReplay, IComment, IReply, setComments,setCommentWithReplay } from "../postSlice";
+import {  addComment, findCommentReplay, IComment, IReply, setComments,setCommentWithReplay } from "../postSlice";
 import handleAsync from "@/utils/handleAsync";
 
 export interface CommentResponse {
@@ -48,7 +48,7 @@ export const addCommentonPost = createAsyncThunk(
   async (
     { postId, comment }: AddCommentArgs,
 
-    { rejectWithValue }
+    { dispatch,rejectWithValue }
   ) => {
     try {
       const response: AxiosResponse<CommentResponse> = await api.post(
@@ -58,6 +58,7 @@ export const addCommentonPost = createAsyncThunk(
       if (!response.data || !response.data.comment) {
         return rejectWithValue("Failed to add comment.");
       }
+      dispatch(addComment({postId:postId,comment:response.data.comment}))
       return response.data.comment;
     } catch (error) {
       console.error("Error adding comment:", error);
@@ -77,7 +78,8 @@ export const fetchCommentById = createAsyncThunk(
       if (!response.data || !response.data.comment) {
         return rejectWithValue("No posts found.");
       }
-      return response.data.comment;
+      
+      return response.data.comment.comment;
     } catch (error) {
       console.error("Error fetching posts:", error);
       return rejectWithValue("Failed to fetch posts.");
@@ -142,65 +144,39 @@ export const deleteAComment = createAsyncThunk(
 export const findReplies=createAsyncThunk(
   "get/findReplies",
   async (commentId:string, { dispatch, rejectWithValue }) => {
-    
-  ;
-    
     const response = await handleAsync<AxiosResponse<replayResponse>>(() => api.get(`/post/user/findreply/${commentId}`));
-
-
     if (!response) {
       return rejectWithValue("subscription  failed")
     }
     const replies=response.data.replies    
-    const result = replies.filter((data) => !data.isDeleted);
-
   
-    
+    const result = replies.filter((data) => !data.isDeleted); 
 dispatch(findCommentReplay(result))
-   
-    
-   
-
-
   } 
 )
 
 export const postReplay=createAsyncThunk(
   "post/replay",
-  async ({ postId, commentId, replyText }:{postId:string,commentId:string,replyText:string} ,{ dispatch, rejectWithValue }) => {
-    
-
-    
+  async ({ postId, commentId, replyText }:{postId:string,commentId:string,replyText:string} ,{  rejectWithValue }) => {
     const response = await handleAsync<AxiosResponse>(() => api.post("/post/user/postreplay",{postId:postId,commentId:commentId,replyText:replyText}));
-
-
     if (!response) {
       return rejectWithValue("subscription  failed")
     }
-
-
-
   } 
 )
 
 export const deleteReplay=createAsyncThunk(
   "delete/replay",
-  async ({ replayId, commentId }:{replayId:string,commentId:string} ,{ dispatch, rejectWithValue }) => {
+  async ({ replayId, commentId }:{replayId:string,commentId:string} ,{ rejectWithValue }) => {
 
     const response = await handleAsync<AxiosResponse>(() =>
       api.delete("/post/user/deletereplay", {
         data: { commentId, replayId }
       })
     );
-
-console.log("delete replaies",response)
     if (!response) {
       return rejectWithValue("subscription  failed")
     }
-     if(response.status===200){
-    
-
-     }
   } 
 )
 
@@ -213,7 +189,7 @@ export const getcommentswithreplies=createAsyncThunk(
     const response = await handleAsync<AxiosResponse>(() =>
       api.get("/post/user/getcommentswithreplies"));
 
-console.log("getcommentswithreplies",response)
+
     if (!response) {
       return rejectWithValue("subscription  failed")
     }
@@ -223,26 +199,17 @@ console.log("getcommentswithreplies",response)
       
      }
   } 
-
-  
 )
 
 
 
 export const updateReplay=createAsyncThunk(
   "updateReplay",
-  async ({ replayedId, commentId,newReplyText}:{replayedId:string,commentId:string,newReplyText:string} ,{ dispatch, rejectWithValue }) => {
+  async ({ replayedId, commentId,newReplyText}:{replayedId:string,commentId:string,newReplyText:string} ,{  rejectWithValue }) => {
     const response = await handleAsync<AxiosResponse>(() => api.put("/post/user/editreplay",{commentId,replayedId,newReplyText}));
-
-
     if (!response) {
       return rejectWithValue("subscription  failed")
     }
-  
-     if(response.status===200){
-
-      
-     }
   } 
 )
 

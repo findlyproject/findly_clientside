@@ -32,8 +32,6 @@ export const registerUser = createAsyncThunk(
     const response = await handleAsync<AxiosResponse<RegisterResponse>>(() =>
       api.post("/user/registration", state)
     );
-    console.log("responseresponsev", response);
-
     if (!response) {
       return rejectWithValue("registration falied.please try again.");
     }
@@ -43,7 +41,6 @@ export const registerUser = createAsyncThunk(
 );
 
 
-//login
 interface LoginResponse {
   logeduser: UserProfile;
 }

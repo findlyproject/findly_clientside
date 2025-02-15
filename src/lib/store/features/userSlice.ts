@@ -113,10 +113,8 @@ const loginSlice = createSlice({
       state.googlestate = false;
     },
     SetLogout: (state) => {
-      console.log("heeeee",state.activeuser)
       state.activeuser = null;
       state.googlestate = true
-      console.log("state.activeuser",state.activeuser)
     },
     setEducation: (state, action: PayloadAction<Education>) => {
       state.activeuser?.education.push(action.payload);
@@ -179,12 +177,10 @@ const loginSlice = createSlice({
     },
     setResume: (state, action: PayloadAction<ResumePayload>) => {
       if (state.activeuser) {
-        console.log("action.payload.resumePDF",action.payload.resumePDF);
-        console.log("action.payload.resumeVideo",action.payload.resumeVideo);
+
         state.activeuser.resumePDF = action.payload.resumePDF;
         state.activeuser.resumeVideo = action.payload.resumeVideo;
-        console.log("state.activeuser.resumePDF",state.activeuser.resumePDF);
-        console.log("state.activeuser.resumeVideo",state.activeuser.resumeVideo);
+  
         
       }
     },

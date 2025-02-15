@@ -37,34 +37,21 @@ const FileUpload = () => {
       introductionVideo: resumevideo?.[0] ? new File([""], "Existing Video.mp4", { type: "video/mp4" }) : null,
     });
   }, [resumePdf, resumevideo]);
-  useEffect(() => {
-    console.log("Redux Resume Data:", resumePdf);
-    console.log("Redux Video Data:", resumevideo);
-  }, [resumePdf, resumevideo]);
+
   
 
   const handleFileUpload = (event: ChangeEvent<HTMLInputElement>, type: keyof FilesState) => {
     const selectedFile = event.target.files ? event.target.files[0] : null;
-    console.log("selectedFile",selectedFile);
-    
     if (selectedFile) {
       setFiles((prevFiles) => ({ ...prevFiles, [type]: selectedFile }));
     }
-    console.log("files",files);
-    
   };
 
   const handleUpload = async () => {
     const formData = new FormData();
-    console.log("filesdddd",files);
+    
     
     const { resume, introductionVideo } = files;
-    console.log("resumeee",resume);
-    console.log("introductionVideooo",introductionVideo);
-    
-    console.log(`resume--${resume}--introductionVideo==${introductionVideo}`);
-    
-
     if (!resume && !introductionVideo) {
       setErrorMessage("Please select a file to upload");
       return;
@@ -74,12 +61,12 @@ const FileUpload = () => {
     if (introductionVideo) formData.append("video", introductionVideo);
 
     try {
-      console.log("formdata",formData);
+ 
       
       setLoading(true);
       setErrorMessage("");
       const result = await dispatch(postresume(formData));
-      console.log("Upload result:", result);
+    
       setFiles({ resume: null, introductionVideo: null });
       if(result.type==="post/resume/fulfilled"){
         toast.success("resume uploaded")
@@ -109,7 +96,6 @@ const FileUpload = () => {
 
   const handleRemoveResume =async (type:string) => {
    const removeResult=await dispatch(removeResume(type)); 
-   console.log("removeResult",removeResult);
    if(removeResult.type==="remove/resume/fulfilled"){
     setFiles({ resume: null, introductionVideo: null });
 
@@ -120,7 +106,7 @@ const FileUpload = () => {
   
 
 
-
+   
   return (
     <div className="flex flex-col items-center justify-center h-screen p-10 bg-gray-100">
       <div className="flex flex-col gap-6 w-full max-w-lg p-6 bg-white shadow-lg rounded-lg">
@@ -174,7 +160,7 @@ const FileUpload = () => {
         </button>
       </div>
 
-      {/* Modal for viewing file */}
+     
       {isModalOpen && modalContent && (
         <div className="fixed inset-0 bg-black bg-opacity-50 flex justify-center items-center z-50">
           <div className="bg-white p-6 rounded-lg w-3/4 max-w-2xl">

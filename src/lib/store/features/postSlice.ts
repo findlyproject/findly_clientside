@@ -5,7 +5,7 @@ export interface IReport {
 _id: string; 
 reportedBy:UserProfile;
 reason:string;
-isDeleted:boolean;
+isDeleted:boolean;  
 createdAt:Date;
 updatedAt:Date;
 
@@ -113,18 +113,17 @@ const postSlice = createSlice({
       }
     },
     findCommentReplay:(state,action)=>{
-      console.log("action.payload",action.payload);
+      
       
     state.commentReplay=action.payload
-    console.log("state.commentReplay",state.commentReplay);
+   
     },
      removeDeletedReply:(state, action) => {
       const deletedReplyId = action.payload; 
-      console.log("deletedReplyId",deletedReplyId);
       
 
       state.commentReplay = state.commentReplay.filter(reply => reply._id !== deletedReplyId);
-      console.log("state.commentReplay", state.commentReplay);
+     
 
     },
     setCommentWithReplay:(state,action)=>{

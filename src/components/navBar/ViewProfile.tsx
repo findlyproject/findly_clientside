@@ -21,8 +21,6 @@ export default function ViewProfile() {
 
   const currentUser = useAppSelector((state) => state.user.activeuser);
 
-  console.log("kk", currentUser);
-  console.log("lo", currentUser);
   const aboutText = currentUser?.about ?? "Tell me about yourself...";
 
   const [isExpanded, setIsExpanded] = useState(false);
@@ -36,14 +34,14 @@ export default function ViewProfile() {
   useEffect(() => {
     const fetchConnections = async () => {
       const response = await api.get(`/connecting/getconnection`);
-      console.log("all connections of user response", response);
+
 
       setConnections(response.data.connections);
     };
     fetchConnections();
   }, []);
 
-  console.log("dd", currentUser?.role === "premium");
+
 
   return (
     <div className="max-w-4xl mx-auto bg-white shadow-lg rounded-lg overflow-hidden mt-5">
@@ -207,10 +205,13 @@ export default function ViewProfile() {
                 key={connect?.connectionID?._id}
                 className="flex items-center space-x-3 p-3 border rounded-lg shadow-sm w-64 mb-4 sm:w-80 md:w-96"
               >
-                <img
-                  className="w-12 h-12 rounded-full"
-                  src={connect?.connectionID?.profileImage}
-                  alt="Profile"
+                
+                <Image
+                 src={connect?.connectionID.profileImage}
+                 alt="profile"
+                 width={50}
+                 height={50}
+                
                 />
                 <div>
                   <p className="font-semibold">
