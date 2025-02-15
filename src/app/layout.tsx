@@ -4,7 +4,7 @@ import "../styles/globals.css";
 import StoreProvider from "@/lib/store/store-provider";
 import SessionProvider from "@/providers/auth-provider";
 import { getServerSession } from "next-auth";
-import { ToastContainer } from "react-toastify";
+import { Slide, ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 
 
@@ -38,11 +38,14 @@ export default async function RootLayout({
           <SessionProvider session={session}>{children}</SessionProvider>
           <ToastContainer
             autoClose={1000}
-            position="top-center"
+            position="bottom-right"
             hideProgressBar={true}
-            closeOnClick
+            closeOnClick 
             pauseOnHover
             draggable
+            theme="colored"
+            newestOnTop
+            transition={Slide}
             toastStyle={{
               width: "auto",
               maxWidth: "90%",
