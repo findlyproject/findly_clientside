@@ -82,25 +82,7 @@ const PricingPlans: React.FC = () => {
        
         <div className="mb-12 text-center">
           <h2 className="text-5xl font-bold text-gray-900 mb-4">Choose your plan</h2>
-          <p className="text-gray-500 text-lg mb-9">7 Days free trial. No credit card required.</p>
-
-        
-          <div className="flex justify-center items-center">
-            <label className="min-w-[3.5rem] text-xl text-gray-900 mr-4 font-medium">
-              Bill Monthly
-            </label>
-            <input
-              type="checkbox"
-              checked={isYearly}
-              onChange={() => setIsYearly(!isYearly)}
-              className="w-11 h-6 bg-indigo-100 rounded-full appearance-none transition duration-200 cursor-pointer relative
-                before:absolute before:w-5 before:h-5 before:bg-indigo-600 before:rounded-full before:top-0.5 before:left-0.5
-                before:transition-all before:duration-200 checked:before:translate-x-full"
-            />
-            <label className="min-w-[3.5rem] text-xl text-gray-500 ml-4 font-medium">
-              Bill Yearly
-            </label>
-          </div>
+          
         </div>
 
              <div className="space-y-8 lg:grid lg:grid-cols-3 sm:gap-6 xl:gap-8 lg:space-y-0 lg:items-center">
@@ -119,7 +101,7 @@ const PricingPlans: React.FC = () => {
         
               <h3 className="text-2xl font-bold mb-3">{plan.name}</h3>
               <div className="flex items-center mb-6">
-                <span className="mr-2 text-6xl font-semibold text-indigo-600">
+                <span className="mr-2 text-6xl font-semibold text-primary">
                   ${isYearly ? plan.price * 10 : plan.price}
                 </span>
                 <span className="text-xl text-gray-500">/ {isYearly ? "year" : "month"}</span>
@@ -131,7 +113,7 @@ const PricingPlans: React.FC = () => {
                   <li key={index} className="flex items-center space-x-4">
                    
                     <svg
-                      className="w-6 h-6 text-indigo-600"
+                      className="w-6 h-6 text-primary"
                       viewBox="0 0 30 30"
                       fill="none"
                       xmlns="http://www.w3.org/2000/svg"
@@ -153,7 +135,7 @@ const PricingPlans: React.FC = () => {
               <a
               onClick={()=>purchasePlan(plan)}
                 href="#"
-                className="py-2.5 px-5 bg-indigo-600 shadow-sm rounded-full transition duration-500 text-base text-white font-semibold text-center w-fit mx-auto hover:bg-indigo-700"
+                className="py-2.5 px-5 bg-primary shadow-sm rounded-full transition duration-500 text-base text-white font-semibold text-center w-fit mx-auto hover:bg-indigo-700"
               >
                 Purchase Plan
               </a>

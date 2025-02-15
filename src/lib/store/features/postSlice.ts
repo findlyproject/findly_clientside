@@ -39,7 +39,7 @@ export interface IPost {
   images?:string [];
   video?:string;
   owner: UserProfile | null;
-  likedBy?: string[];
+  likedBy?: UserProfile[];
   reports?:  IReport[]| null|undefined;
   comments?:  IComment[] ;
   isDeleted?: boolean;
@@ -52,9 +52,10 @@ interface PostState {
   posts: IPost[] | null;
   comments:IComment[] | null;
   postsLength: number | null;
-  commentReplay:IReply[]
-  commentsReplay:IComment[] | null;
+  commentReplay?:IReply[]
+  commentsReplay?:IComment[] | null;
   
+  likes: string[]; 
 }
 
 const initialState: PostState = {
@@ -98,20 +99,6 @@ const postSlice = createSlice({
         post.comments.push(comment);
       }
     },         
-    updateComment: (state, action) => {
-      const { commentId, newComment } = action.payload;
-    
-      if (!state.comments) return; // Ensure comments exist
-    
-      const commentIndex = state.comments.findIndex(comment => comment._id === commentId);
-      
-      if (commentIndex !== -1) {
-        state.comments[commentIndex] = { 
-          ...state.comments[commentIndex], 
-          text: newComment // Assuming `text` is the property storing comment content
-        };
-      }
-    },
     findCommentReplay:(state,action)=>{
       
       
@@ -130,12 +117,15 @@ const postSlice = createSlice({
       state.commentsReplay=action.payload
     },
     setLikes: (state, action: PayloadAction<[]>) => {
+      state.likes = action.payload
+    },
+    setLikes: (state, action: PayloadAction<[]>) => {
       state.likes = action.payload// Ensure likes is an array
     }
     
   },
 });
 
-export const { setPosts,addPost,addComment,updateComment,setComments,findCommentReplay,removeDeletedReply,setCommentWithReplay,setLikes,updatePost} = postSlice.actions;
+export const { setPosts,addPost,addComment,setComments,findCommentReplay,removeDeletedReply,setCommentWithReplay,updatePost,setLikes} = postSlice.actions;
 
 export default postSlice.reducer;

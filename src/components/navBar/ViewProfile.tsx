@@ -6,6 +6,11 @@ import Image from "next/image";
 import { useState, useEffect } from "react";
 import api from "@/utils/api";
 import { useRouter } from "next/navigation";
+import Link from "next/link";
+
+import { UserProfile } from "@/lib/store/features/userSlice";
+
+
 interface Connection {
   connectionID: {
     _id: string;
@@ -15,11 +20,11 @@ interface Connection {
   };
 }
 
-
+const connections: Connection[] = []; 
 export default function ViewProfile() {
   const router = useRouter();
 
-  const currentUser = useAppSelector((state) => state.user.activeuser);
+  const currentUser = useAppSelector((state) => state.user.activeuser as UserProfile |null);
 
   const aboutText = currentUser?.about ?? "Tell me about yourself...";
 
@@ -48,7 +53,7 @@ export default function ViewProfile() {
       <div className="max-w-4xl mx-auto bg-white shadow-lg rounded-lg overflow-hidden mt-5">
         <div className="relative h-36 bg-gray-300">
           <Image
-            className="object-cover"
+            className="object-cover w-full h-full"
             src={currentUser?.banner || ""}
             alt="Profile Banner"
             fill
@@ -56,15 +61,16 @@ export default function ViewProfile() {
         </div>
 
         <div className="p-6 relative  ">
-          <div className="w-24 h-24 rounded-full border-4 border-white absolute -top-12 left-6">
-            <Image
-              src={currentUser?.profileImage || ""}
-              alt="Landing Page Illustration"
-              width={100}
-              height={200}
-              className="object-cover rounded-md"
-            />
-          </div>
+        <div className="w-24 h-24 rounded-full border-4 border-white absolute -top-12 left-6 overflow-hidden">
+  <Image
+    src={currentUser?.profileImage || ""}
+    alt="Profile Image"
+    width={100}
+    height={100}
+    className="w-full h-full object-cover rounded-full"
+  />
+</div>
+
           <div className=" flex flex-col md:flex-row justify-between">
             <div className="mt-12 flex flex-col items-start">
               <div className="flex items-center justify-between ">
@@ -86,11 +92,46 @@ export default function ViewProfile() {
                 {currentUser?.jobTitle?.map((title) => title)}
               </p>
               <p className="text-gray-900 text-sm">
-                {currentUser?.location}• {connections.length} connections
+                {currentUser?.location?.city}• {connections.length} connections
               </p>
             </div>
 
             <div className="p-6">
+           <div className="flex gap-4 justify-end">
+           <div className="relative group">
+      {/* Hover Text */}
+      <span className="hidden group-hover:block absolute bottom-12 -left-8 w-24 bg-gray-800 text-white px-2 py-1 rounded-md text-sm">
+        Edit Profile
+      </span>
+
+      <button 
+        onClick={() => router.push(`/editprofile`)}
+        className="text-white bg-primary font-semibold text-xl p-2 rounded-md group flex items-center gap-2">
+        
+        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth="1.5" stroke="currentColor" className="w-6 h-6">
+          <path strokeLinecap="round" strokeLinejoin="round" d="m16.862 4.487 1.687-1.688a1.875 1.875 0 1 1 2.652 2.652L10.582 16.07a4.5 4.5 0 0 1-1.897 1.13L6 18l.8-2.685a4.5 4.5 0 0 1 1.13-1.897l8.932-8.931Zm0 0L19.5 7.125M18 14v4.75A2.25 2.25 0 0 1 15.75 21H5.25A2.25 2.25 0 0 1 3 18.75V8.25A2.25 2.25 0 0 1 5.25 6H10" />
+        </svg>
+        
+      </button>
+    </div>
+    <div className="relative group">
+      <span className="hidden group-hover:block absolute bottom-12 -left-8 w-32 bg-gray-800 text-white px-2 py-1 rounded-md text-sm">
+        Upload Resume
+      </span>
+
+      
+      <button 
+           onClick={()=>router.push(`/ownprofile/resume`)}
+           className="text-white bg-primary font-semibold text-xl p-2 rounded-md group flex items-center gap-2"
+           ><svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth="1.5" stroke="currentColor" className="size-6">
+           <path strokeLinecap="round" strokeLinejoin="round" d="M19.5 14.25v-2.625a3.375 3.375 0 0 0-3.375-3.375h-1.5A1.125 1.125 0 0 1 13.5 7.125v-1.5a3.375 3.375 0 0 0-3.375-3.375H8.25m6.75 12-3-3m0 0-3 3m3-3v6m-1.5-15H5.625c-.621 0-1.125.504-1.125 1.125v17.25c0 .621.504 1.125 1.125 1.125h12.75c.621 0 1.125-.504 1.125-1.125V11.25a9 9 0 0 0-9-9Z" />
+         </svg>
+         </button>
+    </div>
+           </div>
+
+
+
               <div className="mt-2 flex flex-col justify-center md:justify-start">
                 {currentUser?.education?.length ? (
                   currentUser.education.map((institute, index) => (
@@ -181,6 +222,34 @@ export default function ViewProfile() {
         </div>
       </div>
 
+
+      {currentUser?.projects && currentUser.projects.length > 0 ? (
+        <div className="p-6 border-t">
+          <h3 className="text-lg font-semibold">Projects</h3>
+          <div className="mt-2">
+            {currentUser.projects.map((item, index) => (
+              <div key={index} className="mb-4">
+                <p className="font-bold">{item.title}</p>
+                <p className="text-gray-600">
+                  {item.description}
+                  
+                </p>
+                
+                <Link className="text-blue-500 underline" href={item.link ?? "/"} target="_blank" rel="noopener noreferrer">
+  Project Link
+</Link>
+
+              </div>
+            ))}
+          </div>
+        </div>
+      ) : (
+        <div className="p-6 border-t">
+          <h3 className="text-lg font-semibold">Project</h3>
+          <p>No Project available</p>
+        </div>
+      )}
+
       <div className="p-6 border-t">
         <h3 className="text-lg font-semibold">Skills</h3>
         <ul className="mt-2 list-disc list-inside">
@@ -205,14 +274,16 @@ export default function ViewProfile() {
                 key={connect?.connectionID?._id}
                 className="flex items-center space-x-3 p-3 border rounded-lg shadow-sm w-64 mb-4 sm:w-80 md:w-96"
               >
-                
+                <div onClick={()=>router.push(`/userdetails/${connect?.connectionID?._id}`)}>
                 <Image
-                 src={connect?.connectionID.profileImage}
-                 alt="profile"
-                 width={50}
-                 height={50}
-                
+                  className="w-12 h-12 rounded-full"
+                  src={connect?.connectionID?.profileImage}
+                  alt="Profile"
+                  width={100}
+                  height={100}
                 />
+                </div>
+               
                 <div>
                   <p className="font-semibold">
                     {connect?.connectionID?.firstName}
