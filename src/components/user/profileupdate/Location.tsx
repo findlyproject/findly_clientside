@@ -5,11 +5,14 @@ import { useAppDispatch, useAppSelector } from "@/lib/store/hooks";
 import {
   setLocation,
   setRemovejoblocation,
+  UserProfile,
 } from "@/lib/store/features/userSlice";
 
 function Location() {
   const dispatch = useAppDispatch();
-  const user = useAppSelector((state) => state.user.activeuser);
+  const user = useAppSelector(
+    (state) => state.user.activeuser as UserProfile | null
+  );
   const [newLocation, setNewLocation] = useState({
     country: "",
     countryName: "",
@@ -26,7 +29,9 @@ function Location() {
     ? City.getCitiesOfState(newLocation.country, newLocation.state)
     : [];
 
-  const handleChange = (e) => {
+  const handleChange = (
+    e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>
+  ) => {
     const { name, value } = e.target;
 
     if (name === "country") {
@@ -119,7 +124,6 @@ function Location() {
           ))}
         </select>
 
-        {/* Add Location Button */}
         <button
           onClick={handleAddLocation}
           className="bg-blue-500 text-white px-4 py-2 rounded-lg font-medium hover:bg-blue-600 transition duration-200 disabled:opacity-50 disabled:cursor-not-allowed mt-3"
@@ -130,27 +134,22 @@ function Location() {
           Add Location
         </button>
 
-        {/* Display Added Locations */}
-        
-          <div className="mt-4">
-            <h3 className="text-xl font-semibold">Added Locations</h3>
-            <ul className="mt-2">
-              {/* {user.location.map((loc, index) => ( */}
-                <li
-                  className="bg-gray-200 p-3 rounded-md mb-2 flex justify-between items-center"
-                >
-                  <div>
-                    <p className="font-semibold">
-                      {user.location.countryName} - {user.location.stateName} - {user.location.city}
-                    </p>
-                  </div>
-                </li>
-              {/* ))} */}
-            </ul>
-          </div>
+        <div className="mt-4">
+          <h3 className="text-xl font-semibold">Added Locations</h3>
+          <ul className="mt-2">
+            <li className="bg-gray-200 p-3 rounded-md mb-2 flex justify-between items-center">
+              <div>
+                <p className="font-semibold">
+                  {user?.location?.countryName} - {user?.location?.stateName} -{" "}
+                  {user?.location?.city}
+                </p>
+              </div>
+            </li>
+          </ul>
+        </div>
       </div>
     </div>
   );
 }
 
-export default Location;
+export default Location;

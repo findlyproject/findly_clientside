@@ -50,7 +50,15 @@ interface UserProfile {
   role: string;
   firstName: string;
   lastName: string;
-  location: string;
+
+  location:{
+    city:string
+    country:string,
+    state:string
+  }
+
+
+
   experience: Experience[];
   email: string;
   createdAt: string;
@@ -105,11 +113,6 @@ const DetailsUser = ({ id }: { id: string }) => {
     (state) => state.user.userdetails
   ) as UserProfile | null;
 
-  console.log("log user",user);
-  
-  // const userdetailes = user?.connecting.map(
-  //   (person) => person.connectionID?._id
-  // );
 
   useEffect(() => {
     const fetch = async () => {
@@ -169,7 +172,7 @@ const DetailsUser = ({ id }: { id: string }) => {
                 </span>
               </div>
               <p className="text-gray-900">
-                {user?.jobTitle?.map((title) => title)}
+                {user?.jobTitle[0]}
               </p>
               <p className="text-gray-900 text-sm">
                 {user?.location?.city}•{" "}
@@ -266,7 +269,11 @@ const DetailsUser = ({ id }: { id: string }) => {
                           <span className="text-black font-semibold">
                             Location:
                           </span>{" "}
-                          {user?.location}
+
+                          {user?.location?.country} {user?.location?.state}  {user?.location?.city}
+
+                          
+
                         </p>
                         <p className="text-gray-700">
                           <span className="text-black font-semibold">
@@ -395,6 +402,35 @@ const DetailsUser = ({ id }: { id: string }) => {
         </div>
       )}
 
+
+
+
+
+{user?.projects && user.projects.length > 0 ? (
+        <div className="p-6 border-t">
+          <h3 className="text-lg font-semibold">Projects</h3>
+          <div className="mt-2">
+            {user.projects.map((item, index) => (
+              <div key={index} className="mb-4">
+                <p className="font-bold">{item.title}</p>
+                <p className="text-gray-600">
+                  {item.description}
+                  
+                </p>
+                
+                <Link className="text-blue-500 underline" href={item.link ?? "/"} target="_blank" rel="noopener noreferrer">
+  Project Link
+</Link>
+
+              </div>
+            ))}
+          </div>
+        </div>
+      ) : (
+        <div className="p-6 border-t">
+          <h3 className="text-lg font-semibold">Project</h3>
+        </div>
+      )}
 
 {user?.projects && user.projects.length > 0 ? (
         <div className="p-6 border-t">
