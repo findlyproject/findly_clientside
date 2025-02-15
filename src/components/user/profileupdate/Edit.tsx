@@ -1,5 +1,5 @@
 "use client";
-import React, { useEffect } from 'react';
+import React from 'react';
 import Personaldetails from "./Personaldetails"
 import Skils from './Skils';
 import Education from './Education';
@@ -8,15 +8,13 @@ import Joblocation from './Joblocation';
 import Location from './Location';
 import Jobtitle from './Jobtitle';
 import api from '@/utils/api';
-import { useAppDispatch, useAppSelector } from '@/lib/store/hooks';
-import { setActive } from '@/lib/store/features/userSlice';
+import { useAppSelector } from '@/lib/store/hooks';
 import { useRouter } from 'next/navigation';
 
 function Edit() {
     const route = useRouter()
     const activeuser = useAppSelector((state)=>state.user.activeuser)
     console.log("activ user ",activeuser);
-    const dispatch = useAppDispatch()
   
       
     
@@ -33,25 +31,6 @@ const handilclik =async ()=>{
 }
 
 
-const getuserprfilr = async ()=>{
-    try {
-        const response = await api.get("/user/currentuserdetails")
-        console.log("response",response);
-        dispatch(setActive(response.data.currentUserDetails))
-    } catch (error) {
-        console.log("error",error);
-        
-    }
-    
-}
-
-useEffect(()=>{
-        console.log("activeuser")
-        
-    if(activeuser){
-        getuserprfilr()
-    }
-    },[])
 
   return (
         <div className="w-full h-auto flex justify-center py-4">
