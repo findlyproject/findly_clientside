@@ -7,6 +7,7 @@ import { useState, useEffect } from "react";
 import api from "@/utils/api";
 import { useRouter } from "next/navigation";
 import Link from "next/link";
+import { UserProfile } from "@/lib/store/features/userSlice";
 interface Connection {
   connectionID: {
     _id: string;
@@ -20,7 +21,7 @@ const connections: Connection[] = [];
 export default function ViewProfile() {
   const router = useRouter();
 
-  const currentUser = useAppSelector((state) => state.user.activeuser);
+  const currentUser = useAppSelector((state) => state.user.activeuser as UserProfile |null);
 
   console.log("kk", currentUser);
   console.log("lo", currentUser);
@@ -51,7 +52,7 @@ export default function ViewProfile() {
       <div className="max-w-4xl mx-auto bg-white shadow-lg rounded-lg overflow-hidden mt-5">
         <div className="relative h-36 bg-gray-300">
           <Image
-            className="object-cover"
+            className="object-cover w-full h-full"
             src={currentUser?.banner || ""}
             alt="Profile Banner"
             fill
@@ -59,15 +60,16 @@ export default function ViewProfile() {
         </div>
 
         <div className="p-6 relative  ">
-          <div className="w-24 h-24 rounded-full border-4 border-white absolute -top-12 left-6">
-            <Image
-              src={currentUser?.profileImage || ""}
-              alt="Landing Page Illustration"
-              width={100}
-              height={200}
-              className="object-cover rounded-md"
-            />
-          </div>
+        <div className="w-24 h-24 rounded-full border-4 border-white absolute -top-12 left-6 overflow-hidden">
+  <Image
+    src={currentUser?.profileImage || ""}
+    alt="Profile Image"
+    width={100}
+    height={100}
+    className="w-full h-full object-cover rounded-full"
+  />
+</div>
+
           <div className=" flex flex-col md:flex-row justify-between">
             <div className="mt-12 flex flex-col items-start">
               <div className="flex items-center justify-between ">

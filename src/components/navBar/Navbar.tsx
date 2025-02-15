@@ -11,7 +11,6 @@ import api from "@/utils/api";
 export const navigation = [
   { name: "Home", href: "/" },
   { name: "About", href: "/about" },
-  { name: "RateUs", href: "/rateus" },
   { name: "Contact", href: "/contactus" },
   { name: "Subscription", href: "/premium" },
 ];
@@ -30,6 +29,8 @@ export default function Navbar() {
   }
   const [searchQuery, setSearchQuery] = useState("");
   const [searchResults, setSearchResults] = useState<User[]>([]);
+
+  console.log("searchQuery",  searchQuery,searchResults)
   useEffect(() => {
     if (searchQuery.length > 0) {
       const fetchUsers = async () => {
@@ -37,7 +38,9 @@ export default function Navbar() {
           const response = await api.get(
             `/user/usersearch?firstName=${searchQuery}`
           );
-          setSearchResults(response.data);
+          console.log("response of search",response);
+          
+          setSearchResults(response.data.users);
         } catch (error) {
           console.error("Error fetching users:", error);
         }

@@ -58,7 +58,7 @@ const Users = () => {
                     <td className="p-5 text-sm text-gray-900">{user._id}</td>
                     <td className="p-5 text-sm text-gray-900">
                       <div className="flex items-center gap-3">
-                        <Image
+                        <img
                           src={
                             user.profileImage ||
                             "https://via.placeholder.com/40"
