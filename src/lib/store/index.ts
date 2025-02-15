@@ -24,7 +24,6 @@ const loginPersistConfig = { key: "login", storage };
 const ratingPersistConfig={key:"login",storage};
 const registerPersistConfig={key:"register",storage};
 const editPersistConfig={key:"edit",storage};
-
 const postPersistConfig={key:"post",storage}
 const adminPersistConfig={key:"admin",storage}
 
@@ -36,17 +35,17 @@ const persistedLoginReducer = persistReducer(loginPersistConfig, loginReducer);
 const persistedRatingReducer=persistReducer(ratingPersistConfig,ratingReducer)
 const persistedpostReducer=persistReducer(postPersistConfig,postReducer)
 const persistedadminReducer=persistReducer(adminPersistConfig,adminReducer)
-// Configure the store
+
 export const makeStore = () =>
   configureStore({
     reducer: {
       theme: themeReducer,
-      register: persistedRegisterReducer,//persisted
+      register: persistedRegisterReducer,
       payment: paymentReducer,
-      login: persistedLoginReducer,  // Persist login state
-      user: persistedUserReducer, //persist
-      rating:persistedRatingReducer ,  // Persist rating state
-      post:persistedpostReducer  , // Persist rating state
+      login: persistedLoginReducer, 
+      user: persistedUserReducer, 
+      rating:persistedRatingReducer , 
+      post:persistedpostReducer  , 
       admin:persistedadminReducer
       
        

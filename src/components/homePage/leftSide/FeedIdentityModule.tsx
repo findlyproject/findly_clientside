@@ -26,7 +26,7 @@ export const FeedIdentityModule = () => {
   if (!activeuser) {
     return <section className="rounded-lg border border-gray-300 min-h-[240px] bg-white flex items-center justify-center">Loading...</section>
   }
-
+  
   return (
     <section className="rounded-lg border border-gray-300 min-h-[240px] bg-white">
       <div>
