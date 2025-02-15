@@ -40,8 +40,6 @@ export const registerUser = createAsyncThunk(
     const response = await handleAsync<AxiosResponse<RegisterResponse>>(() =>
       api.post("/user/registration", state)
     );
-    console.log("responseresponsev", response);
-
     if (!response) {
       return rejectWithValue("registration falied.please try again.");
     }
@@ -51,7 +49,6 @@ export const registerUser = createAsyncThunk(
 );
 
 
-//login
 interface LoginResponse {
   logeduser: UserProfile;
 }
@@ -95,14 +92,14 @@ export const logoutUser = createAsyncThunk(
     const response = await handleAsync<AxiosResponse<LoginResponse>>(() =>
       api.post("/user/logout")
     );
-
+    
     if (!response) {
       return rejectWithValue("logout failed");
     }
-
+    dispatch(SetLogout());
     const status: number = response.status;
     if (status >= 200 && status < 300) {
-      dispatch(SetLogout());
+     
       return null;
     } else {
       throw new Error("Logout failed");

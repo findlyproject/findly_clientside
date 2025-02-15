@@ -26,8 +26,6 @@ export default function ViewProfile() {
 
   const currentUser = useAppSelector((state) => state.user.activeuser as UserProfile |null);
 
-  console.log("kk", currentUser);
-  console.log("lo", currentUser);
   const aboutText = currentUser?.about ?? "Tell me about yourself...";
 
   const [isExpanded, setIsExpanded] = useState(false);
@@ -41,14 +39,14 @@ export default function ViewProfile() {
   useEffect(() => {
     const fetchConnections = async () => {
       const response = await api.get(`/connecting/getconnection`);
-      console.log("all connections of user response", response);
+
 
       setConnections(response.data.connections);
     };
     fetchConnections();
   }, []);
 
-  console.log("dd", currentUser?.role === "premium");
+
 
   return (
     <div className="max-w-4xl mx-auto bg-white shadow-lg rounded-lg overflow-hidden mt-5">

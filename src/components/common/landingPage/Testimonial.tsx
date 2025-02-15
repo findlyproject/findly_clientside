@@ -9,6 +9,7 @@ import { useState, useEffect } from "react";
 import api from "@/utils/api";
 import { useAppDispatch, useAppSelector } from "@/lib/store/hooks";
 import { setAllRatings } from "@/lib/store/features/ratingSlice";
+import Image from "next/image"
 
 const Testimonials = () => {
   const dispatch = useAppDispatch();
@@ -38,6 +39,7 @@ const Testimonials = () => {
 
   return (
     <section className="py-24">
+      
       <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
         <div className="mb-16 text-center">
           <span className="text-sm text-gray-500 font-medium block mb-2">
@@ -97,11 +99,12 @@ const Testimonials = () => {
                   )}
                 </p>
 
-                <div className="flex items-center gap-5 border-t border-gray-200 pt-5">
-                  <img
-                    className="rounded-full h-10 w-10 object-cover"
-                    src={rating.userId?.profileImage}
-                    alt={rating.userId?.firstName}
+                <div className="flex items-center gap-5 border-t border-gray-200 pt-5">  
+                  <Image 
+                  src={rating.userId?.profileImage||"/default-profile.png"}
+                  width={50}
+                  height={50}
+                  alt="profile image"
                   />
                   <div>
                     <h5 className="text-gray-900 font-medium">
