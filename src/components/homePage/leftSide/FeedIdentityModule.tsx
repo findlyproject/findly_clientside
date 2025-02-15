@@ -9,6 +9,8 @@ import Image from "next/image";
 
 export const FeedIdentityModule = () => {
   const[connections,setConnections]=useState([])
+  console.log("connections",connections);
+  
   const router = useRouter();
   const { activeuser } = useAppSelector((state) => state.login);
   
@@ -26,11 +28,7 @@ export const FeedIdentityModule = () => {
   if (!activeuser) {
     return <section className="rounded-lg border border-gray-300 min-h-[240px] bg-white flex items-center justify-center">Loading...</section>
   }
-<<<<<<< HEAD
-
-=======
   
->>>>>>> 724f9bae77726d267e8ec7f32f00ead0696c9a55
   return (
     <section className="rounded-lg border border-gray-300 min-h-[240px] bg-white">
       <div>
