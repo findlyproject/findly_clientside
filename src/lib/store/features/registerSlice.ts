@@ -4,15 +4,29 @@ interface EducationType {
   startYear: string;  
   endYear: string;  
 }  
+ export interface JobLocationType {
+  country: string;
+  countryName: string;
+  state: string;
+  stateName: string;
+  city: string;
+}
+
 interface RegisterType {
     email: string
     password:string
     firstName:string
-  lastName:string
-  location:string
+    lastName:string
+    location:{
+    country: string;
+    countryName: string;
+    state: string;
+    stateName: string;
+    city: string;
+  }
   education:EducationType[]
   jobTitles:string[],
-  jobLocations:string[]
+  jobLocations:JobLocationType[]
 }
 
 const initialState: RegisterType = {
@@ -20,7 +34,13 @@ const initialState: RegisterType = {
   password:"",
   firstName:"",
   lastName:"",
-  location:"",
+  location:{
+    country: "",
+    countryName: "",
+    state: "",
+    stateName: "",
+    city: ""
+  },
   education:[],
   
   jobTitles:[],
@@ -49,14 +69,14 @@ state.firstName=action.payload
     },
  
     setEducation: (state, action: PayloadAction<EducationType[]>) => {  
-      state.education = action.payload; // ✅ Replace the entire array instead of pushing
+      state.education = action.payload; 
     },
     
 
     setjobTitles:(state,action)=>{
       state.jobTitles=action.payload
     },
-    setjobLocations:(state,action)=>{
+    setjobLocations:(state,action:PayloadAction<JobLocationType[]>)=>{
       state.jobLocations=action.payload
     },
     
