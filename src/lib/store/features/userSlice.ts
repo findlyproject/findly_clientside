@@ -30,7 +30,11 @@ export interface UserProfile {
   password: string;
   phoneNumber?: string;
   dateOfBirth?: Date;
-  location?: Location;
+
+  location?: LocationType;
+
+ 
+
   profileImage?: string;
   banner?: string;
   skills?: string[];

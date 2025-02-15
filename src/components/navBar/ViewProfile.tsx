@@ -7,7 +7,10 @@ import { useState, useEffect } from "react";
 import api from "@/utils/api";
 import { useRouter } from "next/navigation";
 import Link from "next/link";
+
 import { UserProfile } from "@/lib/store/features/userSlice";
+
+
 interface Connection {
   connectionID: {
     _id: string;
