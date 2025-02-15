@@ -2,18 +2,37 @@
 import { useState, useEffect } from "react";
 import Link from "next/link";
 import AfterLogin from "./Afterlogin";
-import Beforlogin from "./Navbiforlogin";
+import Beforlogin from "./NavBeforeLogin";
 import Image from "next/image";
 import { useRouter } from "next/navigation";
 import { useAppSelector } from "@/lib/store/hooks";
 import logo from "../../../public/assets/findlylogo.png";
 import api from "@/utils/api";
+
 export const navigation = [
+  { name: "Home", href: "/" },
+  { name: "About", href: "/about" },
+  { name: "Contact", href: "/contactus" },
+
+];
+
+export const dropDownAfterlogin = [
+  { name: "Subscription", href: "/premium" },
+];
+
+export const dropDownAfterloginSmallerScreen = [
   { name: "Home", href: "/" },
   { name: "About", href: "/about" },
   { name: "Contact", href: "/contactus" },
   { name: "Subscription", href: "/premium" },
 ];
+
+export const dropDownBeforLogin = [
+  { name: "Home", href: "/" },
+  { name: "About", href: "/about" },
+  { name: "Contact", href: "/contactus" },
+];
+
 export default function Navbar() {
  
   const router=useRouter()

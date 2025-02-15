@@ -133,10 +133,7 @@ const loginSlice = createSlice({
     },
     SetLogout: (state) => {
       state.activeuser = null;
-  state.userdetails = null;
-  state.connectionRequest = null;
-  state.connections = [];
-  state.googlestate = true;
+      state.googlestate = true
     },
     setEducation: (state, action: PayloadAction<Education[]>) => {
       state.activeuser?.education.push(action.payload);
@@ -197,12 +194,10 @@ const loginSlice = createSlice({
     },
     setResume: (state, action: PayloadAction<ResumePayload>) => {
       if (state.activeuser) {
-        console.log("action.payload.resumePDF",action.payload.resumePDF);
-        console.log("action.payload.resumeVideo",action.payload.resumeVideo);
+
         state.activeuser.resumePDF = action.payload.resumePDF;
         state.activeuser.resumeVideo = action.payload.resumeVideo;
-        console.log("state.activeuser.resumePDF",state.activeuser.resumePDF);
-        console.log("state.activeuser.resumeVideo",state.activeuser.resumeVideo);
+  
         
       }
     },

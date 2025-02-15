@@ -8,6 +8,10 @@ import {
   UserProfile,
 } from "@/lib/store/features/userSlice";
 import api from "@/utils/api";
+interface Images {
+    profileImage: File | string | undefined;
+    banner: File | string | undefined;  
+}
 
 function Personaldetails() {
   const user = useAppSelector((state) => state.user.activeuser as UserProfile);
@@ -22,7 +26,7 @@ function Personaldetails() {
     about: user.about,
   });
 
-  const [image, setImage] = useState({
+  const [image, setImage] = useState<Images>({
     profileImage: user.profileImage,
     banner: user.banner,
   });
@@ -86,8 +90,8 @@ function Personaldetails() {
       };
 
       const [profileImageUrl, banner] = await Promise.all([
-        uploadImage(image.profileImage),
-        uploadImage(image.banner),
+        uploadImage(image.profileImage as File),
+        uploadImage(image.banner as File),
       ]);
 
       console.log("Profile Image URL:", profileImageUrl);
@@ -103,7 +107,7 @@ function Personaldetails() {
   };
 
   const handilsubmit = () => {
-    handleImageeChange(image);
+    handleImageeChange();
   };
   return (
     <div>
@@ -130,7 +134,7 @@ function Personaldetails() {
           id="bannerUpload"
           onChange={handilImage}
         />
-        <button onClick={() => document.getElementById("bannerUpload").click()}>
+        <button onClick={() => document.getElementById("bannerUpload")?.click()}>
           <FaRegEdit className="absolute top-5 right-5 text-white bg-gray-800 p-2 rounded-full cursor-pointer text-4xl" />
         </button>
 
@@ -158,7 +162,7 @@ function Personaldetails() {
             onChange={handilImage}
           />
           <button
-            onClick={() => document.getElementById("profileUpload").click()}
+            onClick={() => document.getElementById("profileUpload")?.click()}
           >
             <FaRegEdit className="absolute top-20 left-24 text-white bg-gray-800 p-2 rounded-full cursor-pointer text-3xl" />
           </button>
@@ -223,7 +227,7 @@ function Personaldetails() {
             <input
               type="date"
               name="dateOfBirth"
-              value={input.dateOfBirth}
+              value={input.dateOfBirth ? input.dateOfBirth.toISOString().split('T')[0] : ''}
               onChange={handilchange}
               className="p-2 border rounded-md"
             />

@@ -63,16 +63,13 @@ export const subscription=createAsyncThunk(
     "verification",
     async(sessionId:string,{dispatch,rejectWithValue})=>{
         const response=await handleAsync<AxiosResponse>(()=>api.post(`/payment/verifySubscription/${sessionId}`))
-        console.log("responseeeeeeeeeeee",response)
+       
 
         if(!response){
             rejectWithValue("verification failed")
         }
         const  features=response?.data.subscription
         const  account=response?.data.accountInfo
-
-        console.log("features",features)
-        console.log("account",account)
      dispatch(setSubscription(features))
      dispatch(setActive(account))
     }

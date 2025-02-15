@@ -8,14 +8,13 @@ import Joblocation from './Joblocation';
 import Location from './Location';
 import Jobtitle from './Jobtitle';
 import api from '@/utils/api';
-import { useAppDispatch, useAppSelector } from '@/lib/store/hooks';
+import { useAppSelector } from '@/lib/store/hooks';
 import { useRouter } from 'next/navigation';
 
 function Edit() {
     const route = useRouter()
     const activeuser = useAppSelector((state)=>state.user.activeuser)
     console.log("activ user ",activeuser);
-    const dispatch = useAppDispatch()
   
     
 const handilclik =async ()=>{
