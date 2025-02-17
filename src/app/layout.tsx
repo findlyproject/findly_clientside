@@ -31,9 +31,7 @@ export default async function RootLayout({
   const session = await getServerSession();
   return (
     <html lang="en">
-      <body
-        style={{ background: "red", width: "100%", height: "100%" }}
-      >
+      <body>
         <StoreProvider>
           <SessionProvider session={session}>{children}</SessionProvider>
           <ToastContainer
