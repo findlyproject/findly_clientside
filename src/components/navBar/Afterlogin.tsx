@@ -15,6 +15,7 @@ import { dropDownAfterlogin, dropDownAfterloginSmallerScreen } from "./Navbar";
 function AfterLogin() {
   const router = useRouter()
   const { activeuser } = useAppSelector((state) => state.login);
+  const activeCompany=useAppSelector((state)=>state.companyLogin.activeCompany)
 
   const dispatch = useAppDispatch()
 
@@ -35,7 +36,7 @@ function AfterLogin() {
       <Menu as="div" className="relative ml-3 z-40 w-20 hidden md:block">
         <Menu.Button className="flex text-sm rounded-full focus:outline-none w-auto">
           <Image 
-            src={activeuser?.profileImage|| "/default-avatar.png"}
+            src={activeuser?.profileImage||activeCompany?.logo|| "/default-avatar.png"}
             alt="User profile"
             width={200}
             height={200}

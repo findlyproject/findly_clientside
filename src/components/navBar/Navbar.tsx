@@ -38,6 +38,8 @@ export const dropDownBeforLogin = [
 ];
 
 export default function Navbar() {
+
+ const activeCompany= useAppSelector((state)=>state.companyLogin.activeCompany)
   const router = useRouter()
   const [issearch,setIssearch]=useState(false)
   const { activeuser } = useAppSelector((state) => state.login);
@@ -221,7 +223,7 @@ export default function Navbar() {
           >
           <IoSearch  />
           </button>
-        {activeuser ? <AfterLogin /> : <Beforlogin />}
+        {activeuser||activeCompany ? <AfterLogin /> : <Beforlogin />}
 
         </div>
           ):(
@@ -234,4 +236,3 @@ export default function Navbar() {
     
   );
 }
-
