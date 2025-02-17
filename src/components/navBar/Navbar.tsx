@@ -20,6 +20,7 @@ export default function Navbar() {
   const dispatch=useAppDispatch()
   
   const { activeuser } = useAppSelector((state) => state.login);
+   const activeCompany=useAppSelector((state)=>state.companyLogin.activeCompany)
   interface User {
     _id: string;
     firstName: string;
@@ -123,7 +124,7 @@ export default function Navbar() {
           </div>
 
           <div className="flex items-center">
-            {activeuser ? <AfterLogin /> : <Beforlogin />}
+            {activeuser||activeCompany ? <AfterLogin /> : <Beforlogin />}
           </div>
         </div>
       </div>

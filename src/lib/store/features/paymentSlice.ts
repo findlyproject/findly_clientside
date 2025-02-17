@@ -11,6 +11,7 @@ interface SubscriptionData {
   endDate: string;
   userId: string;
   sessionId: string;
+  companyId:string
 }
 
 interface PaymentState {
