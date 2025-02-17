@@ -1,4 +1,4 @@
-import { setEducation, setRemoveEducation } from '@/lib/store/features/userSlice';
+import {  Ieducation, setEducation, setRemoveEducation } from '@/lib/store/features/userSlice';
 import { useAppDispatch, useAppSelector } from '@/lib/store/hooks';
 import React, { useState } from 'react'
 import { RxCross2 } from 'react-icons/rx'
@@ -7,7 +7,7 @@ function Education() {
   const user = useAppSelector((state)=>state.user.activeuser)
   const dispatch= useAppDispatch()
 
-      const [newEducation, setNewEducation] = useState({
+      const [newEducation, setNewEducation] = useState<Ieducation>({
         qualification: "",
         startYear: "",
         endYear: "",
@@ -15,18 +15,19 @@ function Education() {
         Subject:"",
       });
     
-      const handleChange = (e) => {
+      const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
         setNewEducation({ ...newEducation, [e.target.name]: e.target.value });
       };
     
       const handleAddEducation = () => {
         if (newEducation.qualification && newEducation.startYear && newEducation.endYear && newEducation.college) {
           dispatch(setEducation(newEducation))
-          setNewEducation({ qualification: "", startYear: "", endYear: "", college: "" ,Subject:""});
+          setNewEducation({ qualification: "", startYear: "", endYear: "", college: "", Subject: ""});
+
         }
       };
     
-      const handleRemoveEducation = (index) => {
+      const handleRemoveEducation = (index:number) => {
         dispatch(setRemoveEducation(index))
       };
     
@@ -98,7 +99,7 @@ function Education() {
             </button>
       
             {/* Display Added Education */}
-            {user?.education && user.education.length > 0 && (
+            {(user?.education?.length ?? 0) > 0 && (
               <div className="mt-4">
                 <h3 className="text-xl font-semibold">Added Education</h3>
                 <ul className="mt-2">

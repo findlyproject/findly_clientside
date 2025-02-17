@@ -7,7 +7,7 @@ import { useAppDispatch } from "@/lib/store/hooks";
 import { fetchAllComments } from "@/lib/store/features/actions/commentActions";
 
 const HomePage = () => {
-  const dispatch = useAppDispatch(); 
+  const dispatch = useAppDispatch(); // ✅ Define dispatch
 
   useEffect(() => {
     dispatch(fetchAllPosts());

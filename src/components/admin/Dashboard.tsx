@@ -1,6 +1,7 @@
 "use client"
 import React, { useState, useEffect } from 'react';
 import { Chart } from 'primereact/chart';
+import { useAppSelector } from '@/lib/store/hooks';
 const Dashboard: React.FC = () => {
   const [chartData, setChartData] = useState({});
   const [chartOptions, setChartOptions] = useState({});
@@ -62,6 +63,9 @@ const Dashboard: React.FC = () => {
     setChartData(data);
     setChartOptions(options);
 }, []);
+const admin = useAppSelector((state) => state.admin);
+console.log("admin ",admin);
+
   return (
     <div>
     <div className="mt-12">
