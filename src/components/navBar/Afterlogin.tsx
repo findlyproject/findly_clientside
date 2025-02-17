@@ -107,7 +107,7 @@ function AfterLogin() {
 
       {/* ///////////////// smallScreen//////////// */}
       <div className="md:hidden">
-      <Menu as="div" className="relative ml-3 z-40 w-20">
+      <Menu as="div" className="relative mx-3 z-40 w-10 mr-5">
         <Menu.Button className="flex text-sm rounded-full focus:outline-none w-auto">
           <Image 
             src={activeuser?.profileImage|| "/default-avatar.png"}
@@ -125,7 +125,7 @@ function AfterLogin() {
           leaveFrom="transform opacity-100 scale-100"
           leaveTo="transform opacity-0 scale-95"
         >
-          <Menu.Items className="absolute right-0 mt-2 w-48 bg-white rounded-md shadow-lg py-1 ring-1 ring-black/5">
+          <Menu.Items className="absolute right-0 mt-2 bg-white rounded-md shadow-lg py-1 ring-1 ring-black/5">
             <Menu.Item>
               {({ active }) => (
                 <Link

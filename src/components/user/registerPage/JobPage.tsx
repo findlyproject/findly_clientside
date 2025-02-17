@@ -1,32 +1,73 @@
 'use client'
 
-import React, { useEffect, useState } from "react";
+import React, {  useState } from "react";
 import { useRouter } from "next/navigation";
 import { useAppDispatch, useAppSelector } from "@/lib/store/hooks";
 import { setjobLocations, setjobTitles } from "@/lib/store/features/registerSlice";
-import api from "@/utils/api";
-import { setActive } from "@/lib/store/features/userSlice";
 import { registerUser } from "@/lib/store/features/actions/userActions";
+import { toast } from "react-toastify";
+import { JobLocationType } from "@/lib/store/features/registerSlice";
+import { Country, State, City } from "country-state-city";
 export default function JobPage() {
   const formData=useAppSelector((state)=>state.register)
   console.log("formData",formData);
   
   const dispatch=useAppDispatch()
   const [JobTitles, setJobTitles] = useState<string[]>([]);
-  const [JobLocations, setJobLocations] = useState<string[]>([]);
+  const [inputValue, setInputValue] = useState("");
+
+  
+  const [JobLocations, setJobLocations] = useState<JobLocationType[]>([]);
+  
+  
+  
+  const [newLocation, setNewLocation] = useState({
+          country: "",
+          countryName: "",
+          state: "",
+          stateName: "",
+          city: ""
+      });
+
+      const countries = Country.getAllCountries();
+      const states = newLocation.country ? State.getStatesOfCountry(newLocation.country) : [];
+      const cities = newLocation.state ? City.getCitiesOfState(newLocation.country, newLocation.state) : [];
+
+      const handleChange = (e:React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
+              const { name, value } = e.target;
+          
+              if (name === "country") {
+                const selectedCountry = countries.find((c) => c.isoCode === value);
+                setNewLocation({
+                  country: selectedCountry?.isoCode || "",
+                  countryName: selectedCountry?.name || "",
+                  state: "",
+                  stateName: "",
+                  city: "",
+                });
+              } else if (name === "state") {
+                const selectedState = states.find((s) => s.isoCode === value);
+                setNewLocation({
+                  ...newLocation,
+                  state: selectedState?.isoCode || "",
+                  stateName: selectedState?.name || "",
+                  city: "",
+                });
+              } else if (name === "city") {
+                setNewLocation({ ...newLocation, city: value });
+              }
+            };
+            
   const[titlesError,settitlesError]=useState("")
   const[joblocationError,setjoblocationError]=useState("")
-  console.log("titlesError",titlesError);
   
     const router = useRouter();
      
 
-      useEffect(() => {
-        dispatch(setjobLocations(JobLocations));
-        dispatch(setjobTitles(JobTitles));
-      }, [dispatch, JobTitles, JobLocations]); 
+     
       
 
+      
 const validateForm=()=>{
   let isValid=true
   if(JobTitles.length===0){
@@ -52,23 +93,47 @@ const handleSubmit = async (e: React.FormEvent) => {
         jobTitle: JobTitles,
         jobLocation: JobLocations,
       })
+      
+    
     );
+
+
+
+
 console.log("resultAction",resultAction);
 
+
+
     if (registerUser.fulfilled.match(resultAction)) {
-      // const user = resultAction.payload;
-      // if (user) {
-      //   dispatch(setActive(user)); // ✅ Explicitly setting active user again (if needed)
-      // }
       router.push("/home");
-      alert("Registration Successful!");
+      toast.success("Registration Successful!");
     }
   }
 };
 
 
       
-      
+const handleKeyDown = (e: React.KeyboardEvent<HTMLInputElement>) => {
+  if (e.key === "Enter" && inputValue.trim()) {
+    e.preventDefault();
+    setJobTitles([...JobTitles, inputValue.trim()]);
+    setInputValue("");
+  }
+};
+
+const removeTitle = (index: number) => {
+  setJobTitles(JobTitles.filter((_, i) => i !== index));
+};
+
+const handleAddLocation = () => {
+  if (newLocation.country && newLocation.state && newLocation.city) {
+      const updatedLocations = [...JobLocations, newLocation]; 
+      setJobLocations(updatedLocations); 
+      dispatch(setjobLocations(updatedLocations));
+      dispatch(setjobTitles(JobTitles));
+      setNewLocation({ country: "", countryName: "", state: "", stateName: "", city: "" });
+  }
+};
 
   return (
     <div className="flex justify-center items-center min-h-screen  px-4">
@@ -82,13 +147,31 @@ console.log("resultAction",resultAction);
           <div className="flex flex-col w-1/2">
             <label className="text-gray-700 font-medium mb-1">Job Title</label>
             <input
-              type="text"
-              placeholder="Ex.Sales Manager"
-              value={JobTitles}
-              onFocus={()=>settitlesError("")}
-              onChange={(e)=>setJobTitles(e.target.value.split(","))}
-              className="px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-primary"
-            />
+        type="text"
+        placeholder="Ex. Sales Manager"
+        value={inputValue}
+        onChange={(e) => setInputValue(e.target.value)}
+        onKeyDown={handleKeyDown} // Capture "Enter" key
+        className="px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-primary w-full"
+      />
+
+      {/* Display entered job titles */}
+      <div className="flex flex-wrap gap-2 mt-2">
+        {JobTitles.map((title, index) => (
+          <div
+            key={index}
+            className="flex items-center bg-gray-200 text-gray-800 px-3 py-1 rounded-full"
+          >
+            {title}
+            <button
+              onClick={() => removeTitle(index)}
+              className="ml-2 text-red-500 hover:text-red-700"
+            >
+              ✕
+            </button>
+          </div>
+        ))}
+      </div>
             {titlesError && (
               <span className="text-red-500">{titlesError}</span>
             )}
@@ -98,14 +181,53 @@ console.log("resultAction",resultAction);
             <label className="text-gray-700 font-medium mb-1">
               Job Locations
             </label>
-            <input
-              type="text"
-              placeholder="Location"
-              value={JobLocations}
-              onFocus={()=>setjoblocationError("")}
-              onChange={(e)=>setJobLocations(e.target.value.split(","))}
-              className="px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-primary"
-            />
+           {/* Country Dropdown */}
+           <select
+                    name="country"
+                    className="border p-3 w-full rounded-lg mb-3 focus:outline-none focus:ring-2 focus:ring-blue-400"
+                    value={newLocation.country}
+                    onChange={handleChange}
+                >
+                    <option value="">Select Country</option>
+                    {countries.map((country) => (
+                        <option key={country.isoCode} value={country.isoCode}>{country.name}</option>
+                    ))}
+                </select>
+
+                {/* State Dropdown */}
+                <select
+                    name="state"
+                    className="border p-3 w-full rounded-lg mb-3 focus:outline-none focus:ring-2 focus:ring-blue-400"
+                    value={newLocation.state}
+                    onChange={handleChange}
+                    disabled={!newLocation.country}
+                >
+                    <option value="">Select State</option>
+                    {states.map((state) => (
+                        <option key={state.isoCode} value={state.isoCode}>{state.name}</option>
+                    ))}
+                </select>
+
+                {/* City Dropdown */}
+                <select
+                    name="city"
+                    className="border p-3 w-full rounded-lg mb-3 focus:outline-none focus:ring-2 focus:ring-blue-400"
+                    value={newLocation.city}
+                    onChange={handleChange}
+                    disabled={!newLocation.state}
+                >
+                    <option value="">Select City</option>
+                    {cities.map((city) => (
+                        <option key={city.name} value={city.name}>{city.name}</option>
+                    ))}
+                </select>
+                <button
+                    onClick={handleAddLocation}
+                    className="bg-blue-500 text-white px-4 py-2 rounded-lg font-medium hover:bg-blue-600 transition duration-200 disabled:opacity-50 disabled:cursor-not-allowed mt-3"
+                    disabled={!newLocation.country || !newLocation.state || !newLocation.city}
+                >
+                    Add Location
+                </button>
             {joblocationError && (
               <span className="text-red-500">{joblocationError}</span>
             )}

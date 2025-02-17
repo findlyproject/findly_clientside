@@ -6,17 +6,17 @@ import { useRouter } from "next/navigation";
 import jobImage from "../../../../public/job.png";
 import register4 from "../../../../public/assets/register4.jpg"
 import register3 from "../../../../public/assets/register3.jpg"
+import landingTop from "../../../../public/assets/register3.jpg"
 import { FaSearch, FaMapMarkerAlt } from "react-icons/fa";
 import { FaUserPlus, FaUpload, FaCheckCircle } from "react-icons/fa";
 import goup from "../../../../public/landingPage-group-discussion.png"
-import landingTop from "../../../../public/landingpage-group.jpg"
+
 import Testimonials from "./Testimonial";
-import { useAppSelector } from "@/lib/store/hooks";
+
 
 function LandingPage() {
-  const { activeuser } = useAppSelector((state) => state.login);
-  const toggleTheme= useAppSelector((state)=>state.theme.dark)
-  console.log("theem",toggleTheme);
+  
+
   const router = useRouter()
   const steps = [
     { title: "Create account", desc: "Aliquam facilisis egestas sapien.", icon: <FaUserPlus /> },
@@ -24,10 +24,10 @@ function LandingPage() {
     { title: "Find suitable job", desc: "Phasellus quis eleifend ex.", icon: <FaSearch /> },
     { title: "Apply job", desc: "Nam sodales purus.", icon: <FaCheckCircle /> },
   ];
-  console.log(activeuser)
+  
 
   return (
-    <div className={toggleTheme? "bg-gray-800":"w-full h-full"}>
+    <div className="w-full h-full">
       <div className="flex flex-col md:flex-row items-center justify-center   w-full  pt-20 ">
 
 

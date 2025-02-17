@@ -1,10 +1,10 @@
-import LoginPage from '@/components/admin/LoginPage'
+import ReportedPosts from '@/components/admin/Reports'
 import React from 'react'
 
 function page() {
   return (
     <div>
-        <LoginPage/>
+        <ReportedPosts/>
     </div>
   )
 }

@@ -1,6 +1,10 @@
+
+
+
+
 import { createAsyncThunk } from "@reduxjs/toolkit";
 import api from "@/utils/api";
-import { setActive, SetLogout, UserProfile } from "../userSlice";
+import { setActive, setConnectionRequest, SetLogout, UserProfile } from "../userSlice";
 import handleAsync from "@/utils/handleAsync";
 import { AxiosResponse } from "axios";
 import {setAllRatings,Rating} from '../ratingSlice'
@@ -18,18 +22,24 @@ export const registerUser = createAsyncThunk(
       password: string;
       firstName: string;
       lastName: string;
-      location: string;
+      location:{country: string,
+        countryName: string,
+        state: string,
+        stateName: string,
+        city: string};
       education: { college: string; startYear: string; endYear: string }[];
       jobTitle: string[];
-      jobLocation: string[];
+      jobLocation:{country: string,
+        countryName: string,
+        state: string,
+        stateName: string,
+        city: string}[]
     },
     { dispatch, rejectWithValue }
   ) => {
     const response = await handleAsync<AxiosResponse<RegisterResponse>>(() =>
       api.post("/user/registration", state)
     );
-    console.log("responseresponsev", response);
-
     if (!response) {
       return rejectWithValue("registration falied.please try again.");
     }
@@ -39,7 +49,6 @@ export const registerUser = createAsyncThunk(
 );
 
 
-//login
 interface LoginResponse {
   logeduser: UserProfile;
 }
@@ -83,14 +92,14 @@ export const logoutUser = createAsyncThunk(
     const response = await handleAsync<AxiosResponse<LoginResponse>>(() =>
       api.post("/user/logout")
     );
-
+    
     if (!response) {
       return rejectWithValue("logout failed");
     }
-
+    dispatch(SetLogout());
     const status: number = response.status;
     if (status >= 200 && status < 300) {
-      dispatch(SetLogout());
+     
       return null;
     } else {
       throw new Error("Logout failed");
@@ -123,10 +132,35 @@ export const RateFindly = createAsyncThunk(
         return rejectWithValue("Rating failed. Please try again.");
       }
 
-      dispatch(setAllRatings([response.data.newRating])); // Wrap in array
+      dispatch(setAllRatings([response.data.newRating]));
       return response.data.newRating;
     } catch (error) {
       return rejectWithValue("An error occurred while submitting the rating.");
     }
+  }
+);
+
+
+
+//request to connect
+interface ConnectRequestResponse {
+  finduser: UserProfile;
+}
+
+export const connectionRequest = createAsyncThunk(
+  "auth/connectionRequest",
+  async (
+    { id, connecting }: { id: string; connecting: { connectionID: string; status: boolean }[] },
+    { dispatch, rejectWithValue }
+  ) => {
+    const response = await handleAsync<AxiosResponse<ConnectRequestResponse>>(() =>
+      api.post(`/connecting/conectting/${id}`, { connecting })
+    );
+    if (!response) {
+      return rejectWithValue("Login failed. Please try again.");
+    }
+
+    dispatch(setConnectionRequest(response?.data?.finduser as UserProfile));
+    return response?.data?.finduser;
   }
 );

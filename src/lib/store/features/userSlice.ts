@@ -1,10 +1,28 @@
-import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 
-export interface Education {
+import { createSlice, PayloadAction } from "@reduxjs/toolkit";
+import { Url } from "url";
+
+export interface Ieducation {
   qualification: string;
   startYear: string;
   endYear: string;
-  location: string;
+  college: string;
+  Subject: string; 
+}
+export interface IlocationType {
+  country: string;
+  countryName: string;
+  state: string;
+  stateName: string;
+  city: string;
+}
+
+export interface JobLocationType {
+  country: string;
+  countryName: string;
+  state: string;
+  stateName: string;
+  city: string;
 }
 
 export interface UserProfile {
@@ -14,30 +32,53 @@ export interface UserProfile {
   password: string;
   phoneNumber?: string;
   dateOfBirth?: Date;
-  location?: string;
+
+  location?: IlocationType;
+
+ 
+
   profileImage?: string;
   banner?: string;
   skills?: string[];
   jobTitle?: string[];
-  jobLocation?: string[];
+  jobLocation?: JobLocationType[];
   education: {
+    Subject: string;
     qualification: string;
-    startYear: string;
-    endYear: string;
+    startYear:string;
+    endYear:string;
     location: string;
     college:string
+  }[]
+
+  experience: 
+  {
+    jobRole:string;
+    companyName:string,
+    startYear:string  
+    endYear:string       
   }[]
   projects?: {
     title: string;
     description: string;
-    link?: string;
+    link?: string | Url | undefined;
   }[];
-  connecting: string[];
+  connecting: {
+    connectionID:string;
+    status: boolean;
+    createdAt:Date}[]
   about?: string;
-  resume?: {
+  resumePDF?: {
     fileUrl: string;
-    type: "PDF" | "Video";
-    uploadedAt?: Date;
+    fileName: string;
+    uploadedAt: Date | null;
+    isDeleted: boolean;
+  }[];
+  resumeVideo?: {
+    fileUrl: string;
+    fileName: string;
+    uploadedAt: Date | null;
+    isDeleted: boolean;
   }[];
   role: "user" | "premium";
   subscriptionEndDate: Date | null;
@@ -50,22 +91,39 @@ export interface UserProfile {
 interface LoginState {
   activeuser: UserProfile | null;
   googlestate: boolean;
+  userdetails:UserProfile|null
+  connectionRequest:UserProfile|null
+  connections:UserProfile[]
 }
 
 const initialState: LoginState = {
   activeuser: null,
-  googlestate: true
+  googlestate: true,
+  userdetails:null,
+  connectionRequest:null,
+  connections:[]
 };
 
-interface EditState {
-  firstName?: string;
-  lastName?: string;
-  email?: string;
-  phoneNumber?: string;
-  dateOfBirth?: Date;
-  about?: string;
-  profileImage?: string;
-  banner?: string;
+// interface EditState {
+//   firstName?: string;
+//   lastName?: string;
+//   email?: string;
+//   phoneNumber?: string;
+//   dateOfBirth?: Date;
+//   about?: string;
+//   profileImage?: string;
+//   banner?: string;
+// }
+interface ResumeFile {
+  fileUrl: string;
+  fileName: string;
+  uploadedAt: Date | null;
+  isDeleted: boolean;
+}
+
+interface ResumePayload {
+  resumePDF: ResumeFile[];
+  resumeVideo: ResumeFile[];
 }
 
 const loginSlice = createSlice({
@@ -79,12 +137,10 @@ const loginSlice = createSlice({
       state.googlestate = false;
     },
     SetLogout: (state) => {
-      console.log("heeeee",state.activeuser)
       state.activeuser = null;
       state.googlestate = true
-      console.log("state.activeuser",state.activeuser)
     },
-    setEducation: (state, action: PayloadAction<Education>) => {
+    setEducation: (state, action: PayloadAction<Ieducation>) => {
       state.activeuser?.education.push(action.payload);
     },
     setRemoveEducation: (state, action: PayloadAction<number>) => {
@@ -92,7 +148,7 @@ const loginSlice = createSlice({
         state.activeuser.education = state.activeuser.education.filter((_, index) => index !== action.payload);
       }
     },
-    setjobLocations: (state, action: PayloadAction<string>) => {
+    setjobLocations: (state, action: PayloadAction<JobLocationType[]>) => {
       state.activeuser?.jobLocation?.push(action.payload);
     },
     setRemovejoblocation: (state, action: PayloadAction<number>) => {
@@ -108,21 +164,22 @@ const loginSlice = createSlice({
         state.activeuser.jobTitle = state.activeuser.jobTitle.filter((_, index) => index !== action.payload);
       }
     },
-    setLocation: (state, action: PayloadAction<string>) => {
+    setLocation: (state, action: PayloadAction<IlocationType>) => {
       if (state.activeuser) {
         state.activeuser.location = action.payload;
       }
     },
-    // setPersonalDetails: (state, action: PayloadAction<Partial<EditState>>) => {
-    //   if (state.activeuser) {
-    //     state.activeuser.firstName = action.payload.details.firstName ?? state.activeuser.firstName;
-    //     state.activeuser.lastName = action.payload.details.lastName ?? state.activeuser.lastName;
-    //     state.activeuser.email = action.payload.details.email ?? state.activeuser.email;
-    //     state.activeuser.phoneNumber = action.payload.details.phoneNumber ?? state.activeuser.phoneNumber;
-    //     state.activeuser.dateOfBirth = action.payload.details.dateOfBirth ?? state.activeuser.dateOfBirth;
-    //     state.activeuser.about = action.payload.details.about ?? state.activeuser.about;
-    //   }
-    // },
+    setPersonalDetails: (state, action: PayloadAction<UserProfile>) => {
+      if (state.activeuser) {
+        state.activeuser.firstName = action.payload.firstName ?? state.activeuser.firstName;
+        state.activeuser.lastName = action.payload.lastName ?? state.activeuser.lastName;
+        state.activeuser.email = action.payload.email ?? state.activeuser.email;
+        state.activeuser.phoneNumber = action.payload.phoneNumber ?? state.activeuser.phoneNumber;
+        state.activeuser.dateOfBirth = action.payload.dateOfBirth ?? state.activeuser.dateOfBirth;
+        state.activeuser.about = action.payload.about ?? state.activeuser.about;
+        
+      }
+    },
     setProject: (state, action: PayloadAction<{ title: string; description: string; link?: string }>) => {
       state.activeuser?.projects?.push(action.payload);
     },
@@ -139,39 +196,135 @@ const loginSlice = createSlice({
         state.activeuser.skills = state.activeuser.skills.filter((_, index) => index !== action.payload);
       }
     },
-    setPersonalDetails:(state, action: PayloadAction<number>) => {
-      state.activeuser.profileImage = action.payload.profileImage;
-      state.activeuser.banner = action.payload.bannerImage
+    setResume: (state, action: PayloadAction<ResumePayload>) => {
       if (state.activeuser) {
-        state.activeuser.firstName = action.payload.details.firstName ?? state.activeuser.firstName;
-        state.activeuser.lastName = action.payload.details.lastName ?? state.activeuser.lastName;
-        state.activeuser.email = action.payload.details.email ?? state.activeuser.email;
-        state.activeuser.phoneNumber = action.payload.details.phoneNumber ?? state.activeuser.phoneNumber;
-        state.activeuser.dateOfBirth = action.payload.details.dateOfBirth ?? state.activeuser.dateOfBirth;
-        state.activeuser.about = action.payload.details.about ?? state.activeuser.about;
+
+        state.activeuser.resumePDF = action.payload.resumePDF;
+        state.activeuser.resumeVideo = action.payload.resumeVideo;
+  
+        
       }
+    },
+    setRemoveResume: (state,action) => {
+      if (state.activeuser) {
+        if(action.payload==="resume"){
+          state.activeuser.resumePDF = [];
+        }else if(action.payload==="introductionVideo"){
+          state.activeuser.resumeVideo = [];
+        }
       
-    }
+       
+      }
+    },
+    // setEducation: (state, action: PayloadAction<Education>) => {
+    //   state.activeuser?.education.push(action.payload);
+    // },
+    // setRemoveEducation: (state, action: PayloadAction<number>) => {
+    //   if (state.activeuser?.education) {
+    //     state.activeuser.education = state.activeuser.education.filter((_, index) => index !== action.payload);
+    //   }
+    // },
+    // setjobLocations: (state, action: PayloadAction<string>) => {
+    //   state.activeuser?.jobLocation?.push(action.payload);
+    // },
+    // setRemovejoblocation: (state, action: PayloadAction<number>) => {
+    //   if (state.activeuser?.jobLocation) {
+    //     state.activeuser.jobLocation = state.activeuser.jobLocation.filter((_, index) => index !== action.payload);
+    //   }
+    // },
+    // setjobTItles: (state, action: PayloadAction<string>) => {
+    //   state.activeuser?.jobTitle?.push(action.payload);
+    // },
+    // setRemovjobTItles: (state, action: PayloadAction<number>) => {
+    //   if (state.activeuser?.jobTitle) {
+    //     state.activeuser.jobTitle = state.activeuser.jobTitle.filter((_, index) => index !== action.payload);
+    //   }
+    // },
+    // setLocation: (state, action: PayloadAction<string>) => {
+    //   if (state.activeuser) {
+    //     state.activeuser.location = action.payload;
+    //   }
+    // },
+    // setPersonalDetails: (state, action: PayloadAction<Partial<EditState>>) => {
+    //   if (state.activeuser) {
+    //     state.activeuser.firstName = action.payload.details.firstName ?? state.activeuser.firstName;
+    //     state.activeuser.lastName = action.payload.details.lastName ?? state.activeuser.lastName;
+    //     state.activeuser.email = action.payload.details.email ?? state.activeuser.email;
+    //     state.activeuser.phoneNumber = action.payload.details.phoneNumber ?? state.activeuser.phoneNumber;
+    //     state.activeuser.dateOfBirth = action.payload.details.dateOfBirth ?? state.activeuser.dateOfBirth;
+    //     state.activeuser.about = action.payload.details.about ?? state.activeuser.about;
+    //   }
+    // },
+    // setProject: (state, action: PayloadAction<{ title: string; description: string; link?: string }>) => {
+    //   state.activeuser?.projects?.push(action.payload);
+    // },
+    // setremovproject: (state, action: PayloadAction<number>) => {
+    //   if (state.activeuser?.projects) {
+    //     state.activeuser.projects = state.activeuser.projects.filter((_, index) => index !== action.payload);
+    //   }
+    // },
+    // setskils: (state, action: PayloadAction<string>) => {
+    //   state.activeuser?.skills?.push(action.payload);
+    // },
+    // setRemovskils: (state, action: PayloadAction<number>) => {
+    //   if (state.activeuser?.skills) {
+    //     state.activeuser.skills = state.activeuser.skills.filter((_, index) => index !== action.payload);
+    //   }
+    // },
+    // setPersonalDetails:(state, action: PayloadAction<number>) => {
+    //   state.activeuser.profileImage = action.payload.profileImage;
+    //   state.activeuser.banner = action.payload.bannerImage
+    //   if (state.activeuser) {
+    //     state.activeuser.firstName = action.payload.details.firstName ?? state.activeuser.firstName;
+    //     state.activeuser.lastName = action.payload.details.lastName ?? state.activeuser.lastName;
+    //     state.activeuser.email = action.payload.details.email ?? state.activeuser.email;
+    //     state.activeuser.phoneNumber = action.payload.details.phoneNumber ?? state.activeuser.phoneNumber;
+    //     state.activeuser.dateOfBirth = action.payload.details.dateOfBirth ?? state.activeuser.dateOfBirth;
+    //     state.activeuser.about = action.payload.details.about ?? state.activeuser.about;
+    //   }
+      
+    // },
     
+    setDetailes:(state,action)=>{
+state.userdetails=action.payload
+    },
+    setConnectionRequest:(state,action:PayloadAction<UserProfile | null>)=>{
+state.connectionRequest=action.payload
+    },
+    setAllConnections:(state,action:PayloadAction<UserProfile []>)=>{
+state.connections=action.payload
+    },
+    setImages:(state,action)=>{
+      if (state.activeuser) {
+        state.activeuser.profileImage = action.payload.profileImage;
+        state.activeuser.banner = action.payload.banner;
+      }
+  },
   },
 });
 
 export const {
+  setResume,
+  setRemoveResume,
   setActive,
   SetLogout,
   setGooglelogin,
+  setAllConnections,
+  setConnectionRequest,
+  setDetailes,
   setEducation,
-  setRemoveEducation,
-  setjobLocations,
-  setRemovejoblocation,
-  setjobTItles,
-  setRemovjobTItles,
   setLocation,
-  setPersonalDetails,
+  setRemovskils,
   setProject,
   setremovproject,
+  setRemoveEducation,
+  setjobLocations,
   setskils,
-  setRemovskils,
+  setPersonalDetails,
+  setRemovjobTItles,
+  setjobTItles,
+  setRemovejoblocation,
+  setImages,
 } = loginSlice.actions;
 
 export default loginSlice.reducer;

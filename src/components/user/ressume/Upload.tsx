@@ -1,8 +1,14 @@
 
 
+
 "use client";
-import api from "@/utils/api";
-import React, { useState, ChangeEvent } from "react";
+
+import { postresume, removeResume } from "@/lib/store/features/actions/resumeActions";
+import { useAppDispatch, useAppSelector } from "@/lib/store/hooks";
+
+import React, { useState, ChangeEvent, useEffect } from "react";
+import { toast } from "react-toastify";
+
 
 interface FilesState {
   resume: File | null;
@@ -10,53 +16,61 @@ interface FilesState {
 }
 
 const FileUpload = () => {
+  const dispatch = useAppDispatch();
+  const resumePdf = useAppSelector((state) => state.user.activeuser?.resumePDF);
+  const resumevideo = useAppSelector((state) => state.user.activeuser?.resumeVideo);
+
   const [files, setFiles] = useState<FilesState>({
     resume: null,
     introductionVideo: null,
   });
+
   const [loading, setLoading] = useState<boolean>(false);
   const [errorMessage, setErrorMessage] = useState<string>("");
+  const [modalContent, setModalContent] = useState<string | null>(null);
+  const [isModalOpen, setIsModalOpen] = useState<boolean>(false);
 
-  // Handle file selection
+
+  useEffect(() => {
+    setFiles({
+      resume: resumePdf?.[0] ? new File([""], "Existing Resume.pdf", { type: "application/pdf" }) : null,
+      introductionVideo: resumevideo?.[0] ? new File([""], "Existing Video.mp4", { type: "video/mp4" }) : null,
+    });
+  }, [resumePdf, resumevideo]);
+
+  
+
   const handleFileUpload = (event: ChangeEvent<HTMLInputElement>, type: keyof FilesState) => {
     const selectedFile = event.target.files ? event.target.files[0] : null;
     if (selectedFile) {
-      setFiles((prevFiles) => ({
-        ...prevFiles,
-        [type]: selectedFile,
-      }));
+      setFiles((prevFiles) => ({ ...prevFiles, [type]: selectedFile }));
     }
   };
 
-  // Handle upload
   const handleUpload = async () => {
     const formData = new FormData();
+    
+    
     const { resume, introductionVideo } = files;
-
     if (!resume && !introductionVideo) {
       setErrorMessage("Please select a file to upload");
       return;
     }
 
     if (resume) formData.append("resume", resume);
-    if (introductionVideo) formData.append("introductionVideo", introductionVideo);
-
-
-    for (const [key, value] of formData.entries()) {
-      console.log(`Key: ${key}, Value:`, value);
-    }
+    if (introductionVideo) formData.append("video", introductionVideo);
 
     try {
+ 
+      
       setLoading(true);
       setErrorMessage("");
-
-      const response = await api.post("/user/uploadressume", formData, {
-        headers: {
-          "Content-Type": "multipart/form-data",
-        },
-      });
-
-      console.log("Upload Response:", response);
+      const result = await dispatch(postresume(formData));
+    
+      setFiles({ resume: null, introductionVideo: null });
+      if(result.type==="post/resume/fulfilled"){
+        toast.success("resume uploaded")
+      }
     } catch (error) {
       setErrorMessage("An error occurred during the upload.");
       console.error("Upload Error:", error);
@@ -65,6 +79,32 @@ const FileUpload = () => {
     }
   };
 
+  const openModal = (type: "resume" | "introductionVideo") => {
+    if (type === "resume" && resumePdf?.[0]) {
+      setModalContent(resumePdf[0].fileUrl);
+    } else if (type === "introductionVideo" && resumevideo?.[0]) {
+      setModalContent(resumevideo[0].fileUrl);
+    }
+    setIsModalOpen(true);
+  };
+
+  const closeModal = () => {
+    setIsModalOpen(false);
+    setModalContent(null);
+  };
+
+
+  const handleRemoveResume =async (type:string) => {
+   const removeResult=await dispatch(removeResume(type)); 
+   if(removeResult.type==="remove/resume/fulfilled"){
+    setFiles({ resume: null, introductionVideo: null });
+
+   }   
+
+   }
+   
+
+
   return (
     <div className="flex flex-col items-center justify-center h-screen p-10 bg-gray-100">
       <div className="flex flex-col gap-6 w-full max-w-lg p-6 bg-white shadow-lg rounded-lg">
@@ -72,22 +112,19 @@ const FileUpload = () => {
 
         {(["resume", "introductionVideo"] as (keyof FilesState)[]).map((type) => (
           <div key={type} className="p-6 border rounded-lg shadow-md text-center">
-            {files[type] ? (
+            {files[type] || (type === "resume" && resumePdf?.length) || (type === "introductionVideo" && resumevideo?.length) ? (
               <div>
-                <p className="text-sm font-semibold">{files[type]?.name}</p>
-                <p className="text-xs text-gray-500">
-                  {files[type] ? `${(files[type]!.size / 1024).toFixed(1)} KB` : ""}
-                </p>
+                <p className="text-sm font-semibold">{files[type]?.name || "Uploaded File"}</p>
                 <div className="flex justify-center gap-4 mt-2">
                   <button
                     className="px-4 py-2 bg-blue-500 text-white rounded hover:bg-blue-600"
-                    onClick={() => alert(`Viewing ${type}`)}
+                    onClick={() => openModal(type)}
                   >
                     View {type}
                   </button>
                   <button
                     className="px-4 py-2 bg-red-500 text-white rounded hover:bg-red-600"
-                    onClick={() => setFiles((prev) => ({ ...prev, [type]: null }))}
+                    onClick={() => handleRemoveResume(type)}
                   >
                     Remove {type}
                   </button>
@@ -120,8 +157,38 @@ const FileUpload = () => {
           {loading ? "Uploading..." : "Upload Files"}
         </button>
       </div>
+
+     
+      {isModalOpen && modalContent && (
+        <div className="fixed inset-0 bg-black bg-opacity-50 flex justify-center items-center z-50">
+          <div className="bg-white p-6 rounded-lg w-3/4 max-w-2xl">
+            <button
+              className="absolute top-2 right-2 text-lg font-bold"
+              onClick={closeModal}
+            >
+              X
+            </button>
+            {modalContent.includes(".pdf") ? (
+          <iframe 
+          className="text-black"
+          src={`https://docs.google.com/gview?url=${modalContent}&embedded=true`} 
+          width="100%" 
+          height="500px"
+          style={{ border: "none" }} 
+        />
+            ) : (
+              <video controls width="100%" height="500px">
+                <source src={modalContent} type="video/mp4" />
+                Your browser does not support the video tag.
+              </video>
+            )}
+          </div>
+        </div>
+      )}
     </div>
   );
 };
 
 export default FileUpload;
+
+
