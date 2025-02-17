@@ -7,7 +7,9 @@ import api from "@/utils/api";
 import Image from "next/image";
 
 export const FeedIdentityModule = () => {
-  const [connections, setConnections] = useState([]);
+  const[connections,setConnections]=useState([])
+  console.log("connections",connections);
+  
   const router = useRouter();
   const { activeuser } = useAppSelector((state) => state.login);
 
