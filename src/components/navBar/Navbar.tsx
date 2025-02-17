@@ -38,10 +38,11 @@ export const dropDownBeforLogin = [
 ];
 
 export default function Navbar() {
+
+ const activeCompany= useAppSelector((state)=>state.companyLogin.activeCompany)
   const router = useRouter()
   const [issearch,setIssearch]=useState(false)
   const { activeuser } = useAppSelector((state) => state.login);
-   const activeCompany=useAppSelector((state)=>state.companyLogin.activeCompany)
   interface User {
     _id: string;
     firstName: string;
@@ -156,8 +157,60 @@ export default function Navbar() {
               ))}
             </div>
 
-          <div className="flex items-center">
-            {activeuser||activeCompany ? <AfterLogin /> : <Beforlogin />}
+            <div className="sm:hidden ">
+              {
+                issearch ? (
+                  <div className="flex space-x-4 w-full">
+              <div className="w-full h-10 bg-slate-200 rounded-3xl outline-none flex pr-3">
+                <input
+                  type="text"
+                  placeholder="Search"
+                  value={searchQuery}
+                  onChange={handleSearchChange}
+                  className="w-full h-full bg-transparent outline-none p-2 pl-4 "
+                />
+                <button onClick={()=>setIssearch(!issearch)}>
+                <RxCross2 />
+                </button>
+              </div>
+
+
+              {searchQuery && searchResults.length > 0 && (
+                <div className="absolute top-12 left-0 mt-2 w-full max-h-60 overflow-y-auto border border-gray-300 bg-white p-4 rounded-lg shadow-md z-50 ">
+                  <ul className="mt-2 space-y-2 ">
+                    {searchResults.map((user) => (
+                      <li key={user._id} className="flex items-center gap-2 hover:bg-slate-200 "
+
+                        onClick={() => router.push(`/userdetails/${user._id}`)}
+                      >
+                        <Image
+                          width={100}
+                          height={100}
+
+                          src={user.profileImage}
+                          alt={`${user.firstName} ${user.lastName}`}
+                          className="w-7 h-7 rounded-full"
+                        />
+                        <div>
+                          <p className="tex-sm font-semibold">
+                            {user.firstName} {user.lastName}
+                          </p>
+                          <p className="text-sm text-gray-500">
+                            {user.jobTitle[0]}
+                          </p>
+                        </div>
+                      </li>
+                    ))}
+                  </ul>
+                </div>
+              )}
+            </div>
+                ):(
+                  ""
+                )
+              }
+            </div>
+
           </div>
 
         </div>
@@ -170,7 +223,7 @@ export default function Navbar() {
           >
           <IoSearch  />
           </button>
-        {activeuser ? <AfterLogin /> : <Beforlogin />}
+        {activeuser||activeCompany ? <AfterLogin /> : <Beforlogin />}
 
         </div>
           ):(
@@ -183,4 +236,3 @@ export default function Navbar() {
     
   );
 }
-
