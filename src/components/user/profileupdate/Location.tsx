@@ -1,10 +1,9 @@
 import React, { useState } from "react";
-import { RxCross2 } from "react-icons/rx";
 import { Country, State, City } from "country-state-city";
 import { useAppDispatch, useAppSelector } from "@/lib/store/hooks";
 import {
+  IlocationType,
   setLocation,
-  setRemovejoblocation,
   UserProfile,
 } from "@/lib/store/features/userSlice";
 
@@ -13,7 +12,7 @@ function Location() {
   const user = useAppSelector(
     (state) => state.user.activeuser as UserProfile | null
   );
-  const [newLocation, setNewLocation] = useState({
+  const [newLocation, setNewLocation] = useState<IlocationType>({
     country: "",
     countryName: "",
     state: "",
@@ -67,10 +66,6 @@ function Location() {
         city: "",
       });
     }
-  };
-
-  const handleRemoveLocation = (index) => {
-    dispatch(setRemovejoblocation(index));
   };
 
   return (
