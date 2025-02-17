@@ -3,7 +3,7 @@ import api from "@/utils/api";
 import handleAsync from "@/utils/handleAsync";
 import { createAsyncThunk } from "@reduxjs/toolkit";
 import { AxiosResponse } from "axios";
-import { setActiveCompany } from "../companyslice";
+import { setActiveCompany, setCompanyLogOut } from "../companyslice";
 
 
 export const loginCompany=createAsyncThunk(
@@ -20,7 +20,27 @@ export const loginCompany=createAsyncThunk(
       }
       const data= response.data.company
       dispatch(setActiveCompany(data))
-  
+
   
     } 
   )
+
+  export const logOutCompany=createAsyncThunk(
+    "logoutcompany",
+    async (_,{ dispatch, rejectWithValue }) => {
+ 
+ 
+      const response = await handleAsync<AxiosResponse>(() => api.post("/company/logout"));
+  
+
+      if (!response) {
+        return rejectWithValue("logout failed")
+      }
+      console.log("logout response",response);
+      
+  
+      dispatch(setCompanyLogOut())
+  return true
+     
+    } )
+  
