@@ -23,13 +23,13 @@ function Jobtitle() {
      const [selectedSkill, setSelectedSkill] = useState("");
     
       const handleAddSkill = () => {
-        if (selectedSkill && !user.jobTitle.includes(selectedSkill)) {
+        if (selectedSkill && user && user.jobTitle && !user.jobTitle.includes(selectedSkill)) {
           dispatch(setjobTItles(selectedSkill))
           setSelectedSkill("");
         }
       };
     
-      const handleRemoveSkill = (index) => {
+      const handleRemoveSkill = (index:number) => {
        dispatch(setRemovjobTItles(index))
       };
   return (
@@ -62,7 +62,7 @@ function Jobtitle() {
       </div>
 
       {/* Display Added Skills */}
-      {user.jobTitle.length > 0 && (
+      {user && user.jobTitle && user.jobTitle.length > 0 && (
         <div className="mt-4">
           <h3 className="text-lg font-medium text-gray-700 mb-2">Added Skills:</h3>
           <ul className="flex flex-wrap gap-2">

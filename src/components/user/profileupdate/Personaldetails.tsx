@@ -8,16 +8,33 @@ import {
   UserProfile,
 } from "@/lib/store/features/userSlice";
 import api from "@/utils/api";
-interface Images {
-    profileImage: File | string | undefined;
-    banner: File | string | undefined;  
+import { toast } from "react-toastify";
+
+interface PersonaldetailsProps {
+    loading: (isLoading: boolean) => void;
+  }
+interface ImageType {
+    profileImage: string | File | undefined;
+    banner: string | File | undefined;
 }
 
-function Personaldetails() {
+interface input {
+    firstName: string | undefined;
+    lastName: string | undefined;
+    email: string | undefined;
+    phoneNumber: string | undefined | number;
+    dateOfBirth: Date | undefined |number ;
+    about: string | undefined;
+}
+
+
+function Personaldetails({ loading }: PersonaldetailsProps) {
+    console.log("props =",loading);
+    
   const user = useAppSelector((state) => state.user.activeuser as UserProfile);
   console.log("activuser", user);
 
-  const [input, setInput] = useState({
+  const [input, setInput] = useState<input>({
     firstName: user.firstName,
     lastName: user.lastName,
     email: user.email,
@@ -26,7 +43,7 @@ function Personaldetails() {
     about: user.about,
   });
 
-  const [image, setImage] = useState<Images>({
+  const [image, setImage] = useState<ImageType>({
     profileImage: user.profileImage,
     banner: user.banner,
   });
@@ -51,6 +68,7 @@ function Personaldetails() {
 
   const handleImageeChange = async () => {
     try {
+        loading(true);
       if (!image.profileImage || !image.banner) {
         console.error("Both profile and banner images must be selected");
         return;
@@ -101,8 +119,12 @@ function Personaldetails() {
       await dispatch(
         setImages({ profileImage: profileImageUrl, banner: banner })
       );
+      toast.success("Images uploaded successfully");
     } catch (error) {
+        toast.warning("Select both profile and banner images");
       console.error("Error uploading images:", error);
+    } finally {
+        loading(false);
     }
   };
 
@@ -227,7 +249,7 @@ function Personaldetails() {
             <input
               type="date"
               name="dateOfBirth"
-              value={input.dateOfBirth ? input.dateOfBirth.toISOString().split('T')[0] : ''}
+              value={input.dateOfBirth ? new Date(input.dateOfBirth).toISOString().split('T')[0] : ''}
               onChange={handilchange}
               className="p-2 border rounded-md"
             />

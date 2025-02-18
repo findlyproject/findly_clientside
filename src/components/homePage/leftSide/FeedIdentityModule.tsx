@@ -8,7 +8,7 @@ import Image from "next/image";
 
 
 
-export const FeedIdentityModule = () => {
+export const FeedIdentityModule = () => {  
   const [connections, setConnections] = useState([]);
   const router = useRouter();
   const { activeuser } = useAppSelector((state) => state.login);
