@@ -2,14 +2,17 @@
 import "../styles/globals.css"
 import Navbar from "@/components/navBar/Navbar";
 import Footer from "@/components/common/footer/Footer"
-import OpenPage from "@/components/openpage/OpenPage";
+import LandingPage from "@/components/common/landingPage/LandingPage";
+
 
 
 export default function Home() {
   return (
     <div>
       <Navbar/>
-    <OpenPage/>
+    
+    <LandingPage/>
+    
       <Footer/>
  
     </div>

@@ -5,8 +5,17 @@ import { FcGoogle } from "react-icons/fc";
 
 import { IoMail } from "react-icons/io5";
 import { FaLock } from "react-icons/fa";
-const Login = () => {
+import { useAppDispatch, useAppSelector } from "@/lib/store/hooks";
+import { loginCompany } from "@/lib/store/features/actions/companyActions";
+import { toast } from "react-toastify";
+import { useRouter } from "next/navigation";
 
+const Login = () => {
+  const router= useRouter()
+    const dispatch=useAppDispatch()
+    const activeCompany=useAppSelector((state)=>state.companyLogin.activeCompany)
+    console.log("activeCompany",activeCompany);
+    
     const [formData,setFormData]=useState({
         email:"",
         password:""
@@ -18,7 +27,16 @@ const Login = () => {
          setFormData({...formData,[name]:value})
 
     }
-    const handleSubmit=async()=>{
+    const handleSubmit=async(e:React.FormEvent)=>{
+        e.preventDefault()
+      const loginStatus= await dispatch(loginCompany(formData))
+      if(loginStatus.type==="logincompany/fulfilled"){
+
+        toast.success("login successfully")
+        router.push("/home")
+      }
+      
+
         
     }
 
