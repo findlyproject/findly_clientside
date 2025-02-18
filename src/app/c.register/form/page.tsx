@@ -1,9 +1,9 @@
-import Form from '@/components/company/registration/Form'
+import RegistrationForm from '@/components/company/registration/Form'
 import React from 'react'
 
 function page() {
   return (
-    <div><Form/></div>
+    <div><RegistrationForm/></div>
   )
 }
 
