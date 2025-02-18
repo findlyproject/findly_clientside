@@ -9,11 +9,8 @@ import { useRouter } from "next/navigation";
 import Image from "next/image";
 import { forgotPassword, googlloginUser, loginUser } from "@/lib/store/features/actions/userActions";
 import { toast } from "react-toastify";
-import { setforgotPassword, setGooglelogin } from "@/lib/store/features/userSlice";
-import Link from "next/link";
-import { Button } from "@headlessui/react";
-import axios from "axios";
-import api from "@/utils/api";
+import { setGooglelogin } from "@/lib/store/features/userSlice";
+
 
 interface Istate {
   email: string;
@@ -92,9 +89,17 @@ console.log("googlestate",googlestate);
       toast.error("Please enter a valid email");
       return;
     }
+    console.log("object",state.email)
 
     try {
-      await dispatch(forgotPassword({email:state.email }));
+      
+      const result = await dispatch(forgotPassword({ email: state.email }));
+
+      if (forgotPassword.rejected.match(result)) {
+        toast.error("You Have no Accunt With This Email");
+        return;
+      }
+
       toast.success("OTP sent successfully!");
       router.push("/resetpassword");
     } catch (err) {
