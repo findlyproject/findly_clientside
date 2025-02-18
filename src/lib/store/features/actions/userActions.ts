@@ -170,6 +170,7 @@ export const forgotPassword = createAsyncThunk(
   "auth/forgotPassword",
   async (state: { email: string }, { dispatch, rejectWithValue }) => {
     try {
+      console.log("loginmail",state.email)
       const response = await api.post(`/user/sendotp/${state.email}`);
       dispatch(setforgotPassword({ email: state.email, otp: response.data.otp }));
       return response.data;
