@@ -9,6 +9,8 @@ import { useAppDispatch, useAppSelector } from "@/lib/store/hooks";
 import { loginCompany } from "@/lib/store/features/actions/companyActions";
 import { toast } from "react-toastify";
 import { useRouter } from "next/navigation";
+const cloginimage = "/assets/companyLogin.jpg";
+
 
 const Login = () => {
   const router= useRouter()
@@ -42,9 +44,9 @@ const Login = () => {
 
   return (
     <div className="flex h-screen w-full border border-black justify-center items-center">
-     <div className="flex  h-4/5 w-3/5 rounded-xl overflow-hidden   border border-black">
+     <div className="flex h-4/6 bg-red-500  w-3/6 rounded-xl overflow-hidden   border border-black">
        
-      <div className="w-1/2 flex flex-col justify-center items-center border boreder-black bg-white p-8 b">
+      <div className="w-full flex flex-col justify-center items-center border boreder-black bg-white p-8 b">
         <h1 className="text-3xl font-bold mb-4">Corporate Access</h1>
         <p className="text-gray-500 mb-6">Let’s get started with your 30 days free trial</p>
         
@@ -99,9 +101,10 @@ const Login = () => {
           Don’t have an account? <a href="#" className="text-blue-500">Sign Up</a>
         </p>
       </div>
-      
- 
-      <div className="w-1/2 h-full bg-cover bg-center" style={{ backgroundImage: `url('assets/companyLogin.jpg')` }}></div>
+<div className="h-full">
+<img className="h-full w-full" src="https://media.tacdn.com/media/attractions-splice-spp-674x446/07/80/19/43.jpg" alt="" />
+</div>
+
       <div>
 
       </div>

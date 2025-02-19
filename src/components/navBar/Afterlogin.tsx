@@ -20,21 +20,25 @@ function AfterLogin() {
 
   const dispatch = useAppDispatch()
 
-  const handilLogut = () => {
-    if(activeuser){
-      console.log("useeeeeeeeeeeer");
-      
-      dispatch(logoutUser())
-    }else if(activeCompany){
-      console.log("commmmmmmmmmmmpa");
-      dispatch(logOutCompany())
-    }
-  
-    // signOut()
-    router.replace("/");
+    const handilLogut = () => {
+        // Clear user and company tokens from cookies
+  document.cookie = "token=; path=/; max-age=0"; // Clear user token
+  document.cookie = "ctoken=; path=/; max-age=0"; // Clear company token
+
+      if(activeuser){
+        console.log("useeeeeeeeeeeer");
+        
+        dispatch(logoutUser())
+      }else if(activeCompany){
+        console.log("commmmmmmmmmmmpa");
+        dispatch(logOutCompany())
+      }
     
-  }
-  
+      // signOut()
+      router.replace("/");
+      
+    }
+    
 
   return (
     <div className="flex">

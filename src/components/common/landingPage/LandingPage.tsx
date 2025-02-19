@@ -18,7 +18,7 @@ import { setActiveCompany } from "@/lib/store/features/companyslice";
 
 function LandingPage() {
   
-
+const  dispatch=useAppDispatch()
   const router = useRouter()
   const steps = [
     { title: "Create account", desc: "Aliquam facilisis egestas sapien.", icon: <FaUserPlus /> },
@@ -26,9 +26,6 @@ function LandingPage() {
     { title: "Find suitable job", desc: "Phasellus quis eleifend ex.", icon: <FaSearch /> },
     { title: "Apply job", desc: "Nam sodales purus.", icon: <FaCheckCircle /> },
   ];
-
-  
-
   return (
     <div className="w-full h-full">
       <div className="flex flex-col md:flex-row items-center justify-center   w-full  pt-20 ">

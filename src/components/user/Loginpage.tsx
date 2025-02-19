@@ -11,6 +11,7 @@ import { googlloginUser, loginUser } from "@/lib/store/features/actions/userActi
 import { toast } from "react-toastify";
 import { setGooglelogin } from "@/lib/store/features/userSlice";
 
+
 function Loginpage() {
   const router = useRouter()
   const {data:session} = useSession()
@@ -18,9 +19,10 @@ function Loginpage() {
     email: "",
     password: ""
   })
+
   const {googlestate} = useAppSelector((state)=>state.login)
 console.log("googlestate",googlestate);
-
+ 
 
   const dispatch = useAppDispatch()
   const handilchange = (e: React.ChangeEvent<HTMLInputElement>) => {

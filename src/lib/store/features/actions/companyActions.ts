@@ -3,7 +3,7 @@ import api from "@/utils/api";
 import handleAsync from "@/utils/handleAsync";
 import { createAsyncThunk } from "@reduxjs/toolkit";
 import { AxiosResponse } from "axios";
-import { setActiveCompany, setCompanyLogOut } from "../companyslice";
+import { setActiveCompany, setAppliedUsers, setCompanyLogOut } from "../companyslice";
 
 
 export const loginCompany=createAsyncThunk(
@@ -43,4 +43,21 @@ export const loginCompany=createAsyncThunk(
   return true
      
     } )
+
+    export const applicationList=createAsyncThunk(
+      "applicationlist",
+      async(_,{dispatch,rejectWithValue})=>{
+ 
+        const response = await handleAsync<AxiosResponse>(() => api.get("/company/findapplications"));
+        if(!response){
+          return rejectWithValue("logout failed")
+        }
+        console.log("response",response);
+        const data=response.data.appliedUsers       
+        dispatch(setAppliedUsers(data)) 
+        
+
+       
+      }
+    )
   
