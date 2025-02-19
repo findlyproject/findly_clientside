@@ -40,7 +40,7 @@ export default function NamePage() {
       dispatch(setfirstName(Firstname));
       dispatch(setlastName(Lastname));
       
-      router.push(`/register/namepage/educationpage`);
+      router.push(`/user/register/namepage/educationpage`);
     }
   };
   return (

@@ -103,7 +103,7 @@ console.log("emaillllllllll" ,Email);
       dispatch(setEmail(Email));
       dispatch(setPassword(Password));
       
-      router.push(`/register/namepage`);
+      router.push(`/user/register/namepage`);
     }
   };
 
