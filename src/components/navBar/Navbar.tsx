@@ -12,6 +12,7 @@ export const navigation = [
   { name: "Home", href: "/" },
   { name: "About", href: "/about" },
   { name: "Contact", href: "/contactus" },
+  {name:"Community",href:"/community"},
   { name: "Subscription", href: "/premium" },
 ];
 export default function Navbar() {

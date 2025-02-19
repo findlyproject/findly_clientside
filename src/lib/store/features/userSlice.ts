@@ -32,7 +32,7 @@ export interface UserProfile {
   dateOfBirth?: Date;
 
   location?: LocationType;
-
+gender:string
  
 
   profileImage?: string;
