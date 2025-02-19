@@ -7,6 +7,8 @@ import api from "@/utils/api";
 import Image from "next/image";
 
 <<<<<<< HEAD
+=======
+<<<<<<< HEAD
 export const FeedIdentityModule = () => {
   const [connections, setConnections] = useState([]);
   const router = useRouter();
@@ -34,27 +36,36 @@ export const FeedIdentityModule = () => {
 =======
 
 
+>>>>>>> 6977ae517ebbd4ee62e0454d6005c6902bb1028b
 export const FeedIdentityModule = () => {  
   const [connections, setConnections] = useState([]);
   const router = useRouter();
   const { activeuser } = useAppSelector((state) => state.login);
-  
-  console.log("activeuser",{activeuser});
-  useEffect(()=>{
-    const fetchConnections=async()=>{
-      const response=await api.get(`/connecting/getconnection`)
-      console.log("all connections of user response",response);
-     
-      setConnections(response.data.connections)
-    }
-    fetchConnections()
-  },[])
-  
+
+  console.log("activeuser", { activeuser });
+  useEffect(() => {
+    const fetchConnections = async () => {
+      const response = await api.get(`/connecting/getconnection`);
+      console.log("all connections of user response", response);
+
+      setConnections(response.data.connections);
+    };
+    fetchConnections();
+  }, []);
+
   if (!activeuser) {
-    return <section className="rounded-lg border border-gray-300 min-h-[240px] bg-white flex items-center justify-center">Loading...</section>
+    return (
+      <section className="rounded-lg border border-gray-300 min-h-[240px] bg-white flex items-center justify-center">
+        Loading...
+      </section>
+    );
   }
+<<<<<<< HEAD
+
+=======
   
 >>>>>>> 5595591ae871dbdb6ac9cb704189243e98ad0092
+>>>>>>> 6977ae517ebbd4ee62e0454d6005c6902bb1028b
   return (
     <section className="rounded-lg border border-gray-300 min-h-[240px] bg-white">
       <div>
@@ -103,6 +114,8 @@ export const FeedIdentityModule = () => {
     </section>
   );
 };
+<<<<<<< HEAD
+=======
 <<<<<<< HEAD
 =======
 
@@ -160,3 +173,4 @@ export const FeedIdentityModule = () => {
 //   )
 // }
 >>>>>>> 5595591ae871dbdb6ac9cb704189243e98ad0092
+>>>>>>> 6977ae517ebbd4ee62e0454d6005c6902bb1028b
