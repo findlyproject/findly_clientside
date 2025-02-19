@@ -16,9 +16,6 @@ export const navigation = [
   { name: "Home", href: "/" },
   { name: "About", href: "/about" },
   { name: "Contact", href: "/contactus" },
-<<<<<<< HEAD
-  {name:"Community",href:"/community"},
-=======
 
 ];
 
@@ -30,7 +27,6 @@ export const dropDownAfterloginSmallerScreen = [
   { name: "Home", href: "/" },
   { name: "About", href: "/about" },
   { name: "Contact", href: "/contactus" },
->>>>>>> 5595591ae871dbdb6ac9cb704189243e98ad0092
   { name: "Subscription", href: "/premium" },
 ];
 
@@ -102,9 +98,11 @@ export default function Navbar() {
           <div className="flex justify-between w-full">
 
             <div className="flex items-center">
-              <Link href="/">
-                <Image src={logo} alt="Logo" width={100} height={50} className="min-w-20" />
-              </Link>
+       
+          <Link href="/" className="text-2xl font-bold text-primary">
+            Findly . 
+          </Link>
+        
               <div>
          
         </div>

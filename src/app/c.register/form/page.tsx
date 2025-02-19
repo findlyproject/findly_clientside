@@ -5,8 +5,8 @@ import React from 'react'
 function page() {
   return (
     <div>
-      {/* <RegistrationForm/> */}
-      <JobPost/>
+      <RegistrationForm/>
+      {/* <JobPost/> */}
     </div>
   )
 }
