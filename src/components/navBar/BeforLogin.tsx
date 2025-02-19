@@ -9,7 +9,7 @@ function Beforlogin() {
 
   return (
     <div>
-      <Link href="/login" className="flex justify-end">
+      <Link href="/login/user" className="flex justify-end">
         <button className="bg-primary p-2 px-7 rounded-full text-white hidden md:block">
           Join
         </button>

@@ -13,12 +13,17 @@ import goup from "../../../../public/landingPage-group-discussion.png"
 
 import Testimonials from "./Testimonial";
 import { useAppDispatch } from "@/lib/store/hooks";
-import { setActiveCompany } from "@/lib/store/features/companyslice";
+import { setCompanyLogOut } from "@/lib/store/features/companyslice";
+
 
 
 function LandingPage() {
+
   
 const  dispatch=useAppDispatch()
+// useEffect(()=>{
+// dispatch(setCompanyLogOut())
+// },[])
   const router = useRouter()
   const steps = [
     { title: "Create account", desc: "Aliquam facilisis egestas sapien.", icon: <FaUserPlus /> },

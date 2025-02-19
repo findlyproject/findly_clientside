@@ -135,12 +135,14 @@ import type { NextRequest } from "next/server";
 
 const isAdminRoute = (route: string) => route.startsWith("/admin") && route !== "/login";
 const isUserProtectedRoute = (route: string) => route.startsWith("/user") && route !== "/login";
-const isDoctorProtectedRoute = (route: string) => route.startsWith("/doctor") && route !== "/login";
+const isCompanyProtectedRoute = (route: string) => route.startsWith("/company") && route !== "/c-login";
 
 export function middleware(req: NextRequest) {
   
-  const userType = req.cookies.get("user")?.value;
-  const token = req.cookies.get("refreshToken")?.value || req.cookies.get("accessToken")?.value;
+  const userType = req.cookies.get("type")?.value;
+  console.log("userType",userType);
+  const token =req.cookies.get("token")?.value;
+  console.log("token ",token);
   const url = req.nextUrl.clone();
   const pathName = url.pathname;
   
@@ -156,7 +158,7 @@ export function middleware(req: NextRequest) {
 
 
   if (userType === "Admin") {
-    if (isUserProtectedRoute(pathName) || isDoctorProtectedRoute(pathName)) {
+    if (isUserProtectedRoute(pathName) || isCompanyProtectedRoute(pathName)) {
       url.pathname = "/login"; 
       return NextResponse.redirect(url);
     }
@@ -176,25 +178,25 @@ export function middleware(req: NextRequest) {
   }
 
   if (userType === "User") {
-    if (isAdminRoute(pathName) || isDoctorProtectedRoute(pathName)) {
+    if (isAdminRoute(pathName) || isCompanyProtectedRoute(pathName)) {
       url.pathname = "/login"; 
       return NextResponse.redirect(url);
     }
   }
 
 
-  if (!token && isDoctorProtectedRoute(pathName)) {
+  if (!token && isCompanyProtectedRoute(pathName)) {
     url.pathname = "/login";
     return NextResponse.redirect(url);
   }
 
-  if (token && userType === "Doctor" && (pathName === "/login" || pathName === "/register")) {
-    url.pathname = "/doctor";
+  if (token && userType === "Company" && (pathName === "/c-login" || pathName === "/c.register")) {
+    url.pathname = "/company/home";
     return NextResponse.redirect(url);
   }
 
 
-  if (userType === "Doctor") {
+  if (userType === "company") {
     if (isAdminRoute(pathName) || isUserProtectedRoute(pathName)) {
       url.pathname = "/login"; 
       return NextResponse.redirect(url);
