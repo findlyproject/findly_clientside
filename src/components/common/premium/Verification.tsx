@@ -27,7 +27,13 @@ const SubscribedPlanDetails: React.FC = () => {
        const result= await dispatch(verification(sessionId))
        console.log("a",result);
        if(result.type==="verification/fulfilled"){
-        router.push("/ownprofile")
+        console.log("resultproiiii",result);
+        if(allFeatures?.userId){
+          router.push("/ownprofile")
+        }else if(allFeatures?.companyId){
+          router.push("/profile")
+        }
+       
        }
        
     } 

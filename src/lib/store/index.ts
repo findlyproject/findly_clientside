@@ -15,18 +15,18 @@ import userReducer from "./features/userSlice";
 import ratingReducer from "./features/ratingSlice"
 import postReducer from "./features/postSlice"
 import adminReducer from './features/adminSlice'
+import companyLoginReducer from "./features/companyslice"
 
-import editReducer from "./features/editinSlice"
 
 // Create persist configs for specific reducers
 const userPersistConfig = { key: "user", storage };
 const loginPersistConfig = { key: "login", storage };
 const ratingPersistConfig={key:"login",storage};
 const registerPersistConfig={key:"register",storage};
-const editPersistConfig={key:"edit",storage};
+
 const postPersistConfig={key:"post",storage}
 const adminPersistConfig={key:"admin",storage}
-
+const companyPersistConfig={key:"company",storage}
 
 // Wrap reducers with persistReducer
 const persistedUserReducer = persistReducer(userPersistConfig, userReducer);
@@ -35,6 +35,7 @@ const persistedLoginReducer = persistReducer(loginPersistConfig, loginReducer);
 const persistedRatingReducer=persistReducer(ratingPersistConfig,ratingReducer)
 const persistedpostReducer=persistReducer(postPersistConfig,postReducer)
 const persistedadminReducer=persistReducer(adminPersistConfig,adminReducer)
+const persistedCompanyReducer=persistReducer(companyPersistConfig,companyLoginReducer)
 
 export const makeStore = () =>
   configureStore({
@@ -46,7 +47,8 @@ export const makeStore = () =>
       user: persistedUserReducer, 
       rating:persistedRatingReducer , 
       post:persistedpostReducer  , 
-      admin:persistedadminReducer
+      admin:persistedadminReducer,
+      companyLogin:persistedCompanyReducer
       
        
 
