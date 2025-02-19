@@ -2,9 +2,14 @@
 import React, { useState } from "react";
 import { useRouter } from "next/navigation";
 import { useAppDispatch, useAppSelector } from "@/lib/store/hooks";
-import { setfirstName, setlastName } from "@/lib/store/features/registerSlice";
+import { setfirstName, setlastName,setGender } from "@/lib/store/features/registerSlice";
 export default function NamePage() {
   const dispatch = useAppDispatch();
+  const [gender, setgender] = useState("");
+
+  const handleChange = (event:React.ChangeEvent<HTMLInputElement>) => {
+    setgender(event.target.value);
+  };
   const [Firstname, setLocalfirstname] = useState("");
 
   const [Lastname, setLocallastname] = useState("");
@@ -31,8 +36,10 @@ export default function NamePage() {
     }
 
     if (isValid) {
+      dispatch(setGender(gender))
       dispatch(setfirstName(Firstname));
       dispatch(setlastName(Lastname));
+      
       router.push(`/register/namepage/educationpage`);
     }
   };
@@ -45,6 +52,44 @@ export default function NamePage() {
         </h1>
 
         <form className="mt-6 space-y-4 flex flex-col items-center">
+        <div className="flex flex-col w-1/2">
+      <label className="text-gray-700 font-medium mb-1">Gender</label>
+      <div className="flex gap-x-4">
+        <input 
+          type="radio" 
+          name="gender" 
+          value="Male" 
+          id="male" 
+          onChange={handleChange}
+          checked={gender === "Male"}
+        />
+        <label htmlFor="male">Male</label>
+
+        <input 
+          type="radio" 
+          name="gender" 
+          value="Female" 
+          id="female" 
+          onChange={handleChange}
+          checked={gender === "Female"}
+        />
+        <label htmlFor="female">Female</label>
+
+        <input 
+          type="radio" 
+          name="gender" 
+          value="Other" 
+          id="other" 
+          onChange={handleChange}
+          checked={gender === "Other"}
+        />
+        <label htmlFor="other">Other</label>
+      </div>
+
+      
+      <p className="mt-2 text-gray-600">Selected Gender: {gender}</p>
+    </div>
+
           <div className="flex flex-col w-1/2">
             <label className="text-gray-700 font-medium mb-1">First Name</label>
             <input

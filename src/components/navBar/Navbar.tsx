@@ -16,6 +16,9 @@ export const navigation = [
   { name: "Home", href: "/" },
   { name: "About", href: "/about" },
   { name: "Contact", href: "/contactus" },
+<<<<<<< HEAD
+  {name:"Community",href:"/community"},
+=======
 
 ];
 
@@ -27,6 +30,7 @@ export const dropDownAfterloginSmallerScreen = [
   { name: "Home", href: "/" },
   { name: "About", href: "/about" },
   { name: "Contact", href: "/contactus" },
+>>>>>>> 5595591ae871dbdb6ac9cb704189243e98ad0092
   { name: "Subscription", href: "/premium" },
 ];
 

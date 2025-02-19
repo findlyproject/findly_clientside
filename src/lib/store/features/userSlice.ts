@@ -33,8 +33,13 @@ export interface UserProfile {
   phoneNumber?: string;
   dateOfBirth?: Date;
 
+<<<<<<< HEAD
+  location?: LocationType;
+gender:string
+=======
   location?: IlocationType;
 
+>>>>>>> 5595591ae871dbdb6ac9cb704189243e98ad0092
  
 
   profileImage?: string;

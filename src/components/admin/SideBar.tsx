@@ -4,7 +4,7 @@ import user from "../../../public/assets/user-06.webp";
 import Link from "next/link";
 import api from "@/utils/api";
 import { useRouter } from "next/navigation";
-
+import { FaPlus } from "react-icons/fa6";
 const Sidebar = () => {
   const router = useRouter();
   const handleAdminLogout = async (e: React.MouseEvent<HTMLButtonElement>) => {
@@ -208,7 +208,7 @@ const Sidebar = () => {
         </div>
         <ul className="flex-col gap-1 flex">
           <li>
-            <Link href="">
+            <Link href="/admin/profile">
               <div className="p-3 rounded-lg items-center inline-flex">
                 <div className="h-5 items-center gap-3 flex">
                   <div className="relative" title="Profile">
@@ -231,6 +231,23 @@ const Sidebar = () => {
                   </div>
                   <h2 className="text-gray-500 text-sm font-medium leading-snug hidden lg:block">
                     Profile
+                  </h2>
+                </div>
+              </div>
+            </Link>
+          </li>
+
+
+
+          <li>
+            <Link href="/admin/create">
+              <div className="p-3 rounded-lg items-center inline-flex">
+                <div className="h-5 items-center gap-3 flex">
+                  <div className="relative" title="Profile">
+                  <FaPlus />
+                  </div>
+                  <h2 className="text-gray-500 text-sm font-medium leading-snug hidden lg:block">
+                    Create
                   </h2>
                 </div>
               </div>
@@ -265,6 +282,9 @@ const Sidebar = () => {
               </div>
             </Link>
           </li>
+
+
+        
           <li>
             <button  onClick={handleAdminLogout}>
               <div className="p-3 rounded-lg items-center inline-flex">

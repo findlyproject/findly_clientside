@@ -9,7 +9,12 @@ import { useAppDispatch, useAppSelector } from "@/lib/store/hooks";
 import Image from "next/image";
 import verification from "../../../public/assets/verify.jpg";
 import { useRouter } from "next/navigation";
+import { RiDeleteBack2Line } from "react-icons/ri";
+import { MdOutlineReport } from "react-icons/md";
+import { CiCircleInfo } from "react-icons/ci";
 import Link from "next/link";
+import { CiCircleRemove } from "react-icons/ci";
+import { ReportUserModal } from "./ReportUserModal";
 interface Connection {
   connectionID: {
     connecting: string[];
@@ -70,7 +75,7 @@ const DetailsUser = ({ id }: { id: string }) => {
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
   const dropdownRef = useRef<HTMLDivElement | null>(null);
   const [isModalOpen, setIsModalOpen] = useState(false);
-
+  const [isreportModalOpen, setIsreportModalOpen] = useState(false);
   const openModal = () => {
     setIsModalOpen(true);
     setIsDropdownOpen(false);
@@ -229,24 +234,42 @@ const DetailsUser = ({ id }: { id: string }) => {
 
                   {isDropdownOpen && (
                     <div
-                      ref={dropdownRef}
-                      className="absolute top-full right-0 mt-1 w-48 bg-white border border-gray-200 rounded-lg shadow-lg z-50"
-                    >
-                      <ul className="text-gray-700">
-                        <li className="px-4 py-2 hover:bg-gray-100 cursor-pointer">
-                          Remove Connection
-                        </li>
-                        <li className="px-4 py-2 hover:bg-gray-100 cursor-pointer">
-                          Report
-                        </li>
-                        <li
-                          className="px-4 py-2 hover:bg-gray-100 cursor-pointer"
-                          onClick={openModal}
-                        >
-                          About This Profile
-                        </li>
-                      </ul>
+                    ref={dropdownRef}
+                    className="absolute top-full right-0 mt-1 w-48 bg-white border border-gray-200 rounded-lg shadow-lg z-50"
+                  >
+                    <div className="text-gray-700">
+                      <div className="flex items-center space-x-2 px-4 py-2 hover:bg-gray-100 cursor-pointer">
+                      <CiCircleRemove />
+                      <button className="text-left">
+                        Remove Connection
+                      </button>
+                      </div>
+                    
+                  
+                      <div 
+                      
+                      className="flex items-center space-x-2 px-4 py-2 hover:bg-gray-100 cursor-pointer">
+                        <MdOutlineReport />
+                        <button className="text-left"
+                          >Report</button>
+                      </div>
+                      {isreportModalOpen && <ReportUserModal repoteduserid={id} onClose={() => setIsreportModalOpen(false)} />}
+
+                      <div className="flex items-center space-x-2 px-4 py-2 hover:bg-gray-100 cursor-pointer">
+                      <CiCircleInfo 
+                      
+                      />
+                      <button
+                        className="text-left"
+                        onClick={openModal}
+                      >
+                        About This Profile
+                      </button>
+                      </div>
+                      
                     </div>
+                  </div>
+                  
                   )}
                   {/* Modal */}
                   {isModalOpen && (
@@ -432,31 +455,7 @@ const DetailsUser = ({ id }: { id: string }) => {
         </div>
       )}
 
-{user?.projects && user.projects.length > 0 ? (
-        <div className="p-6 border-t">
-          <h3 className="text-lg font-semibold">Projects</h3>
-          <div className="mt-2">
-            {user.projects.map((item, index) => (
-              <div key={index} className="mb-4">
-                <p className="font-bold">{item.title}</p>
-                <p className="text-gray-600">
-                  {item.description}
-                  
-                </p>
-                
-                <Link className="text-blue-500 underline" href={item.link ?? "/"} target="_blank" rel="noopener noreferrer">
-  Project Link
-</Link>
 
-              </div>
-            ))}
-          </div>
-        </div>
-      ) : (
-        <div className="p-6 border-t">
-          <h3 className="text-lg font-semibold">Project</h3>
-        </div>
-      )}
 
       {user?.skills && user.skills.length > 0 ? (
         <div className="p-6 border-t">
