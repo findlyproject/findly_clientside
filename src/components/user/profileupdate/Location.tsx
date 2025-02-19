@@ -4,6 +4,10 @@ import { useAppDispatch, useAppSelector } from "@/lib/store/hooks";
 import {
   IlocationType,
   setLocation,
+<<<<<<< HEAD
+  setRemovejoblocation,
+=======
+>>>>>>> 5595591ae871dbdb6ac9cb704189243e98ad0092
   UserProfile,
 } from "@/lib/store/features/userSlice";
 
@@ -12,7 +16,11 @@ function Location() {
   const user = useAppSelector(
     (state) => state.user.activeuser as UserProfile | null
   );
+<<<<<<< HEAD
+  const [newLocation, setNewLocation] = useState({
+=======
   const [newLocation, setNewLocation] = useState<IlocationType>({
+>>>>>>> 5595591ae871dbdb6ac9cb704189243e98ad0092
     country: "",
     countryName: "",
     state: "",
