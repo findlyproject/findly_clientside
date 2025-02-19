@@ -13,9 +13,12 @@ import { RxCross2 } from "react-icons/rx";
 
 
 export const navigation = [
-  { name: "Home", href: "/" },
+  { name: "Home", href: "/home  " },
   { name: "About", href: "/about" },
   { name: "Contact", href: "/contactus" },
+  { name: "Jobs", href: "/jobs" },
+
+
 
 ];
 
@@ -24,14 +27,16 @@ export const dropDownAfterlogin = [
 ];
 
 export const dropDownAfterloginSmallerScreen = [
-  { name: "Home", href: "/" },
+  { name: "Home", href: "/home" },
   { name: "About", href: "/about" },
   { name: "Contact", href: "/contactus" },
   { name: "Subscription", href: "/premium" },
+  { name: "Jobs", href: "/jobs" },
+
 ];
 
 export const dropDownBeforLogin = [
-  { name: "Home", href: "/" },
+  { name: "Home", href: "/home" },
   { name: "About", href: "/about" },
   { name: "Contact", href: "/contactus" },
   { name: "Subscription", href: "/premium" },

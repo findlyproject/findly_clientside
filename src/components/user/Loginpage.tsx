@@ -99,7 +99,6 @@ console.log("googlestate",googlestate);
         toast.error("You Have no Accunt With This Email");
         return;
       }
-
       toast.success("OTP sent successfully!");
       router.push("/resetpassword");
     } catch (err) {
