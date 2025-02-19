@@ -3,7 +3,7 @@ import React, { useState } from "react";
 import { Eye, EyeOff, Camera } from "lucide-react";
 import Image from "next/image";
 import { Country, State, City } from "country-state-city";
-import { Formik, Form, ErrorMessage } from "formik";
+import { Formik, Form, ErrorMessage, Field } from "formik";
 import * as Yup from "yup";
 import api from "@/utils/api";
 const RegistrationForm = () => {
@@ -14,12 +14,13 @@ const RegistrationForm = () => {
   const [selectedState, setSelectedState] = useState("");
   const [selectedCity, setSelectedCity] = useState("");
   const [pincode, setPincode] = useState("");
+
   const validationSchema = Yup.object().shape({
-    companyName: Yup.string().required("Company Name is required"),
+    name: Yup.string().required("Company Name is required"),
     email: Yup.string()
       .email("Invalid email format")
       .required("Email is required"),
-    mobile: Yup.string()
+    contact: Yup.string()
       .matches(/^[0-9]{10}$/, "Invalid mobile number")
       .required("Mobile Number is required"),
     age: Yup.number()
@@ -30,18 +31,23 @@ const RegistrationForm = () => {
     password: Yup.string()
       .min(6, "Password must be at least 6 characters")
       .required("Password is required"),
-    confirmPassword: Yup.string()
+    cpassword: Yup.string()
       .oneOf([Yup.ref("password"), null], "Passwords must match")
       .required("Confirm Password is required"),
-    industry: Yup.string().required("Industry Type is required"),
-    landmark: Yup.string().required("Landmark is required"),
-    country: Yup.string().required("Country is required"),
-    state: Yup.string().required("State is required"),
-    city: Yup.string().required("City is required"),
-    pincode: Yup.string()
-      .matches(/^[0-9]{6}$/, "Invalid Pincode")
-      .required("Pincode is required"),
+    IndustryType: Yup.string().required("Industry Type is required"),
+  
+    // ✅ Corrected address validation (Nested Object)
+    address: Yup.object().shape({
+      landmark: Yup.string().required("Landmark is required"),
+      country: Yup.string().required("Country is required"),
+      state: Yup.string().required("State is required"),
+      city: Yup.string().required("City is required"),
+      pincode: Yup.string()
+        .matches(/^[0-9]{6}$/, "Invalid Pincode")
+        .required("Pincode is required"),
+    }),
   });
+  
   
   const handleImageChange = (e) => {
     const file = e.target.files[0];
@@ -54,16 +60,26 @@ const RegistrationForm = () => {
     }
   };
 
-  const handleFormSubmit = async (values) => {
+  const handleFormSubmit = async (values:any) => {
     try {
       // Spread form data and add the profile image (logo)
-      const formData = {
-        ...values,  // Spread form data
-        logo: previewImage,  // Add the profile image
-      };
+     const formData = new FormData();
+// Object.entries(values).forEach(([key, value]) => {
+//   if (key === "address") {
+//     Object.entries(value).forEach(([subKey, subValue]) => {
+//       formData.append(`address[${subKey}]`, subValue);
+//     });
+//   } else {
+//     formData.append(key, value);
+//   }
+// });
+
+// // Append image file
+//  formData.append("logo", previewImage);
+
   
       // Send a POST request to your backend API
-      const response = await api.post('/company/final-register', formData);
+      const response = await api.post('/company/final-register', formData);  
   
       // Handle success
       console.log('Registration successful:', response.data);
@@ -107,37 +123,39 @@ const RegistrationForm = () => {
         </div>
         <Formik
           initialValues={{
-            companyName: "",
+            name: "",
             email: "",
-            mobile: "",
+            contact: "",
             age: "",
             password: "",
-            confirmPassword: "",
-            industry: "",
-            landmark: "",
-            country: "",
-            state: "",
-            city: "",
-            pincode: "",
+            cpassword: "",
+            IndustryType: "",
+            address: {
+              landmark: "",
+              country: "",
+              state: "",
+              city: "",
+              pincode: "",
+            },
           }}
           validationSchema={validationSchema}
           onSubmit={handleFormSubmit}
         >
-          {({ values, isSubmitting }) => (
+          {({ values, isSubmitting,setFieldValue  }) => (
             <Form className="space-y-6">
               <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                 <div className="space-y-2">
                   <label className="block text-sm text-gray-700">
                     Company Name <span className="text-red-500">*</span>
                   </label>
-                  <input
+                  <Field
                     type="text"
                     placeholder="company name"
-                   
+                    name="name"
                     className="w-full p-2.5 border rounded-lg focus:ring-2 focus:ring-blue-500 outline-none text-sm md:text-base"
                   />
                   <ErrorMessage
-                    name="companyName"
+                    name="name"
                     component="div"
                     className="text-red-500 text-sm"
                   />
@@ -147,7 +165,7 @@ const RegistrationForm = () => {
                   <label className="block text-sm text-gray-700">
                     Email <span className="text-red-500">*</span>
                   </label>
-                  <input
+                  <Field
                     type="email"
                     placeholder="email@gmail.com"
                     name="email"
@@ -170,15 +188,15 @@ const RegistrationForm = () => {
                     <select className="p-2.5 border rounded-lg rounded-r-none border-r-0 focus:ring-2 focus:ring-blue-500 outline-none text-sm md:text-base min-w-[4rem]">
                       <option>IN</option>
                     </select>
-                    <input
+                    <Field
                       type="tel"
                       placeholder="00000 00000"
-                      name="mobile"
+                      name="contact"
                       className="w-full p-2.5 border rounded-lg rounded-l-none focus:ring-2 focus:ring-blue-500 outline-none text-sm md:text-base"
                     />
                   </div>
                   <ErrorMessage
-                    name="mobile"
+                    name="contact"
                     component="div"
                     className="text-red-500 text-sm"
                   />
@@ -188,7 +206,7 @@ const RegistrationForm = () => {
                     Age of the company (Year){" "}
                     <span className="text-red-500">*</span>
                   </label>
-                  <input
+                  <Field
                     type="number"
                     placeholder="5"
                     name="age"
@@ -208,16 +226,17 @@ const RegistrationForm = () => {
                     Password <span className="text-red-500">*</span>
                   </label>
                   <div className="relative">
-                    <input
+                    <Field
                       type={showPassword ? "text" : "password"}
                       placeholder="••••••"
+                      name="password"
                       className="w-full p-2.5 border rounded-lg focus:ring-2 focus:ring-blue-500 outline-none text-sm md:text-base"
                     />
                     <button
                       type="button"
                       onClick={() => setShowPassword(!showPassword)}
                       className="absolute right-2 top-1/2 -translate-y-1/2 text-gray-500"
-                      name="password"
+                      
                     >
                       {showPassword ? <EyeOff size={20} /> : <Eye size={20} />}
                     </button>
@@ -234,9 +253,10 @@ const RegistrationForm = () => {
                     Confirm Password <span className="text-red-500">*</span>
                   </label>
                   <div className="relative">
-                    <input
+                    <Field
                       type={showConfirmPassword ? "text" : "password"}
                       placeholder="••••••"
+                       name="cpassword"
                       className="w-full p-2.5 border rounded-lg focus:ring-2 focus:ring-blue-500 outline-none text-sm md:text-base"
                     />
                     <button
@@ -245,7 +265,7 @@ const RegistrationForm = () => {
                         setShowConfirmPassword(!showConfirmPassword)
                       }
                       className="absolute right-2 top-1/2 -translate-y-1/2 text-gray-500"
-                      name="confirmPassword"
+                     
                     >
                       {showConfirmPassword ? (
                         <EyeOff size={20} />
@@ -254,7 +274,7 @@ const RegistrationForm = () => {
                       )}
                     </button>
                     <ErrorMessage
-                      name="confirmPassword"
+                      name="cpassword"
                       component="div"
                       className="text-red-500 text-sm"
                     />
@@ -267,14 +287,22 @@ const RegistrationForm = () => {
                   <label className="block text-sm text-gray-700">
                     Industry Type <span className="text-red-500">*</span>
                   </label>
-                  <select
-                    name="industry"
+                  <Field
+                  as="select"
+                    name="IndustryType"
                     className="w-full p-2.5 border rounded-lg focus:ring-2 focus:ring-blue-500 outline-none text-sm md:text-base"
+                    value={values.IndustryType || ""}
+                    onChange={(e) => {
+                      setFieldValue("IndustryType",e.target.value);
+                    }}
                   >
-                    <option>India</option>
-                  </select>
+                     <option value=""></option>
+                    <option value="IT">IT</option>
+                    <option></option>
+
+                  </Field>
                   <ErrorMessage
-                    name="industry"
+                    name="IndustryType"
                     component="div"
                     className="text-red-500 text-sm"
                   />
@@ -284,14 +312,14 @@ const RegistrationForm = () => {
                   <label className="block text-sm text-gray-700">
                     Landmark <span className="text-red-500">*</span>
                   </label>
-                  <input
-                    name="landmark"
+                  <Field
+                    name="address.landmark"
                     type="text"
                     placeholder="landmark"
                     className="w-full p-2.5 border rounded-lg focus:ring-2 focus:ring-blue-500 outline-none text-sm md:text-base"
                   />
                   <ErrorMessage
-                    name="landmark"
+                    name="address.landmark"
                     component="div"
                     className="text-red-500 text-sm"
                   />
@@ -305,14 +333,13 @@ const RegistrationForm = () => {
                     <label className="block text-sm text-gray-700">
                       Country <span className="text-red-500">*</span>
                     </label>
-                    <select
-                      name="country"
+                    <Field
+                    as="select"
+                      name="address.country"
                       className="w-full p-2.5 border rounded-lg focus:ring-2 focus:ring-blue-500 outline-none text-sm md:text-base"
-                      value={selectedCountry}
+                      value={values.address.country || ""}
                       onChange={(e) => {
-                        setSelectedCountry(e.target.value);
-                        setSelectedState(""); // Reset state on country change
-                        setSelectedCity(""); // Reset city on country change
+                        setFieldValue("address.country",e.target.value);
                       }}
                     >
                       <option value="">Select Country</option>
@@ -321,9 +348,9 @@ const RegistrationForm = () => {
                           {country.name}
                         </option>
                       ))}
-                    </select>
+                    </Field>
                     <ErrorMessage
-                      name="country"
+                      name="address.country"
                       component="div"
                       className="text-red-500 text-sm"
                     />
@@ -334,28 +361,28 @@ const RegistrationForm = () => {
                     <label className="block text-sm text-gray-700">
                       State <span className="text-red-500">*</span>
                     </label>
-                    <select
+                    <Field
+                    as="select"
                       className="w-full p-2.5 border rounded-lg focus:ring-2 focus:ring-blue-500 outline-none text-sm md:text-base"
-                      value={selectedState}
+                      value={values.address.state || ""}
                       onChange={(e) => {
-                        setSelectedState(e.target.value);
-                        setSelectedCity(""); // Reset city on state change
+                        setFieldValue("address.state", e.target.value);
                       }}
                       name="state"
-                      disabled={!selectedCountry}
+                      
                     >
                       <option value="">Select State</option>
-                      {selectedCountry &&
-                        State.getStatesOfCountry(selectedCountry).map(
+                      {values.address.country &&
+                        State.getStatesOfCountry(values.address.country)?.map(
                           (state) => (
                             <option key={state.isoCode} value={state.isoCode}>
                               {state.name}
                             </option>
                           )
                         )}
-                    </select>
+                    </Field>
                     <ErrorMessage
-                      name="state"
+                      name="address.state"
                       component="div"
                       className="text-red-500 text-sm"
                     />
@@ -368,26 +395,28 @@ const RegistrationForm = () => {
                     <label className="block text-sm text-gray-700">
                       City <span className="text-red-500">*</span>
                     </label>
-                    <select
+                    <Field
+                    as="select"
                       className="w-full p-2.5 border rounded-lg focus:ring-2 focus:ring-blue-500 outline-none text-sm md:text-base"
-                      value={selectedCity}
-                      onChange={(e) => setSelectedCity(e.target.value)}
-                      disabled={!selectedState}
+                      value={values.address.city || ""}
+
+                      onChange={(e) => setFieldValue("address.city", e.target.value)}
+                     
                       name="city"
                     >
                       <option value="">Select City</option>
-                      {selectedState &&
+                      {values.address.state &&
                         City.getCitiesOfState(
-                          selectedCountry,
-                          selectedState
-                        ).map((city) => (
+                          values.address.country,
+                          values.address.state
+                        )?.map((city) => (
                           <option key={city.name} value={city.name}>
                             {city.name}
                           </option>
                         ))}
-                    </select>
+                    </Field>
                     <ErrorMessage
-                      name="city"
+                      name="address.city"
                       component="div"
                       className="text-red-500 text-sm"
                     />
@@ -398,16 +427,14 @@ const RegistrationForm = () => {
                     <label className="block text-sm text-gray-700">
                       Pincode <span className="text-red-500">*</span>
                     </label>
-                    <input
+                    <Field
                       type="number"
                       className="w-full p-2.5 border rounded-lg focus:ring-2 focus:ring-blue-500 outline-none text-sm md:text-base"
                       placeholder="Enter Pincode"
-                      value={pincode}
-                      onChange={(e) => setPincode(e.target.value)}
-                      name="pincode"
+                      name="address.pincode"
                     />
                     <ErrorMessage
-                      name="pincode"
+                      name="address.pincode"
                       component="div"
                       className="text-red-500 text-sm"
                     />
@@ -418,9 +445,9 @@ const RegistrationForm = () => {
               <button
                 type="submit"
                 className="w-full bg-gray-900 text-white p-3 rounded-lg hover:bg-gray-800 transition-colors text-sm md:text-base font-medium"
-                disabled={isSubmitting }
+                
               >
-                Create Account
+                 {isSubmitting ? "Submitting..." : "Register"}
               </button>
             </Form>
           )}
