@@ -1,44 +1,44 @@
-import { NextResponse } from "next/server";
-import type { NextRequest } from "next/server";
+// import { NextResponse } from "next/server";
+// import type { NextRequest } from "next/server";
 
-const isCompanyProtectedRoute = (route: string) =>
-  route.startsWith("/home") || 
-  route.startsWith("/premium") ||
-  route.startsWith("/profile")||
-  route.startsWith("/candidatelist");
-export function middleware(req: NextRequest) {
-  const ctoken = req.cookies.get("ctoken")?.value;
+// const isCompanyProtectedRoute = (route: string) =>
+//   route.startsWith("/home") || 
+//   route.startsWith("/premium") ||
+//   route.startsWith("/profile")||
+//   route.startsWith("/candidatelist");
+// export function middleware(req: NextRequest) {
+//   const ctoken = req.cookies.get("ctoken")?.value;
 
-  const url = req.nextUrl.clone();
-  const pathname = url.pathname;
+//   const url = req.nextUrl.clone();
+//   const pathname = url.pathname;
 
-      console.log("ctoken",ctoken);
+//       console.log("ctoken",ctoken);
       
 
-  if (!ctoken && isCompanyProtectedRoute(pathname)) {
+//   if (!ctoken && isCompanyProtectedRoute(pathname)) {
    
-    url.pathname = "/";
-    return NextResponse.redirect(url);
-  }
+//     url.pathname = "/";
+//     return NextResponse.redirect(url);
+//   }
 
-  if (ctoken && (pathname === "/"||pathname==="/c-login")) {
+//   if (ctoken && (pathname === "/"||pathname==="/c-login")) {
 
-    url.pathname = "/home";
-    return NextResponse.redirect(url);
-  }
+//     url.pathname = "/home";
+//     return NextResponse.redirect(url);
+//   }
 
 
-  // re validate the cache of token
-  const res= NextResponse.next();
-  res.headers.set("Cache-Control", "no-store, must-revalidate");
-  return res;  
-}
+//   // re validate the cache of token
+//   const res= NextResponse.next();
+//   res.headers.set("Cache-Control", "no-store, must-revalidate");
+//   return res;  
+// }
 
-export const config = {
-  matcher: [
-    "/((?!_next|_next/static|_next/image|images|favicon.ico).*)",
-  ],
-};
+// export const config = {
+//   matcher: [
+//     "/((?!_next|_next/static|_next/image|images|favicon.ico).*)",
+//   ],
+// };
 
 
 
@@ -126,3 +126,85 @@ export const config = {
 //     "/((?!home|_next|_next/static|_next/image|images|favicon.ico|reset-password|forgot-password|verify-otp).*)",
 //   ],
 // };
+
+
+
+
+import { NextResponse } from "next/server";
+import type { NextRequest } from "next/server";
+
+const isAdminRoute = (route: string) => route.startsWith("/admin") && route !== "/login";
+const isUserProtectedRoute = (route: string) => route.startsWith("/user") && route !== "/login";
+const isDoctorProtectedRoute = (route: string) => route.startsWith("/doctor") && route !== "/login";
+
+export function middleware(req: NextRequest) {
+  
+  const userType = req.cookies.get("user")?.value;
+  const token = req.cookies.get("refreshToken")?.value || req.cookies.get("accessToken")?.value;
+  const url = req.nextUrl.clone();
+  const pathName = url.pathname;
+  
+  if (userType !== "Admin" && isAdminRoute(pathName)) {
+    url.pathname = pathName;
+    return NextResponse.redirect(url);
+  }
+
+  if (userType === "Admin" && pathName === "/login") {
+    url.pathname = "/admin";
+    return NextResponse.redirect(url);
+  }
+
+
+  if (userType === "Admin") {
+    if (isUserProtectedRoute(pathName) || isDoctorProtectedRoute(pathName)) {
+      url.pathname = "/login"; 
+      return NextResponse.redirect(url);
+    }
+  }
+
+  if (!token && isUserProtectedRoute(pathName)) {
+    if (req.headers.get("referer")?.includes("/user")) {
+      return NextResponse.next(); 
+    }
+    url.pathname = "/"; 
+    return NextResponse.redirect(url);
+  }
+
+  if (token && userType === "User" && (pathName === "/login" || pathName === "/register")) {
+    url.pathname = "/user";
+    return NextResponse.redirect(url);
+  }
+
+  if (userType === "User") {
+    if (isAdminRoute(pathName) || isDoctorProtectedRoute(pathName)) {
+      url.pathname = "/login"; 
+      return NextResponse.redirect(url);
+    }
+  }
+
+
+  if (!token && isDoctorProtectedRoute(pathName)) {
+    url.pathname = "/login";
+    return NextResponse.redirect(url);
+  }
+
+  if (token && userType === "Doctor" && (pathName === "/login" || pathName === "/register")) {
+    url.pathname = "/doctor";
+    return NextResponse.redirect(url);
+  }
+
+
+  if (userType === "Doctor") {
+    if (isAdminRoute(pathName) || isUserProtectedRoute(pathName)) {
+      url.pathname = "/login"; 
+      return NextResponse.redirect(url);
+    }
+  }
+
+
+  return NextResponse.next(); 
+}
+
+export const config = {
+  matcher: "/:path*", 
+};
