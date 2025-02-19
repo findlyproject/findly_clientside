@@ -1,7 +1,6 @@
 "use client"
 import { useState } from "react";
 import { useForm } from "react-hook-form";
-import CreatableSelect from "react-select/creatable";
 
 export const JobPost = () => {
   const [requirementInput, setRequirementInput] = useState("");
