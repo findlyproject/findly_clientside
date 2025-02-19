@@ -10,6 +10,9 @@ import {
 import api from "@/utils/api";
 import { toast } from "react-toastify";
 
+interface PersonaldetailsProps {
+    loading: (isLoading: boolean) => void;
+  }
 interface ImageType {
     profileImage: string | File | undefined;
     banner: string | File | undefined;
@@ -23,7 +26,9 @@ interface input {
     dateOfBirth: Date | undefined |number ;
     about: string | undefined;
 }
-function Personaldetails({loading}) {
+
+
+function Personaldetails({ loading }: PersonaldetailsProps) {
     console.log("props =",loading);
     
   const user = useAppSelector((state) => state.user.activeuser as UserProfile);

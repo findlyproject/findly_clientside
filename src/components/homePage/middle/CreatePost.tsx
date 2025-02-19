@@ -1,5 +1,8 @@
 "use client";
-import { addPostByUser } from "@/lib/store/features/actions/postActions";
+import {
+  addPostByUser,
+  fetchAllPosts,
+} from "@/lib/store/features/actions/postActions";
 import { useAppDispatch } from "@/lib/store/hooks";
 import Image from "next/image";
 import { useState, useEffect } from "react";
@@ -24,42 +27,43 @@ const CreatePost = () => {
   const handleMediaChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     if (event.target.files && event.target.files.length > 0) {
       const files = Array.from(event.target.files);
-      console.log("files",event.target.files)
-  
+      console.log("files", event.target.files);
+
       setSelectedFiles((prevFiles) => {
         // Filter out duplicates
-        const newFiles = files.filter((file) => !prevFiles.some((prev) => prev.name === file.name));
-  
+        const newFiles = files.filter(
+          (file) => !prevFiles.some((prev) => prev.name === file.name)
+        );
+
         // Combine existing and new files (limit to 5)
         const updatedFiles = [...prevFiles, ...newFiles].slice(0, 5);
-        
-        // ✅ Ensure the correct previews are generated
+
+        //  previews are generated
         const updatedImages = updatedFiles
           .filter((file) => file.type.startsWith("image/"))
           .map((file) => URL.createObjectURL(file));
-  
-        const updatedVideo = updatedFiles.find((file) => file.type.startsWith("video/"))
-          ? URL.createObjectURL(updatedFiles.find((file) => file.type.startsWith("video/"))!)
+
+        const updatedVideo = updatedFiles.find((file) =>
+          file.type.startsWith("video/")
+        )
+          ? URL.createObjectURL(
+              updatedFiles.find((file) => file.type.startsWith("video/"))!
+            )
           : null;
-  
+
         setPreviewImages(updatedImages);
         setPreviewVideo(updatedVideo);
-  
+
         return updatedFiles;
       });
     }
   };
-  
-  
- 
 
   const handleSubmit = async (event: React.FormEvent) => {
     event.preventDefault();
 
-    // ✅ Dispatch Redux action with correct payload
     dispatch(addPostByUser({ description, mediaFiles: selectedFiles }));
-
-    // Reset form after submission
+    dispatch(fetchAllPosts());
     setDescription("");
     setSelectedFiles([]);
     setPreviewImages([]);
@@ -76,14 +80,16 @@ const CreatePost = () => {
       <form onSubmit={handleSubmit} className="space-y-4">
         {/* Media Upload (Image or Video) */}
         <div>
-          <label className="block text-gray-700 font-medium mb-1">Upload Media</label>
+          <label className="block text-gray-700 font-medium mb-1">
+            Upload Media
+          </label>
           <p className="text-sm text-gray-500 mt-1">
-  {selectedFiles.length} / 5 images selected
-</p>
+            {selectedFiles.length} / 5 images selected
+          </p>
           <div className="relative border border-gray-300 rounded-md p-3 flex items-center cursor-pointer">
             <FiImage className="text-gray-500 w-6 h-6 mr-2" />
             <span className="text-gray-500">Upload Image or Video</span>
-           
+
             <input
               type="file"
               accept="image/*,video/*"
@@ -123,7 +129,9 @@ const CreatePost = () => {
 
         {/* Description Input */}
         <div>
-          <label className="block text-gray-700 font-medium mb-1">Description</label>
+          <label className="block text-gray-700 font-medium mb-1">
+            Description
+          </label>
           <textarea
             value={description}
             onChange={(e) => setDescription(e.target.value)}

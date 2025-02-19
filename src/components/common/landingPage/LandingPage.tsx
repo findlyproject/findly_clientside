@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useEffect } from "react";
+
 import Image from "next/image";
 import { useRouter } from "next/navigation";
 import jobImage from "../../../../public/job.png";
@@ -12,18 +12,18 @@ import { FaUserPlus, FaUpload, FaCheckCircle } from "react-icons/fa";
 import goup from "../../../../public/landingPage-group-discussion.png"
 
 import Testimonials from "./Testimonial";
-import { useAppDispatch } from "@/lib/store/hooks";
-import { setCompanyLogOut } from "@/lib/store/features/companyslice";
 
 
 
 function LandingPage() {
 
   
-const  dispatch=useAppDispatch()
+// const  dispatch=useAppDispatch()
 // useEffect(()=>{
 // dispatch(setCompanyLogOut())
+// dispatch(SetLogout())
 // },[])
+
   const router = useRouter()
   const steps = [
     { title: "Create account", desc: "Aliquam facilisis egestas sapien.", icon: <FaUserPlus /> },
@@ -199,7 +199,7 @@ const  dispatch=useAppDispatch()
             <h2 className="text-2xl font-bold">Become a Candidate</h2>
             <p className="text-gray-600">Registering as a jobseeker is a vital step to access employment opportunities, resources, and support tailored to your career goals.</p>
             <button
-              onClick={() => router.push(`/register`)}
+              onClick={() => router.push(`/user/register`)}
               className="bg-primary text-white px-5 py-2 rounded-full mt-4">Register Now</button>
           </div>
           <div className="md:w-1/2">
@@ -210,7 +210,9 @@ const  dispatch=useAppDispatch()
           <div className="md:w-1/2">
             <h2 className="text-2xl font-bold">Become an Employer</h2>
             <p>Registering as a recruiter or employer enables access to a diverse talent pool and streamlines the hiring process, enhancing workforce management.</p>
-            <button className="bg-white text-primary px-5 py-2 rounded-full mt-4"
+            <button 
+            onClick={() => router.push(`/company/register`)}
+            className="bg-white text-primary px-5 py-2 rounded-full mt-4"
             >Register Now</button>
           </div>
           <div className="md:w-1/2 flex justify-end">

@@ -35,7 +35,7 @@ const Login = () => {
       if(loginStatus.type==="logincompany/fulfilled"){
 
         toast.success("login successfully")
-        router.push("/home")
+        router.push("/company/home")
       }
       
 

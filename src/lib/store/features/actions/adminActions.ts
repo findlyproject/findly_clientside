@@ -5,9 +5,10 @@ import handleAsync from "@/utils/handleAsync";
 import { AxiosResponse } from "axios";
 import api from "@/utils/api";
 import { AdminProfile, setAdmin } from "../adminSlice";
+
 //login
 interface LoginResponse {
-    findadmin: AdminProfile;
+  findAdmin: AdminProfile;
   }
   
   export const loginAdmin = createAsyncThunk(
@@ -19,11 +20,13 @@ interface LoginResponse {
       const response = await handleAsync<AxiosResponse<LoginResponse>>(() =>
         api.post("/admin/login", state)
       );
+      console.log("response of admin login",response);
+      
       if (!response) {
         return rejectWithValue("Login failed. Please try again.");
       }
   
-      dispatch(setAdmin(response?.data?.findadmin as AdminProfile));
-      return response?.data?.findadmin;
+      dispatch(setAdmin(response?.data?.findAdmin as AdminProfile));
+      return response?.data?.findAdmin;
     }
   );

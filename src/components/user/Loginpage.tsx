@@ -7,15 +7,20 @@ import { useAppDispatch, useAppSelector } from "@/lib/store/hooks";
 import { useRouter } from "next/navigation";
 
 import Image from "next/image";
-import { googlloginUser, loginUser } from "@/lib/store/features/actions/userActions";
+import { forgotPassword, googlloginUser, loginUser } from "@/lib/store/features/actions/userActions";
 import { toast } from "react-toastify";
 import { setGooglelogin } from "@/lib/store/features/userSlice";
 
 
+
+interface Istate {
+  email: string;
+  password: string;
+}
 function Loginpage() {
   const router = useRouter()
   const {data:session} = useSession()
-  const [state, setState] = useState({
+  const [state, setState] = useState<Istate>({
     email: "",
     password: ""
   })
@@ -34,7 +39,7 @@ console.log("googlestate",googlestate);
     const resultAction = await dispatch(loginUser(state));
 
     if (loginUser.fulfilled.match(resultAction)) {
-      router.push("/home");
+      router.push("/user/home");
       toast.success("Login Successful!")
     }
   };
@@ -70,9 +75,42 @@ console.log("googlestate",googlestate);
   }, [googlestate, dispatch, hasLoggedIn, router, session]);
   
   
-  // console.log(session);
-
+  const validateEmail = (email: string) => {
+    return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email);
+  };
   
+
+  const forgotPasswordee =async () =>{
+    
+
+    if (!state.email) {
+      toast.error("Please enter your email");
+      return;
+    }
+    if (!validateEmail(state.email)) {
+      toast.error("Please enter a valid email");
+      return;
+    }
+    console.log("object",state.email)
+
+    try {
+      
+      const result = await dispatch(forgotPassword({ email: state.email }));
+
+      if (forgotPassword.rejected.match(result)) {
+        toast.error("You Have no Accunt With This Email");
+        return;
+      }
+      toast.success("OTP sent successfully!");
+      router.push("/resetpassword");
+    } catch (err) {
+      console.error("Error:", err);
+     toast.error("You Have no Accunt With This Email");
+    }
+   }
+    
+   
+
   return (
     <div className="flex h-screen items-center justify-center bg-gray-100">  
       <div className="absolute top-3 left-1">
@@ -117,6 +155,13 @@ console.log("googlestate",googlestate);
                 onChange={handilchange}
                 required
               />
+              <div className="w-fullfont-bold  flex justify-end pr-6 cursor-pointer">
+                <div
+                onClick={forgotPasswordee}
+                >
+                <p className="underline ">Forgot Password</p>
+                </div>
+              </div>
             </div>
               
 

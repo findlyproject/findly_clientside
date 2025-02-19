@@ -7,7 +7,7 @@ export default function QuestionPage() {
 
   const handleContinue = (e: React.MouseEvent<HTMLButtonElement>) => {
     e.preventDefault();
-    router.push(`/register/namepage/educationpage/questionpage/jobpage`);
+    router.push(`/user/register/namepage/educationpage/questionpage/jobpage`);
   };
 
   return (

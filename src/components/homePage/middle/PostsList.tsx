@@ -4,15 +4,20 @@ import { PostPreview } from "./postPreview/PostPreview";
 export const PostsList = () => {
   const { posts } = useAppSelector((state) => state.post);
 
-console.log("posts",posts);
-
   return (
-    <section className="w-full max-w-3xl mx-auto px-4 sm:px-6 lg:px-8 space-y-3 border bg-white rounded-lg shadow-md py-4">
+    <section className="w-full max-w-3xl mx-auto px-4 sm:px-10 lg:px-8 space-y-3 rounded-lg py-4">
       {/* Posts List */}
       {Array.isArray(posts) && posts.length > 0 ? (
-        posts.map((post) => <PostPreview key={post._id} post={post} />)
+        posts
+          .slice()
+          .sort(
+            (a, b) =>
+              new Date(b.createdAt || 0).getTime() -
+              new Date(a.createdAt || 0).getTime()
+          )
+          .map((post) => <PostPreview key={post._id} post={post} />)
       ) : (
-        <div className="flex justify-center items-center h-40">
+        <div className="flex justify-center items-center ">
           <p className="text-center text-gray-500">No posts available.</p>
         </div>
       )}
