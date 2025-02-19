@@ -14,7 +14,8 @@ export function middleware(req: NextRequest) {
   const url = req.nextUrl.clone();
   const pathname = url.pathname;
 
-  
+      console.log("ctoken",ctoken);
+      
 
   if (!ctoken && isUserProtectedRoute(pathname)) {
    
@@ -28,7 +29,11 @@ export function middleware(req: NextRequest) {
     return NextResponse.redirect(url);
   }
 
-  return NextResponse.next();
+
+  // re validate the cache of token
+  const res= NextResponse.next();
+  res.headers.set("Cache-Control", "no-store, must-revalidate");
+  return res;  
 }
 
 export const config = {

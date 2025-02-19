@@ -40,10 +40,13 @@ export const loginSlice= createSlice({
         state.activeCompany=action.payload
         console.log("state.activeCompany",state.activeCompany);
         
+    },
+    setCompanyLogOut:(state)=>{
+        state.activeCompany=null
     }
 
    }
 })
 
-export const {setActiveCompany}=loginSlice.actions
+export const {setActiveCompany,setCompanyLogOut}=loginSlice.actions
 export default loginSlice.reducer 

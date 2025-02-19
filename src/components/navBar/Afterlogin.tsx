@@ -10,6 +10,7 @@ import React from "react";
 import Image from "next/image";
 import { logoutUser } from "@/lib/store/features/actions/userActions";
 import { dropDownAfterlogin, dropDownAfterloginSmallerScreen } from "./Navbar";
+import { logOutCompany } from "@/lib/store/features/actions/companyActions";
 
 
 function AfterLogin() {
@@ -20,9 +21,17 @@ function AfterLogin() {
   const dispatch = useAppDispatch()
 
   const handilLogut = () => {
-    dispatch(logoutUser())
+    if(activeuser){
+      console.log("useeeeeeeeeeeer");
+      
+      dispatch(logoutUser())
+    }else if(activeCompany){
+      console.log("commmmmmmmmmmmpa");
+      dispatch(logOutCompany())
+    }
+  
     // signOut()
-    router.push("/")
+    router.replace("/");
     
   }
   

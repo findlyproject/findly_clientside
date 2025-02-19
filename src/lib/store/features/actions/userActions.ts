@@ -4,7 +4,7 @@
 
 import { createAsyncThunk } from "@reduxjs/toolkit";
 import api from "@/utils/api";
-import { setActive, setConnectionRequest, SetLogout, UserProfile } from "../userSlice";
+import { setActive, setConnectionRequest, setforgotPassword, SetLogout, UserProfile } from "../userSlice";
 import handleAsync from "@/utils/handleAsync";
 import { AxiosResponse } from "axios";
 import {setAllRatings,Rating} from '../ratingSlice'
@@ -164,3 +164,19 @@ export const connectionRequest = createAsyncThunk(
     return response?.data?.finduser;
   }
 );
+
+
+export const forgotPassword = createAsyncThunk(
+  "auth/forgotPassword",
+  async (state: { email: string }, { dispatch, rejectWithValue }) => {
+    try {
+      const response = await api.post(`/user/sendotp/${state.email}`);
+      dispatch(setforgotPassword({ email: state.email, otp: response.data.otp }));
+      return response.data;
+    } catch (error) {
+      console.log("error",error);
+      
+      return rejectWithValue("An error occurred while submitting the rating.",error);
+    }
+  }
+)

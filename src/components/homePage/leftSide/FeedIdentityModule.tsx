@@ -6,10 +6,8 @@ import api from "@/utils/api";
 
 import Image from "next/image";
 
-export const FeedIdentityModule = () => {
-  const[connections,setConnections]=useState([])
-  console.log("connections",connections);
-  
+export const FeedIdentityModule = () => {  
+  const [connections, setConnections] = useState([]);
   const router = useRouter();
   const { activeuser } = useAppSelector((state) => state.login);
 
@@ -70,9 +68,7 @@ export const FeedIdentityModule = () => {
         {/* Connections */}
         <div className="px-4 py-2 border-b border-gray-300">
           {/* <p className="text-sm text-gray-600">{connections?connections.length:0} connections</p> */}
-          <p className="text-sm text-gray-600">
-            {activeuser ? activeuser.connecting.length : 0} connections
-          </p>
+          <p className="text-sm text-gray-600">{activeuser?activeuser.connecting?.length:0} connections</p>
         </div>
       </div>
     </section>

@@ -94,6 +94,10 @@ interface LoginState {
   userdetails:UserProfile|null
   connectionRequest:UserProfile|null
   connections:UserProfile[]
+  forgotPassword:{
+    email:string,
+    otp:string,
+  }
 }
 
 const initialState: LoginState = {
@@ -101,7 +105,11 @@ const initialState: LoginState = {
   googlestate: true,
   userdetails:null,
   connectionRequest:null,
-  connections:[]
+  connections:[],
+  forgotPassword:{
+    email:"",
+    otp:"",
+  }
 };
 
 // interface EditState {
@@ -216,75 +224,7 @@ const loginSlice = createSlice({
        
       }
     },
-    // setEducation: (state, action: PayloadAction<Education>) => {
-    //   state.activeuser?.education.push(action.payload);
-    // },
-    // setRemoveEducation: (state, action: PayloadAction<number>) => {
-    //   if (state.activeuser?.education) {
-    //     state.activeuser.education = state.activeuser.education.filter((_, index) => index !== action.payload);
-    //   }
-    // },
-    // setjobLocations: (state, action: PayloadAction<string>) => {
-    //   state.activeuser?.jobLocation?.push(action.payload);
-    // },
-    // setRemovejoblocation: (state, action: PayloadAction<number>) => {
-    //   if (state.activeuser?.jobLocation) {
-    //     state.activeuser.jobLocation = state.activeuser.jobLocation.filter((_, index) => index !== action.payload);
-    //   }
-    // },
-    // setjobTItles: (state, action: PayloadAction<string>) => {
-    //   state.activeuser?.jobTitle?.push(action.payload);
-    // },
-    // setRemovjobTItles: (state, action: PayloadAction<number>) => {
-    //   if (state.activeuser?.jobTitle) {
-    //     state.activeuser.jobTitle = state.activeuser.jobTitle.filter((_, index) => index !== action.payload);
-    //   }
-    // },
-    // setLocation: (state, action: PayloadAction<string>) => {
-    //   if (state.activeuser) {
-    //     state.activeuser.location = action.payload;
-    //   }
-    // },
-    // setPersonalDetails: (state, action: PayloadAction<Partial<EditState>>) => {
-    //   if (state.activeuser) {
-    //     state.activeuser.firstName = action.payload.details.firstName ?? state.activeuser.firstName;
-    //     state.activeuser.lastName = action.payload.details.lastName ?? state.activeuser.lastName;
-    //     state.activeuser.email = action.payload.details.email ?? state.activeuser.email;
-    //     state.activeuser.phoneNumber = action.payload.details.phoneNumber ?? state.activeuser.phoneNumber;
-    //     state.activeuser.dateOfBirth = action.payload.details.dateOfBirth ?? state.activeuser.dateOfBirth;
-    //     state.activeuser.about = action.payload.details.about ?? state.activeuser.about;
-    //   }
-    // },
-    // setProject: (state, action: PayloadAction<{ title: string; description: string; link?: string }>) => {
-    //   state.activeuser?.projects?.push(action.payload);
-    // },
-    // setremovproject: (state, action: PayloadAction<number>) => {
-    //   if (state.activeuser?.projects) {
-    //     state.activeuser.projects = state.activeuser.projects.filter((_, index) => index !== action.payload);
-    //   }
-    // },
-    // setskils: (state, action: PayloadAction<string>) => {
-    //   state.activeuser?.skills?.push(action.payload);
-    // },
-    // setRemovskils: (state, action: PayloadAction<number>) => {
-    //   if (state.activeuser?.skills) {
-    //     state.activeuser.skills = state.activeuser.skills.filter((_, index) => index !== action.payload);
-    //   }
-    // },
-    // setPersonalDetails:(state, action: PayloadAction<number>) => {
-    //   state.activeuser.profileImage = action.payload.profileImage;
-    //   state.activeuser.banner = action.payload.bannerImage
-    //   if (state.activeuser) {
-    //     state.activeuser.firstName = action.payload.details.firstName ?? state.activeuser.firstName;
-    //     state.activeuser.lastName = action.payload.details.lastName ?? state.activeuser.lastName;
-    //     state.activeuser.email = action.payload.details.email ?? state.activeuser.email;
-    //     state.activeuser.phoneNumber = action.payload.details.phoneNumber ?? state.activeuser.phoneNumber;
-    //     state.activeuser.dateOfBirth = action.payload.details.dateOfBirth ?? state.activeuser.dateOfBirth;
-    //     state.activeuser.about = action.payload.details.about ?? state.activeuser.about;
-    //   }
-      
-    // },
-    
+  
     setDetailes:(state,action)=>{
 state.userdetails=action.payload
     },
@@ -300,6 +240,11 @@ state.connections=action.payload
         state.activeuser.banner = action.payload.banner;
       }
   },
+  setforgotPassword:(state,action)=>{
+    state.forgotPassword.email = action.payload.email;
+    state.forgotPassword.otp = action.payload.otp;
+    console.log("otpotp",action.payload)
+   },
   },
 });
 
@@ -325,6 +270,7 @@ export const {
   setjobTItles,
   setRemovejoblocation,
   setImages,
+  setforgotPassword,
 } = loginSlice.actions;
 
 export default loginSlice.reducer;
