@@ -53,7 +53,7 @@ const Page1: React.FC = () => {
       const response = await api.post("company/verify-otp", values);
       console.log("Verification response:", response);
       alert("OTP verified successfully!");
-      router.push("/c.register/form");
+      router.push("/company/register/form");
     } catch (error) {
       console.error("Error verifying OTP:", error);
       alert("Invalid OTP. Please try again.");

@@ -116,7 +116,7 @@ console.log("resultAction",resultAction);
 
 
     if (registerUser.fulfilled.match(resultAction)) {
-      router.push("/home");
+      router.push("/user/home");
       toast.success("Registration Successful!");
     }
   }

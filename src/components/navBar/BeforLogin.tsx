@@ -12,12 +12,12 @@ function Beforlogin() {
   return (
     <div>
       <div className="flex justify-end space-x-3">
-      <Link href="/login" className="">
+      <Link href="/login/user" className="">
         <button className="bg-primary p-2 px-7 rounded-full text-white hidden md:block">
         Employees desk
         </button>
       </Link>
-      <Link href="/c-login" className="">
+      <Link href="/login/company" className="">
         <button className="bg-primary p-2 px-7 rounded-full text-white hidden md:block">
         Employer desk
         </button>

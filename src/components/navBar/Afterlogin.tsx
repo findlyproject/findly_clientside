@@ -19,26 +19,33 @@ function AfterLogin() {
   const activeCompany=useAppSelector((state)=>state.companyLogin.activeCompany)
 
   const dispatch = useAppDispatch()
+const route=activeuser?"user":"company"
+    const handilLogut = () => {
+        // Clear user and company tokens from cookies
+  document.cookie = "token=; path=/; max-age=0"; // Clear user token
+  document.cookie = "ctoken=; path=/; max-age=0"; // Clear company token
 
-  const handilLogut = () => {
-    if(activeuser){
-      console.log("useeeeeeeeeeeer");
-      
-      dispatch(logoutUser())
-    }else if(activeCompany){
-      console.log("commmmmmmmmmmmpa");
-      dispatch(logOutCompany())
-    }
-  
-    // signOut()
-    router.replace("/");
+      if(activeuser){
+        console.log("useeeeeeeeeeeer");
+        
+        dispatch(logoutUser())
+      }else if(activeCompany){
+        console.log("commmmmmmmmmmmpa");
+        dispatch(logOutCompany())
+      }
     
-  }
-  
+      // signOut()
+      router.replace("/");
+      
+    }
+    
+console.log("dropDownAfterlogin",dropDownAfterlogin);
+console.log("dropDownAfterloginSmallerScreen",dropDownAfterloginSmallerScreen);
 
   return (
     <div className="flex">
-      <Link href="/notification">
+      
+      <Link href={`/${route}/notification`}>
         <button className="relative text-gray-500 hover:text-gray-700 p-2">
           <BellIcon className="h-6 w-6" />
         </button></Link>
@@ -64,7 +71,7 @@ function AfterLogin() {
             <Menu.Item>
               {({ active }) => (
                 <Link
-                  href='/ownprofile'
+                  href={`/${route}/profile`}
                   className={`block px-4 py-2 text-sm hover:bg-gray-300 ${active ? "bg-gray-300" : ""
                     }`}
                 >
@@ -84,7 +91,7 @@ function AfterLogin() {
                 </Link>
               )}
             </Menu.Item>
-            {dropDownAfterlogin.map((item) => (
+            {dropDownAfterlogin(route).map((item) => (
               <Menu.Item key={item.name}>
 
                 {({ active }) => (
@@ -139,7 +146,7 @@ function AfterLogin() {
             <Menu.Item>
               {({ active }) => (
                 <Link
-                  href='/ownprofile'
+                  href={`/${route}/profile`}
                   className={`block px-4 py-2 text-sm hover:bg-gray-300 ${active ? "bg-gray-300" : ""
                     }`}
                 >
@@ -159,7 +166,7 @@ function AfterLogin() {
                 </Link>
               )}
             </Menu.Item>
-            {dropDownAfterloginSmallerScreen.map((item) => (
+            {dropDownAfterloginSmallerScreen(route).map((item) => (
               <Menu.Item key={item.name}>
 
                 {({ active }) => (

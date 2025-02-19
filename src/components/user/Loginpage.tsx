@@ -12,6 +12,7 @@ import { toast } from "react-toastify";
 import { setGooglelogin } from "@/lib/store/features/userSlice";
 
 
+
 interface Istate {
   email: string;
   password: string;
@@ -23,9 +24,10 @@ function Loginpage() {
     email: "",
     password: ""
   })
+
   const {googlestate} = useAppSelector((state)=>state.login)
 console.log("googlestate",googlestate);
-
+ 
 
   const dispatch = useAppDispatch()
   const handilchange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -37,7 +39,7 @@ console.log("googlestate",googlestate);
     const resultAction = await dispatch(loginUser(state));
 
     if (loginUser.fulfilled.match(resultAction)) {
-      router.push("/home");
+      router.push("/user/home");
       toast.success("Login Successful!")
     }
   };

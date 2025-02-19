@@ -6,37 +6,7 @@ import api from "@/utils/api";
 
 import Image from "next/image";
 
-<<<<<<< HEAD
-=======
-<<<<<<< HEAD
-export const FeedIdentityModule = () => {
-  const [connections, setConnections] = useState([]);
-  const router = useRouter();
-  const { activeuser } = useAppSelector((state) => state.login);
 
-  console.log("activeuser", { activeuser });
-  useEffect(() => {
-    const fetchConnections = async () => {
-      const response = await api.get(`/connecting/getconnection`);
-      console.log("all connections of user response", response);
-
-      setConnections(response.data.connections);
-    };
-    fetchConnections();
-  }, []);
-
-  if (!activeuser) {
-    return (
-      <section className="rounded-lg border border-gray-300 min-h-[240px] bg-white flex items-center justify-center">
-        Loading...
-      </section>
-    );
-  }
-
-=======
-
-
->>>>>>> 6977ae517ebbd4ee62e0454d6005c6902bb1028b
 export const FeedIdentityModule = () => {  
   const [connections, setConnections] = useState([]);
   const router = useRouter();
@@ -60,12 +30,8 @@ export const FeedIdentityModule = () => {
       </section>
     );
   }
-<<<<<<< HEAD
-
-=======
   
->>>>>>> 5595591ae871dbdb6ac9cb704189243e98ad0092
->>>>>>> 6977ae517ebbd4ee62e0454d6005c6902bb1028b
+
   return (
     <section className="rounded-lg border border-gray-300 min-h-[240px] bg-white">
       <div>
@@ -101,23 +67,14 @@ export const FeedIdentityModule = () => {
         </div>
 
         <div className="px-4 py-2 border-b border-gray-300">
-<<<<<<< HEAD
-          <p className="text-sm text-gray-600">
-            {connections ? connections.length : 0} connections
-          </p>
-=======
           {/* <p className="text-sm text-gray-600">{connections?connections.length:0} connections</p> */}
           <p className="text-sm text-gray-600">{activeuser?activeuser.connecting?.length:0} connections</p>
->>>>>>> 5595591ae871dbdb6ac9cb704189243e98ad0092
         </div>
       </div>
     </section>
   );
 };
-<<<<<<< HEAD
-=======
-<<<<<<< HEAD
-=======
+
 
 
 
@@ -172,5 +129,3 @@ export const FeedIdentityModule = () => {
 //     </section>
 //   )
 // }
->>>>>>> 5595591ae871dbdb6ac9cb704189243e98ad0092
->>>>>>> 6977ae517ebbd4ee62e0454d6005c6902bb1028b
