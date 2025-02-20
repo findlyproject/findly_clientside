@@ -40,7 +40,11 @@ export default function NamePage() {
       dispatch(setfirstName(Firstname));
       dispatch(setlastName(Lastname));
       
+<<<<<<< HEAD
+      router.push(`/register/namepage/educationpage`);
+=======
       router.push(`/user/register/namepage/educationpage`);
+>>>>>>> 0e7888464bd06148eee8a0fd7563175062a8f8d6
     }
   };
   return (

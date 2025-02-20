@@ -16,10 +16,6 @@ export default function Profile() {
   const [selectedFile, setSelectedFile] = useState<File | null>(null);
   const [preview, setPreview] = useState<string | null>(admin.profileImage || null);
 
-  const [activeLink, setActiveLink] = useState('accountSettings');
-  const handleLinkClick = (link: string) => {
-    setActiveLink(link);
-  };
   const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     if (e.target.files && e.target.files[0]) {
       setSelectedFile(e.target.files[0]);
@@ -87,13 +83,7 @@ export default function Profile() {
           </h2>
           <p className="text-gray-500">{admin.email}</p>
         </div>
-        <nav className="mt-6 space-y-3">
-          <a href="#" className="block text-gray-700 hover:text-primary hover:font-semibold">Account Settings</a>
-           <a href="#" className="block text-gray-700 hover:text-primary hover:font-semibold">Password</a>
-           <a href="#" className="block text-gray-700 hover:text-primary hover:font-semibold">Security & Privacy</a>
-           <a href="#" className="block text-gray-700 hover:text-primary hover:font-semibold">Application</a>
-           <a href="#" className="block text-gray-700 hover:text-primary hover:font-semibold">Notification</a>
-         </nav>
+        
       </aside>
 
       <main className="flex-1 bg-white shadow-md rounded-lg p-6 md:ml-6">
@@ -151,6 +141,9 @@ export default function Profile() {
   
                 <ErrorMessage name="email" component="div" className="text-red-500 text-sm" />
               </div>
+
+
+              
               <div>
                 <Field
                   type="text"

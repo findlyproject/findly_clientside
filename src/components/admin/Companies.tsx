@@ -1,20 +1,21 @@
 "use client";
 
+import { companyData } from "@/lib/store/features/companyslice";
 import { UserProfile } from "@/lib/store/features/userSlice";
 import api from "@/utils/api";
 import Image from "next/image";
 import { useEffect, useState } from "react";
 
-const Users = () => {
-  const [data, setData] = useState<UserProfile[]>([]);
+const Companies = () => {
+  const [data, setData] = useState<companyData[]>([]);
 
   useEffect(() => {
-    const fetchUsers = async () => {
-      const response = await api.get("admin/users");
-      const nonAdminUsers = response.data.users;
+    const fetchCompanies = async () => {
+      const response = await api.get("admin/companies");
+      const nonAdminUsers = response.data.companies;
       setData(nonAdminUsers);
     };
-    fetchUsers();
+    fetchCompanies();
   }, []);
   const handleBlock = async (id: string) => {
     const response = await api.patch(`/admin/blockandunblock/${id}`);
@@ -38,10 +39,10 @@ const Users = () => {
               <thead>
                 <tr className="bg-gray-50">
                   <th className="p-5 text-left font-semibold text-gray-900">
-                  Full Name
+                    User ID
                   </th>
                   <th className="p-5 text-left font-semibold text-gray-900">
-                   Email
+                    Full Name & Email
                   </th>
                   <th className="p-5 text-left font-semibold text-gray-900">
                     Role
@@ -55,23 +56,23 @@ const Users = () => {
               <tbody className="divide-y divide-gray-300">
                 {data.map((user) => (
                   <tr key={user._id} className="bg-white hover:bg-gray-50">
-                    <td className="p-5 text-sm text-gray-900"><p className="text-sm text-gray-900">
-                            {user.firstName} {user.lastName}
-                          </p></td>
+                    <td className="p-5 text-sm text-gray-900">{user._id}</td>
                     <td className="p-5 text-sm text-gray-900">
                       <div className="flex items-center gap-3">
                         <img
                           src={
-                            user.profileImage ||
+                            user.logo ||
                             "ass"
                           }
                           height={30}
                           width={30}
-                          alt={user.firstName}
+                          alt={user.name}
                           className="w-10 h-10 rounded-full"
                         />
                         <div>
-                          
+                          <p className="text-sm text-gray-900">
+                            {user.name}
+                          </p>
                           <p className="text-xs text-gray-500">{user.email}</p>
                         </div>
                       </div>
@@ -88,7 +89,7 @@ const Users = () => {
                         className={`text-xs sm:text-sm px-2 sm:px-4 py-1 sm:py-2 rounded-md text-white transition ${
                           user.isBlocked
                             ? "bg-yellow-500 hover:bg-yellow-400"
-                            : "bg-red-600 hover:bg-red-700 w-20"
+                            : "bg-red-600 hover:bg-red-700"
                         }`}
                         onClick={() => handleBlock(user._id)}
                       >
@@ -106,4 +107,4 @@ const Users = () => {
   );
 };
 
-export default Users;
+export default Companies;
