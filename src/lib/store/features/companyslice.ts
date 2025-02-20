@@ -50,12 +50,19 @@ interface loginState{
     activeCompany:companyData|null
     application:applicationData[]
     
+    forgotPassword:{
+        email:string,
+        otp:string,
+      }
 }
 
 const initialState:loginState={
     activeCompany:null,
-    application:[]
-
+    application:[],
+    forgotPassword:{
+        email:"",
+        otp:"",
+      }
 }
 
 export const loginSlice= createSlice({
@@ -74,15 +81,16 @@ export const loginSlice= createSlice({
     },
     setAppliedUsers:(state,action)=>{
        state.application=action.payload
-
-    }
+    },
+    setforgotPassword:(state,action)=>{
+        state.forgotPassword.email = action.payload.email;
+        state.forgotPassword.otp = action.payload.otp;
+        console.log("otpotpcccc",action.payload)
+       },
+    
 
    }
 })
 
-
-// export const {setActiveCompany,setCompanyLogOut}=loginSlice.actions
-
-export const {setActiveCompany,setCompanyLogOut,setAppliedUsers}=loginSlice.actions
-
+export const {setActiveCompany,setCompanyLogOut,setAppliedUsers,setforgotPassword}=loginSlice.actions
 export default loginSlice.reducer 
