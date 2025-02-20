@@ -1,17 +1,37 @@
 
-import { createSlice } from "@reduxjs/toolkit";
+import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 
+export interface SkillType{
+  _id:string
+  name:string
+  status:boolean
+}
 
+export interface TitleType{
+  _id:string
+  name:string
+  status:boolean
+}
 
 export interface AdminProfile {
   email:string
   password:string
+  firstName:string
+  lastName:string
+  phoneNumber:string
+  profileImage:string
+  bio:string
+ 
 }
  interface AdminState{
 admin:AdminProfile|null
+skills:SkillType[]
+titles:TitleType[]
  }
 const initialState: AdminState = {
-  admin:null
+  admin:null,
+  skills:[],
+  titles:[]
 };
 
 const adminSlice = createSlice({
@@ -20,9 +40,17 @@ const adminSlice = createSlice({
   reducers: {
     setAdmin: (state,action) => {
       state.admin = action.payload
+      
+      
     },
+    setSkills:(state,action:PayloadAction<SkillType[]>)=>{
+      state.skills=action.payload
+    },
+    setJOBTitles:(state,action:PayloadAction<TitleType[]>)=>{
+      state.titles=action.payload
+    }
   }, 
 });
 
-export const { setAdmin } = adminSlice.actions;
+export const { setAdmin,setSkills,setJOBTitles } = adminSlice.actions;
 export default adminSlice.reducer;

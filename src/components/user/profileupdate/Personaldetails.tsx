@@ -8,12 +8,33 @@ import {
   UserProfile,
 } from "@/lib/store/features/userSlice";
 import api from "@/utils/api";
+import { toast } from "react-toastify";
 
-function Personaldetails() {
+interface PersonaldetailsProps {
+    loading: (isLoading: boolean) => void;
+  }
+interface ImageType {
+    profileImage: string | File | undefined;
+    banner: string | File | undefined;
+}
+
+interface input {
+    firstName: string | undefined;
+    lastName: string | undefined;
+    email: string | undefined;
+    phoneNumber: string | undefined | number;
+    dateOfBirth: Date | undefined |number ;
+    about: string | undefined;
+}
+
+
+function Personaldetails({ loading }: PersonaldetailsProps) {
+    console.log("props =",loading);
+    
   const user = useAppSelector((state) => state.user.activeuser as UserProfile);
   console.log("activuser", user);
 
-  const [input, setInput] = useState({
+  const [input, setInput] = useState<input>({
     firstName: user.firstName,
     lastName: user.lastName,
     email: user.email,
@@ -22,7 +43,7 @@ function Personaldetails() {
     about: user.about,
   });
 
-  const [image, setImage] = useState({
+  const [image, setImage] = useState<ImageType>({
     profileImage: user.profileImage,
     banner: user.banner,
   });
@@ -47,6 +68,7 @@ function Personaldetails() {
 
   const handleImageeChange = async () => {
     try {
+        loading(true);
       if (!image.profileImage || !image.banner) {
         console.error("Both profile and banner images must be selected");
         return;
@@ -86,8 +108,8 @@ function Personaldetails() {
       };
 
       const [profileImageUrl, banner] = await Promise.all([
-        uploadImage(image.profileImage),
-        uploadImage(image.banner),
+        uploadImage(image.profileImage as File),
+        uploadImage(image.banner as File),
       ]);
 
       console.log("Profile Image URL:", profileImageUrl);
@@ -97,13 +119,17 @@ function Personaldetails() {
       await dispatch(
         setImages({ profileImage: profileImageUrl, banner: banner })
       );
+      toast.success("Images uploaded successfully");
     } catch (error) {
+        toast.warning("Select both profile and banner images");
       console.error("Error uploading images:", error);
+    } finally {
+        loading(false);
     }
   };
 
   const handilsubmit = () => {
-    handleImageeChange(image);
+    handleImageeChange();
   };
   return (
     <div>
@@ -130,7 +156,7 @@ function Personaldetails() {
           id="bannerUpload"
           onChange={handilImage}
         />
-        <button onClick={() => document.getElementById("bannerUpload").click()}>
+        <button onClick={() => document.getElementById("bannerUpload")?.click()}>
           <FaRegEdit className="absolute top-5 right-5 text-white bg-gray-800 p-2 rounded-full cursor-pointer text-4xl" />
         </button>
 
@@ -158,7 +184,7 @@ function Personaldetails() {
             onChange={handilImage}
           />
           <button
-            onClick={() => document.getElementById("profileUpload").click()}
+            onClick={() => document.getElementById("profileUpload")?.click()}
           >
             <FaRegEdit className="absolute top-20 left-24 text-white bg-gray-800 p-2 rounded-full cursor-pointer text-3xl" />
           </button>
@@ -223,7 +249,7 @@ function Personaldetails() {
             <input
               type="date"
               name="dateOfBirth"
-              value={input.dateOfBirth}
+              value={input.dateOfBirth ? new Date(input.dateOfBirth).toISOString().split('T')[0] : ''}
               onChange={handilchange}
               className="p-2 border rounded-md"
             />

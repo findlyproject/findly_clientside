@@ -1,6 +1,6 @@
 'use client'
 
-import React, {  useState } from "react";
+import React, {  useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
 import { useAppDispatch, useAppSelector } from "@/lib/store/hooks";
 import { setjobLocations, setjobTitles } from "@/lib/store/features/registerSlice";
@@ -8,6 +8,8 @@ import { registerUser } from "@/lib/store/features/actions/userActions";
 import { toast } from "react-toastify";
 import { JobLocationType } from "@/lib/store/features/registerSlice";
 import { Country, State, City } from "country-state-city";
+import api from "@/utils/api";
+import { TitleType } from "@/lib/store/features/adminSlice";
 export default function JobPage() {
   const formData=useAppSelector((state)=>state.register)
   console.log("formData",formData);
@@ -15,7 +17,16 @@ export default function JobPage() {
   const dispatch=useAppDispatch()
   const [JobTitles, setJobTitles] = useState<string[]>([]);
   const [inputValue, setInputValue] = useState("");
+const[Titles,setTitles]=useState<TitleType[]>([])
+  useEffect(()=>{
+    const fetchTitles=async()=>{
+      const res=await api.get(`/admin/alltitle`)
+      setTitles(res.data.titles)
+    }
+    fetchTitles()
+  },[])
 
+  console.log("Titles",Titles);
   
   const [JobLocations, setJobLocations] = useState<JobLocationType[]>([]);
   
@@ -113,14 +124,27 @@ console.log("resultAction",resultAction);
 
 
       
-const handleKeyDown = (e: React.KeyboardEvent<HTMLInputElement>) => {
+const handleKeyDown =async (e: React.KeyboardEvent<HTMLInputElement>) => {
   if (e.key === "Enter" && inputValue.trim()) {
     e.preventDefault();
     setJobTitles([...JobTitles, inputValue.trim()]);
+    const response=await api.post(`/admin/titlebyuser`,{name:inputValue})
     setInputValue("");
   }
 };
 
+
+const addTitle = (selectedTitle: string) => {
+  if (!JobTitles.includes(selectedTitle)) {
+    setJobTitles([...JobTitles, selectedTitle]);
+    // setTitlesError(""); // Clear error if a title is selected
+  }
+};
+
+// Remove a selected job title
+// const removeTitle = (index: number) => {
+//   setJobTitles(JobTitles.filter((_, i) => i !== index));
+// };
 const removeTitle = (index: number) => {
   setJobTitles(JobTitles.filter((_, i) => i !== index));
 };
@@ -154,6 +178,23 @@ const handleAddLocation = () => {
         onKeyDown={handleKeyDown} // Capture "Enter" key
         className="px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-primary w-full"
       />
+      
+<br/>
+     
+       {/* Select dropdown for job titles */}
+       <select
+        onChange={(e) => addTitle(e.target.value)}
+        className="px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-primary w-full"
+      >
+        <option value="">Select a Job Title</option>
+        {Titles.map((title) => (
+          <option key={title._id} value={title.name}>
+            {title.name}
+          </option>
+        ))}
+      </select>
+
+      
 
       {/* Display entered job titles */}
       <div className="flex flex-wrap gap-2 mt-2">

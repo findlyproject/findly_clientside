@@ -1,4 +1,5 @@
 
+
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 
  export interface Rating {
@@ -28,8 +29,17 @@ const ratingSlice = createSlice({
     setAllRatings: (state, action: PayloadAction<Rating[]>) => {
       state.ratings = action.payload;
     },
+    removeRating: (state, action: PayloadAction<string>) => {
+      state.ratings = state.ratings.filter((rating) => rating._id !== action.payload);
+    },
+    approveRating:(state,action:PayloadAction<string>)=>{
+      state.ratings = state.ratings.map((rating) => rating._id === action.payload?{ ...rating, status: true } : rating);
+
+      console.log(" state.ratings", state.ratings);
+      
+    }
   },
 });
 
-export const { setAllRatings } = ratingSlice.actions;
+export const { setAllRatings,removeRating,approveRating } = ratingSlice.actions;
 export default ratingSlice.reducer;

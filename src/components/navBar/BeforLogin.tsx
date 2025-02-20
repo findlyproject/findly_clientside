@@ -2,7 +2,7 @@ import { Menu, Transition } from "@headlessui/react";
 import { Bars3Icon, XMarkIcon } from "@heroicons/react/24/outline";
 import Link from "next/link";
 import React, { useState } from "react";
-import { navigation } from "./Navbar";
+import { dropDownBeforLogin } from "./Navbar";
 
 function Beforlogin() {
   const [menuOpen, setMenuOpen] = useState(false);
@@ -54,7 +54,7 @@ function Beforlogin() {
                 )}
               </Menu.Item>
               
-              {navigation.map((item)=>(
+              {dropDownBeforLogin.map((item)=>(
                 <Menu.Item key={item.name}>
                   
                 {({ active }) => (
