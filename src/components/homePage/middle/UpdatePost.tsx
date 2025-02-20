@@ -15,10 +15,10 @@ export const UpdatePost = ({ post,setIsUpdateOpen }: { post: IPost,setIsUpdateOp
   const [oldPost, setOldPost] = useState<IPost | null>(post);
 
   useEffect(() => {
-    setOldPost(post);
+    setOldPost(post);   
   }, [post]);
 
-  useEffect(() => {
+  useEffect(() => {   
     return () => {
       previewImages.forEach((url) => URL.revokeObjectURL(url));
       if (previewVideo) URL.revokeObjectURL(previewVideo);
@@ -28,7 +28,6 @@ export const UpdatePost = ({ post,setIsUpdateOpen }: { post: IPost,setIsUpdateOp
   const handleMediaChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     if (event.target.files && event.target.files.length > 0) {
       const files = Array.from(event.target.files);
-      console.log("files", event.target.files);
 
       setSelectedFiles((prevFiles) => {
         // Filter out duplicates
