@@ -1,10 +1,5 @@
 "use client";
 
-<<<<<<< HEAD
-import React, { useEffect } from "react";
-=======
-
->>>>>>> 0e7888464bd06148eee8a0fd7563175062a8f8d6
 import Image from "next/image";
 import { useRouter } from "next/navigation";
 import jobImage from "../../../../public/job.png";
@@ -37,12 +32,6 @@ function LandingPage() {
     { title: "Find suitable job", desc: "Phasellus quis eleifend ex.", icon: <FaSearch /> },
     { title: "Apply job", desc: "Nam sodales purus.", icon: <FaCheckCircle /> },
   ];
-<<<<<<< HEAD
-
-  
-
-=======
->>>>>>> 0e7888464bd06148eee8a0fd7563175062a8f8d6
   return (
     <div className="w-full h-full">
       <div className="flex flex-col md:flex-row items-center justify-center   w-full  pt-20 ">

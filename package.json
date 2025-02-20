@@ -16,10 +16,7 @@
     "@fortawesome/react-fontawesome": "^0.2.2",
     "@headlessui/react": "^2.2.0",
     "@heroicons/react": "^2.2.0",
-<<<<<<< HEAD
-=======
     "@hookform/resolvers": "^4.1.0",
->>>>>>> 0e7888464bd06148eee8a0fd7563175062a8f8d6
     "@mui/icons-material": "^6.4.4",
     "@mui/material": "^6.4.4",
     "@react-pdf-viewer/core": "^3.12.0",

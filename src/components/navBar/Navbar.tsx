@@ -12,35 +12,18 @@ import { IoSearch } from "react-icons/io5";
 import { RxCross2 } from "react-icons/rx";
 
 
-<<<<<<< HEAD
-=======
 
-
-
->>>>>>> 0e7888464bd06148eee8a0fd7563175062a8f8d6
 export const navigation = [
   { name: "Home", href: "/" },
   { name: "About", href: "/about" },
   { name: "Contact", href: "/contactus" },
-<<<<<<< HEAD
+
   {name:"Community",href:"/community"},
 
 ];
 
-export const dropDownAfterlogin = [
-  { name: "Subscription", href: "/premium" },
-];
 
-export const dropDownAfterloginSmallerScreen = [
-  { name: "Home", href: "/" },
-  { name: "About", href: "/about" },
-  { name: "Contact", href: "/contactus" },
-  { name: "Subscription", href: "/premium" },
-];
 
-=======
-
-];
 
 export const dropDownAfterlogin = (route:string)=>[
   { name: "Subscription", href: `/${route}/premium` },
@@ -53,16 +36,14 @@ export const dropDownAfterloginSmallerScreen =(route:string)=> [
   { name: "Subscription", href: `/${route}/premium`},
 ];
 
->>>>>>> 0e7888464bd06148eee8a0fd7563175062a8f8d6
+
 export const dropDownBeforLogin = [
   { name: "Home", href: "/" },
   { name: "About", href: "/about" },
   { name: "Contact", href: "/contactus" },
-<<<<<<< HEAD
+
   { name: "Subscription", href: "/premium" },
-=======
-  
->>>>>>> 0e7888464bd06148eee8a0fd7563175062a8f8d6
+
 ];
 
 export default function Navbar() {
@@ -129,17 +110,17 @@ dropDownAfterlogin(route)
           <div className="flex justify-between w-full">
 
             <div className="flex items-center">
-<<<<<<< HEAD
+
               <Link href="/">
                 <Image src={logo} alt="Logo" width={100} height={50} className="min-w-20" />
               </Link>
-=======
+
        
           <Link href="/" className="text-2xl font-bold text-primary">
             Findly . 
           </Link>
         
->>>>>>> 0e7888464bd06148eee8a0fd7563175062a8f8d6
+
               <div>
          
         </div>

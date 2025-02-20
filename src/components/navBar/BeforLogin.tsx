@@ -3,11 +3,10 @@ import { Bars3Icon, XMarkIcon } from "@heroicons/react/24/outline";
 import Link from "next/link";
 import React, { useState } from "react";
 import { dropDownBeforLogin } from "./Navbar";
-<<<<<<< HEAD
-=======
+
 import { Ultra } from "next/font/google";
 import Image from "next/image";
->>>>>>> 0e7888464bd06148eee8a0fd7563175062a8f8d6
+
 
 function Beforlogin() {
   const [menuOpen, setMenuOpen] = useState(false);

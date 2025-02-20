@@ -1,5 +1,3 @@
-
-
 import { useAppDispatch, useAppSelector } from "@/lib/store/hooks";
 
 import { Menu, Transition } from "@headlessui/react";
@@ -25,20 +23,6 @@ const route=activeuser?"user":"company"
   document.cookie = "token=; path=/; max-age=0"; // Clear user token
   document.cookie = "ctoken=; path=/; max-age=0"; // Clear company token
 
-<<<<<<< HEAD
-  const handilLogut = () => {
-    if(activeuser){
-      console.log("useeeeeeeeeeeer");
-      
-      dispatch(logoutUser())
-    }else if(activeCompany){
-      console.log("commmmmmmmmmmmpa");
-      dispatch(logOutCompany())
-    }
-  
-    // signOut()
-    router.replace("/");
-=======
       if(activeuser){
         console.log("useeeeeeeeeeeer");
         
@@ -47,7 +31,6 @@ const route=activeuser?"user":"company"
         console.log("commmmmmmmmmmmpa");
         dispatch(logOutCompany())
       }
->>>>>>> 0e7888464bd06148eee8a0fd7563175062a8f8d6
     
       // signOut()
       router.replace("/");
@@ -60,7 +43,7 @@ console.log("dropDownAfterloginSmallerScreen",dropDownAfterloginSmallerScreen);
   return (
     <div className="flex">
       
-      <Link href={`/${route}/notification`}>
+      <Link href={/${route}/notification}>
         <button className="relative text-gray-500 hover:text-gray-700 p-2">
           <BellIcon className="h-6 w-6" />
         </button></Link>
@@ -86,7 +69,7 @@ console.log("dropDownAfterloginSmallerScreen",dropDownAfterloginSmallerScreen);
             <Menu.Item>
               {({ active }) => (
                 <Link
-                  href={`/${route}/profile`}
+                  href={/${route}/profile}
                   className={`block px-4 py-2 text-sm hover:bg-gray-300 ${active ? "bg-gray-300" : ""
                     }`}
                 >
@@ -106,11 +89,7 @@ console.log("dropDownAfterloginSmallerScreen",dropDownAfterloginSmallerScreen);
                 </Link>
               )}
             </Menu.Item>
-<<<<<<< HEAD
-            {dropDownAfterlogin.map((item) => (
-=======
             {dropDownAfterlogin(route).map((item) => (
->>>>>>> 0e7888464bd06148eee8a0fd7563175062a8f8d6
               <Menu.Item key={item.name}>
 
                 {({ active }) => (
@@ -165,11 +144,7 @@ console.log("dropDownAfterloginSmallerScreen",dropDownAfterloginSmallerScreen);
             <Menu.Item>
               {({ active }) => (
                 <Link
-<<<<<<< HEAD
-                  href='/ownprofile'
-=======
-                  href={`/${route}/profile`}
->>>>>>> 0e7888464bd06148eee8a0fd7563175062a8f8d6
+                  href={/${route}/profile}
                   className={`block px-4 py-2 text-sm hover:bg-gray-300 ${active ? "bg-gray-300" : ""
                     }`}
                 >
@@ -189,11 +164,7 @@ console.log("dropDownAfterloginSmallerScreen",dropDownAfterloginSmallerScreen);
                 </Link>
               )}
             </Menu.Item>
-<<<<<<< HEAD
-            {dropDownAfterloginSmallerScreen.map((item) => (
-=======
             {dropDownAfterloginSmallerScreen(route).map((item) => (
->>>>>>> 0e7888464bd06148eee8a0fd7563175062a8f8d6
               <Menu.Item key={item.name}>
 
                 {({ active }) => (

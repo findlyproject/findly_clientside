@@ -15,11 +15,6 @@ export interface TitleType{
 
 export interface AdminProfile {
   email:string
-<<<<<<< HEAD
-  password:string
-=======
- 
->>>>>>> 0e7888464bd06148eee8a0fd7563175062a8f8d6
   firstName:string
   lastName:string
   phoneNumber:string

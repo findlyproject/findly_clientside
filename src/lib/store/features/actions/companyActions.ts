@@ -3,11 +3,11 @@ import api from "@/utils/api";
 import handleAsync from "@/utils/handleAsync";
 import { createAsyncThunk } from "@reduxjs/toolkit";
 import { AxiosResponse } from "axios";
-<<<<<<< HEAD
-import { setActiveCompany, setCompanyLogOut } from "../companyslice";
-=======
+
+
+
 import { setActiveCompany, setAppliedUsers, setCompanyLogOut } from "../companyslice";
->>>>>>> 0e7888464bd06148eee8a0fd7563175062a8f8d6
+
 
 
 export const loginCompany=createAsyncThunk(
@@ -47,8 +47,7 @@ export const loginCompany=createAsyncThunk(
   return true
      
     } )
-<<<<<<< HEAD
-=======
+
 
     export const applicationList=createAsyncThunk(
       "applicationlist",
@@ -66,5 +65,5 @@ export const loginCompany=createAsyncThunk(
        
       }
     )
->>>>>>> 0e7888464bd06148eee8a0fd7563175062a8f8d6
+
   

@@ -16,13 +16,6 @@ export default function Profile() {
   const [selectedFile, setSelectedFile] = useState<File | null>(null);
   const [preview, setPreview] = useState<string | null>(admin.profileImage || null);
 
-<<<<<<< HEAD
-=======
-  const [activeLink, setActiveLink] = useState('accountSettings');
-  const handleLinkClick = (link: string) => {
-    setActiveLink(link);
-  };
->>>>>>> 0e7888464bd06148eee8a0fd7563175062a8f8d6
   const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     if (e.target.files && e.target.files[0]) {
       setSelectedFile(e.target.files[0]);
@@ -90,17 +83,7 @@ export default function Profile() {
           </h2>
           <p className="text-gray-500">{admin.email}</p>
         </div>
-<<<<<<< HEAD
         
-=======
-        <nav className="mt-6 space-y-3">
-          <a href="#" className="block text-gray-700 hover:text-primary hover:font-semibold">Account Settings</a>
-           <a href="#" className="block text-gray-700 hover:text-primary hover:font-semibold">Password</a>
-           <a href="#" className="block text-gray-700 hover:text-primary hover:font-semibold">Security & Privacy</a>
-           <a href="#" className="block text-gray-700 hover:text-primary hover:font-semibold">Application</a>
-           <a href="#" className="block text-gray-700 hover:text-primary hover:font-semibold">Notification</a>
-         </nav>
->>>>>>> 0e7888464bd06148eee8a0fd7563175062a8f8d6
       </aside>
 
       <main className="flex-1 bg-white shadow-md rounded-lg p-6 md:ml-6">
@@ -158,7 +141,6 @@ export default function Profile() {
   
                 <ErrorMessage name="email" component="div" className="text-red-500 text-sm" />
               </div>
-<<<<<<< HEAD
 
 
               
@@ -190,36 +172,6 @@ export default function Profile() {
                 />
                 <ErrorMessage name="bio" component="div" className="text-red-500 text-sm" />
               </div>
-=======
-              <div>
-                <Field
-                  type="text"
-                  name="phoneNumber"
-                  value={values.phoneNumber}
-                  onChange={handleChange}
-                 
-                  placeholder="Phone Number"
-                  className="w-full p-2 border rounded-md"
-                />
-                 {touched.email && errors.email && (
-    <div className="text-red-500 text-xs">{errors.email}</div>
-  )}
-                <ErrorMessage name="phoneNumber" component="div" className="text-red-500 text-sm" />
-              </div>
-
-              <div>
-                <Field
-                  as="textarea"
-                  name="bio"
-                  value={values.bio}
-                  onChange={handleChange}
-                  placeholder="Write about yourself"
-                  className="w-full p-2 border rounded-md"
-                  rows={3}
-                />
-                <ErrorMessage name="bio" component="div" className="text-red-500 text-sm" />
-              </div>
->>>>>>> 0e7888464bd06148eee8a0fd7563175062a8f8d6
               <div className="flex space-x-4">
                 <button type="submit" className="bg-primary text-white px-4 py-2 rounded-md">
                   Update
