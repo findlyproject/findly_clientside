@@ -2,6 +2,64 @@ import React, { useEffect, useState, useRef, useCallback } from "react";
 import { JobCard } from "./jobcard";
 import api from "@/utils/api";
 
+
+
+
+
+
+export interface Job {
+  _id: string;
+  title: string;
+  company: string;
+  location: string;
+  jobType: string;
+  experienceLevel: string;
+  industry: string;
+  description: string;
+  requirements: string[];
+  jobResponsibilities: string[];
+  applicationDeadline: string;
+  benefits: string[];
+  contactEmail: string;
+  contactPhone: string;
+  postedBy: PostedBy;
+  likes: string[]; 
+  comments: string[]; 
+  reports: string[]; 
+  status: string;
+  isDeleted: boolean;
+  createdAt: string;
+  updatedAt: string;
+  __v: number;
+}
+
+export interface PostedBy {
+  address: Address;
+  _id: string;
+  name: string;
+  logo: string;
+  email: string;
+  password: string;
+  contact: number;
+  role: string;
+  age: number;
+  IndustryType: string;
+  subscriptionEndDate: string;
+  subscriptionStartDate: string;
+  isDeleted: boolean;
+  employees: string[]; 
+  createdAt: string;
+  updatedAt: string;
+  __v: number;
+}
+
+export interface Address {
+  pincode: string;
+  city: string;
+  state: string;
+  country: string;
+}
+
 function AllJobs() {
   const [jobs, setJobs] = useState([]); 
   const [page, setPage] = useState(1); 

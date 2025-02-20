@@ -1,11 +1,31 @@
 "use client"
 import React, { useState, useEffect } from 'react';
 import { Chart } from 'primereact/chart';
+<<<<<<< HEAD
+import api from '@/utils/api';
+=======
 import { useAppSelector } from '@/lib/store/hooks';
+>>>>>>> 5595591ae871dbdb6ac9cb704189243e98ad0092
 const Dashboard: React.FC = () => {
   const [chartData, setChartData] = useState({});
   const [chartOptions, setChartOptions] = useState({});
   
+const [dailyUser,setDailyUser]=useState(0)
+const [dailyRevenue,setDailyRevenue]=useState(0)
+  useEffect(()=>{
+    const fetch=async()=>{
+      const dailyUsers=await api.get(`/admin/dailyusers`)
+      console.log("dailyUsers",dailyUsers);
+      
+      setDailyUser(dailyUsers.data.dailyUserCount)
+
+      const dailyRevenue=await api.get(`/admin/dailyrevenue`)
+      console.log("dailyRevenue",dailyRevenue);
+      setDailyRevenue(dailyRevenue.data.dailyRevenue)
+      
+    }
+    fetch()
+  },[])
   useEffect(() => {
     const documentStyle = getComputedStyle(document.documentElement);
     const textColor = documentStyle.getPropertyValue('--text-color');
@@ -80,7 +100,7 @@ console.log("admin ",admin);
           </div>
           <div className="p-4 text-right">
             <p className="block antialiased font-sans text-sm leading-normal font-normal text-blue-gray-600">Today's Money</p>
-            <h4 className="block antialiased tracking-normal font-sans text-2xl font-semibold leading-snug text-blue-gray-900">$53k</h4>
+            <h4 className="block antialiased tracking-normal font-sans text-2xl font-semibold leading-snug text-blue-gray-900">₹{dailyRevenue}</h4>
           </div>
           <div className="border-t border-blue-gray-50 p-4">
             <p className="block antialiased font-sans text-base leading-relaxed font-normal text-blue-gray-600">
@@ -88,6 +108,8 @@ console.log("admin ",admin);
             </p>
           </div>
         </div>
+
+
         <div className="relative flex flex-col bg-clip-border rounded-xl bg-white text-gray-700 shadow-md">
           <div className="bg-clip-border mx-4 rounded-xl overflow-hidden bg-gradient-to-tr from-pink-600 to-pink-400 text-white shadow-pink-500/40 shadow-lg absolute -mt-4 grid h-16 w-16 place-items-center">
             <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true" className="w-6 h-6 text-white">
@@ -96,7 +118,7 @@ console.log("admin ",admin);
           </div>
           <div className="p-4 text-right">
             <p className="block antialiased font-sans text-sm leading-normal font-normal text-blue-gray-600">Today's Users</p>
-            <h4 className="block antialiased tracking-normal font-sans text-2xl font-semibold leading-snug text-blue-gray-900">2,300</h4>
+            <h4 className="block antialiased tracking-normal font-sans text-2xl font-semibold leading-snug text-blue-gray-900">{dailyUser}</h4>
           </div>
           <div className="border-t border-blue-gray-50 p-4">
             <p className="block antialiased font-sans text-base leading-relaxed font-normal text-blue-gray-600">
@@ -104,6 +126,9 @@ console.log("admin ",admin);
             </p>
           </div>
         </div>
+
+
+
         <div className="relative flex flex-col bg-clip-border rounded-xl bg-white text-gray-700 shadow-md">
           <div className="bg-clip-border mx-4 rounded-xl overflow-hidden bg-gradient-to-tr from-green-600 to-green-400 text-white shadow-green-500/40 shadow-lg absolute -mt-4 grid h-16 w-16 place-items-center">
             <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true" className="w-6 h-6 text-white">

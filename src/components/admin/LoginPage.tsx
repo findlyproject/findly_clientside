@@ -36,6 +36,7 @@ export default function LoginPage() {
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     const resultAction = await dispatch(loginAdmin(datas));
+   
 
     if (loginAdmin.fulfilled.match(resultAction)) {
       router.push("/admin/dashboard");

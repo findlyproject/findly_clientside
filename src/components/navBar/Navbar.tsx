@@ -5,11 +5,13 @@ import AfterLogin from "./Afterlogin";
 import Image from "next/image";
 import { useRouter } from "next/navigation";
 import { useAppSelector } from "@/lib/store/hooks";
-import logo from "../../../public/assets/findlylogo.png";
 import api from "@/utils/api";
 import Beforlogin from "./BeforLogin";
 import { IoSearch } from "react-icons/io5";
 import { RxCross2 } from "react-icons/rx";
+
+
+
 
 
 export const navigation = [
@@ -22,24 +24,22 @@ export const navigation = [
 
 ];
 
-export const dropDownAfterlogin = [
-  { name: "Subscription", href: "/premium" },
+export const dropDownAfterlogin = (route:string)=>[
+  { name: "Subscription", href: `/${route}/premium` },
 ];
 
-export const dropDownAfterloginSmallerScreen = [
-  { name: "Home", href: "/home" },
+export const dropDownAfterloginSmallerScreen =(route:string)=> [
+  { name: "Home", href: "/" },
   { name: "About", href: "/about" },
   { name: "Contact", href: "/contactus" },
-  { name: "Subscription", href: "/premium" },
-  { name: "Jobs", href: "/jobs" },
-
+  { name: "Subscription", href: `/${route}/premium`},
 ];
 
 export const dropDownBeforLogin = [
   { name: "Home", href: "/home" },
   { name: "About", href: "/about" },
   { name: "Contact", href: "/contactus" },
-  { name: "Subscription", href: "/premium" },
+  
 ];
 
 export default function Navbar() {
@@ -48,6 +48,9 @@ export default function Navbar() {
   const router = useRouter()
   const [issearch,setIssearch]=useState(false)
   const { activeuser } = useAppSelector((state) => state.login);
+const route=activeuser?"user":"company"
+dropDownAfterloginSmallerScreen(route)
+dropDownAfterlogin(route)
   interface User {
     _id: string;
     firstName: string;
@@ -103,9 +106,11 @@ export default function Navbar() {
           <div className="flex justify-between w-full">
 
             <div className="flex items-center">
-              <Link href="/">
-                <Image src={logo} alt="Logo" width={100} height={50} className="min-w-20" />
-              </Link>
+       
+          <Link href="/" className="text-2xl font-bold text-primary">
+            Findly . 
+          </Link>
+        
               <div>
          
         </div>

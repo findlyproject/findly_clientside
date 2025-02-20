@@ -27,6 +27,7 @@ export const registerUser = createAsyncThunk(
         state: string,
         stateName: string,
         city: string};
+        gender:string;
       education: { college: string; startYear: string; endYear: string }[];
       jobTitle: string[];
       jobLocation:{country: string,

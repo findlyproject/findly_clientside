@@ -30,24 +30,24 @@ export const fetchAllPosts = createAsyncThunk(
     export const addPostByUser = createAsyncThunk(
       "posts/addPost",
       async ({ description, mediaFiles }: { description: string; mediaFiles: File[] }, { dispatch, rejectWithValue }) => {
-
+console.log("Media Files to Upload:",mediaFiles)
         const formData = new FormData();
     
           formData.append("description", description);
           console.log("Media Files to Upload:", mediaFiles);
           formData.append("media", mediaFiles[0]);
 
-          // mediaFiles.forEach((file, index) => {
-          //   formData.append("media", file);
-          //   console.log("fils in append",file);
+          mediaFiles.forEach((file, index) => {
+            formData.append("media", file);
+            console.log("fils in append",file);
             
-          //   console.log(`Appending File ${index + 1}:`, file.name, file.type, file.size);
-          // });
-          // console.log(formData)
+            console.log(`Appending File ${index + 1}:`, file.name, file.type, file.size);
+          });
+          console.log(formData)
     
-          // for (let pair of formData.entries()) {
-          //   console.log("FormData Entry:", pair[0], pair[1]);
-          // }
+          for (let pair of formData.entries()) {
+            console.log("FormData Entry:", pair[0], pair[1]);
+          }
           
         try {
           
