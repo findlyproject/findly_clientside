@@ -24,11 +24,9 @@ const route=activeuser?"user":"company"
   document.cookie = "ctoken=; path=/; max-age=0"; // Clear company token
 
       if(activeuser){
-        console.log("useeeeeeeeeeeer");
         
         dispatch(logoutUser())
       }else if(activeCompany){
-        console.log("commmmmmmmmmmmpa");
         dispatch(logOutCompany())
       }
     
@@ -43,7 +41,7 @@ console.log("dropDownAfterloginSmallerScreen",dropDownAfterloginSmallerScreen);
   return (
     <div className="flex">
       
-      <Link href={/${route}/notification}>
+      <Link href={`/${route}/notification`}>
         <button className="relative text-gray-500 hover:text-gray-700 p-2">
           <BellIcon className="h-6 w-6" />
         </button></Link>
@@ -69,7 +67,7 @@ console.log("dropDownAfterloginSmallerScreen",dropDownAfterloginSmallerScreen);
             <Menu.Item>
               {({ active }) => (
                 <Link
-                  href={/${route}/profile}
+                  href={`/${route}/profile`}
                   className={`block px-4 py-2 text-sm hover:bg-gray-300 ${active ? "bg-gray-300" : ""
                     }`}
                 >
@@ -144,7 +142,7 @@ console.log("dropDownAfterloginSmallerScreen",dropDownAfterloginSmallerScreen);
             <Menu.Item>
               {({ active }) => (
                 <Link
-                  href={/${route}/profile}
+                  href={`/${route}/profile`}
                   className={`block px-4 py-2 text-sm hover:bg-gray-300 ${active ? "bg-gray-300" : ""
                     }`}
                 >
