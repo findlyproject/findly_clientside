@@ -116,8 +116,8 @@ dropDownAfterlogin(route)
               </Link>
 
        
-          <Link href="/" className="text-2xl font-bold text-primary">
-            Findly . 
+          <Link href="/" className="text:sm lg:text-2xl font-bold text-primary">
+            Findly. 
           </Link>
         
 
