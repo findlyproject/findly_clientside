@@ -21,7 +21,7 @@ export const navigationBefore = [
 ];
 
 export const navigationAfter = [
-  { name: "Home", href: "/" },
+  { name: "Home", href: "/" },    
   { name: "About", href: "/about" },
   { name: "Contact", href: "/contactus" },
   {name:"Community",href:"/community"},
