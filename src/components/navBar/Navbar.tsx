@@ -105,8 +105,8 @@ dropDownAfterlogin(route)
 
             <div className="flex items-center">
        
-          <Link href="/" className="text-2xl font-bold text-primary">
-            Findly . 
+          <Link href="/" className="text:sm lg:text-2xl font-bold text-primary">
+            Findly. 
           </Link>
         
               <div>

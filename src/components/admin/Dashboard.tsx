@@ -1,11 +1,8 @@
 "use client"
 import React, { useState, useEffect } from 'react';
 import { Chart } from 'primereact/chart';
-<<<<<<< HEAD
 import api from '@/utils/api';
-=======
 import { useAppSelector } from '@/lib/store/hooks';
->>>>>>> 5595591ae871dbdb6ac9cb704189243e98ad0092
 const Dashboard: React.FC = () => {
   const [chartData, setChartData] = useState({});
   const [chartOptions, setChartOptions] = useState({});
