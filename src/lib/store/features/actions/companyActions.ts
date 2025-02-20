@@ -4,6 +4,7 @@ import handleAsync from "@/utils/handleAsync";
 import { createAsyncThunk } from "@reduxjs/toolkit";
 import { AxiosResponse } from "axios";
 import { setActiveCompany, setAppliedUsers, setCompanyLogOut } from "../companyslice";
+import { setforgotPassword } from "../companyslice";
 
 
 export const loginCompany=createAsyncThunk(
@@ -57,6 +58,26 @@ export const loginCompany=createAsyncThunk(
         dispatch(setAppliedUsers(data)) 
         
 
+       
+      }
+    )
+
+
+    export const forgotPassword = createAsyncThunk(
+      "auth/forgotPassword",
+      async (state: { email: string }, { dispatch, rejectWithValue }) => {
+        
+     console.log("state",state);
+     
+          const response = await handleAsync<AxiosResponse>(() => api.post(`/company/sendotp/${state.email}`));
+          if(!response){
+            return rejectWithValue("dd")
+          }
+
+          console.log("responseottttpp",response);
+          
+          dispatch(setforgotPassword({ email: state.email, otp: response.data.otp }));
+          return response.data;
        
       }
     )

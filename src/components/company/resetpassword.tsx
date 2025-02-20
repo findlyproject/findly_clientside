@@ -18,7 +18,7 @@ function ResetPassword() {
   const [timer, setTimer] = useState(192); // 3:12 in seconds
   const [showPassword, setShowPassword] = useState(true);
   const [showConfirmPassword, setShowConfirmPassword] = useState(true);
-  const data = useAppSelector((state)=>state.user.forgotPassword)
+  const data = useAppSelector((state)=>state.companyLogin.forgotPassword)
   const dispatch = useAppDispatch()
   const route = useRouter()
   useEffect(() => {
@@ -35,6 +35,8 @@ function ResetPassword() {
       setOtp(newOtp);
     }
   };
+  console.log("data",data);
+  console.log("otp",otp);
   
   const verifyotp = () => {
     const verify = data.otp == otp.join("")
@@ -63,7 +65,7 @@ function ResetPassword() {
       return;
     }
     try {
-      const response = await api.post(`/user/resetpasword/${data.email}/${password}`)
+      const response = await api.post(`/company/resetpassword/${data.email}/${password}`)
       console.log("response",response);
       toast.success("Password reset successfully")
       dispatch(setforgotPassword({email:"",otp:""}))
