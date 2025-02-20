@@ -6,8 +6,12 @@ import api from "@/utils/api";
 
 import Image from "next/image";
 
+<<<<<<< HEAD
+export const FeedIdentityModule = () => {
+=======
 
 export const FeedIdentityModule = () => {  
+>>>>>>> 0e7888464bd06148eee8a0fd7563175062a8f8d6
   const [connections, setConnections] = useState([]);
   const router = useRouter();
   const { activeuser } = useAppSelector((state) => state.login);
@@ -30,7 +34,10 @@ export const FeedIdentityModule = () => {
       </section>
     );
   }
+<<<<<<< HEAD
+=======
   
+>>>>>>> 0e7888464bd06148eee8a0fd7563175062a8f8d6
 
   return (
     <section className="rounded-lg border border-gray-300 min-h-[240px] bg-white">
@@ -67,13 +74,20 @@ export const FeedIdentityModule = () => {
         </div>
 
         <div className="px-4 py-2 border-b border-gray-300">
+<<<<<<< HEAD
+          <p className="text-sm text-gray-600">{connections?connections.length:0} connections</p>
+         
+=======
           {/* <p className="text-sm text-gray-600">{connections?connections.length:0} connections</p> */}
           <p className="text-sm text-gray-600">{activeuser?activeuser.connecting?.length:0} connections</p>
+>>>>>>> 0e7888464bd06148eee8a0fd7563175062a8f8d6
         </div>
       </div>
     </section>
   );
 };
+<<<<<<< HEAD
+=======
 
 
 
@@ -129,3 +143,4 @@ export const FeedIdentityModule = () => {
 //     </section>
 //   )
 // }
+>>>>>>> 0e7888464bd06148eee8a0fd7563175062a8f8d6

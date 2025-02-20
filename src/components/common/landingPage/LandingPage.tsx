@@ -1,6 +1,5 @@
 "use client";
 
-
 import Image from "next/image";
 import { useRouter } from "next/navigation";
 import jobImage from "../../../../public/job.png";
@@ -12,6 +11,8 @@ import { FaUserPlus, FaUpload, FaCheckCircle } from "react-icons/fa";
 import goup from "../../../../public/landingPage-group-discussion.png"
 
 import Testimonials from "./Testimonial";
+import { useAppDispatch } from "@/lib/store/hooks";
+import { setActiveCompany } from "@/lib/store/features/companyslice";
 
 
 

@@ -5,6 +5,8 @@ import Link from "next/link";
 import api from "@/utils/api";
 import { useRouter } from "next/navigation";
 import { FaPlus } from "react-icons/fa6";
+import { MdOutlineReviews } from "react-icons/md";
+import { toast } from "react-toastify";
 const Sidebar = () => {
   const router = useRouter();
   const handleAdminLogout = async (e: React.MouseEvent<HTMLButtonElement>) => {
@@ -13,8 +15,8 @@ const Sidebar = () => {
     const response = await api.post("/admin/logout");
 
     if (response.status >= 200 && response.status < 300) {
-      alert("Admin Logout successful");
-      router.push("/"); // ✅ Redirect after logout
+      toast.success("Admin Logout successful");
+      router.push("/"); 
     } else {
       throw new Error(response.data?.message || "An error occurred");
     }
@@ -105,6 +107,10 @@ const Sidebar = () => {
                       Reports
                     </h2>
                   </Link>
+                
+
+
+
                   <Link
                     href=""
                     className="lg:flex items-center gap-3 hidden "
@@ -138,6 +144,21 @@ const Sidebar = () => {
                 </div>
               </div>
             </div>
+          </li>
+
+          <li>
+            <Link href="/admin/ratings">
+              <div className="flex-col flex p-3 bg-white rounded-lg">
+                <div className="h-5 gap-3 flex">
+                  <div className="relative" title="ratings">
+                  <MdOutlineReviews className="text-2xl text-gray-500"/>
+                  </div>
+                  <h2 className="text-gray-500 text-sm font-medium leading-snug hidden lg:block">
+                    Ratings
+                  </h2>
+                </div>
+              </div>
+            </Link>
           </li>
           <li>
             <Link href="/admin/users">
