@@ -1,4 +1,8 @@
 import { createSlice } from "@reduxjs/toolkit"
+<<<<<<< HEAD
+=======
+import { UserProfile } from "./userSlice";
+>>>>>>> 0e7888464bd06148eee8a0fd7563175062a8f8d6
 
 export interface companyData{
     email:string,
@@ -24,12 +28,37 @@ export interface companyData{
 }
 
 
+<<<<<<< HEAD
 interface loginState{
     activeCompany:companyData|null
 }
 
 const initialState:loginState={
     activeCompany:null
+=======
+export interface applicationData{
+    companyId: string;
+    coverLetter: string;
+    createdAt: string;
+    introVideo: string;
+    jobId: string;
+    resume: string;
+    status: string;
+    updatedAt: string;
+    userId: UserProfile;
+}
+
+
+interface loginState{
+    activeCompany:companyData|null
+    application:applicationData[]
+    
+}
+
+const initialState:loginState={
+    activeCompany:null,
+    application:[]
+>>>>>>> 0e7888464bd06148eee8a0fd7563175062a8f8d6
 }
 
 export const loginSlice= createSlice({
@@ -43,10 +72,20 @@ export const loginSlice= createSlice({
     },
     setCompanyLogOut:(state)=>{
         state.activeCompany=null
+<<<<<<< HEAD
+=======
+    },
+    setAppliedUsers:(state,action)=>{
+       state.application=action.payload
+>>>>>>> 0e7888464bd06148eee8a0fd7563175062a8f8d6
     }
 
    }
 })
 
+<<<<<<< HEAD
 export const {setActiveCompany,setCompanyLogOut}=loginSlice.actions
+=======
+export const {setActiveCompany,setCompanyLogOut,setAppliedUsers}=loginSlice.actions
+>>>>>>> 0e7888464bd06148eee8a0fd7563175062a8f8d6
 export default loginSlice.reducer 

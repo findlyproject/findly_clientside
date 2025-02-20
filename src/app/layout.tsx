@@ -34,9 +34,13 @@ export default async function RootLayout({
   
   return (
     <html lang="en">
+<<<<<<< HEAD
       <body
        
       >
+=======
+      <body>
+>>>>>>> 0e7888464bd06148eee8a0fd7563175062a8f8d6
         <StoreProvider>
           <SessionProvider session={session}>{children}</SessionProvider>
           <ToastContainer

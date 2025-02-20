@@ -2,8 +2,12 @@ import React, { useState } from "react";
 import { Country, State, City } from "country-state-city";
 import { useAppDispatch, useAppSelector } from "@/lib/store/hooks";
 import {
+  IlocationType,
   setLocation,
+<<<<<<< HEAD
   
+=======
+>>>>>>> 0e7888464bd06148eee8a0fd7563175062a8f8d6
   UserProfile,
 } from "@/lib/store/features/userSlice";
 
@@ -12,7 +16,11 @@ function Location() {
   const user = useAppSelector(
     (state) => state.user.activeuser as UserProfile | null
   );
+<<<<<<< HEAD
   const [newLocation, setNewLocation] = useState({
+=======
+  const [newLocation, setNewLocation] = useState<IlocationType>({
+>>>>>>> 0e7888464bd06148eee8a0fd7563175062a8f8d6
     country: "",
     countryName: "",
     state: "",

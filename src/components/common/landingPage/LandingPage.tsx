@@ -1,6 +1,10 @@
 "use client";
 
+<<<<<<< HEAD
 import React, { useEffect } from "react";
+=======
+
+>>>>>>> 0e7888464bd06148eee8a0fd7563175062a8f8d6
 import Image from "next/image";
 import { useRouter } from "next/navigation";
 import jobImage from "../../../../public/job.png";
@@ -16,8 +20,15 @@ import { useAppDispatch } from "@/lib/store/hooks";
 import { setActiveCompany } from "@/lib/store/features/companyslice";
 
 
+
 function LandingPage() {
+
   
+// const  dispatch=useAppDispatch()
+// useEffect(()=>{
+// dispatch(setCompanyLogOut())
+// dispatch(SetLogout())
+// },[])
 
   const router = useRouter()
   const steps = [
@@ -26,9 +37,12 @@ function LandingPage() {
     { title: "Find suitable job", desc: "Phasellus quis eleifend ex.", icon: <FaSearch /> },
     { title: "Apply job", desc: "Nam sodales purus.", icon: <FaCheckCircle /> },
   ];
+<<<<<<< HEAD
 
   
 
+=======
+>>>>>>> 0e7888464bd06148eee8a0fd7563175062a8f8d6
   return (
     <div className="w-full h-full">
       <div className="flex flex-col md:flex-row items-center justify-center   w-full  pt-20 ">
@@ -197,7 +211,7 @@ function LandingPage() {
             <h2 className="text-2xl font-bold">Become a Candidate</h2>
             <p className="text-gray-600">Registering as a jobseeker is a vital step to access employment opportunities, resources, and support tailored to your career goals.</p>
             <button
-              onClick={() => router.push(`/register`)}
+              onClick={() => router.push(`/user/register`)}
               className="bg-primary text-white px-5 py-2 rounded-full mt-4">Register Now</button>
           </div>
           <div className="md:w-1/2">
@@ -208,7 +222,9 @@ function LandingPage() {
           <div className="md:w-1/2">
             <h2 className="text-2xl font-bold">Become an Employer</h2>
             <p>Registering as a recruiter or employer enables access to a diverse talent pool and streamlines the hiring process, enhancing workforce management.</p>
-            <button className="bg-white text-primary px-5 py-2 rounded-full mt-4"
+            <button 
+            onClick={() => router.push(`/company/register`)}
+            className="bg-white text-primary px-5 py-2 rounded-full mt-4"
             >Register Now</button>
           </div>
           <div className="md:w-1/2 flex justify-end">
