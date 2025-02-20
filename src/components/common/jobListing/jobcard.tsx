@@ -3,16 +3,22 @@
 import React, { useEffect, useState } from "react";
 import { Calendar, MapPin } from "lucide-react";
 import Image from "next/image";
+import { useRouter } from "next/navigation";
 
 interface JobCardProps {
   date: string;
   company: string;
   role: string;
   tags: string;
-  salary: string;
+  salary: {
+    min:string;
+    max:string;
+    rate:string;
+  }
   location: string;
   logo: string;
   bgColor: string;
+  _id: string;
 }
 
 export const JobCard: React.FC<JobCardProps> = ({
@@ -24,24 +30,25 @@ export const JobCard: React.FC<JobCardProps> = ({
   location,
   logo,
   bgColor,
+  _id,
 }) => {
   const [mounted, setMounted] = useState(false);
-
+  const route = useRouter();
   useEffect(() => {
     setMounted(true);
   }, []);
 
   if (!mounted) return null; 
-
+console.log("salary",salary);
   return (
     <div
-      className="p-4 rounded-2xl shadow-lg w-72"
+      className="p-4 rounded-2xl shadow-xl w-72"
       style={{ backgroundColor: bgColor }}
       suppressHydrationWarning 
     >
       <div className="flex justify-between items-center text-gray-600 text-sm">
         <span className="flex items-center gap-1">
-          <Calendar size={16} /> {date}
+          <Calendar size={16} /> {new Date(date).toLocaleDateString("en-US")}
         </span>
         <button className="text-lg">🔖</button>
       </div>
@@ -70,13 +77,18 @@ export const JobCard: React.FC<JobCardProps> = ({
           </span>
       </div>
 
-      <div className="mt-3 text-lg font-semibold">{salary}/hr</div>
+
+      <div className="mt-3 text-lg font-semibold">{salary.min}/{salary.rate}</div>
+
+      
 
       <div className="flex items-center gap-1 text-gray-600 text-sm">
         <MapPin size={16} /> {location}
       </div>
 
-      <button className="mt-3 w-full py-2 bg-black text-white rounded-lg font-semibold hover:bg-gray-800 transition">
+      <button className="mt-3 w-full py-2 bg-black text-white rounded-lg font-semibold hover:bg-gray-800 transition"
+      onClick={()=>route.push(`/jobdetails/${_id}`)}
+      >
         Details
       </button>
     </div>

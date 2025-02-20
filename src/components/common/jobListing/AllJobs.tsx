@@ -1,11 +1,8 @@
+"use client"
+
 import React, { useEffect, useState, useRef, useCallback } from "react";
 import { JobCard } from "./jobcard";
 import api from "@/utils/api";
-
-
-
-
-
 
 export interface Job {
   _id: string;
@@ -23,14 +20,21 @@ export interface Job {
   contactEmail: string;
   contactPhone: string;
   postedBy: PostedBy;
-  likes: string[]; 
-  comments: string[]; 
-  reports: string[]; 
+  likes: string[];
+  salary?: Salary; 
+  comments: string[];
+  reports: string[];
   status: string;
   isDeleted: boolean;
   createdAt: string;
   updatedAt: string;
   __v: number;
+}
+
+export interface Salary {
+  min: number;
+  max: number;
+  rate: string;
 }
 
 export interface PostedBy {
@@ -47,7 +51,7 @@ export interface PostedBy {
   subscriptionEndDate: string;
   subscriptionStartDate: string;
   isDeleted: boolean;
-  employees: string[]; 
+  employees: string[];
   createdAt: string;
   updatedAt: string;
   __v: number;
@@ -61,25 +65,25 @@ export interface Address {
 }
 
 function AllJobs() {
-  const [jobs, setJobs] = useState([]); 
-  const [page, setPage] = useState(1); 
-  const [loading, setLoading] = useState(false);
-  const [hasMore, setHasMore] = useState(true); // Track if there are more jobs to load
-  const observer = useRef<IntersectionObserver | null>(null); 
+  const [jobs, setJobs] = useState<Job[]>([]); 
+  const [page, setPage] = useState<number>(1);
+  const [loading, setLoading] = useState<boolean>(false);
+  const [hasMore, setHasMore] = useState<boolean>(true);
+  const observer = useRef<IntersectionObserver | null>(null);
 
-  const fetchJobs = async () => {
+  const fetchJobs = async (): Promise<void> => {
     if (loading || !hasMore) return;
     setLoading(true);
-    
+
     try {
-      const response = await api.get(`company/getalljobs?page=${page}`);
+      const response = await api.get<{ jobs: Job[] }>(`company/getalljobs?page=${page}`);
       console.log("Fetched jobs:", response.data.jobs);
-      
+
       if (response.data.jobs.length === 0) {
-        setHasMore(false); // No more jobs to fetch
+        setHasMore(false);
       } else {
-        setJobs(response.data.jobs); 
-        setPage((prevPage) => prevPage + 1); 
+        setJobs((prevJobs) => [...prevJobs, ...response.data.jobs]); 
+        setPage((prevPage) => prevPage + 1);
       }
     } catch (error) {
       console.error("Error fetching jobs:", error);
@@ -88,16 +92,15 @@ function AllJobs() {
     setLoading(false);
   };
 
-  // Intersection Observer for Infinite Scrolling
   const lastJobRef = useCallback(
-    (node) => {
+    (node: HTMLDivElement | null) => {
       if (loading) return;
-      if (observer.current) observer.current.disconnect(); 
+      if (observer.current) observer.current.disconnect();
 
       observer.current = new IntersectionObserver(
         (entries) => {
           if (entries[0].isIntersecting) {
-            fetchJobs(); 
+            fetchJobs();
           }
         },
         { threshold: 1.0 }
@@ -105,29 +108,30 @@ function AllJobs() {
 
       if (node) observer.current.observe(node);
     },
-    [loading] // Run only when `loading` changes
+    [loading]
   );
 
   useEffect(() => {
-    fetchJobs(); 
+    fetchJobs();
   }, []);
 
   return (
-    <div className="p-4 h-screen overflow-y-auto">
+    <div className="p-4 h-full overflow-y-auto bg-slate-100">
       <div className="flex flex-wrap justify-stretch gap-4 mb-32">
         {jobs.map((job, index) => (
           <JobCard
-          key={job._id} // Use `_id` instead of `index` for better performance
-          date={job.createdAt}
-          company={job.company}
-          role={job.title}
-          tags={job.jobType}
-          salary={job.salary}
-          location={job.location}
-          logo={job.postedBy.logo}
-          bgColor="#C9E6FF"
-          ref={index === jobs.length - 1 ? lastJobRef : null} 
-        />
+            key={index}
+            date={job.createdAt}
+            company={job.company}
+            role={job.title}
+            tags={job.jobType}
+            salary={job.salary}
+            location={job.location}
+            logo={job.postedBy.logo}
+            bgColor="#C9E69F"
+            _id={job._id}
+            ref={index === jobs.length - 1 ? lastJobRef : null}
+          />
         ))}
       </div>
 
