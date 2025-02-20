@@ -137,7 +137,7 @@ const router =useRouter()
                     
                     <td className="p-5"  onClick={()=>router.push(`/admin/posts/${post._id}`)}>{post._id}</td>
                     <td className="p-5 flex items-center gap-3"  onClick={()=>router.push(`/admin/posts/${post._id}`)}>
-                      {(post.images?.length > 0 || post.video) && (
+                      {(post?.images?.length && post?.images?.length > 0 || post.video) && (
                         <div className="flex gap-2">
                           {post.images?.slice(0, 2).map((image, index) => (
                             <Image
@@ -164,10 +164,10 @@ const router =useRouter()
                       )}
                     </td>
                     <td className="p-5"  onClick={()=>router.push(`/admin/posts/${post._id}`)}>
-                      {post.reports?.length > 0 && (
+                      {post.reports?.length && post.reports?.length > 0 && (
                         <div className="p-3 border rounded-lg bg-gray-100 w-full">
                           <h5 className="text-gray-900 text-lg font-semibold mb-2">Reports:</h5>
-                          {post.reports.map((report) => (
+                          {post.reports?.map((report) => (
                             <div key={report._id} className="border-b py-2 last:border-none">
                               <p className="text-gray-600 text-sm">
                                 {new Date(report.createdAt).toLocaleDateString()} -{" "}

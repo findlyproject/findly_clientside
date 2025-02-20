@@ -1,5 +1,3 @@
-
-
 import { useAppDispatch, useAppSelector } from "@/lib/store/hooks";
 
 import { Menu, Transition } from "@headlessui/react";
@@ -26,11 +24,9 @@ const route=activeuser?"user":"company"
   document.cookie = "ctoken=; path=/; max-age=0"; // Clear company token
 
       if(activeuser){
-        console.log("useeeeeeeeeeeer");
         
         dispatch(logoutUser())
       }else if(activeCompany){
-        console.log("commmmmmmmmmmmpa");
         dispatch(logOutCompany())
       }
     
@@ -38,9 +34,7 @@ const route=activeuser?"user":"company"
       router.replace("/");
       
     }
-    
-console.log("dropDownAfterlogin",dropDownAfterlogin);
-console.log("dropDownAfterloginSmallerScreen",dropDownAfterloginSmallerScreen);
+
 
   return (
     <div className="flex">

@@ -2,45 +2,88 @@
 import React, { useState, useEffect } from 'react';
 import { Chart } from 'primereact/chart';
 import api from '@/utils/api';
-import { useAppSelector } from '@/lib/store/hooks';
 const Dashboard: React.FC = () => {
   const [chartData, setChartData] = useState({});
   const [chartOptions, setChartOptions] = useState({});
   
 const [dailyUser,setDailyUser]=useState(0)
+const[aboutUser,setaboutUser]=useState([])
+const[dailyCompany,setDailyCompany]=useState(0)
+const[aboutCompany,setaboutCompany]=useState([])
 const [dailyRevenue,setDailyRevenue]=useState(0)
+const[totalRevenue,setTotalRevenue]=useState(0)
+const[userRevenue,setuserRevenue]=useState(0)
+const[companyRevenue,setcompanyRevenue]=useState(0)
+const[daily,setDaily]=useState([])
+const x1Labels = daily?.map((item) => item.day) || [];
+const dailyData = daily?.map((item) => item.revenue) || [];
+const[company,setCompany]=useState([])
+
+const companydata=company?.map((item)=>item.revenue||[])
+console.log("companydata",companydata);
+
   useEffect(()=>{
     const fetch=async()=>{
       const dailyUsers=await api.get(`/admin/dailyusers`)
       console.log("dailyUsers",dailyUsers);
       
       setDailyUser(dailyUsers.data.dailyUserCount)
-
+      setaboutUser(dailyUsers.data.TodayUsers)
       const dailyRevenue=await api.get(`/admin/dailyrevenue`)
       console.log("dailyRevenue",dailyRevenue);
       setDailyRevenue(dailyRevenue.data.dailyRevenue)
+      const totalRevenue=await api.get(`/admin/totalrevenue`)
+      setTotalRevenue(totalRevenue.data.totalRevenue)
+
+      const dailyCompanies=await api.get(`/admin/dailycompanies`)
+      setDailyCompany(dailyCompanies.data.dailyCompanyCount)
+      setaboutCompany(dailyCompanies.data.Todaycompanies)
+      // const userRevenue=await api.get(`/admin/userrevenue`)
+      // setuserRevenue(userRevenue.data.TotaluserRevenue)
+
+
+      // const companyRevenue=await api.get(`/admin/companyrevenue`)
+      // setcompanyRevenue(companyRevenue.data.TotalcompanyRevenue)
+
+      
+      const user=await api.get(`/admin/dailyuser`)
+      console.log("user dailyyyy",user);
+      
+      setDaily(user.data.dailyRevenue||[])
+
+
+
+      
+      const companyrevenue=await api.get(`/admin/new`)
+      console.log("nnn",companyrevenue);
+      setCompany(companyrevenue.data.dailyRevenue||[])
       
     }
     fetch()
   },[])
+ 
+  console.log("dailyCompany",dailyCompany);
+  console.log("aboutUser",aboutUser);
+  
+  
   useEffect(() => {
     const documentStyle = getComputedStyle(document.documentElement);
     const textColor = documentStyle.getPropertyValue('--text-color');
     const textColorSecondary = documentStyle.getPropertyValue('--text-color-secondary');
     const surfaceBorder = documentStyle.getPropertyValue('--surface-border');
     const data = {
-        labels: ['January', 'February', 'March', 'April', 'May', 'June', 'July'],
+        labels: x1Labels,
         datasets: [
             {
-                label: 'First Dataset',
-                data: [65, 59, 80, 81, 56, 55, 40],
+                label: 'User Total revenue',
+                data: dailyData,
                 fill: false,
                 borderColor: documentStyle.getPropertyValue('--blue-500'),
                 tension: 0.4
             },
             {
-                label: 'Second Dataset',
-                data: [28, 48, 40, 19, 86, 27, 90],
+                label: 'Company Total revenue',
+                data:companydata ,
                 fill: false,
                 borderColor: documentStyle.getPropertyValue('--pink-500'),
                 tension: 0.4
@@ -79,9 +122,8 @@ const [dailyRevenue,setDailyRevenue]=useState(0)
 
     setChartData(data);
     setChartOptions(options);
-}, []);
-const admin = useAppSelector((state) => state.admin);
-console.log("admin ",admin);
+}, [daily,company]);
+
 
   return (
     <div>
@@ -133,8 +175,8 @@ console.log("admin ",admin);
             </svg>
           </div>
           <div className="p-4 text-right">
-            <p className="block antialiased font-sans text-sm leading-normal font-normal text-blue-gray-600">New Clients</p>
-            <h4 className="block antialiased tracking-normal font-sans text-2xl font-semibold leading-snug text-blue-gray-900">3,462</h4>
+            <p className="block antialiased font-sans text-sm leading-normal font-normal text-blue-gray-600">Today's Companies</p>
+            <h4 className="block antialiased tracking-normal font-sans text-2xl font-semibold leading-snug text-blue-gray-900">{dailyCompany}</h4>
           </div>
           <div className="border-t border-blue-gray-50 p-4">
             <p className="block antialiased font-sans text-base leading-relaxed font-normal text-blue-gray-600">
@@ -149,8 +191,8 @@ console.log("admin ",admin);
             </svg>
           </div>
           <div className="p-4 text-right">
-            <p className="block antialiased font-sans text-sm leading-normal font-normal text-blue-gray-600">Sales</p>
-            <h4 className="block antialiased tracking-normal font-sans text-2xl font-semibold leading-snug text-blue-gray-900">$103,430</h4>
+            <p className="block antialiased font-sans text-sm leading-normal font-normal text-blue-gray-600">Total Revenue</p>
+            <h4 className="block antialiased tracking-normal font-sans text-2xl font-semibold leading-snug text-blue-gray-900">₹{totalRevenue}</h4>
           </div>
           <div className="border-t border-blue-gray-50 p-4">
             <p className="block antialiased font-sans text-base leading-relaxed font-normal text-blue-gray-600">
@@ -160,17 +202,17 @@ console.log("admin ",admin);
         </div>
       </div>
       <div className='grid xl:grid-cols-2'>
-        {/* table 1 */}
+        {/* table 1  today,s users*/}
       <div className="mb-4 grid grid-cols-1 gap-6 xl:grid-cols-3">
         <div className="relative flex flex-col bg-clip-border rounded-xl bg-white text-gray-700 shadow-md overflow-hidden xl:col-span-2">
           <div className="relative bg-clip-border rounded-xl overflow-hidden bg-transparent text-gray-700 shadow-none m-0 flex items-center justify-between p-6">
             <div>
-              <h6 className="block antialiased tracking-normal font-sans text-base font-semibold leading-relaxed text-blue-gray-900 mb-1">Projects</h6>
+              <h6 className="block antialiased tracking-normal font-sans text-base font-semibold leading-relaxed text-blue-gray-900 mb-1">Today's Users</h6>
               <p className="antialiased font-sans text-sm leading-normal flex items-center gap-1 font-normal text-blue-gray-600">
                 <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth="3" stroke="currentColor" aria-hidden="true" className="h-4 w-4 text-blue-500">
                   <path strokeLinecap="round" strokeLinejoin="round" d="M4.5 12.75l6 6 9-13.5"></path>
                 </svg>
-                <strong>30 done</strong> this month
+                <strong>{aboutUser.length?aboutUser.length:0} done</strong> this day
               </p>
             </div>
             <button aria-expanded="false" aria-haspopup="menu" id=":r5:" className="relative middle none font-sans font-medium text-center uppercase transition-all disabled:opacity-50 disabled:shadow-none disabled:pointer-events-none w-8 max-w-[32px] h-8 max-h-[32px] rounded-lg text-xs text-blue-gray-500 hover:bg-blue-gray-500/10 active:bg-blue-gray-500/30" type="button">
@@ -186,55 +228,76 @@ console.log("admin ",admin);
               <thead>
                 <tr>
                   <th className="border-b border-blue-gray-50 py-3 px-6 text-left">
-                    <p className="block antialiased font-sans text-[11px] font-medium uppercase text-blue-gray-400">companies</p>
+                    <p className="block antialiased font-sans text-[11px] font-medium uppercase text-blue-gray-400">User</p>
                   </th>
                   <th className="border-b border-blue-gray-50 py-3 px-6 text-left">
-                    <p className="block antialiased font-sans text-[11px] font-medium uppercase text-blue-gray-400">budget</p>
+                    <p className="block antialiased font-sans text-[11px] font-medium uppercase text-blue-gray-400">Joined</p>
                   </th>
                   <th className="border-b border-blue-gray-50 py-3 px-6 text-left">
-                    <p className="block antialiased font-sans text-[11px] font-medium uppercase text-blue-gray-400">completion</p>
+                    <p className="block antialiased font-sans text-[11px] font-medium uppercase text-blue-gray-400">Job Title</p>
                   </th>
                 </tr>
               </thead>
               <tbody>
-              
-                <tr>
-                  <td className="py-3 px-5 border-b border-blue-gray-50">
-                    <div className="flex items-center gap-4">
-                      <p className="block antialiased font-sans text-sm leading-normal text-blue-gray-900 font-bold">Add Progress Track</p>
-                    </div>
-                  </td>
-                  <td className="py-3 px-5 border-b border-blue-gray-50">
-                    <p className="block antialiased font-sans text-xs font-medium text-blue-gray-600">$3,000</p>
-                  </td>
-                  <td className="py-3 px-5 border-b border-blue-gray-50">
-                    <div className="w-10/12">
-                      <p className="antialiased font-sans mb-1 block text-xs font-medium text-blue-gray-600">10%</p>
-                      <div className="flex flex-start bg-blue-gray-50 overflow-hidden w-full rounded-sm font-sans text-xs font-medium h-1">
-                        <div className="flex justify-center items-center h-full bg-gradient-to-tr from-blue-600 to-blue-400 text-white"></div>
-                      </div>
-                    </div>
-                  </td>
-                </tr>
-               
-                
-              </tbody>
+  {aboutUser.length > 0 ? (
+    aboutUser.map((item, index) => (
+      <tr key={index}>
+        <td className="py-3 px-5 border-b border-blue-gray-50">
+          <div className="flex items-center gap-4">
+            <img src={item.profileImage} className='w-10 h-10 rounded-full'/>
+            <p className="block antialiased font-sans text-sm leading-normal text-blue-gray-900 font-bold">
+              {item.firstName} {item.lastName}
+              <p>{item.email}</p>
+            </p>
+          </div>
+        </td>
+        <td className="py-3 px-5 border-b border-blue-gray-50">
+          <p className="block antialiased font-sans text-xs font-medium text-blue-gray-600">{new Date(item.createdAt).toLocaleDateString("en-GB", {
+    day: "2-digit",
+    month: "short",
+    year: "numeric",
+  })}</p>
+        </td>
+        <td className="py-3 px-5 border-b border-blue-gray-50">
+          <div className="w-10/12">
+            <p className="antialiased font-sans mb-1 block text-xs font-medium text-blue-gray-600">{item.jobTitle[0]}</p>
+            <div className="flex flex-start bg-blue-gray-50 overflow-hidden w-full rounded-sm font-sans text-xs font-medium h-1">
+              <div className="flex justify-center items-center h-full bg-gradient-to-tr from-blue-600 to-blue-400 text-white"></div>
+            </div>
+          </div>
+        </td>
+      </tr>
+    ))
+  ) : (
+    <tr>
+      <td colSpan="3" className="py-3 px-5 text-center text-blue-gray-600">
+        No user info available
+      </td>
+    </tr>
+  )}
+</tbody>
+
             </table>
             
           </div>
         </div>
       </div>
+
+
+
+
+
       {/* table2 */}
       <div className="mb-4 grid grid-cols-1 gap-6 xl:grid-cols-3">
         <div className="relative flex flex-col bg-clip-border rounded-xl bg-white text-gray-700 shadow-md overflow-hidden xl:col-span-2">
           <div className="relative bg-clip-border rounded-xl overflow-hidden bg-transparent text-gray-700 shadow-none m-0 flex items-center justify-between p-6">
             <div>
-              <h6 className="block antialiased tracking-normal font-sans text-base font-semibold leading-relaxed text-blue-gray-900 mb-1">Projects</h6>
+              <h6 className="block antialiased tracking-normal font-sans text-base font-semibold leading-relaxed text-blue-gray-900 mb-1">Today's Companies</h6>
               <p className="antialiased font-sans text-sm leading-normal flex items-center gap-1 font-normal text-blue-gray-600">
                 <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth="3" stroke="currentColor" aria-hidden="true" className="h-4 w-4 text-blue-500">
                   <path strokeLinecap="round" strokeLinejoin="round" d="M4.5 12.75l6 6 9-13.5"></path>
                 </svg>
-                <strong>30 done</strong> this month
+                <strong>{aboutCompany.length?aboutCompany.length:0} done</strong> this day
               </p>
             </div>
             <button aria-expanded="false" aria-haspopup="menu" id=":r5:" className="relative middle none font-sans font-medium text-center uppercase transition-all disabled:opacity-50 disabled:shadow-none disabled:pointer-events-none w-8 max-w-[32px] h-8 max-h-[32px] rounded-lg text-xs text-blue-gray-500 hover:bg-blue-gray-500/10 active:bg-blue-gray-500/30" type="button">
@@ -253,36 +316,63 @@ console.log("admin ",admin);
                     <p className="block antialiased font-sans text-[11px] font-medium uppercase text-blue-gray-400">companies</p>
                   </th>
                   <th className="border-b border-blue-gray-50 py-3 px-6 text-left">
-                    <p className="block antialiased font-sans text-[11px] font-medium uppercase text-blue-gray-400">budget</p>
+                    <p className="block antialiased font-sans text-[11px] font-medium uppercase text-blue-gray-400">Joined</p>
                   </th>
                   <th className="border-b border-blue-gray-50 py-3 px-6 text-left">
-                    <p className="block antialiased font-sans text-[11px] font-medium uppercase text-blue-gray-400">completion</p>
+                    <p className="block antialiased font-sans text-[11px] font-medium uppercase text-blue-gray-400">Employees</p>
                   </th>
                 </tr>
               </thead>
               <tbody>
-              
-                <tr>
-                  <td className="py-3 px-5 border-b border-blue-gray-50">
-                    <div className="flex items-center gap-4">
-                      <p className="block antialiased font-sans text-sm leading-normal text-blue-gray-900 font-bold">Add Progress Track</p>
-                    </div>
-                  </td>
-                  <td className="py-3 px-5 border-b border-blue-gray-50">
-                    <p className="block antialiased font-sans text-xs font-medium text-blue-gray-600">$3,000</p>
-                  </td>
-                  <td className="py-3 px-5 border-b border-blue-gray-50">
-                    <div className="w-10/12">
-                      <p className="antialiased font-sans mb-1 block text-xs font-medium text-blue-gray-600">10%</p>
-                      <div className="flex flex-start bg-blue-gray-50 overflow-hidden w-full rounded-sm font-sans text-xs font-medium h-1">
-                        <div className="flex justify-center items-center h-full bg-gradient-to-tr from-blue-600 to-blue-400 text-white"></div>
-                      </div>
-                    </div>
-                  </td>
-                </tr>
-               
-                
-              </tbody>
+  {aboutCompany.length > 0 ? (
+    aboutCompany.map((item, index) => (
+      <tr key={index}>
+        <td className="py-3 px-5 border-b border-blue-gray-50">
+          <div className="flex items-center gap-4">
+          <img src={item.logo} className='w-10 h-10 rounded-full'/>
+            <p className="block antialiased font-sans text-sm leading-normal text-blue-gray-900 font-bold">
+              {item.name} 
+               <p>{item.email}</p>
+            </p>
+           
+          </div>
+        </td>
+        <td className="py-3 px-5 border-b border-blue-gray-50">
+        
+
+        <p className="block antialiased font-sans text-xs font-medium text-blue-gray-600">
+  {new Date(item.createdAt).toLocaleDateString("en-GB", {
+    day: "2-digit",
+    month: "short",
+    year: "numeric",
+  })}
+</p>
+
+
+
+        </td>
+        <td className="py-3 px-5 border-b border-blue-gray-50">
+          <div className="w-10/12">
+          <p className="antialiased font-sans mb-1 block text-xs font-medium text-blue-gray-600">
+  {item.employees?.length ?? 0}
+</p>
+
+            <div className="flex flex-start bg-blue-gray-50 overflow-hidden w-full rounded-sm font-sans text-xs font-medium h-1">
+              <div className="flex justify-center items-center h-full bg-gradient-to-tr from-blue-600 to-blue-400 text-white"></div>
+            </div>
+          </div>
+        </td>
+      </tr>
+    ))
+  ) : (
+    <tr>
+      <td colSpan="3" className="py-3 px-5 text-center text-blue-gray-600">
+        No company info available
+      </td>
+    </tr>
+  )}
+</tbody>
+
             </table>
             
           </div>

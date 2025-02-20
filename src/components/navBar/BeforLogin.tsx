@@ -3,8 +3,8 @@ import { Bars3Icon, XMarkIcon } from "@heroicons/react/24/outline";
 import Link from "next/link";
 import React, { useState } from "react";
 import { dropDownBeforLogin } from "./Navbar";
-import { Ultra } from "next/font/google";
-import Image from "next/image";
+
+
 
 function Beforlogin() {
   const [menuOpen, setMenuOpen] = useState(false);
@@ -13,18 +13,18 @@ function Beforlogin() {
     <div>
       <div className="flex justify-end space-x-1  lg:space-x-3">
         <Link href="/login/user" className="">
-          <button className="bg-primary p-2 px-1 lg:px-7 rounded-full text-white hidden lg:block">
+          <button className="bg-primary p-2 px-1 lg:px-7 rounded-full text-white hidden xl:block">
             Employee desk
           </button>
         </Link>
         <Link href="/login/company" className="">
-          <button className="bg-primary p-2 px-1 md:px-0 lg:px-7 rounded-full text-white hidden lg:block">
+          <button className="bg-primary p-2 px-1 md:px-0 lg:px-7 rounded-full text-white hidden xl:block">
           Employer desk
           </button>
         </Link>
       </div>
-      <div className=" flex gap-3">
-        <Menu as="div" className="lg:hidden relative mx-3 z-40 w-10 mr-5">
+      <div className="flex gap-3">
+        <Menu as="div" className="xl:hidden relative mx-3 z-40 w-10 mr-5">
           <Menu.Button className="flex  text-sm rounded-full  focus:outline-none w-auto">
             Login
           </Menu.Button>

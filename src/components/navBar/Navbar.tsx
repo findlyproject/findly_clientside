@@ -13,14 +13,17 @@ import { RxCross2 } from "react-icons/rx";
 
 
 
-
-
 export const navigation = [
   { name: "Home", href: "/" },
   { name: "About", href: "/about" },
   { name: "Contact", href: "/contactus" },
 
+  {name:"Community",href:"/community"},
+
 ];
+
+
+
 
 export const dropDownAfterlogin = (route:string)=>[
   { name: "Subscription", href: `/${route}/premium` },
@@ -33,11 +36,14 @@ export const dropDownAfterloginSmallerScreen =(route:string)=> [
   { name: "Subscription", href: `/${route}/premium`},
 ];
 
+
 export const dropDownBeforLogin = [
   { name: "Home", href: "/" },
   { name: "About", href: "/about" },
   { name: "Contact", href: "/contactus" },
-  
+
+  { name: "Subscription", href: "/premium" },
+
 ];
 
 export default function Navbar() {
@@ -104,11 +110,17 @@ dropDownAfterlogin(route)
           <div className="flex justify-between w-full">
 
             <div className="flex items-center">
+
+              <Link href="/">
+                <Image src={logo} alt="Logo" width={100} height={50} className="min-w-20" />
+              </Link>
+
        
           <Link href="/" className="text:sm lg:text-2xl font-bold text-primary">
             Findly. 
           </Link>
         
+
               <div>
          
         </div>

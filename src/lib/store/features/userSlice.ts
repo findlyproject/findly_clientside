@@ -9,7 +9,11 @@ export interface Ieducation {
   college: string;
   Subject: string; 
 }
+
+
+
 export interface IlocationType {
+
   country: string;
   countryName: string;
   state: string;
@@ -33,7 +37,12 @@ export interface UserProfile {
   phoneNumber?: string;
   dateOfBirth?: Date;
 
+
+  
+gender:string
+
   location?: IlocationType;
+
 
  
 
