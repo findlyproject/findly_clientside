@@ -1,5 +1,7 @@
 import { createSlice } from "@reduxjs/toolkit"
+
 import { UserProfile } from "./userSlice";
+
 
 export interface companyData{
     email:string,
@@ -22,6 +24,12 @@ export interface companyData{
     subscriptionEndDate: string | null;
     employees: string[]; 
     _id: string;
+}
+
+
+
+interface loginState{
+    activeCompany:companyData|null
 }
 
 
@@ -68,6 +76,8 @@ export const loginSlice= createSlice({
     },
     setCompanyLogOut:(state)=>{
         state.activeCompany=null
+
+
     },
     setAppliedUsers:(state,action)=>{
        state.application=action.payload

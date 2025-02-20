@@ -13,14 +13,23 @@ import { RxCross2 } from "react-icons/rx";
 
 
 
-
-
-export const navigation = [
+export const navigationBefore = [
   { name: "Home", href: "/" },
   { name: "About", href: "/about" },
   { name: "Contact", href: "/contactus" },
 
 ];
+
+export const navigationAfter = [
+  { name: "Home", href: "/" },    
+  { name: "About", href: "/about" },
+  { name: "Contact", href: "/contactus" },
+  {name:"Community",href:"/community"},
+
+];
+
+
+
 
 export const dropDownAfterlogin = (route:string)=>[
   { name: "Subscription", href: `/${route}/premium` },
@@ -33,11 +42,14 @@ export const dropDownAfterloginSmallerScreen =(route:string)=> [
   { name: "Subscription", href: `/${route}/premium`},
 ];
 
+
 export const dropDownBeforLogin = [
   { name: "Home", href: "/" },
   { name: "About", href: "/about" },
   { name: "Contact", href: "/contactus" },
-  
+
+  { name: "Subscription", href: "/premium" },
+
 ];
 
 export default function Navbar() {
@@ -105,10 +117,11 @@ dropDownAfterlogin(route)
 
             <div className="flex items-center">
        
-          <Link href="/" className="text-2xl font-bold text-primary">
-            Findly . 
+          <Link href="/" className="text:sm lg:text-2xl font-bold text-primary">
+            Findly. 
           </Link>
         
+
               <div>
          
         </div>
@@ -154,7 +167,9 @@ dropDownAfterlogin(route)
                   </ul>
                 </div>
               )}
-              {navigation.map((item) => (
+              {activeuser||activeCompany ?(
+
+              navigationAfter.map((item) => (
                 <Link
                   key={item.name}
                   href={item.href}
@@ -162,7 +177,18 @@ dropDownAfterlogin(route)
                 >
                   {item.name}
                 </Link>
-              ))}
+              ))
+            ):(
+              navigationBefore.map((item) => (
+                <Link
+                  key={item.name}
+                  href={item.href}
+                  className="text-gray-500 hover:text-gray-700 hover:font-bold px-3 py-2 rounded-md text-sm font-medium"
+                >
+                  {item.name}
+                </Link>
+              ))
+            )}
             </div>
 
             <div className="sm:hidden ">

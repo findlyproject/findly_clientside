@@ -13,8 +13,6 @@ const geistSans = Geist({
   subsets: ["latin"],
 });
 
-
-
 const geistMono = Geist_Mono({
   variable: "--font-geist-mono",
   subsets: ["latin"],
@@ -31,7 +29,6 @@ export default async function RootLayout({
   children: React.ReactNode;
 }>) {
   const session = await getServerSession();
-  
   return (
     <html lang="en">
       <body>
@@ -56,6 +53,6 @@ export default async function RootLayout({
           />
         </StoreProvider>
       </body>
-    </html>
-  );
+  </html>
+);
 }

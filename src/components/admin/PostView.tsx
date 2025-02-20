@@ -7,6 +7,7 @@ import Image from "next/image";
 
 const PostView = () => {
   const { id } = useParams();
+  console.log(id)
   const router = useRouter();
   const [post, setPost] = useState<IPost | null>(null);
   const [error, setError] = useState<string | null>(null);

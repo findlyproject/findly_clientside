@@ -6,14 +6,12 @@ import { Country, State, City } from "country-state-city";
 import { Formik, Form, ErrorMessage, Field } from "formik";
 import * as Yup from "yup";
 import api from "@/utils/api";
+import { useRouter } from "next/navigation";
 const RegistrationForm = () => {
   const [showPassword, setShowPassword] = useState(false);
   const [showConfirmPassword, setShowConfirmPassword] = useState(false);
-  const [previewImage, setPreviewImage] = useState(null);
-  const [selectedCountry, setSelectedCountry] = useState("");
-  const [selectedState, setSelectedState] = useState("");
-  const [selectedCity, setSelectedCity] = useState("");
-  const [pincode, setPincode] = useState("");
+  const [previewImage, setPreviewImage] = useState<File>();
+  const router = useRouter();
 
   const validationSchema = Yup.object().shape({
     name: Yup.string().required("Company Name is required"),
@@ -35,8 +33,6 @@ const RegistrationForm = () => {
       .oneOf([Yup.ref("password"), null], "Passwords must match")
       .required("Confirm Password is required"),
     IndustryType: Yup.string().required("Industry Type is required"),
-  
-    // ✅ Corrected address validation (Nested Object)
     address: Yup.object().shape({
       landmark: Yup.string().required("Landmark is required"),
       country: Yup.string().required("Country is required"),
@@ -47,50 +43,47 @@ const RegistrationForm = () => {
         .required("Pincode is required"),
     }),
   });
-  
-  
+
   const handleImageChange = (e) => {
     const file = e.target.files[0];
     if (file) {
-      const reader = new FileReader();
-      reader.onloadend = () => {
-        setPreviewImage(reader.result);
-      };
-      reader.readAsDataURL(file);
+      setPreviewImage(file);
     }
   };
 
-  const handleFormSubmit = async (values:any) => {
+  const handleFormSubmit = async (values: any) => {
     try {
-      // Spread form data and add the profile image (logo)
-     const formData = new FormData();
-// Object.entries(values).forEach(([key, value]) => {
-//   if (key === "address") {
-//     Object.entries(value).forEach(([subKey, subValue]) => {
-//       formData.append(`address[${subKey}]`, subValue);
-//     });
-//   } else {
-//     formData.append(key, value);
-//   }
-// });
+      const formData = new FormData();
 
-// // Append image file
-//  formData.append("logo", previewImage);
+      Object.entries(values).forEach(([key, value]) => {
+        console.log(key, value);
+        router.push("/home");
+        if (key === "address" && typeof value === "object" && value !== null) {
+          Object.entries(value).forEach(([subKey, subValue]) => {
+            formData.append(`address[${subKey}]`, subValue);
+          });
+        } else {
+          formData.append(key, value);
+        }
+      });
 
-  
-      // Send a POST request to your backend API
-      const response = await api.post('/company/final-register', formData);  
-  
+      if (previewImage instanceof File) {
+        formData.append("logo", previewImage);
+      } else {
+        console.warn("Invalid file: previewImage is not a File object");
+      }
+
+      const response = await api.post("/company/final-register", formData);
+
       // Handle success
-      console.log('Registration successful:', response.data);
-      alert('Registration successful');
+      console.log("Registration successful:", response.data);
+      alert("Registration successful");
     } catch (error) {
       // Handle error
-      console.error('Error during registration:', error);
-      alert('Error during registration. Please try again later.');
+      console.error("Error during registration:", error);
+      alert("Error during registration. Please try again later.");
     }
   };
-  
 
   return (
     <div className=" min-h-screen p-4 flex items-center justify-center">
@@ -141,7 +134,7 @@ const RegistrationForm = () => {
           validationSchema={validationSchema}
           onSubmit={handleFormSubmit}
         >
-          {({ values, isSubmitting,setFieldValue  }) => (
+          {({ values, isSubmitting, setFieldValue }) => (
             <Form className="space-y-6">
               <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                 <div className="space-y-2">
@@ -236,7 +229,6 @@ const RegistrationForm = () => {
                       type="button"
                       onClick={() => setShowPassword(!showPassword)}
                       className="absolute right-2 top-1/2 -translate-y-1/2 text-gray-500"
-                      
                     >
                       {showPassword ? <EyeOff size={20} /> : <Eye size={20} />}
                     </button>
@@ -256,7 +248,7 @@ const RegistrationForm = () => {
                     <Field
                       type={showConfirmPassword ? "text" : "password"}
                       placeholder="••••••"
-                       name="cpassword"
+                      name="cpassword"
                       className="w-full p-2.5 border rounded-lg focus:ring-2 focus:ring-blue-500 outline-none text-sm md:text-base"
                     />
                     <button
@@ -265,7 +257,6 @@ const RegistrationForm = () => {
                         setShowConfirmPassword(!showConfirmPassword)
                       }
                       className="absolute right-2 top-1/2 -translate-y-1/2 text-gray-500"
-                     
                     >
                       {showConfirmPassword ? (
                         <EyeOff size={20} />
@@ -288,18 +279,17 @@ const RegistrationForm = () => {
                     Industry Type <span className="text-red-500">*</span>
                   </label>
                   <Field
-                  as="select"
+                    as="select"
                     name="IndustryType"
                     className="w-full p-2.5 border rounded-lg focus:ring-2 focus:ring-blue-500 outline-none text-sm md:text-base"
                     value={values.IndustryType || ""}
                     onChange={(e) => {
-                      setFieldValue("IndustryType",e.target.value);
+                      setFieldValue("IndustryType", e.target.value);
                     }}
                   >
-                     <option value=""></option>
+                    <option value=""></option>
                     <option value="IT">IT</option>
                     <option></option>
-
                   </Field>
                   <ErrorMessage
                     name="IndustryType"
@@ -334,12 +324,12 @@ const RegistrationForm = () => {
                       Country <span className="text-red-500">*</span>
                     </label>
                     <Field
-                    as="select"
+                      as="select"
                       name="address.country"
                       className="w-full p-2.5 border rounded-lg focus:ring-2 focus:ring-blue-500 outline-none text-sm md:text-base"
                       value={values.address.country || ""}
                       onChange={(e) => {
-                        setFieldValue("address.country",e.target.value);
+                        setFieldValue("address.country", e.target.value);
                       }}
                     >
                       <option value="">Select Country</option>
@@ -362,14 +352,13 @@ const RegistrationForm = () => {
                       State <span className="text-red-500">*</span>
                     </label>
                     <Field
-                    as="select"
+                      as="select"
                       className="w-full p-2.5 border rounded-lg focus:ring-2 focus:ring-blue-500 outline-none text-sm md:text-base"
                       value={values.address.state || ""}
                       onChange={(e) => {
                         setFieldValue("address.state", e.target.value);
                       }}
                       name="state"
-                      
                     >
                       <option value="">Select State</option>
                       {values.address.country &&
@@ -396,12 +385,12 @@ const RegistrationForm = () => {
                       City <span className="text-red-500">*</span>
                     </label>
                     <Field
-                    as="select"
+                      as="select"
                       className="w-full p-2.5 border rounded-lg focus:ring-2 focus:ring-blue-500 outline-none text-sm md:text-base"
                       value={values.address.city || ""}
-
-                      onChange={(e) => setFieldValue("address.city", e.target.value)}
-                     
+                      onChange={(e) =>
+                        setFieldValue("address.city", e.target.value)
+                      }
                       name="city"
                     >
                       <option value="">Select City</option>
@@ -445,9 +434,8 @@ const RegistrationForm = () => {
               <button
                 type="submit"
                 className="w-full bg-gray-900 text-white p-3 rounded-lg hover:bg-gray-800 transition-colors text-sm md:text-base font-medium"
-                
               >
-                 {isSubmitting ? "Submitting..." : "Register"}
+                {isSubmitting ? "Submitting..." : "Register"}
               </button>
             </Form>
           )}

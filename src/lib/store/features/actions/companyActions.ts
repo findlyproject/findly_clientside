@@ -3,6 +3,9 @@ import api from "@/utils/api";
 import handleAsync from "@/utils/handleAsync";
 import { createAsyncThunk } from "@reduxjs/toolkit";
 import { AxiosResponse } from "axios";
+
+
+
 import { setActiveCompany, setAppliedUsers, setCompanyLogOut } from "../companyslice";
 import { setforgotPassword } from "../companyslice";
 
@@ -44,6 +47,7 @@ export const loginCompany=createAsyncThunk(
   return true
      
     } )
+
 
     export const applicationList=createAsyncThunk(
       "applicationlist",
