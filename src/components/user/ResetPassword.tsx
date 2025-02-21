@@ -28,6 +28,7 @@ function ResetPassword() {
     }
   }, [timer]);
 
+  // Handle OTP input change
   const handleOtpChange = (index: number, value: string) => {
     if (/^\d?$/.test(value)) {
       const newOtp = [...otp];

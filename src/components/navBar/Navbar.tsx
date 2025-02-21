@@ -5,7 +5,6 @@ import AfterLogin from "./Afterlogin";
 import Image from "next/image";
 import { useRouter } from "next/navigation";
 import { useAppSelector } from "@/lib/store/hooks";
-import logo from "../../../public/assets/findlylogo.png";
 import api from "@/utils/api";
 import Beforlogin from "./BeforLogin";
 import { IoSearch } from "react-icons/io5";
@@ -19,6 +18,13 @@ export const navigationBefore = [
   { name: "Contact", href: "/contactus" },
 
 ];
+
+export const navigation = [
+  { name: "Home", href: "/home  " },
+  { name: "About", href: "/about" },
+  { name: "Contact", href: "/contactus" },
+  { name: "Jobs", href: "/jobs" },
+
 
 export const navigationAfter = [
   { name: "Home", href: "/" },    
@@ -44,7 +50,7 @@ export const dropDownAfterloginSmallerScreen =(route:string)=> [
 
 
 export const dropDownBeforLogin = [
-  { name: "Home", href: "/" },
+  { name: "Home", href: "/home" },
   { name: "About", href: "/about" },
   { name: "Contact", href: "/contactus" },
 
