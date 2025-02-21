@@ -32,7 +32,7 @@ const Create = () => {
 
       setallSkills(response.data.skills);
 
-      const responseofTitle = await api.get("/admin/alltitle");
+      const responseofTitle = await api.get("/admin/alladmin");
 
       setallTitles(responseofTitle.data.titles);
     };
