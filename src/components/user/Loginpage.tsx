@@ -181,7 +181,7 @@ console.log("googlestate",googlestate);
             <FcGoogle className="mr-2" /> <span className="mb-2">google</span>
           </button>
           <div className="flex mt-3">
-            <p>Don&apos;t have any account? <a href="/register" className="underline">create account</a></p>
+            <p>Don&apos;t have any account? <a href="/user/register" className="underline">create account</a></p>
            
           </div>
 

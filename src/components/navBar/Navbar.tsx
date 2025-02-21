@@ -18,7 +18,7 @@ export const navigation = [
   { name: "Home", href: "/home  " },
   { name: "About", href: "/about" },
   { name: "Contact", href: "/contactus" },
-  { name: "Jobs", href: "/jobs" },
+  { name: "Jobs", href: "/user/jobs" },
 
 
 
@@ -33,6 +33,8 @@ export const dropDownAfterloginSmallerScreen =(route:string)=> [
   { name: "About", href: "/about" },
   { name: "Contact", href: "/contactus" },
   { name: "Subscription", href: `/${route}/premium`},
+  { name: "Jobs", href: "/user/jobs" },
+
 ];
 
 export const dropDownBeforLogin = [

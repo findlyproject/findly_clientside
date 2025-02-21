@@ -87,7 +87,7 @@ console.log("salary",salary);
       </div>
 
       <button className="mt-3 w-full py-2 bg-black text-white rounded-lg font-semibold hover:bg-gray-800 transition"
-      onClick={()=>route.push(`/jobdetails/${_id}`)}
+      onClick={()=>route.push(`/user/jobdetails/${_id}`)}
       >
         Details
       </button>
