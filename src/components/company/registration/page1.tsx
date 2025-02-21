@@ -47,13 +47,13 @@ const Page1: React.FC = () => {
   };
 
   // Handle OTP verification
-  const HandleOtpVerify = async (values: { otp: string; email: string }) => {
+  const HandleOtpVerify = async (values: { otp: string; email: string;name:string }) => {
     setLoading(true);
     try {
       const response = await api.post("company/verify-otp", values);
       console.log("Verification response:", response);
       alert("OTP verified successfully!");
-      router.push("/company/register/form");
+      router.push(`/company/register/form?email=${encodeURIComponent(values.email)}&name=${encodeURIComponent(values.name)}`);
     } catch (error) {
       console.error("Error verifying OTP:", error);
       alert("Invalid OTP. Please try again.");
