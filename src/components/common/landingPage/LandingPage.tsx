@@ -12,7 +12,9 @@ import goup from "../../../../public/landingPage-group-discussion.png"
 
 import Testimonials from "./Testimonial";
 import { useAppDispatch } from "@/lib/store/hooks";
-import { setActiveCompany } from "@/lib/store/features/companyslice";
+import { setActiveCompany, setCompanyLogOut } from "@/lib/store/features/companyslice";
+import { useEffect } from "react";
+import { SetLogout } from "@/lib/store/features/userSlice";
 
 
 
@@ -22,7 +24,7 @@ function LandingPage() {
 // const  dispatch=useAppDispatch()
 // useEffect(()=>{
 // dispatch(setCompanyLogOut())
-// dispatch(SetLogout())
+// dispatch(SetLogout())  
 // },[])
 
   const router = useRouter()

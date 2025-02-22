@@ -102,7 +102,8 @@ const Page1: React.FC = () => {
           <p className="mt-6 text-center font-medium md:text-left">
             Already using Findly?
             <Link
-              href="c-login"
+          
+              href="/company/login"
               className="whitespace-nowrap font-semibold text-purple-800"
             >
               {" "}

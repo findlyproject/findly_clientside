@@ -1,7 +1,7 @@
 "use client"
 import React, { useState } from "react";
 import { subscription } from "@/lib/store/features/actions/subscriptionActions";
-import { useAppDispatch } from "@/lib/store/hooks";
+import { useAppDispatch, useAppSelector } from "@/lib/store/hooks";
 import { useRouter } from "next/navigation";
 interface Plan {
   id: number;
@@ -64,16 +64,18 @@ const PricingPlans: React.FC = () => {
   const router=useRouter()
   const [isYearly, setIsYearly] = useState(false);
   const dispatch=useAppDispatch()
-
-
+const activeCompany=useAppSelector((state)=>state.companyLogin.activeCompany)
+const route=activeCompany?"company":"user"
   const purchasePlan = async (plan: Plan) => {
 
 
+   console.log("activeCompany",activeCompany);
+   console.log("routepreee",route);
    
-     const resultAction = await dispatch(subscription(plan));
+     const resultAction = await dispatch(subscription({plan,route}));
      console.log("resultAction",resultAction)
      if(resultAction.type==="subscription/fulfilled"){
-      router.push("/premium/payment")
+      router.push(`/${route}/premium/payment`)
      }
   };
   return (

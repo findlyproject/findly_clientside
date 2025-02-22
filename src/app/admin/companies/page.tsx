@@ -1,10 +1,10 @@
-import Login from '@/components/company/LoginPage'
+import Companies from '@/components/admin/Companies'
 import React from 'react'
 
 const page = () => {
   return (
     <div>
-      <Login/>
+      <Companies/>
     </div>
   )
 }
