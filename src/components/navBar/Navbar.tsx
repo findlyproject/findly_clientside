@@ -24,7 +24,7 @@ export const navigation = [
   { name: "About", href: "/about" },
   { name: "Contact", href: "/contactus" },
   { name: "Jobs", href: "/jobs" },
-
+]
 
 export const navigationAfter = [
   { name: "Home", href: "/" },    
