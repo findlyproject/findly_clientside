@@ -34,7 +34,8 @@ function LandingPage() {
   ];
   return (
     <div className="w-full h-full">
-      <div className="flex flex-col md:flex-row items-center justify-center   w-full  pt-20 ">
+      <section className="bg-primary w-full h-[100vh]">
+      <div className="flex flex-col md:flex-row items-center justify-center  w-full  pt-20 ">
 
 
         <div className="w-full flex flex-col-reverse md:flex-row justify-evenly items-center  space-y-8 md:space-y-0 md:space-x-10 p-4 md:p-8">
@@ -143,6 +144,7 @@ function LandingPage() {
           </div>
         </div>
       </div>
+      </section>
       <div className="relative flex flex-col items-center bg-white py-20">
 
         <div className="relative bg-white shadow-lg p-10 flex flex-col md:flex-row items-center w-2/3 justify-center z-10">

@@ -12,7 +12,7 @@ export const CommunityPanel = () => {
   ];
 
   return (
-    <section className="bg-white min-h-[300px] rounded-lg my-2 sticky top-[76px] flex flex-col justify-center p-4 shadow-md">
+    <section className="bg-red-200 min-h-[300px] rounded-lg my-2 sticky top-[76px] flex flex-col justify-center p-4 shadow-md">
       <div className="container">
         <div className="text-center font-semibold text-gray-700">
           <p>Add to your feed</p>

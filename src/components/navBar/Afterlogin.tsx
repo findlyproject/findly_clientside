@@ -1,5 +1,5 @@
+"use client"
 import { useAppDispatch, useAppSelector } from "@/lib/store/hooks";
-
 import { Menu, Transition } from "@headlessui/react";
 import { BellIcon } from "@heroicons/react/24/outline";
 import Link from "next/link";

@@ -6,6 +6,7 @@ import { Formik, Form, Field, ErrorMessage } from "formik";
 import * as Yup from "yup";
 import api from "@/utils/api";
 import { useRouter } from "next/navigation";
+import { toast } from "react-toastify";
 
 const Page1: React.FC = () => {
   const [loading, setLoading] = useState(false);
@@ -35,28 +36,26 @@ const Page1: React.FC = () => {
     try {
       const response = await api.post("company/send-otp", values);
       console.log("Response:", response);
-      alert("OTP sent successfully! Check your email.");
+      toast.success("OTP sent successfully! Check your email.");
       setOtpSent(true);
       setResendCount(resendCount + 1); 
     } catch (error) {
       console.error("Error sending OTP:", error);
-      alert("Failed to send OTP. Please try again.");
+      toast.error("Failed to send OTP. Please try again.");
     } finally {
       setLoading(false);
     }
   };
 
   // Handle OTP verification
-  const HandleOtpVerify = async (values: { otp: string; email: string }) => {
+  const HandleOtpVerify = async (values: { otp: string; email: string;name:string }) => {
     setLoading(true);
     try {
       const response = await api.post("company/verify-otp", values);
-      console.log("Verification response:", response);
-      alert("OTP verified successfully!");
-      router.push("/company/register/form");
+      toast.success("OTP verified successfully!");
+      router.push(`/company/register/form?email=${encodeURIComponent(values.email)}&name=${encodeURIComponent(values.name)}`);
     } catch (error) {
-      console.error("Error verifying OTP:", error);
-      alert("Invalid OTP. Please try again.");
+      toast.error("Invalid OTP. Please try again.");
     } finally {
       setLoading(false);
     }
