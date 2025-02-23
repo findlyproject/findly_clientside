@@ -6,9 +6,12 @@ import { Country, State, City } from "country-state-city";
 import { Formik, Form, ErrorMessage, Field } from "formik";
 import * as Yup from "yup";
 import api from "@/utils/api";
-import { useRouter } from "next/navigation";
+import { useRouter, useSearchParams } from "next/navigation";
 import { toast } from "react-toastify";
 const RegistrationForm = () => {
+  const searchParams = useSearchParams();
+  const Email = searchParams.get("email");
+  const Name = searchParams.get("name");
   const [showPassword, setShowPassword] = useState(false);
   const [showConfirmPassword, setShowConfirmPassword] = useState(false);
   const [previewImage, setPreviewImage] = useState<File>();
@@ -45,10 +48,11 @@ const RegistrationForm = () => {
     }),
   });
 
-  const handleImageChange = (e) => {
-    const file = e.target.files[0];
+  const handleImageChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0]; // Get the first file
     if (file) {
-      setPreviewImage(file);
+      const imageUrl = URL.createObjectURL(file); // Convert File to URL
+      setPreviewImage(imageUrl);
     }
   };
 
@@ -58,7 +62,6 @@ const RegistrationForm = () => {
 
       Object.entries(values).forEach(([key, value]) => {
         console.log(key, value);
-       
         if (key === "address" && typeof value === "object" && value !== null) {
           Object.entries(value).forEach(([subKey, subValue]) => {
             formData.append(`address[${subKey}]`, subValue);
@@ -75,7 +78,12 @@ const RegistrationForm = () => {
       }
 
       const response = await api.post("/company/final-register", formData);
-
+      if(response.status==201){
+        // Handle success
+        console.log("Registration successful:", response.data);
+        toast.success("Registration successful");
+        router.push("/company/home");
+  }
       // Handle success
       console.log("Registration successful:", response.data);
       toast.success("Registration successful");
@@ -83,7 +91,6 @@ const RegistrationForm = () => {
     } catch (error) {
       // Handle error
       console.error("Error during registration:", error);
-      alert("Error during registration. Please try again later.");
     }
   };
 
@@ -95,7 +102,7 @@ const RegistrationForm = () => {
             <div className="w-24 h-24 md:w-28 md:h-28 mb-6 bg-gray-100 rounded-full flex items-center justify-center overflow-hidden group hover:bg-gray-200 transition-colors">
               {previewImage ? (
                 <Image
-                  src={previewImage}
+                  src={previewImage||""}
                   alt="Profile preview"
                   className="w-full h-full object-cover"
                   width={300}
@@ -118,8 +125,8 @@ const RegistrationForm = () => {
         </div>
         <Formik
           initialValues={{
-            name: "",
-            email: "",
+            name: Name,
+            email: Email,
             contact: "",
             age: "",
             password: "",

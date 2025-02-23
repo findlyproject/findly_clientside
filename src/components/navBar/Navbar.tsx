@@ -5,7 +5,6 @@ import AfterLogin from "./Afterlogin";
 import Image from "next/image";
 import { useRouter } from "next/navigation";
 import { useAppSelector } from "@/lib/store/hooks";
-import logo from "../../../public/assets/findlylogo.png";
 import api from "@/utils/api";
 import Beforlogin from "./BeforLogin";
 import { IoSearch } from "react-icons/io5";
@@ -13,11 +12,24 @@ import { RxCross2 } from "react-icons/rx";
 
 
 
-export const navigation = [
+export const navigationBefore = [
   { name: "Home", href: "/" },
   { name: "About", href: "/about" },
   { name: "Contact", href: "/contactus" },
 
+];
+
+export const navigation = [
+  { name: "Home", href: "/home  " },
+  { name: "About", href: "/about" },
+  { name: "Contact", href: "/contactus" },
+  { name: "Jobs", href: "/jobs" },
+]
+
+export const navigationAfter = [
+  { name: "Home", href: "/" },    
+  { name: "About", href: "/about" },
+  { name: "Contact", href: "/contactus" },
   {name:"Community",href:"/community"},
 
 ];
@@ -38,7 +50,7 @@ export const dropDownAfterloginSmallerScreen =(route:string)=> [
 
 
 export const dropDownBeforLogin = [
-  { name: "Home", href: "/" },
+  { name: "Home", href: "/home" },
   { name: "About", href: "/about" },
   { name: "Contact", href: "/contactus" },
 
@@ -110,11 +122,6 @@ dropDownAfterlogin(route)
           <div className="flex justify-between w-full">
 
             <div className="flex items-center">
-
-              <Link href="/">
-                <Image src={logo} alt="Logo" width={100} height={50} className="min-w-20" />
-              </Link>
-
        
           <Link href="/" className="text:sm lg:text-2xl font-bold text-primary">
             Findly. 
@@ -166,7 +173,9 @@ dropDownAfterlogin(route)
                   </ul>
                 </div>
               )}
-              {navigation.map((item) => (
+              {activeuser||activeCompany ?(
+
+              navigationAfter.map((item) => (
                 <Link
                   key={item.name}
                   href={item.href}
@@ -174,7 +183,18 @@ dropDownAfterlogin(route)
                 >
                   {item.name}
                 </Link>
-              ))}
+              ))
+            ):(
+              navigationBefore.map((item) => (
+                <Link
+                  key={item.name}
+                  href={item.href}
+                  className="text-gray-500 hover:text-gray-700 hover:font-bold px-3 py-2 rounded-md text-sm font-medium"
+                >
+                  {item.name}
+                </Link>
+              ))
+            )}
             </div>
 
             <div className="sm:hidden ">

@@ -18,10 +18,11 @@ interface Plan {
 
 export const subscription=createAsyncThunk(
     "subscription",
-    async (plan:Plan, { dispatch, rejectWithValue }) => {
+    async ({plan,route}:{plan:Plan,route:string},{ dispatch, rejectWithValue }) => {
       console.log("plan",plan);
+      console.log("route",route);
       
-      const response = await handleAsync<AxiosResponse>(() => api.post("/payment/createSubscription",{ 
+      const response = await handleAsync<AxiosResponse>(() => api.post(`/${route}/payment/createSubscription`,{ 
         plan: plan.name,
         price: plan.price,
         features: plan.features,
@@ -45,9 +46,9 @@ export const subscription=createAsyncThunk(
 
   export const features=createAsyncThunk(
     "features",
-    async (sessionId:string, { dispatch, rejectWithValue }) => {
+    async ({sessionId,route}:{sessionId:string,route:string}, { dispatch, rejectWithValue }) => {
       
-      const response = await handleAsync<AxiosResponse>(() =>api.post(`/payment/findsubscriptionbyId/${sessionId}`));
+      const response = await handleAsync<AxiosResponse>(() =>api.post(`/${route}/payment/findsubscriptionbyId/${sessionId}`));
   
   console.log("subscrio",response)
       if (!response) {
@@ -64,8 +65,8 @@ export const subscription=createAsyncThunk(
 
   export const verification=createAsyncThunk(
     "verification",
-    async(sessionId:string,{dispatch,rejectWithValue})=>{
-        const response=await handleAsync<AxiosResponse>(()=>api.post(`/payment/verifySubscription/${sessionId}`))
+    async({sessionId,route}:{sessionId:string,route:string},{dispatch,rejectWithValue})=>{
+        const response=await handleAsync<AxiosResponse>(()=>api.post(`/${route}/payment/verifySubscription/${sessionId}`))
        
 
         if(!response){
