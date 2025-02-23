@@ -7,6 +7,7 @@ import * as Yup from "yup";
 import api from "@/utils/api";
 import { useRouter, useSearchParams } from "next/navigation";
 import { toast } from "react-toastify";
+import Image from "next/image";
 const RegistrationForm = () => {
   const searchParams = useSearchParams();
   const Email = searchParams.get("email");
@@ -15,6 +16,13 @@ const RegistrationForm = () => {
   const [showConfirmPassword, setShowConfirmPassword] = useState(false);
   const [previewImage, setPreviewImage] = useState<string | null>(null);
 
+const handleImageChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+  const file = e.target.files?.[0]; // Get the first file
+  if (file) {
+    const imageUrl = URL.createObjectURL(file); // Convert File to URL
+    setPreviewImage(imageUrl);
+  }
+};
 
   const router = useRouter();
 
@@ -55,17 +63,9 @@ const RegistrationForm = () => {
     }),
   });
 
-  const handleImageChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const file = e.target.files?.[0]; // Get the first file
-    if (file) {
-      const imageUrl = URL.createObjectURL(file); // Convert File to URL
-      setPreviewImage(imageUrl);
-    }
-  };
 
   const handleSubmit = async (values) => {
-    console.log("first")
-    
+    try {
     
       const formData = new FormData();
 
@@ -87,19 +87,17 @@ const RegistrationForm = () => {
       }
 
       const response = await api.post("/company/final-register", formData);
-      if(response.status==201){
-        // Handle success
-        console.log("Registration successful:", response.data);
-        toast.success("Registration successful");
-        router.push("/company/home");
-  }
+if(response.status==201){
       // Handle success
       console.log("Registration successful:", response.data);
       toast.success("Registration successful");
       router.push("/company/home");
 }
 
-   
+    } catch (error) {
+      // Handle error
+      console.error("Error during registration:", error);
+    }
   };
 
   return (
@@ -110,8 +108,8 @@ const RegistrationForm = () => {
             <div className="w-24 h-24 md:w-28 md:h-28 mb-6 bg-gray-100 rounded-full flex items-center justify-center overflow-hidden group hover:bg-gray-200 transition-colors">
               {previewImage ? (
                 <Image
-                  src={previewImage||""}
-                  alt="Profile preview"
+                  src={previewImage}
+                  alt="Profilepreview"
                   className="w-full h-full object-cover"
                   width={300}
                   height={300}
@@ -237,7 +235,7 @@ const RegistrationForm = () => {
                   </label>
                   <div className="relative">
                     <Field
-                      type={showPasswor ? "text" : "password"}
+                      type={showPassword ? "text" : "password"}
                       placeholder="••••••"
                       name="password"
                       className="w-full p-2.5 border rounded-lg focus:ring-2 focus:ring-blue-500 outline-none text-sm md:text-base"

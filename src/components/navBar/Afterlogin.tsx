@@ -10,7 +10,6 @@ import { logoutUser } from "@/lib/store/features/actions/userActions";
 import { dropDownAfterlogin, dropDownAfterloginSmallerScreen } from "./Navbar";
 import { logOutCompany } from "@/lib/store/features/actions/companyActions";
 
-
 function AfterLogin() {
   const router = useRouter()
   const { activeuser } = useAppSelector((state) => state.login);
