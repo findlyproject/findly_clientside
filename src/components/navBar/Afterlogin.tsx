@@ -34,9 +34,7 @@ const route=activeuser?"user":"company"
       router.replace("/");
       
     }
-    
-console.log("dropDownAfterlogin",dropDownAfterlogin);
-console.log("dropDownAfterloginSmallerScreen",dropDownAfterloginSmallerScreen);
+
 
   return (
     <div className="flex">

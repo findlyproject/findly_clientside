@@ -6,8 +6,7 @@ import api from "@/utils/api";
 
 import Image from "next/image";
 
-
-export const FeedIdentityModule = () => {  
+export const FeedIdentityModule = () => {
   const [connections, setConnections] = useState([]);
   const router = useRouter();
   const { activeuser } = useAppSelector((state) => state.login);
@@ -30,7 +29,6 @@ export const FeedIdentityModule = () => {
       </section>
     );
   }
-  
 
   return (
     <section className="rounded-lg border border-gray-300 min-h-[240px] bg-white">

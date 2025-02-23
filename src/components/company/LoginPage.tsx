@@ -98,7 +98,7 @@ const Login = () => {
         </button>
         
         <p className="text-gray-600">
-          Don’t have an account? <a href="#" className="text-blue-500">Sign Up</a>
+          Don’t have an account? <a href="/company/register" className="text-blue-500">Sign Up</a>
         </p>
       </div>
 <div className="h-full">
