@@ -86,7 +86,8 @@ const RegistrationForm = () => {
   }
       // Handle success
       console.log("Registration successful:", response.data);
-      alert("Registration successful");
+      toast.success("Registration successful");
+      router.push("/company/home");
     } catch (error) {
       // Handle error
       console.error("Error during registration:", error);
