@@ -96,6 +96,10 @@ const Apply = () => {
         if (docUrl) updatedData.resumDocUrl = docUrl;
         if (videoUrl) updatedData.resumVideoUrl = videoUrl;
         setData(updatedData);
+        setFile({
+          doc:null,
+          video:null
+        })
       }
   
       if (!updatedData.resumDocUrl) {
@@ -152,7 +156,7 @@ const Apply = () => {
                   {/* <button type="button" className="text-blue-500 hover:text-blue-700" onClick={()=>"jkfhgjhdjgfdghdfjk"}>
                     View Resume
                   </button> */}
-                  <a href={data.resumDocUrl || undefined} className="text-blue-500 hover:text-blue-700 cursor-pointer">veiw resum</a>
+                  <a href={data.resumDocUrl || undefined} target='blank' className="text-blue-500 hover:text-blue-700 cursor-pointer">veiw resum</a>
                 </div>
               </div>
             )}

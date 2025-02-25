@@ -1,5 +1,5 @@
+"use client"
 import { useAppDispatch, useAppSelector } from "@/lib/store/hooks";
-
 import { Menu, Transition } from "@headlessui/react";
 import { BellIcon } from "@heroicons/react/24/outline";
 import Link from "next/link";
@@ -9,7 +9,6 @@ import Image from "next/image";
 import { logoutUser } from "@/lib/store/features/actions/userActions";
 import { dropDownAfterlogin, dropDownAfterloginSmallerScreen } from "./Navbar";
 import { logOutCompany } from "@/lib/store/features/actions/companyActions";
-
 
 function AfterLogin() {
   const router = useRouter()
