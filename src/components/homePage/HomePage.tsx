@@ -20,7 +20,7 @@ const HomePage = () => {
   }, [dispatch]);
 
   return (
-    <section className="grid w-full gap-x-6 gap-y-6 grid-cols-1 sm:grid-cols-[1fr,2fr] lg:grid-cols-[1fr,3fr] px-4">
+    <section className="grid bg-gray-100 w-full gap-x-6 gap-y-6 grid-cols-1 sm:grid-cols-[1fr,2fr] lg:grid-cols-[1fr,3fr] px-4">
       <LeftSideBar />
       <Posts />
     </section>
