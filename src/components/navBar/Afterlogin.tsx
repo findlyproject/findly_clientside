@@ -1,5 +1,3 @@
-
-
 import { useAppDispatch, useAppSelector } from "@/lib/store/hooks";
 
 import { Menu, Transition } from "@headlessui/react";
@@ -22,15 +20,13 @@ function AfterLogin() {
 const route=activeuser?"user":"company"
     const handilLogut = () => {
         // Clear user and company tokens from cookies
-  document.cookie = "token=; path=/; max-age=0"; // Clear user token
-  document.cookie = "ctoken=; path=/; max-age=0"; // Clear company token
+  document.cookie = "token=; path=/; max-age=0"; 
+  document.cookie = "ctoken=; path=/; max-age=0"; 
 
       if(activeuser){
-        console.log("useeeeeeeeeeeer");
         
         dispatch(logoutUser())
       }else if(activeCompany){
-        console.log("commmmmmmmmmmmpa");
         dispatch(logOutCompany())
       }
     
@@ -38,9 +34,7 @@ const route=activeuser?"user":"company"
       router.replace("/");
       
     }
-    
-console.log("dropDownAfterlogin",dropDownAfterlogin);
-console.log("dropDownAfterloginSmallerScreen",dropDownAfterloginSmallerScreen);
+
 
   return (
     <div className="flex">
@@ -49,7 +43,7 @@ console.log("dropDownAfterloginSmallerScreen",dropDownAfterloginSmallerScreen);
         <button className="relative text-gray-500 hover:text-gray-700 p-2">
           <BellIcon className="h-6 w-6" />
         </button></Link>
-      <Menu as="div" className="relative ml-3 z-40 w-20 hidden md:block">
+      <Menu as="div" className=" ml-3 z-40 w-20 hidden md:block">
         <Menu.Button className="flex text-sm rounded-full focus:outline-none w-auto">
           <Image 
             src={activeuser?.profileImage||activeCompany?.logo|| "/default-avatar.png"}
@@ -67,7 +61,7 @@ console.log("dropDownAfterloginSmallerScreen",dropDownAfterloginSmallerScreen);
           leaveFrom="transform opacity-100 scale-100"
           leaveTo="transform opacity-0 scale-95"
         >
-          <Menu.Items className="absolute right-0 mt-2 w-48 bg-white rounded-md shadow-lg py-1 ring-1 ring-black/5">
+          <Menu.Items className="absolute right-1 mt-3 w-48 bg-white rounded-md shadow-lg py-1 ring-1 ring-black/5">
             <Menu.Item>
               {({ active }) => (
                 <Link
@@ -124,7 +118,7 @@ console.log("dropDownAfterloginSmallerScreen",dropDownAfterloginSmallerScreen);
 
       {/* ///////////////// smallScreen//////////// */}
       <div className="md:hidden">
-      <Menu as="div" className="relative mx-3 z-40 w-10 mr-5">
+      <Menu as="div" className=" mx-3 z-40 w-10 mr-5">
         <Menu.Button className="flex text-sm rounded-full focus:outline-none w-auto">
           <Image 
             src={activeuser?.profileImage|| "/default-avatar.png"}
@@ -142,7 +136,7 @@ console.log("dropDownAfterloginSmallerScreen",dropDownAfterloginSmallerScreen);
           leaveFrom="transform opacity-100 scale-100"
           leaveTo="transform opacity-0 scale-95"
         >
-          <Menu.Items className="absolute right-0 mt-2 bg-white rounded-md shadow-lg py-1 ring-1 ring-black/5">
+          <Menu.Items className="absolute right-1 w-48 mt-2 bg-white rounded-md shadow-lg py-1 ring-1 ring-black/5">
             <Menu.Item>
               {({ active }) => (
                 <Link

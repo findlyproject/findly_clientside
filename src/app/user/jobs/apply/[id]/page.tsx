@@ -1,10 +1,10 @@
-import Jobdetails from '@/components/common/jobListing/Jobdetails'
+import Apply from '@/components/common/jobListing/Apply'
 import React from 'react'
 
 function page() {
   return (
     <div>
-      <Jobdetails/>
+      <Apply/>
     </div>
   )
 }

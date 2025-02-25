@@ -12,17 +12,20 @@ import { RxCross2 } from "react-icons/rx";
 
 
 
-
-
-export const navigation = [
-  { name: "Home", href: "/home  " },
+export const navigationBefore = [
+  { name: "Home", href: "/" },
   { name: "About", href: "/about" },
   { name: "Contact", href: "/contactus" },
-  { name: "Jobs", href: "/user/jobs" },
-
-
-
 ];
+
+export const navigationAfter = (route:string)=> [
+  { name: "Home", href: "/" },    
+  { name: "About", href: "/about" },
+  { name: "Contact", href: "/contactus" },
+  { name:"Community",href:"/community"},
+  { name: "Jobs", href: `/${route}/jobs` },
+];
+
 
 export const dropDownAfterlogin = (route:string)=>[
   { name: "Subscription", href: `/${route}/premium` },
@@ -33,15 +36,15 @@ export const dropDownAfterloginSmallerScreen =(route:string)=> [
   { name: "About", href: "/about" },
   { name: "Contact", href: "/contactus" },
   { name: "Subscription", href: `/${route}/premium`},
-  { name: "Jobs", href: "/user/jobs" },
+  { name: "Jobs", href: `/${route}/jobs` },
 
 ];
+
 
 export const dropDownBeforLogin = [
   { name: "Home", href: "/home" },
   { name: "About", href: "/about" },
   { name: "Contact", href: "/contactus" },
-  
 ];
 
 export default function Navbar() {
@@ -109,16 +112,17 @@ dropDownAfterlogin(route)
 
             <div className="flex items-center">
        
-          <Link href="/" className="text-2xl font-bold text-primary">
-            Findly . 
+          <Link href="/" className="text:sm lg:text-2xl mr-3 font-bold text-primary">
+            Findly. 
           </Link>
         
+
               <div>
          
         </div>
             </div>
-            <div className="hidden md:flex space-x-4 relative">
-              <div className="w-96 h-10 bg-slate-200 rounded-3xl outline-none ">
+            <div className="hidden md:flex space-x-4 relative w-full">
+              <div className="w-full h-10 bg-slate-200 rounded-3xl outline-none ">
                 <input
                   type="text"
                   placeholder="Search"
@@ -158,7 +162,9 @@ dropDownAfterlogin(route)
                   </ul>
                 </div>
               )}
-              {navigation.map((item) => (
+              {activeuser||activeCompany ?(
+
+              navigationAfter(route).map((item) => (
                 <Link
                   key={item.name}
                   href={item.href}
@@ -166,7 +172,18 @@ dropDownAfterlogin(route)
                 >
                   {item.name}
                 </Link>
-              ))}
+              ))
+            ):(
+              navigationBefore.map((item) => (
+                <Link
+                  key={item.name}
+                  href={item.href}
+                  className="text-gray-500 hover:text-gray-700 hover:font-bold px-3 py-2 rounded-md text-sm font-medium"
+                >
+                  {item.name}
+                </Link>
+              ))
+            )}
             </div>
 
             <div className="sm:hidden ">
@@ -188,7 +205,7 @@ dropDownAfterlogin(route)
 
 
               {searchQuery && searchResults.length > 0 && (
-                <div className="absolute top-12 left-0 mt-2 w-full max-h-60 overflow-y-auto border border-gray-300 bg-white p-4 rounded-lg shadow-md z-50 ">
+                <div className="absolute top-12 left-0 mt-2 w-full z-20 max-h-60 overflow-y-auto border border-gray-300 bg-white p-4 rounded-lg shadow-md z-50 ">
                   <ul className="mt-2 space-y-2 ">
                     {searchResults.map((user) => (
                       <li key={user._id} className="flex items-center gap-2 hover:bg-slate-200 "

@@ -1,6 +1,7 @@
 "use client";
 
 import { useAppSelector } from "@/lib/store/hooks";
+import handleAsync from "@/utils/handleAsync";
 import Image from "next/image";
 import { useRouter } from "next/navigation";
 
@@ -49,7 +50,7 @@ const router =useRouter()
             </thead>
             <tbody className="divide-y divide-gray-300 bg-white">
               {Array.isArray(posts) && posts.map((post) => (
-                <tr key={post._id} className="hover:bg-gray-50">
+                <tr key={post._id} className="hover:bg-gray-50" onClick={()=>router.push(`/admin/posts/${post._id}`)}>
                   
                   <td className="p-3 text-xs sm:text-sm text-gray-900">{post._id}</td>
                   <td className="p-3">
@@ -72,16 +73,17 @@ const router =useRouter()
                   </td>
                   <td className="p-3 text-xs sm:text-sm text-gray-900">
                     <div className="flex gap-2">
-                      {post.images?.map((image, index) => (
-                        <Image
-                          key={index}
-                          className="rounded-md max-h-16 object-cover"
-                          src={image}
-                          alt={`Post Image ${index + 1}`}
-                          width={50}
-                          height={50}
-                        />
-                      ))}
+                    {post.images?.slice(0, 2).map((image, index) => (
+  <Image
+    key={index}
+    className="rounded-md max-h-16 object-cover"
+    src={image}
+    alt={`Post Image ${index + 1}`}
+    width={50}
+    height={50}
+  />
+))}
+
                       {post.video && (
                         <video className="rounded-md max-h-16 object-cover" controls width={50} height={50}>
                           <source src={post.video} type="video/mp4" />
@@ -100,10 +102,8 @@ const router =useRouter()
                     {post.reports?.length || 0}
                   </td>
                   <td className="p-3 flex gap-2">
-                    <button className="p-2 bg-indigo-600 text-white rounded text-xs sm:text-sm" onClick={()=>router.push(`/admin/posts/${post._id}`)}>
-                      View
-                    </button>
-                    <button className="p-2 bg-red-600 text-white rounded text-xs sm:text-sm">
+                    
+                    <button className="p-2 bg-red-600 text-white rounded text-xs sm:text-sm" onClick={handleAsync}>
                       Delete
                     </button>
                     <button className="p-2 bg-gray-800 text-white rounded text-xs sm:text-sm">

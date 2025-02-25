@@ -12,7 +12,6 @@ import { toast } from "react-toastify";
 import { setGooglelogin } from "@/lib/store/features/userSlice";
 
 
-
 interface Istate {
   email: string;
   password: string;

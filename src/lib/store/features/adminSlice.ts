@@ -15,7 +15,6 @@ export interface TitleType{
 
 export interface AdminProfile {
   email:string
- 
   firstName:string
   lastName:string
   phoneNumber:string
