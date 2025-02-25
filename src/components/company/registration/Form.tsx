@@ -92,8 +92,11 @@ if(response.status==201){
       console.log("Registration successful:", response.data);
       toast.success("Registration successful");
       router.push("/company/home");
+<<<<<<< HEAD
 }
 
+=======
+>>>>>>> 34aa6f601e9f75cc0971130a95547318d390f7b2
     } catch (error) {
       // Handle error
       console.error("Error during registration:", error);

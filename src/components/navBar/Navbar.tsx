@@ -451,7 +451,7 @@ console.log(activeuser,activeCompany)
         <>
           <nav
             className={`border-gray-200 ${
-              pathname === "/" ? "bg-primary" : "bg-white"
+              pathname === "/" ? "bg-primary" : "bg-gray-100"
             }  py-2.5`}
           >
             <div className="mx-auto flex max-w-screen-xl flex-wrap items-center justify-between px-4">
@@ -469,7 +469,7 @@ console.log(activeuser,activeCompany)
                   className={`rounded-lg border-2  ${
                     pathname === "/"
                       ? "text-white hover:bg-white hover:text-primary border-white"
-                      : "text-primary hover:bg-primary hover:text-white border-primary"
+                      : "text-primary hover:bg-primary hover:text-gray-100 border-primary"
                   }  px-4 py-2 text-sm leading-[24px] font-medium focus:ring-4 focus:ring-gray-300 focus:outline-none sm:mr-2 lg:px-5 lg:py-2.5 
         `}
                   href="/login/company"
@@ -529,6 +529,60 @@ console.log(activeuser,activeCompany)
           </nav>
         </>
       )}
+      {isMenuOpen && (
+            <div className="lg:hidden order-3 absolute top-16 left-0 w-full bg-white shadow-md z-50">
+              <Link
+                href="/"
+                className={`block font-montserrat px-4 py-2 rounded-full ${
+                  activeTab === "Home" ? "bg-black text-white" : ""
+                }`}
+                onClick={() => {
+                  setIsMenuOpen(false);
+                  setActiveTab("Home");
+                }}
+              >
+                Home
+              </Link>
+              <Link
+                href="/explore"
+                className={`block font-montserrat px-4 py-2 rounded-full ${
+                  activeTab === "Explore" ? "bg-black text-white" : ""
+                }`}
+                onClick={() => {
+                  setIsMenuOpen(false);
+                  setActiveTab("Explore");
+                }}
+              >
+                Explore
+              </Link>
+              <Link
+                href="/create"
+                className={`block font-montserrat px-4 py-2 rounded-full ${
+                  activeTab === "Create" ? "bg-black text-white" : ""
+                }`}
+                onClick={() => {
+                  setIsMenuOpen(false);
+                  setActiveTab("Create");
+                }}
+              >
+                Create
+              </Link>
+             
+              <Link
+                href="/create"
+                className={`md:hidden font-montserrat px-4 py-2 rounded-full ${
+                  activeTab === "Create" ? "bg-black text-white" : ""
+                }`}
+                onClick={() => {
+                  setIsMenuOpen(false);
+                  setActiveTab("Create");
+                }}
+              >
+                Community
+              </Link>
+              
+            </div>
+          )}
     </header>
   );
 }
