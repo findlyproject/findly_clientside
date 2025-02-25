@@ -6,11 +6,11 @@ import Link from "next/link";
 import { usePathname, useRouter } from "next/navigation";
 import React, { useEffect, useState } from "react";
 import { motion } from "framer-motion";
-import { User } from "next-auth";
 import api from "@/utils/api";
 import { UserProfile } from "@/lib/store/features/userSlice";
 import { logOutCompany } from "@/lib/store/features/actions/companyActions";
 import { logoutUser } from "@/lib/store/features/actions/userActions";
+import Image from "next/image";
 
 
 export const dropDownAfterlogin = (route: string) => [
@@ -174,10 +174,10 @@ console.log(activeuser,activeCompany)
 
                         onClick={() => router.push(`/userdetails/${user._id}`)}
                       >
-                        <img
+                        <Image
                           width={100}
                           height={100}
-                          src={user.profileImage}
+                          src={user.profileImage || "/default-profile.png"}
                           alt={`${user.firstName} ${user.lastName}`}
                           className="w-7 h-7 rounded-full"
                         />
@@ -262,7 +262,9 @@ console.log(activeuser,activeCompany)
                   <button className="avatar w-10 h-10 sm:w-12 sm:h-12 rounded-full flex items-center justify-center hover:bg-purple-700 hover:bg-opacity-40">
                     <div className="img w-8 h-8 sm:w-10 sm:h-10 rounded-full overflow-hidden relative">
                       {activeuser?.profileImage ? (
-                        <img
+                        <Image
+                        width={100}
+                        height={100}
                           src={activeuser?.profileImage}
                           alt="User Profile"
                           className="w-full h-full object-cover"
