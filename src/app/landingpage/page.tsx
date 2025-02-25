@@ -5,7 +5,7 @@ import Navbar from '@/components/navBar/Navbar'
 import React from 'react'
 
 const LandingHomePage = () => {
-  return (
+  return ( 
     <div>
       <Navbar/>
       <LandingPage/>
