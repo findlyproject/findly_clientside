@@ -12,6 +12,7 @@ import { UserProfile } from "@/lib/store/features/userSlice";
 import { logOutCompany } from "@/lib/store/features/actions/companyActions";
 import { logoutUser } from "@/lib/store/features/actions/userActions";
 
+
 export const dropDownAfterlogin = (route: string) => [
   { name: "Subscription", href: `/${route}/premium` },
 ];
@@ -20,6 +21,7 @@ export const dropDownAfterloginSmallerScreen = (route: string) => [
   { name: "Home", href: "/" },
   { name: "About", href: "/about" },
   { name: "Contact", href: "/contactus" },
+
   { name: "Subscription", href: `/${route}/premium` },
 ];
 
