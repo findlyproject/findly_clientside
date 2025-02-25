@@ -36,7 +36,7 @@ const handleKeyDown = (
 };
 
   return (
-    <div className="max-w-screen-2x1 container mx-auto x1">
+    <div className=" mt-48 max-w-screen-2x1 container mx-auto xl">
       {/* form */}
       <div className=" bg-[#FAFAFA] py-10 px-4 lg:px-16">
         <form onSubmit={handleSubmit(onSubmit)} className="space-y-5">
