@@ -55,7 +55,7 @@ export const loginCompany=createAsyncThunk(
  
         const response = await handleAsync<AxiosResponse>(() => api.get("/company/findapplications"));
         if(!response){
-          return rejectWithValue("logout failed")
+          return rejectWithValue("application failed")
         }
         console.log("response",response);
         const data=response.data.appliedUsers       
