@@ -1,70 +1,125 @@
 "use client";
-import Image from "next/image";
-import Link from "next/link";
 import { LuSend } from "react-icons/lu";
 import { FaEllipsisV, FaSearch } from "react-icons/fa";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { HiPaperClip } from "react-icons/hi2";
 import { useRouter } from "next/navigation";
+import api from "@/utils/api";
+import { toast } from "react-toastify";
+import { useAppSelector } from "@/lib/store/hooks";
 export default function ChatUI() {
+  const activeuser=useAppSelector((state)=>state.user.activeuser)
   const [isOpen, setIsOpen] = useState(false);
   const [ismenuOpen, setIsmenuOpen] = useState(false);
+  const [isModal, setIsModal] = useState(false);
   const router = useRouter();
-  const members = [
-    {
-      name: "Sophia Madison",
-      img: "https://i.pravatar.cc/40?img=6",
-      admin: true,
-    },
-    { name: "Lucas West", img: "https://i.pravatar.cc/40?img=7", admin: false },
-    { name: "Ancy", img: "https://i.pravatar.cc/40?img=5", admin: false },
-    { name: "Joe", img: "https://i.pravatar.cc/40?img=4", admin: false },
-    { name: "Maria", img: "https://i.pravatar.cc/40?img=2", admin: false },
-  ];
-  const chatData = [
-    {
-      name: "Developers",
-      message: "👋",
-      img: "https://i.pinimg.com/474x/75/87/df/7587df77ef521cf98057d0028ee983f1.jpg",
-      status: "online",
-      unread: 3,
-    },
-    {
-      name: "Learn Javascript",
-      message: "Have a nice day 😊",
-      img: "https://i.pinimg.com/736x/0e/4f/dc/0e4fdce8ac22e09688c580e5bc4dcd7d.jpg",
-      status: "offline",
-      unread: 1,
-    },
-    {
-      name: "Evan Warren",
-      message: "Hey. It’s time to start your workout!",
-      img: "https://i.pravatar.cc/40?img=3",
-      status: "online",
-      unread: 2,
-    },
-    {
-      name: "Jane Smith",
-      message: "See you later!",
-      img: "https://i.pravatar.cc/40?img=4",
-      status: "offline",
-      unread: 0,
-    },
-    {
-      name: "Gloria Black",
-      message: "Fine! Keep it up 💪",
-      img: "https://i.pravatar.cc/40?img=5",
-      status: "online",
-      unread: 0,
-    },
-    {
-      name: "Audrey Watson",
-      message: "Thanks!",
-      img: "https://i.pravatar.cc/40?img=6",
-      status: "offline",
-      unread: 0,
-    },
-  ];
+  const [community, setCommunity] = useState([]);
+  const [selectedCommunity, setSelectedCommunity] = useState(null);
+ const[input,setInput]=useState({
+  name:"",
+  description:"",
+  profile:""
+ })
+const[image,setImage]=useState(null)
+
+ const handleInputCange=(e:React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>)=>{
+  
+  const { name, value } = e.target;
+  setInput((prev) => ({
+    ...prev,
+    [name]: value,
+  }));
+ }
+
+ const handleImageChange=(e:React.ChangeEvent<HTMLInputElement>)=>{
+  const { name } = e.target;
+    const file = e.target.files ? e.target.files[0] : null;
+    setImage((prev) => ({
+      ...prev,
+      [name]: file,
+    }));
+ }
+  useEffect(() => {
+    const fetchCommunity = async () => {
+      const response = await api.get(`/message/all`);
+      console.log("response of all communities", response);
+      setCommunity(response.data.communities);
+    };
+    fetchCommunity();
+  }, []);
+
+  const handleCommunitySelect = (community) => {
+    setSelectedCommunity(community);
+  };
+  const handleImageTocloud = async (image:File) => {
+    console.log("imageeee",image);
+    
+      
+        const response = await api.get("/user/generate-signed-url", {
+          params: { fileType: image?.image.type },
+        });
+
+        const { api_key, timestamp, signature, folder, cloudName } =
+          response.data;
+
+        console.log("Uploading image:", image.image);
+
+        const formData = new FormData();
+        formData.append("file", image.image);
+        formData.append("api_key", api_key);
+        formData.append("timestamp", timestamp.toString());
+        formData.append("signature", signature);
+        formData.append("folder", folder);
+
+        const uploadResponse = await fetch(
+         ` https://api.cloudinary.com/v1_1/${cloudName}/image/upload`,
+          {
+            method: "POST",
+            body: formData,
+          }
+        );
+
+        const data = await uploadResponse.json();
+console.log("object",data.secure_url)
+
+        if (!data.secure_url) {
+          throw new Error("Upload failed");
+        }
+        await setInput((priv)=>({
+          ...priv,
+          profile : data.secure_url
+        }))
+        
+        return postrdata({profile:data.secure_url})
+     
+    }
+    const postrdata = async ({profile})=>{
+  console.log("inputs inside postdata",input);
+console.log("profile",profile.profile)
+      const responseofCreation =await api.post(`/message/create`,{name:input.name,description:input.description,profile})
+console.log("responseofCreation",responseofCreation);
+    }
+  const handleSubmit=(e)=>{
+e.preventDefault()
+handleImageTocloud(image)
+
+  }
+  console.log("image",image);
+  console.log("inputs",input);
+  const handleJoin=async(communityID)=>{
+    const response=await api.patch(`/message/join/${communityID}`)
+console.log("response of joining",response);
+toast.success(response.data.message)
+
+setCommunity((prevCommunity) =>
+  prevCommunity.map((item) =>
+    item._id === communityID
+      ? { ...item, members: [...item.members, activeuser._id] }
+      : item
+  )
+);
+   
+  }
   return (
     <div className="flex h-screen bg-gray-100">
       <aside className="w-1/4 bg-white border-r p-4 overflow-y-auto hidden md:block">
@@ -82,24 +137,94 @@ export default function ChatUI() {
 
             {ismenuOpen && (
               <div className="absolute right-0 mt-2 w-48 bg-white border rounded-lg shadow-lg z-50">
-                <ul className="py-2 text-sm text-gray-700">
-                  <li
+                <div className="py-2 text-sm text-gray-700">
+                  <button
                     className="px-4 py-2 hover:bg-gray-100 cursor-pointer"
                     onClick={() => {
-                      alert("Reported");
-                      setIsmenuOpen(false);
+                      setIsModal(true);
+                      // setIsmenuOpen(false);
                     }}
                   >
                     New Community
-                  </li>
+                  </button>
+                  {isModal && (
+                    <div
+                      className="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-50"
+                      onClick={(e) => {
+                        if (e.target === e.currentTarget) setIsModal(false);
+                      }}
+                    >
+                      <div className="bg-white w-full max-w-lg mx-4 p-6 rounded-2xl shadow-lg">
+                        <h2 className="text-2xl font-bold mb-4 text-center">
+                          Create New Community
+                        </h2>
 
-                  <li
+                        <form onSubmit={handleSubmit}>
+                          <div className="mb-4">
+                            <label className="block text-gray-700">Name</label>
+                            <input
+                              type="text"
+                              name="name"
+                              value={input.name}
+                              className="w-full px-3 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+                              placeholder="Community Name"
+                              onChange={handleInputCange}
+                            />
+                          </div>
+
+                          <div className="mb-4">
+                            <label className="block text-gray-700">
+                              Description
+                            </label>
+                            <textarea
+                            name="description"
+                            value={input.description}
+                              className="w-full px-3 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+                              placeholder="Community Description"
+                              onChange={handleInputCange}
+                            />
+                          </div>
+
+                          <div className="mb-4">
+                            <label className="block text-gray-700">
+                              Profile Image
+                            </label>
+                            <input
+                            name="image"
+                              type="file"
+                              onChange={handleImageChange}
+                              className="w-full px-3 py-2 border rounded-lg"
+                            />
+                          </div>
+
+                          <div className="flex justify-end space-x-4">
+                            <button
+                              type="button"
+                              className="px-4 py-2 bg-gray-300 rounded-lg hover:bg-gray-400"
+                              onClick={() => setIsModal(false)}
+                            >
+                              Cancel
+                            </button>
+
+                            <button
+                              type="submit"
+                              className="px-4 py-2 bg-primary text-white rounded-lg "
+                            >
+                              Create
+                            </button>
+                          </div>
+                        </form>
+                      </div>
+                    </div>
+                  )}
+
+                  <button
                     className="px-4 py-2 hover:bg-gray-100 cursor-pointer"
                     onClick={() => setIsmenuOpen(false)}
                   >
                     Back
-                  </li>
-                </ul>
+                  </button>
+                </div>
               </div>
             )}
           </div>
@@ -115,158 +240,90 @@ export default function ChatUI() {
         </div>
 
         <div className="space-y-4">
-          {chatData.map((chat, index) => (
+          {community.map((item, index) => (
             <div
               key={index}
               className="flex items-center justify-between p-2 bg-white rounded-lg shadow-sm"
             >
               <div
                 className="flex items-center space-x-3"
-                onClick={() => router.push(`/community`)}
+                onClick={() => handleCommunitySelect(item)}
               >
                 <div className="relative">
                   <img
-                    src={chat.img}
+                    src={item.profile}
                     alt="User"
                     className="w-10 h-10 rounded-full"
                   />
                 </div>
 
                 <div>
-                  <h2 className="text-sm font-semibold">{chat.name}</h2>
-                  <p className="text-xs text-gray-600 truncate w-40">
-                    {chat.message}
-                  </p>
+                  <h2 className="text-sm font-semibold">{item.name}</h2>
                 </div>
               </div>
-
-              {chat.unread > 0 && (
-                <span className="bg-primary text-white text-xs px-2 py-1 rounded-full">
-                  {chat.unread}
-                </span>
-              )}
             </div>
           ))}
         </div>
       </aside>
 
-      <main className="flex-1 flex flex-col">
+      <main className="flex-1 flex flex-col" key={selectedCommunity?._id}>
+    {selectedCommunity ? (
+      <>
         <header className="flex items-center justify-between bg-white p-4 border-b">
-          <div
-            className="flex items-center"
-            onClick={() => router.push(`/community/details`)}
-          >
+          <div className="flex items-center">
             <img
-              src="https://i.pinimg.com/474x/75/87/df/7587df77ef521cf98057d0028ee983f1.jpg"
+              src={selectedCommunity.profile}
               className="w-10 h-10 rounded-full"
               alt="Group"
             />
             <div className="ml-3">
-              <h2 className="font-medium">Developers</h2>
-              <span className="text-sm text-gray-500">56 members</span>
+              <h2 className="font-medium">{selectedCommunity.name}</h2>
+              <span className="text-sm text-gray-500">
+                {selectedCommunity.members.length} Members
+              </span>
             </div>
-          </div>
-          <div className="relative">
-            <div
-              className="flex space-x-4 cursor-pointer"
-              onClick={() => setIsOpen(!isOpen)}
-            >
-              <FaEllipsisV className="text-gray-600" />
-            </div>
-
-            {isOpen && (
-              <div className="absolute right-0 mt-2 w-48 bg-white border rounded-lg shadow-lg">
-                <ul className="py-2 text-sm text-gray-700">
-                  <li
-                    className="px-4 py-2 hover:bg-gray-100 cursor-pointer"
-                    onClick={() => alert("Reported")}
-                  >
-                    Report
-                  </li>
-                  <li
-                    className="px-4 py-2 hover:bg-gray-100 cursor-pointer"
-                    onClick={() => alert("Left the community")}
-                  >
-                    Leave Community
-                  </li>
-                  <li
-                    className="px-4 py-2 hover:bg-gray-100 cursor-pointer"
-                    onClick={() => setIsOpen(false)}
-                  >
-                    Back
-                  </li>
-                </ul>
-              </div>
-            )}
           </div>
         </header>
-
-        <div className="flex-1 overflow-y-auto p-4 space-y-4">
-          <div className="flex flex-col items-start">
-            <div className="flex items-start">
-              <img
-                src="https://i.pravatar.cc/40?img=4"
-                className="w-8 h-8 rounded-full"
-                alt="User"
-              />
-              <div className="ml-3 bg-gray-200 p-3 rounded-lg max-w-xs">
-                <p className="text-sm">Hi guys! I am ready! 💪😊</p>
-              </div>
-            </div>
-            <span className="text-xs text-gray-500 mt-1 ml-11">11:08 AM</span>
-          </div>
-
-          <div className="flex flex-col items-end">
-            <div className="flex items-start">
-              <div className="bg-primary text-white p-3 rounded-lg max-w-xs">
-                <p className="text-sm">
-                  Hello, I have a cool idea. Are you ready guys? 🔥
+        <div className="flex-1 overflow-y-auto p-4">
+          <div className="flex justify-center px-4 py-8">
+            <div className="border border-primary rounded-lg shadow-lg max-w-md w-full bg-white p-6">
+              <div className="text-center">
+                <h1 className="text-black font-bold text-2xl mb-2">
+                  Join Our Community
+                </h1>
+                <p className="text-gray-600 mb-4">
+                  Connect with job seekers and employers, expand your network, and unlock new opportunities.
+                  Share experiences and get the support you need to land your dream job.
                 </p>
-              </div>
-              <img
-                src="https://i.pravatar.cc/40?img=5"
-                className="w-8 h-8 rounded-full ml-3"
-                alt="You"
-              />
-            </div>
-            <span className="text-xs text-gray-500 mt-1">11:08 AM</span>
-          </div>
+                {!selectedCommunity.members.includes(activeuser._id) ? (
+                  <button
+                    onClick={() => handleJoin(selectedCommunity._id)}
+                    className="text-white bg-primary hover:bg-primary-dark transition-colors duration-300 font-semibold rounded-md py-2 px-4 w-full"
+                  >
+                    Join Now
+                  </button>
+                ) : (
+                  <button
+                    className="text-white bg-gray-400 cursor-not-allowed transition-colors duration-300 font-semibold rounded-md py-2 px-4 w-full"
+                    disabled
+                  >
+                    Joined
+                  </button>
 
-          <div className="flex flex-col items-start">
-            <div className="flex items-start">
-              <img
-                src="https://i.pravatar.cc/40?img=4"
-                className="w-8 h-8 rounded-full"
-                alt="User"
-              />
-              <div className="ml-3 bg-gray-200 p-3 rounded-lg max-w-xs">
-                <Image
-                  src="https://i.pinimg.com/736x/3d/e2/68/3de268261ccee692c8b085f7e5b7035f.jpg"
-                  alt="job"
-                  width={500}
-                  height={300}
-                  className="w-full h-auto rounded-lg"
-                />
+
+                )}
               </div>
             </div>
-            <span className="text-xs text-gray-500 mt-1 ml-11">11:08 AM</span>
-          </div>
-          <div className="flex flex-col items-end">
-            <div className="flex items-start">
-              <div className="bg-primary text-white p-3 rounded-lg max-w-xs">
-                <p className="text-sm">Amazing 🔥</p>
-              </div>
-              <img
-                src="https://i.pravatar.cc/40?img=5"
-                className="w-8 h-8 rounded-full ml-3"
-                alt="You"
-              />
-            </div>
-            <span className="text-xs text-gray-500 mt-1">11:08 AM</span>
           </div>
         </div>
+      </>
+    ) : (
+      <div className="flex-1 flex items-center justify-center text-gray-600">
+        Select a community to start chatting!
+      </div>
+    )}
 
-        <footer className="p-4 bg-white border-t flex">
+    <footer className="p-4 bg-white border-t flex">
           <input
             type="text"
             placeholder="Type a message..."
@@ -280,61 +337,7 @@ export default function ChatUI() {
             <LuSend />
           </button>
         </footer>
-      </main>
-
-      <aside className="w-1/4 bg-white border-l p-4 overflow-y-auto hidden lg:block">
-        <h2 className="text-xl font-semibold">Developers</h2>
-        <p className="text-gray-500 text-sm">56 members</p>
-        <div className="mt-4">
-          <h3 className="font-semibold">Members</h3>
-          <div className="mt-2">
-            {members.map((member, index) => (
-              <div key={index} className="py-2 flex items-center">
-                <img
-                  src={member.img}
-                  className="w-8 h-8 rounded-full"
-                  alt={member.name}
-                />
-                <p className="ml-3">{member.name}</p>
-                <span>
-                  {member.admin === true ? (
-                    <p className="text-primary ml-24 bg-gray-100  border border-primary rounded-full text-sm p-1">
-                      admin
-                    </p>
-                  ) : (
-                    ""
-                  )}
-                </span>
-              </div>
-            ))}
-          </div>
-
-          <div className="flex justify-end text-blue-500">
-            <Link href="">more</Link>
-          </div>
-        </div>
-
-        <div className="mt-6">
-          <h3 className="font-semibold">Shared Posts</h3>
-          <div className="mt-2 grid grid-cols-3 gap-2">
-            {[
-              "https://i.pinimg.com/474x/1a/d7/9b/1ad79bd7a043fa44e497c11d09443704.jpg",
-              "https://i.pinimg.com/474x/11/30/cd/1130cdadc60fae91e1781bac0ee0aa8d.jpg",
-              "https://i.pinimg.com/736x/31/71/00/317100cdc901c0f87d4baa2d2188ba44.jpg",
-              "https://i.pinimg.com/474x/1a/d7/9b/1ad79bd7a043fa44e497c11d09443704.jpg",
-              "https://i.pinimg.com/474x/11/30/cd/1130cdadc60fae91e1781bac0ee0aa8d.jpg",
-              "https://i.pinimg.com/736x/31/71/00/317100cdc901c0f87d4baa2d2188ba44.jpg",
-            ].map((img, index) => (
-              <img
-                key={index}
-                src={img}
-                className="w-full max-w-[100px] h-[100px] rounded-lg shadow-md"
-                alt={`Shared post ${index + 1}`}
-              />
-            ))}
-          </div>
-        </div>
-      </aside>
+  </main>
     </div>
   );
 }

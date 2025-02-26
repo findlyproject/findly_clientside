@@ -49,6 +49,7 @@
     "react-select": "^5.10.0",
     "react-toastify": "^11.0.3",
     "redux-persist": "^6.0.0",
+    "socket.io-client": "^4.8.1",
     "stripe": "^17.6.0",
     "swiper": "^11.2.1",
     "yup": "^1.6.1"
