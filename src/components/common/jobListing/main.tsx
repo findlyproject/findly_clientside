@@ -10,9 +10,9 @@ function Jobelist() {
     const [togle, setTogle] = useState(false)
 
     return (
-        <div className="w-full h-screen flex overflow-hidden">
+        <div className="w-full h-screen flex overflow-hidden relative">
             {/* Sidebar */}
-            <div className={`fixed inset-y-0 left-0 w-64 bg-white border-r border-gray-300 transition-transform duration-300 ease-in-out z-50
+            <div className={`fixed inset-y-0 left-0 w-64 bg-white border-r border-gray-300 transition-transform duration-300 ease-in-out z-20
                 ${togle ? "translate-x-0" : "-translate-x-full"} sm:translate-x-0 sm:relative`}>
                 
                 {/* Close Button for Mobile */}
