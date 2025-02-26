@@ -24,6 +24,8 @@ interface RegisterType {
     stateName: string;
     city: string;
   }
+  gender:string
+
   education:EducationType[]
   jobTitles:string[],
   jobLocations:JobLocationType[]
@@ -42,6 +44,7 @@ const initialState: RegisterType = {
     city: ""
   },
   education:[],
+  gender:"",
   
   jobTitles:[],
   jobLocations:[]
@@ -79,9 +82,11 @@ state.firstName=action.payload
     setjobLocations:(state,action:PayloadAction<JobLocationType[]>)=>{
       state.jobLocations=action.payload
     },
-    
+    setGender:(state,action)=>{
+state.gender=action.payload
+    }
   },
 });
 
-export const { setEmail,setPassword ,setfirstName,setlastName,setLocation,setEducation,setjobTitles,setjobLocations} = registerSlice.actions;
+export const { setEmail,setPassword ,setfirstName,setlastName,setLocation,setEducation,setjobTitles,setjobLocations,setGender} = registerSlice.actions;
 export default registerSlice.reducer;

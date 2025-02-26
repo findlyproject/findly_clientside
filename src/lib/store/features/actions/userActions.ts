@@ -27,6 +27,7 @@ export const registerUser = createAsyncThunk(
         state: string,
         stateName: string,
         city: string};
+        gender:string;
       education: { college: string; startYear: string; endYear: string }[];
       jobTitle: string[];
       jobLocation:{country: string,
@@ -134,7 +135,7 @@ export const RateFindly = createAsyncThunk(
 
       dispatch(setAllRatings([response.data.newRating]));
       return response.data.newRating;
-    } catch (error) {
+    } catch {
       return rejectWithValue("An error occurred while submitting the rating.");
     }
   }
@@ -174,10 +175,8 @@ export const forgotPassword = createAsyncThunk(
       const response = await api.post(`/user/sendotp/${state.email}`);
       dispatch(setforgotPassword({ email: state.email, otp: response.data.otp }));
       return response.data;
-    } catch (error) {
-      console.log("error",error);
-      
-      return rejectWithValue("An error occurred while submitting the rating.",error);
+    } catch {
+      return rejectWithValue("An error occurred while submitting the rating.");
     }
   }
 )

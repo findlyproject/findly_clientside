@@ -4,15 +4,19 @@ import { Star } from "lucide-react";
 import { useRouter } from "next/navigation";
 
 import { RateFindly } from "@/lib/store/features/actions/userActions";
-import { useAppDispatch } from "@/lib/store/hooks";
+import { useAppDispatch, useAppSelector } from "@/lib/store/hooks";
 import { toast } from "react-toastify";
 
 const RateUs: React.FC = () => {
+
   const dispatch = useAppDispatch();
   const router = useRouter();
   const [rating, setRating] = useState<number | null>(0);
   const [message, setMessage] = useState("");
   
+const activeuser=useAppSelector((state)=>state.user.activeuser)
+   const route=activeuser?"user":"company"
+
 
   const handleSubmit = async () => {
     if (rating === null || message.trim() === "") {
@@ -95,7 +99,7 @@ const RateUs: React.FC = () => {
         <div className="flex flex-col sm:flex-row items-center justify-center gap-4 mt-6">
           <button
             className="w-full sm:w-auto border border-primary text-primary px-6 py-2 rounded-full hover:bg-purple-100 transition-all"
-            onClick={() => router.push(`/home`)}
+            onClick={() => router.push(`/${route}/home`)}
           >
             Back
           </button>

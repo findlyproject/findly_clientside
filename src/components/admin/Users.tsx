@@ -38,10 +38,10 @@ const Users = () => {
               <thead>
                 <tr className="bg-gray-50">
                   <th className="p-5 text-left font-semibold text-gray-900">
-                    User ID
+                  Full Name
                   </th>
                   <th className="p-5 text-left font-semibold text-gray-900">
-                    Full Name & Email
+                   Email
                   </th>
                   <th className="p-5 text-left font-semibold text-gray-900">
                     Role
@@ -55,7 +55,9 @@ const Users = () => {
               <tbody className="divide-y divide-gray-300">
                 {data.map((user) => (
                   <tr key={user._id} className="bg-white hover:bg-gray-50">
-                    <td className="p-5 text-sm text-gray-900">{user._id}</td>
+                    <td className="p-5 text-sm text-gray-900"><p className="text-sm text-gray-900">
+                            {user.firstName} {user.lastName}
+                          </p></td>
                     <td className="p-5 text-sm text-gray-900">
                       <div className="flex items-center gap-3">
                         <img
@@ -69,9 +71,7 @@ const Users = () => {
                           className="w-10 h-10 rounded-full"
                         />
                         <div>
-                          <p className="text-sm text-gray-900">
-                            {user.firstName} {user.lastName}
-                          </p>
+                          
                           <p className="text-xs text-gray-500">{user.email}</p>
                         </div>
                       </div>
@@ -88,7 +88,7 @@ const Users = () => {
                         className={`text-xs sm:text-sm px-2 sm:px-4 py-1 sm:py-2 rounded-md text-white transition ${
                           user.isBlocked
                             ? "bg-yellow-500 hover:bg-yellow-400"
-                            : "bg-red-600 hover:bg-red-700"
+                            : "bg-red-600 hover:bg-red-700 w-20"
                         }`}
                         onClick={() => handleBlock(user._id)}
                       >

@@ -1,7 +1,5 @@
-
-
+"use client"
 import { useAppDispatch, useAppSelector } from "@/lib/store/hooks";
-
 import { Menu, Transition } from "@headlessui/react";
 import { BellIcon } from "@heroicons/react/24/outline";
 import Link from "next/link";
@@ -12,37 +10,39 @@ import { logoutUser } from "@/lib/store/features/actions/userActions";
 import { dropDownAfterlogin, dropDownAfterloginSmallerScreen } from "./Navbar";
 import { logOutCompany } from "@/lib/store/features/actions/companyActions";
 
-
 function AfterLogin() {
   const router = useRouter()
   const { activeuser } = useAppSelector((state) => state.login);
   const activeCompany=useAppSelector((state)=>state.companyLogin.activeCompany)
 
   const dispatch = useAppDispatch()
+const route=activeuser?"user":"company"
+    const handilLogut = () => {
+        // Clear user and company tokens from cookies
+  document.cookie = "token=; path=/; max-age=0"; 
+  document.cookie = "ctoken=; path=/; max-age=0"; 
 
-  const handilLogut = () => {
-    if(activeuser){
-      console.log("useeeeeeeeeeeer");
-      
-      dispatch(logoutUser())
-    }else if(activeCompany){
-      console.log("commmmmmmmmmmmpa");
-      dispatch(logOutCompany())
-    }
-  
-    // signOut()
-    router.replace("/");
+      if(activeuser){
+        
+        dispatch(logoutUser())
+      }else if(activeCompany){
+        dispatch(logOutCompany())
+      }
     
-  }
-  
+      // signOut()
+      router.replace("/");
+      
+    }
+
 
   return (
     <div className="flex">
-      <Link href="/notification">
+      
+      <Link href={`/${route}/notification`}>
         <button className="relative text-gray-500 hover:text-gray-700 p-2">
           <BellIcon className="h-6 w-6" />
         </button></Link>
-      <Menu as="div" className="relative ml-3 z-40 w-20 hidden md:block">
+      <Menu as="div" className=" ml-3 z-40 w-20 hidden md:block">
         <Menu.Button className="flex text-sm rounded-full focus:outline-none w-auto">
           <Image 
             src={activeuser?.profileImage||activeCompany?.logo|| "/default-avatar.png"}
@@ -60,11 +60,11 @@ function AfterLogin() {
           leaveFrom="transform opacity-100 scale-100"
           leaveTo="transform opacity-0 scale-95"
         >
-          <Menu.Items className="absolute right-0 mt-2 w-48 bg-white rounded-md shadow-lg py-1 ring-1 ring-black/5">
+          <Menu.Items className="absolute right-1 mt-3 w-48 bg-white rounded-md shadow-lg py-1 ring-1 ring-black/5">
             <Menu.Item>
               {({ active }) => (
                 <Link
-                  href='/ownprofile'
+                  href={`/${route}/profile`}
                   className={`block px-4 py-2 text-sm hover:bg-gray-300 ${active ? "bg-gray-300" : ""
                     }`}
                 >
@@ -84,7 +84,7 @@ function AfterLogin() {
                 </Link>
               )}
             </Menu.Item>
-            {dropDownAfterlogin.map((item) => (
+            {dropDownAfterlogin(route).map((item) => (
               <Menu.Item key={item.name}>
 
                 {({ active }) => (
@@ -117,7 +117,7 @@ function AfterLogin() {
 
       {/* ///////////////// smallScreen//////////// */}
       <div className="md:hidden">
-      <Menu as="div" className="relative mx-3 z-40 w-10 mr-5">
+      <Menu as="div" className=" mx-3 z-40 w-10 mr-5">
         <Menu.Button className="flex text-sm rounded-full focus:outline-none w-auto">
           <Image 
             src={activeuser?.profileImage|| "/default-avatar.png"}
@@ -135,11 +135,11 @@ function AfterLogin() {
           leaveFrom="transform opacity-100 scale-100"
           leaveTo="transform opacity-0 scale-95"
         >
-          <Menu.Items className="absolute right-0 mt-2 bg-white rounded-md shadow-lg py-1 ring-1 ring-black/5">
+          <Menu.Items className="absolute right-1 w-48 mt-2 bg-white rounded-md shadow-lg py-1 ring-1 ring-black/5">
             <Menu.Item>
               {({ active }) => (
                 <Link
-                  href='/ownprofile'
+                  href={`/${route}/profile`}
                   className={`block px-4 py-2 text-sm hover:bg-gray-300 ${active ? "bg-gray-300" : ""
                     }`}
                 >
@@ -159,7 +159,7 @@ function AfterLogin() {
                 </Link>
               )}
             </Menu.Item>
-            {dropDownAfterloginSmallerScreen.map((item) => (
+            {dropDownAfterloginSmallerScreen(route).map((item) => (
               <Menu.Item key={item.name}>
 
                 {({ active }) => (
