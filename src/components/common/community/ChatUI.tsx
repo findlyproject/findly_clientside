@@ -7,6 +7,7 @@ import { useRouter } from "next/navigation";
 import api from "@/utils/api";
 import { toast } from "react-toastify";
 import { useAppSelector } from "@/lib/store/hooks";
+import Image from "next/image";
 export default function ChatUI() {
   const activeuser=useAppSelector((state)=>state.user.activeuser)
   const [isOpen, setIsOpen] = useState(false);
@@ -21,7 +22,30 @@ export default function ChatUI() {
   profile:""
  })
 const[image,setImage]=useState(null)
+const [searchQuery, setSearchQuery] = useState("");
+  const [searchResults, setSearchResults] = useState([]);
+  useEffect(() => {
+    if (searchQuery.length > 0) {
+      const fetchCommunity= async () => {
+        try {
+          const response = await api.get(
+            `/message/search?query=${searchQuery}`
+          );
 
+          setSearchResults(response.data.community);
+        } catch (error) {
+          console.error("Error fetching users:", error);
+        }
+      };
+
+      fetchCommunity();
+    } else {
+      setSearchResults([]);
+    }
+  }, [searchQuery]);
+   const handleSearchChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+          setSearchQuery(e.target.value);
+        };
  const handleInputCange=(e:React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>)=>{
   
   const { name, value } = e.target;
@@ -47,6 +71,12 @@ const[image,setImage]=useState(null)
     };
     fetchCommunity();
   }, []);
+
+console.log("search query",searchQuery);
+console.log("searchResults",searchResults);
+
+
+
 
   const handleCommunitySelect = (community) => {
     setSelectedCommunity(community);
@@ -234,11 +264,38 @@ setCommunity((prevCommunity) =>
           <input
             type="text"
             placeholder="Search"
+            onChange={handleSearchChange}
             className="w-full p-2 pl-10 border rounded-md focus:outline-none"
           />
           <FaSearch className="absolute left-3 top-3 text-gray-400" />
-        </div>
+          {searchQuery && searchResults.length > 0 && (
+                <div className="absolute top-full left-0 mt-2 w-full max-h-60 overflow-y-auto border  border-gray-300 bg-white p-4 rounded-lg shadow-md z-50 ">
+                  <ul className="mt-2 space-y-2 ">
+                    {searchResults.map((community) => (
+                      <li key={community._id} className="cursor-pointer flex items-center gap-2 pl-4 hover:bg-primary hover:bg-opacity-20 rounded-full"
 
+                        onClick={()=>handleCommunitySelect(community)}
+                      >
+                        <Image
+                          width={100}
+                          height={100}
+                          src={community.profile || "/default-profile.png"}
+                          alt={`${community.name}`}
+                          className="w-7 h-7 rounded-full"
+                        />
+                        <div>
+                          <p className="tex-sm font-semibold">
+                             {community.name}
+                          </p>
+                          
+                        </div>
+                      </li>
+                    ))}
+                  </ul>
+                </div>
+              )}
+        </div>
+ 
         <div className="space-y-4">
           {community.map((item, index) => (
             <div
@@ -270,7 +327,8 @@ setCommunity((prevCommunity) =>
     {selectedCommunity ? (
       <>
         <header className="flex items-center justify-between bg-white p-4 border-b">
-          <div className="flex items-center">
+          <div className="flex items-center"
+          onClick={()=>router.push(`/community/details/${selectedCommunity._id}`)}>
             <img
               src={selectedCommunity.profile}
               className="w-10 h-10 rounded-full"
