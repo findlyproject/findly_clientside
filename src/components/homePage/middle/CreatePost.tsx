@@ -17,7 +17,6 @@ const CreatePost = () => {
   const [description, setDescription] = useState("");
 
   useEffect(() => {
-    // Cleanup object URLs to prevent memory leaks
     return () => {
       previewImages.forEach((url) => URL.revokeObjectURL(url));
       if (previewVideo) URL.revokeObjectURL(previewVideo);

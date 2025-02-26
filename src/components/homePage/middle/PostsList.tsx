@@ -5,7 +5,7 @@ export const PostsList = () => {
   const { posts } = useAppSelector((state) => state.post);
 
   return (
-    <section className="w-full max-w-3xl mx-auto px-4 sm:px-10 lg:px-8 space-y-3 rounded-lg py-4">
+    <section className="w-full mx-auto px-2 lg:px-8 space-y-3 rounded-lg py-4 xl:mr-20">
       {/* Posts List */}
       {Array.isArray(posts) && posts.length > 0 ? (
         posts

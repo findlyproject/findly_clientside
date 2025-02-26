@@ -12,17 +12,6 @@ import { UserProfile } from "@/lib/store/features/userSlice";
 import { logOutCompany } from "@/lib/store/features/actions/companyActions";
 import { logoutUser } from "@/lib/store/features/actions/userActions";
 
-export const dropDownAfterlogin = (route: string) => [
-  { name: "Subscription", href: `/${route}/premium` },
-];
-
-export const dropDownAfterloginSmallerScreen = (route: string) => [
-  { name: "Home", href: "/" },
-  { name: "About", href: "/about" },
-  { name: "Contact", href: "/contactus" },
-  { name: "Subscription", href: `/${route}/premium` },
-];
-
 function Navbar() {
   const pathname = usePathname();
   const router = useRouter();
@@ -30,7 +19,6 @@ const dispatch = useAppDispatch()
 
   const { activeuser } = useAppSelector((state) => state.login);
   const { activeCompany } = useAppSelector((state) => state.companyLogin);
-console.log(activeuser,activeCompany)
   const [activeTab, setActiveTab] = useState("Home");
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
@@ -95,14 +83,25 @@ console.log(activeuser,activeCompany)
                 >
                   Home
                 </Link>
+                {activeuser ?(
                 <Link
+                  href="/user/jobs"
+                  className={`home  text-primary flex items-center hover:bg-primary hover:bg-opacity-20 justify-center px-3 py-2 rounded-lg ${
+                    activeTab === "Explore" ? "bg-primary bg-opacity-20 " : ""
+                  }`}
+                >
+                  Jobs
+                </Link>
+                ):(
+                  <Link
                   href="/explore"
                   className={`home  text-primary flex items-center hover:bg-primary hover:bg-opacity-20 justify-center px-3 py-2 rounded-lg ${
                     activeTab === "Explore" ? "bg-primary bg-opacity-20 " : ""
                   }`}
                 >
-                  About
+                  CandidateList
                 </Link>
+                )}
                 <Link
                   href="/create"
                   className={`home  text-primary flex items-center hover:bg-primary hover:bg-opacity-20 justify-center px-3 py-2 rounded-lg ${
