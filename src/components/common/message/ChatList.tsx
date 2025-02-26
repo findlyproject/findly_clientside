@@ -5,6 +5,7 @@ import { HiPaperClip } from "react-icons/hi2";
 import React from "react";
 import api, { socket } from "@/utils/api";
 import { useAppSelector } from "@/lib/store/hooks";
+import { FaEllipsisV } from "react-icons/fa";
 
 export default function ChatList() {
   const [selectedUser, setSelectedUser] = useState(null);
