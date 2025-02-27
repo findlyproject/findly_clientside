@@ -1,10 +1,8 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import {
-  faEllipsisH,
-  faThumbsUp,
   faComment,
   faShare,
   faPaperPlane,
@@ -22,6 +20,7 @@ import { Comments } from "./Comment";
 import { PostMenu } from "./PostMenu";
 import api from "@/utils/api";
 import { fetchAllPosts } from "@/lib/store/features/actions/postActions";
+import OutsideClickHandler from "react-outside-click-handler";
 interface PostPreviewProps {
   post: IPost;
 }
@@ -63,18 +62,21 @@ export const PostPreview = ({ post }: PostPreviewProps) => {
   };
 
   return (
-    <section className="flex flex-col border border-gray-300 bg-white rounded-lg w-full max-w-3xl mx-auto p-4 shadow-md relative">
-      <div className="bg-right-top top-2">
+    <section className="flex flex-col border border-gray-300 bg-white rounded-lg mx-auto p-4 shadow-md relative">
+      <div className="bg-right-top flex justify-end top-2">
         <div
           className="cursor-pointer"
           onClick={() => setIsShowMenu(!isShowMenu)}
         >
-          <FontAwesomeIcon
-            icon={faEllipsisH}
-            className="text-gray-500 hover:text-gray-700"
-          />
+          <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth="1.5" stroke="currentColor" className="size-6">
+  <path strokeLinecap="round" strokeLinejoin="round" d="M12 6.75a.75.75 0 1 1 0-1.5.75.75 0 0 1 0 1.5ZM12 12.75a.75.75 0 1 1 0-1.5.75.75 0 0 1 0 1.5ZM12 18.75a.75.75 0 1 1 0-1.5.75.75 0 0 1 0 1.5Z" />
+</svg>
+<OutsideClickHandler onOutsideClick={()=>setIsShowMenu(false)}>
+{isShowMenu && <PostMenu post={post} />}
+</OutsideClickHandler>
+
         </div>
-        {isShowMenu && <PostMenu post={post} />}
+       
       </div>
 
       {/* Post Owner Details */}
@@ -100,13 +102,10 @@ export const PostPreview = ({ post }: PostPreviewProps) => {
             href={`/main/profile/${post.owner?._id}`}
             className="hover:underline"
           >
-            <h3 className="text-lg sm:text-xl font-semibold text-gray-900">
+            <h3 className="text-xs lg:text-lg font-semibold text-gray-900">
               {post.owner?.firstName || "Unknown User"}
             </h3>
           </Link>
-          <p className="text-sm sm:text-base text-gray-600">
-            {post.owner?.email || "Unknown Profession"}
-          </p>
           <div className="text-xs text-gray-500">
             {post.createdAt
               ? new Date(post.createdAt).toLocaleDateString("en-US", {

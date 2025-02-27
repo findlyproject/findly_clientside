@@ -1,5 +1,3 @@
-
-
 "use client";
 import { useAppDispatch, useAppSelector } from "@/lib/store/hooks";
 import Link from "next/link";
@@ -11,7 +9,7 @@ import { UserProfile } from "@/lib/store/features/userSlice";
 import { logOutCompany } from "@/lib/store/features/actions/companyActions";
 import { logoutUser } from "@/lib/store/features/actions/userActions";
 import Image from "next/image";
-
+import Notification from "../notification/Notification";
 
 export const dropDownAfterlogin = (route: string) => [
   { name: "Subscription", href: `/${route}/premium` },
@@ -28,69 +26,65 @@ export const dropDownAfterloginSmallerScreen = (route: string) => [
 function Navbar() {
   const pathname = usePathname();
   const router = useRouter();
-const dispatch = useAppDispatch()
+  const dispatch = useAppDispatch();
 
   const { activeuser } = useAppSelector((state) => state.login);
   const { activeCompany } = useAppSelector((state) => state.companyLogin);
 console.log(activeuser,activeCompany)
-const route=activeCompany?"company":"user"
   const [activeTab, setActiveTab] = useState("Home");
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
   const [searchQuery, setSearchQuery] = useState("");
   const [searchResults, setSearchResults] = useState<UserProfile[]>([]);
+ console.log(activeCompany)
 
-    console.log("searchResults",searchResults);
     
-      useEffect(() => {
-        if (searchQuery.length > 0) {
-          const fetchUsers = async () => {
-            try {
-              const response = await api.get(
-                `/user/usersearch?firstName=${searchQuery}`
-              );
-    
-              setSearchResults(response.data.results);
-            } catch (error) {
-              console.error("Error fetching users:", error);
-            }
-          };
-    
-          fetchUsers();
-        } else {
-          setSearchResults([]);
-        }
-      }, [searchQuery]);
-    
-      const handleSearchChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-        setSearchQuery(e.target.value);
-      };
-     const handleLogout = () => {
-          if(activeuser){  
-            dispatch(logoutUser())
-          }else if(activeCompany){
-            dispatch(logOutCompany())
+    useEffect(() => {
+      if (searchQuery.length > 0) {
+        const fetchUsers = async () => {
+          try {
+            const response = await api.get(
+              `/user/usersearch?firstName=${searchQuery}`
+            );
+  
+            setSearchResults(response.data.results);
+          } catch (error) {
+            console.error("Error fetching users:", error);
           }
-           // signOut()
-          router.replace("/");
-          
-        }
+        };
+  
+        fetchUsers();
+      } else {
+        setSearchResults([]);
+      }
+    }, [searchQuery]);
+
+  const handleSearchChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setSearchQuery(e.target.value);
+  };
+  const handleLogout = () => {
+    if (activeuser) {
+      dispatch(logoutUser());
+    } else if (activeCompany) {
+      dispatch(logOutCompany());
+    }
+    // signOut()
+    router.replace("/");
+  };
   return (
     <header className="w-full">
       {activeuser || activeCompany ? (
         <>
           <div className=" flex items-center justify-between bg-gray-100 px-4 py-3 lg:px-8 lg:py-4">
-          
             {/* Left Section */}
             <div className="left flex items-center md:space-x-4">
-            <Link
+              <Link
                 href="/"
                 className="text-xl md:text-2xl font-bold text-primary"
               >
                 Findly.
               </Link>
               <div className="hidden xl:flex md:space-x-2 space-x-4">
-                
                 <Link
                   href="/"
                   className={`home  text-primary flex items-center hover:bg-primary hover:bg-opacity-20 justify-center px-3 py-2 rounded-lg ${
@@ -99,24 +93,31 @@ const route=activeCompany?"company":"user"
                 >
                   Home
                 </Link>
+                {activeuser ? (
+                  <Link
+                    href="/user/jobs"
+                    className=" text-primary flex items-center hover:bg-primary hover:bg-opacity-20 justify-center px-3 py-2 rounded-lg "
+
+                  >
+                    Jobs
+                  </Link>
+                ) : (
+                  <Link
+                    href="/company/candidatelist"
+                    className=" text-primary flex items-center hover:bg-primary hover:bg-opacity-20 justify-center px-3 py-2 rounded-lg "
+                      
+                  >
+                    CandidateList
+                  </Link>
+                )}
                 <Link
-                  href="/explore"
-                  className={`home  text-primary flex items-center hover:bg-primary hover:bg-opacity-20 justify-center px-3 py-2 rounded-lg ${
-                    activeTab === "Explore" ? "bg-primary bg-opacity-20 " : ""
-                  }`}
-                >
-                  About
-                </Link>
-                <Link
-                  href="/create"
-                  className={`home  text-primary flex items-center hover:bg-primary hover:bg-opacity-20 justify-center px-3 py-2 rounded-lg ${
-                    activeTab === "Create" ? "bg-primary bg-opacity-20 " : ""
-                  }`}
+                  href="/contactus"
+                  className=" text-primary flex items-center hover:bg-primary hover:bg-opacity-20 justify-center px-3 py-2 rounded-lg "
+
                 >
                   Contact
                 </Link>
               </div>
-             
             </div>
 
             {/* Search Section */}
@@ -169,40 +170,12 @@ const route=activeCompany?"company":"user"
                 </form>
               </div>
               {searchQuery && searchResults.length > 0 && (
-  <div className="absolute top-full left-0 mt-2 w-full max-h-60 overflow-y-auto border border-gray-300 bg-white p-4 rounded-lg shadow-md z-50">
-    <ul className="mt-2 space-y-2">
-      {searchResults.map((item) => (
-        <li
-          key={item._id}
-          className="cursor-pointer flex items-center gap-2 pl-4 hover:bg-primary hover:bg-opacity-20 rounded-full"
-          onClick={() => router.push(`/${route}/${item._id}/${item.type}`)}
-        >
-          <img
-            width={100}
-            height={100}
-            src={item.type === "User" ? item.profileImage : item.logo}
-            alt={item.type === "User" ? `${item.firstName} ${item.lastName}` : item.name}
-            className="w-7 h-7 rounded-full"
-          />
-          <div>
-            <p className="text-sm font-semibold">
-              {item.type === "User" ? `${item.firstName} ${item.lastName}` : item.name}
-            </p>
-            <p className="text-sm text-gray-500">{item.email}</p>
-          </div>
-        </li>
-      ))}
-    </ul>
-  </div>
-)}
-
-              {/* {searchQuery && searchResults.length > 0 && (
                 <div className="absolute top-full left-0 mt-2 w-full max-h-60 overflow-y-auto border  border-gray-300 bg-white p-4 rounded-lg shadow-md z-50 ">
                   <ul className="mt-2 space-y-2 ">
                     {searchResults.map((user) => (
                       <li key={user._id} className="cursor-pointer flex items-center gap-2 pl-4 hover:bg-primary hover:bg-opacity-20 rounded-full"
 
-                        onClick={() => router.push(`/${route}/${user._id}`)}
+                        onClick={() => router.push(`/userdetails/${user._id}`)}
                       >
                         <Image
                           width={100}
@@ -211,22 +184,11 @@ const route=activeCompany?"company":"user"
                           alt={`${user.firstName} ${user.lastName}`}
                           className="w-7 h-7 rounded-full"
                         />
-                          ):(
-                            <img
-                          width={100}
-                          height={100}
-                          src={user.logo}
-                          alt={`${user.name} `}
-                          className="w-7 h-7 rounded-full"
-                        />
-                          )
-                        }
                         <div>
-                        {
-                          user.type==="User"?(
-                            <p className="tex-sm font-semibold">
+                          <p className="tex-sm font-semibold">
                             {user.firstName} {user.lastName}
                           </p>
+                          <p className="text-sm text-gray-500">{user.email}</p>
                           ):(
                             <p className="tex-sm font-semibold">
                             {user.name} 
@@ -241,13 +203,17 @@ const route=activeCompany?"company":"user"
                     ))}
                   </ul>
                 </div>
-              )} */}
+              )}
             </div>
-            
+
             {/* Right Section */}
             <div className="right flex items-center lg:space-x-4 justify-end">
-            <div className="xl:hidden md:ml-10 flex items-center "  onMouseEnter={() => setIsMenuOpen(true)}
-                  onMouseLeave={() => setIsMenuOpen(false)}>
+              <div  onMouseLeave={() => setIsMenuOpen(false)}>
+                <div
+                  className="xl:hidden md:ml-10 flex items-center"
+                  onMouseEnter={() => setIsMenuOpen(true)}
+                
+                >
                   <svg
                     xmlns="http://www.w3.org/2000/svg"
                     fill="none"
@@ -262,9 +228,64 @@ const route=activeCompany?"company":"user"
                       d="M3.75 6.75h16.5M3.75 12h16.5m-16.5 5.25h16.5"
                     />
                   </svg>
+                </div>
+                {isMenuOpen && (
+                  <div className="xl:hidden absolute rounded-2xl bg-white shadow-md z-50">
+                    <Link
+                      href="/"
+                      className="block font-montserrat px-4 py-2 rounded-full"
+                      onClick={() => {
+                        setIsMenuOpen(false);
+                      }}
+                    >
+                      Home
+                    </Link>
+                    {activeuser ? (
+                      <Link
+                    href="/user/jobs"
+                       
+                        className="block font-montserrat px-4 py-2 rounded-full"
+                        onClick={() => {
+                          setIsMenuOpen(false);
+                        }}
+                      >
+                        Jobs
+                      </Link>
+                    ) : (
+                      <Link
+                        href="/company/candidatelist"
+                        className="block font-montserrat px-4 py-2 rounded-full"
+                        onClick={() => {
+                          setIsMenuOpen(false);
+                        }}
+                      >
+                        CandidatesList
+                      </Link>
+                    )}
+                    <Link
+                      href="/contactus"
+                      className="block font-montserrat px-4 py-2 rounded-full"
+                      onClick={() => {
+                        setIsMenuOpen(false);
+                      }}
+                    >
+                      Contact
+                    </Link>
+
+                    <Link
+                      href="/community"
+                      className="block font-montserrat px-4 py-2 rounded-full"
+                      onClick={() => {
+                        setIsMenuOpen(false);
+                      }}
+                    >
+                      Community
+                    </Link>
+                  </div>
+                )}
               </div>
               <Link
-                href=""
+                href="/notification"
                 className="items w-10 h-10 sm:w-12 sm:h-12 rounded-full flex items-center justify-center hover:bg-gray-200"
               >
                 <svg
@@ -283,7 +304,7 @@ const route=activeCompany?"company":"user"
                 </svg>
               </Link>
               <Link
-                href=""
+                href="/community"
                 className="hidden  items w-10 h-10 sm:w-12 sm:h-12 rounded-full md:flex items-center justify-center hover:bg-gray-200"
               >
                 <svg
@@ -301,203 +322,78 @@ const route=activeCompany?"company":"user"
                   />
                 </svg>
               </Link>
-             
-                <div
-                  className="relative inline-block text-left"
-                  onMouseEnter={() => setIsDropdownOpen(true)}
-                  onMouseLeave={() => setIsDropdownOpen(false)}
-                >
-                  <button className="avatar w-10 h-10 sm:w-12 sm:h-12 rounded-full flex items-center justify-center hover:bg-purple-700 hover:bg-opacity-40">
-                    <div className="img w-8 h-8 sm:w-10 sm:h-10 rounded-full overflow-hidden relative">
-                      {activeuser?.profileImage ? (
-                        <Image
+
+              <div
+                className="relative inline-block text-left"
+                onMouseEnter={() => setIsDropdownOpen(true)}
+                onMouseLeave={() => setIsDropdownOpen(false)}
+              >
+                <button className="avatar w-10 h-10 sm:w-12 sm:h-12 rounded-full flex items-center justify-center hover:bg-purple-700 hover:bg-opacity-40">
+                  <div className="img w-8 h-8 sm:w-10 sm:h-10 rounded-full overflow-hidden relative">
+                    {activeuser?.profileImage ? (
+                      <Image
                         width={100}
                         height={100}
-                          src={activeuser?.profileImage}
-                          alt="User Profile"
-                          className="w-full h-full object-cover"
-                        />
-                      ) : (
-                        <div className="bg-gray-200 flex items-center justify-center w-full h-full text-lg text-black">
-                          {activeuser?.firstName
-                            ? activeuser?.firstName[0].toUpperCase()
-                            : ""}
-                        </div>
-                      )}
+                        src={activeuser?.profileImage}
+                        alt="User Profile"
+                        className="w-full h-full object-cover"
+                      />
+                    ) : (
+                      <div className="bg-gray-200 flex items-center justify-center w-full h-full text-lg text-black">
+                        {activeuser?.firstName
+                          ? activeuser?.firstName[0].toUpperCase()
+                          : ""}
+                      </div>
+                    )}
+                  </div>
+                </button>
+                {isDropdownOpen && (
+                  <motion.div
+                    initial={{ opacity: 0, y: -10 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    exit={{ opacity: 0, y: -10 }}
+                    transition={{ duration: 0.3, ease: "easeInOut" }}
+                    className="absolute top-full right-0  w-64 bg-white shadow-lg rounded-lg p-2 z-50"
+                  >
+                    <div className="py-2">
+                      <p className="px-4 text-xs">Your accounts</p>
+                      <button
+                        className="block w-full text-left px-4 py-2 text-sm hover:bg-gray-100"
+                        onClick={() => router.push("/user/profile")}
+                      >
+                        Profile
+                      </button>
+                      <button
+                        className="block w-full text-left px-4 py-2 text-sm hover:bg-gray-100"
+                        onClick={() => router.push("")}
+                      >
+                        Change Passoword
+                      </button>
                     </div>
-                  </button>
-                  {isDropdownOpen && (
-                    <motion.div
-                      initial={{ opacity: 0, y: -10 }}
-                      animate={{ opacity: 1, y: 0 }}
-                      exit={{ opacity: 0, y: -10 }}
-                      transition={{ duration: 0.3, ease: "easeInOut" }}
-                      className="absolute top-full right-0  w-64 bg-white shadow-lg rounded-lg p-2 z-50"
-                    >
-                      <div className="py-2">
-                        <p className="px-4 text-xs">Your accounts</p>
-                        <button className="block w-full text-left px-4 py-2 text-sm hover:bg-gray-100">
-                          Profile
-                        </button>
-                        <button
-                          className="block w-full text-left px-4 py-2 text-sm hover:bg-gray-100"
-                          onClick={() => router.push("")}
-                        >
-                          Change Passoword
-                        </button>
-                      </div>
 
-                      <div className="py-3">
-                        <p className="px-4 text-xs">More options</p>
-                        <button className="block w-full text-left px-4 py-4 text-sm hover:bg-gray-100">
-                          Settings
-                        </button>
-                        <button className="block w-full text-left px-4 py-2 text-sm hover:bg-gray-100">
-                          Delete Account
-                        </button>
-                        <button className="block w-full text-left px-4 py-2 text-sm hover:bg-gray-100">
-                          Install the Windows app
-                        </button>
-                        <button className="block w-full text-left px-4 py-2 text-sm hover:bg-gray-100">
-                          Reports and Violations Centre
-                        </button>
-                        <button className="block w-full text-left px-4 py-2 text-sm hover:bg-gray-100">
-                          Your privacy rights
-                        </button>
-                        <button className="flex justify-between w-full text-left px-4 py-2 text-sm hover:bg-gray-100">
-                          Help Centre
-                          <svg
-                            xmlns="http://www.w3.org/2000/svg"
-                            fill="none"
-                            viewBox="0 0 24 24"
-                            strokeWidth={1.5}
-                            stroke="currentColor"
-                            className="size-5"
-                          >
-                            <path
-                              strokeLinecap="round"
-                              strokeLinejoin="round"
-                              d="M13.5 6H5.25A2.25 2.25 0 0 0 3 8.25v10.5A2.25 2.25 0 0 0 5.25 21h10.5A2.25 2.25 0 0 0 18 18.75V10.5m-10.5 6L21 3m0 0h-5.25M21 3v5.25"
-                            />
-                          </svg>
-                        </button>
-                        <button className=" flex justify-between  w-full text-left px-4 py-2 text-sm hover:bg-gray-100">
-                          Terms of Service
-                          <svg
-                            xmlns="http://www.w3.org/2000/svg"
-                            fill="none"
-                            viewBox="0 0 24 24"
-                            strokeWidth={1.5}
-                            stroke="currentColor"
-                            className="size-5"
-                          >
-                            <path
-                              strokeLinecap="round"
-                              strokeLinejoin="round"
-                              d="M13.5 6H5.25A2.25 2.25 0 0 0 3 8.25v10.5A2.25 2.25 0 0 0 5.25 21h10.5A2.25 2.25 0 0 0 18 18.75V10.5m-10.5 6L21 3m0 0h-5.25M21 3v5.25"
-                            />
-                          </svg>
-                        </button>
-                        <button className="flex justify-between  w-full text-left px-4 py-2 text-sm hover:bg-gray-100">
-                          Privacy Policy
-                          <svg
-                            xmlns="http://www.w3.org/2000/svg"
-                            fill="none"
-                            viewBox="0 0 24 24"
-                            strokeWidth={1.5}
-                            stroke="currentColor"
-                            className="size-5"
-                          >
-                            <path
-                              strokeLinecap="round"
-                              strokeLinejoin="round"
-                              d="M13.5 6H5.25A2.25 2.25 0 0 0 3 8.25v10.5A2.25 2.25 0 0 0 5.25 21h10.5A2.25 2.25 0 0 0 18 18.75V10.5m-10.5 6L21 3m0 0h-5.25M21 3v5.25"
-                            />
-                          </svg>
-                        </button>
-                        <button className="flex justify-between  w-full text-left px-4 py-2 text-sm hover:bg-gray-100">
-                          Be a beta tester
-                          <svg
-                            xmlns="http://www.w3.org/2000/svg"
-                            fill="none"
-                            viewBox="0 0 24 24"
-                            strokeWidth={1.5}
-                            stroke="currentColor"
-                            className="size-5"
-                          >
-                            <path
-                              strokeLinecap="round"
-                              strokeLinejoin="round"
-                              d="M13.5 6H5.25A2.25 2.25 0 0 0 3 8.25v10.5A2.25 2.25 0 0 0 5.25 21h10.5A2.25 2.25 0 0 0 18 18.75V10.5m-10.5 6L21 3m0 0h-5.25M21 3v5.25"
-                            />
-                          </svg>
-                        </button>
-                        <button
-                          className="block w-full text-left px-4 py-2 text-sm hover:bg-gray-100"
-                          onClick={handleLogout}
-                        >
-                          Log out
-                        </button>
-                      </div>
-                    </motion.div>
-                  )}
-                </div>
+                    <div className="py-3">
+                      <p className="px-4 text-xs">More options</p>
+                      <button
+                        className="block w-full text-left px-4 py-4 text-sm hover:bg-gray-100"
+                        onClick={() => router.push("settings")}
+                      >
+                        Settings
+                      </button>
+                      <button className="block w-full text-left px-4 py-2 text-sm hover:bg-gray-100">
+                        Delete Account
+                      </button>
+                      <button
+                        className="block w-full text-left px-4 py-2 text-sm hover:bg-gray-100"
+                        onClick={handleLogout}
+                      >
+                        Log out
+                      </button>
+                    </div>
+                  </motion.div>
+                )}
+              </div>
             </div>
           </div>
-          {isMenuOpen && (
-            <div className="lg:hidden absolute top-16 left-0 w-full bg-white shadow-md z-50">
-              <Link
-                href="/"
-                className={`block font-montserrat px-4 py-2 rounded-full ${
-                  activeTab === "Home" ? "bg-black text-white" : ""
-                }`}
-                onClick={() => {
-                  setIsMenuOpen(false);
-                  setActiveTab("Home");
-                }}
-              >
-                Home
-              </Link>
-              <Link
-                href="/explore"
-                className={`block font-montserrat px-4 py-2 rounded-full ${
-                  activeTab === "Explore" ? "bg-black text-white" : ""
-                }`}
-                onClick={() => {
-                  setIsMenuOpen(false);
-                  setActiveTab("Explore");
-                }}
-              >
-                Explore
-              </Link>
-              <Link
-                href="/create"
-                className={`block font-montserrat px-4 py-2 rounded-full ${
-                  activeTab === "Create" ? "bg-black text-white" : ""
-                }`}
-                onClick={() => {
-                  setIsMenuOpen(false);
-                  setActiveTab("Create");
-                }}
-              >
-                Create
-              </Link>
-             
-              <Link
-                href="/create"
-                className={`md:hidden font-montserrat px-4 py-2 rounded-full ${
-                  activeTab === "Create" ? "bg-black text-white" : ""
-                }`}
-                onClick={() => {
-                  setIsMenuOpen(false);
-                  setActiveTab("Create");
-                }}
-              >
-                Community
-              </Link>
-              
-            </div>
-          )}
         </>
       ) : (
         <>
@@ -582,59 +478,58 @@ const route=activeCompany?"company":"user"
         </>
       )}
       {isMenuOpen && (
-            <div className="lg:hidden order-3 absolute top-16 left-0 w-full bg-white shadow-md z-50">
-              <Link
-                href="/"
-                className={`block font-montserrat px-4 py-2 rounded-full ${
-                  activeTab === "Home" ? "bg-black text-white" : ""
-                }`}
-                onClick={() => {
-                  setIsMenuOpen(false);
-                  setActiveTab("Home");
-                }}
-              >
-                Home
-              </Link>
-              <Link
-                href="/explore"
-                className={`block font-montserrat px-4 py-2 rounded-full ${
-                  activeTab === "Explore" ? "bg-black text-white" : ""
-                }`}
-                onClick={() => {
-                  setIsMenuOpen(false);
-                  setActiveTab("Explore");
-                }}
-              >
-                Explore
-              </Link>
-              <Link
-                href="/create"
-                className={`block font-montserrat px-4 py-2 rounded-full ${
-                  activeTab === "Create" ? "bg-black text-white" : ""
-                }`}
-                onClick={() => {
-                  setIsMenuOpen(false);
-                  setActiveTab("Create");
-                }}
-              >
-                Create
-              </Link>
-             
-              <Link
-                href="/create"
-                className={`md:hidden font-montserrat px-4 py-2 rounded-full ${
-                  activeTab === "Create" ? "bg-black text-white" : ""
-                }`}
-                onClick={() => {
-                  setIsMenuOpen(false);
-                  setActiveTab("Create");
-                }}
-              >
-                Community
-              </Link>
-              
-            </div>
-          )}
+        <div className="lg:hidden order-3 absolute top-16 left-0 w-full bg-white shadow-md z-50">
+          <Link
+            href="/"
+            className={`block font-montserrat px-4 py-2 rounded-full ${
+              activeTab === "Home" ? "bg-black text-white" : ""
+            }`}
+            onClick={() => {
+              setIsMenuOpen(false);
+              setActiveTab("Home");
+            }}
+          >
+            Home
+          </Link>
+          <Link
+            href="/explore"
+            className={`block font-montserrat px-4 py-2 rounded-full ${
+              activeTab === "Explore" ? "bg-black text-white" : ""
+            }`}
+            onClick={() => {
+              setIsMenuOpen(false);
+              setActiveTab("Explore");
+            }}
+          >
+            Explore
+          </Link>
+          <Link
+            href="/create"
+            className={`block font-montserrat px-4 py-2 rounded-full ${
+              activeTab === "Create" ? "bg-black text-white" : ""
+            }`}
+            onClick={() => {
+              setIsMenuOpen(false);
+              setActiveTab("Create");
+            }}
+          >
+            Create
+          </Link>
+
+          <Link
+            href="/create"
+            className={`md:hidden font-montserrat px-4 py-2 rounded-full ${
+              activeTab === "Create" ? "bg-black text-white" : ""
+            }`}
+            onClick={() => {
+              setIsMenuOpen(false);
+              setActiveTab("Create");
+            }}
+          >
+            Community
+          </Link>
+        </div>
+      )}
     </header>
   );
 }
