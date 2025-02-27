@@ -7,7 +7,7 @@ const ContactUs: React.FC = () => {
 
   
   return (
-    <section className="w-full xl:py-24 lg:py-20 py-12 bg-slate-50 border-b border-gray-300 font-inter">
+    <section className="w-full xl:py-24 lg:py-20 py-12  border-b border-gray-300 font-inter">
       <div className="w-full max-w-7xl px-6 lg:px-8 mx-auto">
         <div className="grid lg:grid-cols-1 grid-cols-1 gap-x-16 xl:gap-x-24 gap-y-14 max-w-lg md:max-w-3xl lg:max-w-full mx-auto">
           

@@ -64,7 +64,8 @@ const handleImageChange = (e: React.ChangeEvent<HTMLInputElement>) => {
   });
 
 
-  const handleSubmit = async (values) => {
+  const submit = async (values: any, { setSubmitting }: any) => {
+    console.log(values)
     try {
     
       const formData = new FormData();
@@ -92,11 +93,8 @@ if(response.status==201){
       console.log("Registration successful:", response.data);
       toast.success("Registration successful");
       router.push("/company/home");
-<<<<<<< HEAD
 }
 
-=======
->>>>>>> 34aa6f601e9f75cc0971130a95547318d390f7b2
     } catch (error) {
       // Handle error
       console.error("Error during registration:", error);
@@ -150,10 +148,10 @@ if(response.status==201){
             },
           }}
           validationSchema={validationSchema}
-          onSubmit={handleSubmit}
+          onSubmit={submit}
         >
-          {({ values, isSubmitting, setFieldValue }) => (
-            <Form className="space-y-6">
+          {({ values, isSubmitting, setFieldValue,handleSubmit }) => (
+            <Form onSubmit={handleSubmit} className="space-y-6">
               <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                 <div className="space-y-2">
                   <label className="block text-sm text-gray-700">
@@ -452,7 +450,7 @@ if(response.status==201){
               <button
                 type="submit"
                 className="w-full bg-gray-900 text-white p-3 rounded-lg hover:bg-gray-800 transition-colors text-sm md:text-base font-medium"
-                disabled={isSubmitting}
+                onClick={() => submit(values, { setSubmitting: () => {} })}
               >
                 {isSubmitting ? "Submitting..." : "Register"}
               </button>

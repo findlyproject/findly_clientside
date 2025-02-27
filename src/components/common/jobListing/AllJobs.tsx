@@ -7,7 +7,7 @@ import api from "@/utils/api";
 export interface Job {
   _id: string;
   title: string;
-  company: string;
+  company: company;
   location: string;
   jobType: string;
   experienceLevel: string;
@@ -19,9 +19,8 @@ export interface Job {
   benefits: string[];
   contactEmail: string;
   contactPhone: string;
-  postedBy: PostedBy;
   likes: string[];
-  salary?: Salary; 
+  salary?: Salary[] | undefined; 
   comments: string[];
   reports: string[];
   status: string;
@@ -37,7 +36,7 @@ export interface Salary {
   rate: string;
 }
 
-export interface PostedBy {
+export interface company {
   address: Address;
   _id: string;
   name: string;
@@ -122,12 +121,12 @@ function AllJobs() {
           <JobCard
             key={index}
             date={job.createdAt}
-            company={job.company}
+            company={job.company.name}
             role={job.title}
             tags={job.jobType}
             salary={job.salary}
             location={job.location}
-            logo={job.postedBy.logo}
+            logo={job.company.logo}
             bgColor="#C9E69F"
             _id={job._id}
             ref={index === jobs.length - 1 ? lastJobRef : null}
