@@ -4,6 +4,7 @@ import { useAppDispatch } from "@/lib/store/hooks";
 import React, { useEffect, useState } from "react";
 import Image from "next/image";
 import api from "@/utils/api";
+import { useRouter } from "next/navigation";
 
 const AppliedUsers = () => {
   interface Jobpost {
@@ -15,7 +16,7 @@ const AppliedUsers = () => {
     _id: string;
     jobId: {
       _id: string;
-      postedBy: string;
+      company: string;
     };
     userId: {
       _id: string;
@@ -38,7 +39,7 @@ const AppliedUsers = () => {
   const [searchLocation, setSearchLocation] = useState<string>("");
 
   const dispatch = useAppDispatch();
-
+const router = useRouter()
   useEffect(() => {
     dispatch(applicationList());
     postedJobs();
@@ -95,7 +96,7 @@ const AppliedUsers = () => {
   });
 
   const totalPages = Math.ceil(filteredApplications.length / itemsPerPage);
-
+console.log(filteredApplications)
   return (
     <div className="p-6 bg-gray-100 min-h-screen">
       {/* Search and Filter Section */}
@@ -146,7 +147,7 @@ const AppliedUsers = () => {
         </aside>
 
         {/* Candidate Grid */}
-        <main className="w-3/4">
+        <main className="w-3/4" >
           <h1 className="text-2xl font-semibold">
             {selectedJobIds.length > 0 ? (
               <span className="font-bold italic text-purple-600">
@@ -162,7 +163,7 @@ const AppliedUsers = () => {
 
           <div className="grid grid-cols-3 gap-4">
             {filteredApplications.slice(startIndex, startIndex + itemsPerPage).map((user, index) => (
-              <div key={index} className="bg-white p-4 rounded-md shadow-md text-center">
+              <div key={index} className="bg-white p-4 rounded-md shadow-md text-center" onClick={()=>router.push(`/company/candidatelist/${user.userId._id}/${user.jobId._id}`)}>
                 <div className="w-16 h-16 bg-gray-300 rounded-full mx-auto mb-3">
                   <Image
                     src={user.userId?.profileImage || ""}

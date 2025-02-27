@@ -2,14 +2,14 @@
 "use client"
 import { useAppSelector } from '@/lib/store/hooks';
 import api from '@/utils/api';
-import { useParams } from 'next/navigation';
+import { useParams, useRouter } from 'next/navigation';
 import React, { useState } from 'react';
 import { toast } from 'react-toastify';
 
 const Apply = () => {
   const activ = useAppSelector((state) => state.user.activeuser);
   const { id } = useParams();
-  
+  const router = useRouter()
   const [data, setData] = useState({
     resumDocName: activ?.resumePDF?.[0]?.fileName || "my resume",
     resumDocUploadedAt: activ?.resumePDF?.[0]?.uploadedAt || null,
@@ -127,6 +127,7 @@ const Apply = () => {
         resumeVideoUrl: updatedData.resumVideoUrl,
       });
       toast.success("Applied successfully!");
+      router.push("/user/jobs")
     } catch (error) {
       toast.warning(error.response?.data?.message || "Error applying to job.");
     }
