@@ -175,7 +175,7 @@ console.log(activeuser,activeCompany)
                     {searchResults.map((user) => (
                       <li key={user._id} className="cursor-pointer flex items-center gap-2 pl-4 hover:bg-primary hover:bg-opacity-20 rounded-full"
 
-                        onClick={() => router.push(`/userdetails/${user._id}`)}
+                        onClick={() => router.push(`/user/${user._id}/User`)}
                       >
                         <Image
                           width={100}
@@ -188,13 +188,6 @@ console.log(activeuser,activeCompany)
                           <p className="tex-sm font-semibold">
                             {user.firstName} {user.lastName}
                           </p>
-                          <p className="text-sm text-gray-500">{user.email}</p>
-                          ):(
-                            <p className="tex-sm font-semibold">
-                            {user.name} 
-                          </p>
-                          )
-                        }
                           <p className="text-sm text-gray-500">
                             {user.email}
                           </p>
