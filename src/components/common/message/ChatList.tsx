@@ -30,20 +30,21 @@ export default function ChatList() {
   }, []);
   useEffect(() => {
     const fetchMessages = async () => {
-      if (selectedUser) { // Ensure a user is selected
+      if (selectedUser) { 
         const responseofMessage = await api.get(
           `/message/conversation/${activeuser._id}/${selectedUser.connectionID._id}`
         );
         console.log("responseofMessage", responseofMessage);
-        setMessages(responseofMessage.data.messages); // Set messages directly
+        setMessages(responseofMessage.data.messages); 
       }
     };
     fetchMessages();
   }, [selectedUser, activeuser._id]);
   
   const handleUserSelect = (user) => {
+    console.log("user....",user)
     setSelectedUser(user);
-    setMessages([]); // Clear previous messages
+    setMessages([]); 
     socket.emit("joinRoom", user.connectionID._id);
   };
 
@@ -81,6 +82,7 @@ export default function ChatList() {
   }, [selectedUser?.connectionID?._id]);
 
   console.log("all messages", messages);
+console.log("selectedUser",selectedUser);
 
   return (
     <div className="flex h-screen">
@@ -141,49 +143,25 @@ export default function ChatList() {
                             <FaEllipsisV className="text-gray-600" />
                           </div>
               
-                          {isOpen && (
-                            <div className="absolute right-0 mt-2 w-48 bg-white border rounded-lg shadow-lg">
-                              <ul className="py-2 text-sm text-gray-700">
-                                <li
-                                  className="px-4 py-2 hover:bg-gray-100 cursor-pointer"
-                                  onClick={() => alert("Reported")}
-                                >
-                                  Report
-                                </li>
-                                <li
-                                  className="px-4 py-2 hover:bg-gray-100 cursor-pointer"
-                                  onClick={() => alert("Left the community")}
-                                >
-                                  Leave Community
-                                </li>
-                                <li
-                                  className="px-4 py-2 hover:bg-gray-100 cursor-pointer"
-                                  onClick={() => setIsmenuOpen(false)}
-                                >
-                                  Back
-                                </li>
-                              </ul>
-                            </div>
-                          )}
+                          
                         </div>
             </header>
-
-            {/* Chat Messages Section */}
-            <div className="border p-4 mb-4 h-64 overflow-y-auto">
+{/* Chat Messages Section */}
+<div className="flex-grow p-4 overflow-y-auto">
   {messages.map((msg, index) => (
     <div
       key={index}
       className={`flex mb-2 ${
         msg.sender === activeuser._id
-          ? "justify-end"   // Align sent messages to the right
-          : "justify-start" // Align received messages to the left
+          ? "justify-end"   
+          : "justify-start" 
       }`}
     >
       <span
         className={`inline-block p-2 rounded-lg max-w-xs break-words ${
           msg.sender === activeuser._id
-            ? "bg-blue-500 text-white"  // Sent messages
-            : "bg-gray-200 text-black"  // Received messages
+            ? "bg-blue-500 text-white"  
+            : "bg-gray-200 text-black" 
         }`}
       >
         {msg.message}
@@ -192,25 +170,28 @@ export default function ChatList() {
   ))}
 </div>
 
-            {/* Fixed Input Section */}
-            <footer className="p-4 bg-gray-50 border-t flex items-center">
-              <input
-                type="text"
-                placeholder="Type a message..."
-                className="flex-1 p-2 border rounded-l-md focus:outline-none"
-                value={message}
-                onChange={(e) => setMessage(e.target.value)}
-              />
-              <button className="text-gray-600 px-4 py-2">
-                <HiPaperClip />
-              </button>
-              <button
-                onClick={handleSendMessage}
-                className="bg-blue-500 text-white px-4 py-2 rounded-r-md"
-              >
-                <LuSend />
-              </button>
-            </footer>
+{/* Fixed Input Section */}
+<footer className="p-4 bg-gray-50 border-t flex items-center">
+  <input
+    type="text"
+    placeholder="Type a message..."
+    className="flex-1 p-2 border rounded-l-md focus:outline-none"
+    value={message}
+    onChange={(e) => setMessage(e.target.value)}
+  />
+  <button className="text-gray-600 px-4 py-2">
+    <HiPaperClip />
+  </button>
+  <button
+    onClick={handleSendMessage}
+    className="bg-blue-500 text-white px-4 py-2 rounded-r-md"
+  >
+    <LuSend />
+  </button>
+</footer>
+
+
+           
           </>
         ) : (
           <div className="flex items-center justify-center h-full text-gray-500">

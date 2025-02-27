@@ -190,6 +190,8 @@ export default function ChatUI() {
     messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' });
   }, [message]);
 
+
+  console.log("community populate",community)
   return (
     <div className="flex h-screen bg-gray-100">
       <Sidebar props={{ setCommunity, community }} />
@@ -219,7 +221,7 @@ export default function ChatUI() {
             <div className="flex-1 overflow-y-auto p-4">
 
               <div>
-                {community.members.includes(activeuser._id) ? (
+                {!community.members.find((item)=>item._id == activeuser?._id) ? (
                   <div className="flex justify-center px-4 py-8">
                     <div className="border border-primary rounded-lg shadow-lg max-w-md w-full bg-white p-6">
                       <div className="text-center">
@@ -391,7 +393,7 @@ export default function ChatUI() {
               </div>
             </div>
             <footer className="p-4 h-20 bg-white border-t flex">
-              {!community?.members.includes(activeuser._id) ? (
+              {community.members.find((item)=>item._id == activeuser?._id) ? (
                 <>
                   <input
                     type="text"
