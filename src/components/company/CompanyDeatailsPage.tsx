@@ -142,6 +142,13 @@ console.log("rewies",rewies);
       date: "2 years ago",
     },
   ];
+
+  const handleFollow=async(companyid)=>{
+    const response=await api.post(`/company/follow/${companyid}`)
+    console.log("response of follow",response);
+    
+    
+  }
   return (
     <div className={`min-h-screen  py-10 bg-gray-200  flex justify-center items-center  `}>
       <div className={ ` ${showModal&& "bg-black bg-opacity-10"} p-8 bg-white rounded-lg shadow-lg w-full max-w-3xl    `}>
@@ -174,11 +181,19 @@ console.log("rewies",rewies);
        </div>
            </OutsideClickHandler>
         <div className="flex items-start justify-between  gap-6">
+          <div className="flex flex-col">
           <img
             src={companyProfile?.logo}
             alt="Profile"
             className=" w-56 h-56 object-cover"
           />
+          <br></br>
+          {
+            
+          }
+          <button onClick={()=>handleFollow(companyProfile?._id)} className="bg-primary p-1 rounded-md text-white font-semibold">Follow</button>
+          </div>
+          
           <div className="">
             <h2 className="text-2xl font-bold">{companyProfile?.name}</h2>
             <p className="text-blue-500">Product Designer</p>
