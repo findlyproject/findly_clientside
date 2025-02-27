@@ -24,13 +24,11 @@ import api from "@/utils/api";
 import { fetchAllPosts } from "@/lib/store/features/actions/postActions";
 interface PostPreviewProps {
   post: IPost;
-  
 }
 // type Post = {
 //   _id: string;
 //   likedBy: { _id: string }[]; // Ensure it's an array of objects, not strings
 // };
-
 
 interface LikedUser {
   _id: string;
@@ -44,12 +42,8 @@ interface Post {
 }
 
 export const PostPreview = ({ post }: PostPreviewProps) => {
-  console.log("post post...", post);
   const [localPost, setLocalPost] = useState(post);
 
-
- 
-  
   const dispatch = useAppDispatch();
   const router = useRouter();
   const [isShowMenu, setIsShowMenu] = useState(false);
@@ -58,46 +52,32 @@ export const PostPreview = ({ post }: PostPreviewProps) => {
   const [isShowComments, setIsShowComments] = useState(false);
 
   const currentUser = useAppSelector((state) => state.user.activeuser);
-  console.log("currentUsercurrentUser", currentUser);
   const like = useAppSelector((state) => state.post.likes);
-  console.log("like.....", like);
-  console.log("localPost.likedBy", localPost.likedBy);
-  console.log("currentUser._id", currentUser?._id);
 
-
-
- 
-
-  
-  
-  
   const handleLike = async (postId: string) => {
-    console.log("Liking postId:", postId);
-
     const response = await api.post(`/post/user/likepost/${postId}`);
-    console.log("Like response.........:", response);
-    
-     
+
     dispatch(setLikes(response.data.post));
     setLocalPost(response.data.post);
-    dispatch(fetchAllPosts())
+    dispatch(fetchAllPosts());
   };
 
   return (
     <section className="flex flex-col border border-gray-300 bg-white rounded-lg w-full max-w-3xl mx-auto p-4 shadow-md relative">
-      <div className=" bg-right-top top-2">
+      <div className="bg-right-top top-2">
         <div
-          className=" cursor-pointer"
+          className="cursor-pointer"
           onClick={() => setIsShowMenu(!isShowMenu)}
         >
           <FontAwesomeIcon
             icon={faEllipsisH}
-            className=" text-gray-500 hover:text-gray-700"
+            className="text-gray-500 hover:text-gray-700"
           />
-        </div>{" "}
-        {isShowMenu === true ? <PostMenu post={post} /> : null}
+        </div>
+        {isShowMenu && <PostMenu post={post} />}
       </div>
 
+      {/* Post Owner Details */}
       <section className="flex items-center p-4">
         <div
           className="cursor-pointer"
@@ -108,7 +88,7 @@ export const PostPreview = ({ post }: PostPreviewProps) => {
               post.owner?.profileImage ||
               "https://res.cloudinary.com/dq1auwpkm/image/upload/v1738735360/profile_jtwxaj.png"
             }
-            className="rounded-full object-cover"
+            className="rounded-full object-cover w-12 h-12 sm:w-14 sm:h-14"
             alt={post.owner?.firstName || "User"}
             width={50}
             height={50}
@@ -120,14 +100,13 @@ export const PostPreview = ({ post }: PostPreviewProps) => {
             href={`/main/profile/${post.owner?._id}`}
             className="hover:underline"
           >
-            <h3 className="text-lg font-semibold text-gray-900">
+            <h3 className="text-lg sm:text-xl font-semibold text-gray-900">
               {post.owner?.firstName || "Unknown User"}
             </h3>
           </Link>
-          <p className="text-sm text-gray-600">
+          <p className="text-sm sm:text-base text-gray-600">
             {post.owner?.email || "Unknown Profession"}
           </p>
-
           <div className="text-xs text-gray-500">
             {post.createdAt
               ? new Date(post.createdAt).toLocaleDateString("en-US", {
@@ -140,9 +119,11 @@ export const PostPreview = ({ post }: PostPreviewProps) => {
         </div>
       </section>
 
+      {/* Post Content */}
       <div className="space-y-3 px-2">
         <h1 className="text-sm sm:text-base">{post.description}</h1>
 
+        {/* Image Carousel */}
         {post.images && post.images.length > 0 && (
           <Swiper
             navigation={{
@@ -157,58 +138,43 @@ export const PostPreview = ({ post }: PostPreviewProps) => {
                 <img
                   src={image}
                   alt={`Post image ${index + 1}`}
-                  className="w-full h-auto rounded-md"
+                  className="w-full h-auto sm:max-h-96 rounded-md object-cover"
                 />
               </SwiperSlide>
             ))}
-
             <div className="swiper-button-prev !text-gray-700 !text-2xl !left-2"></div>
             <div className="swiper-button-next !text-gray-700 !text-2xl !right-2"></div>
           </Swiper>
         )}
 
+        {/* Video */}
         {post.video && (
           <div className="flex justify-center">
-            <video width="100%" height="300" controls className="rounded-md">
+            <video width="100%" className="rounded-md sm:max-h-96" controls>
               <source src={post.video} type="video/mp4" />
             </video>
           </div>
         )}
       </div>
 
-      <div className="flex items-center justify-between px-4 py-2">
+      {/* Like & Comment Count */}
+      <div className="flex items-center justify-between px-4 py-2 text-sm sm:text-base">
         <div className="text-gray-600 cursor-pointer" onClick={toggleLikes}>
           {localPost.likedBy ? localPost.likedBy.length : 0} Likes
         </div>
-        <div className="flex items-center space-x-4 text-gray-600">
-          <span>{post.comments?.length ?? 0} Comments</span>
+        <div className="text-gray-600">
+          {post.comments?.length ?? 0} Comments
         </div>
       </div>
 
-      {isShowLikes && (
-        <div
-          className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center"
-          onClick={toggleLikes}
-        >
-          <div
-            className="bg-white p-6 rounded-lg shadow-lg max-w-md w-full"
-            onClick={(ev) => ev.stopPropagation()}
-          >
-            <h2 className="text-lg font-semibold">Liked by</h2>
-
-          </div>
-        </div>
-      )}
-
+      {/* Like Button with Responsive Padding & Icon Size */}
       <section className="space-y-2">
         <section className="flex items-center justify-around border-t border-gray-200 pt-2">
           {Array.isArray(localPost.likedBy) &&
           localPost.likedBy.find((item) => {
-            console.log("item...", item);
 
             // return item === currentUser?._id;
             return typeof item === "string" && item == currentUser?._id;
-
           }) ? (
             <div>
               <button
@@ -249,19 +215,7 @@ export const PostPreview = ({ post }: PostPreviewProps) => {
             </button>
           )}
 
-         
-
-
-
-
-
-
-
-
-
-
-
-         <button
+          <button
             className="flex items-center text-gray-500 px-4 py-2 rounded-md hover:bg-gray-100 hover:text-black"
             onClick={() => setIsShowComments((prev) => !prev)}
           >
@@ -289,60 +243,51 @@ export const PostPreview = ({ post }: PostPreviewProps) => {
             <span className="hidden sm:inline">Send</span>
           </button>
         </section>
+      </section>
 
-        {isShowComments && post && post.comments && (
-          <Comments postId={post._id} comments={post.comments} />
-        )}
+      {isShowComments && post && post.comments && (
+        <Comments postId={post._id} comments={post.comments} />
+      )}
+       {isShowLikes && (
+  <div
+    className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center px-4 z-50"
+    onClick={toggleLikes}
+  >
+    <div
+      className="bg-white p-6 rounded-lg shadow-lg max-w-sm md:max-w-md w-full overflow-hidden"
+      onClick={(ev) => ev.stopPropagation()}
+    >
+      <h2 className="text-lg font-semibold mb-4 text-gray-700 text-center">
+        Liked by
+      </h2>
 
-        {/* Likes Modal */}
-        {isShowLikes && (
-          <div
-            className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center px-4 z-50"
-            onClick={toggleLikes}
-          >
+      <div className="max-h-60 overflow-y-auto space-y-4 z-50">
+        {Array.isArray(post.likedBy) && post.likedBy.length > 0 ? (
+          post.likedBy.map((item) => (
             <div
-              className="bg-white p-6 rounded-lg shadow-lg max-w-sm md:max-w-md w-full overflow-hidden"
-              onClick={(ev) => ev.stopPropagation()}
+              key={item._id}
+              className="flex items-center space-x-4 bg-gray-100 p-3 rounded-lg"
             >
-              <h2 className="text-lg font-semibold mb-4 text-gray-700 text-center">
-                Liked by
-              </h2>
-
-              <div className="max-h-60 overflow-y-auto space-y-4 z-50 ">
-                {Array.isArray(post.likedBy) && post.likedBy.length > 0 ? (
-                  post.likedBy.map((item) => (
-                    
-                    <div
-                      key={item._id}
-                      className="flex items-center space-x-4 bg-gray-100 p-3 rounded-lg"
-                    >
-                      <img
-                        src={item.profileImage}
-                        alt={item.firstName}
-                        className="w-12 h-12 rounded-full border border-gray-300 object-cover"
-                      />
-                      <p className="text-gray-700 font-medium">
-                        {item.firstName} {item.lastName}
-                      </p>
-                    </div>
-                  ))
-                ) : (
-                  <div className="text-center text-gray-500">
-                    <h1>No likes yet</h1>
-                  </div>
-                )}
-              </div>
-
-              <button
-                className="w-full mt-4 py-2 bg-gray-700 text-white rounded-lg hover:bg-gray-800 transition duration-300"
-                onClick={toggleLikes}
-              >
-                Close
-              </button>
+              <img
+                src={item.profileImage}
+                alt={item.firstName}
+                className="w-12 h-12 rounded-full border border-gray-300 object-cover"
+              />
+              <p className="text-gray-700 font-medium">
+                {item.firstName} {item.lastName}
+              </p>
             </div>
+          ))
+        ) : (
+          <div className="text-center text-gray-500">
+            <h1>No likes yet</h1>
           </div>
         )}
-      </section>
+      </div>
+    </div>
+  </div>
+)}
+
     </section>
   );
 };

@@ -1,6 +1,6 @@
 'use client';
 import { setAllConnections } from '@/lib/store/features/userSlice';
-import { useAppDispatch, useAppSelector } from '@/lib/store/hooks';
+import { useAppDispatch } from '@/lib/store/hooks';
 import api from '@/utils/api';
 import Image from 'next/image';
 import { useRouter } from 'next/navigation';

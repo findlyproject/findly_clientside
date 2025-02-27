@@ -8,6 +8,8 @@ import { features, verification } from "@/lib/store/features/actions/subscriptio
 import { useRouter } from "next/navigation";
 
 const SubscribedPlanDetails: React.FC = () => {
+  const  activeCompany=useAppSelector((state)=>state.companyLogin.activeCompany)
+  const route=activeCompany?"Comapny":"User"
     const router=useRouter()
   const searchParams = useSearchParams();
   const sessionId = searchParams.get("session_id");
@@ -18,20 +20,20 @@ const SubscribedPlanDetails: React.FC = () => {
 
   useEffect(() => {
     if (sessionId) {
-      dispatch(features(sessionId));
+      dispatch(features({sessionId,route}));
     }  
   }, [dispatch, sessionId]);
 
   const handleContinue = async() => {
     if(sessionId){
-       const result= await dispatch(verification(sessionId))
+       const result= await dispatch(verification({sessionId,route}))
        console.log("a",result);
        if(result.type==="verification/fulfilled"){
         console.log("resultproiiii",result);
         if(allFeatures?.userId){
-          router.push("/ownprofile")
+          router.push("/user/profile")
         }else if(allFeatures?.companyId){
-          router.push("/profile")
+          router.push("/company/profile")
         }
        
        }

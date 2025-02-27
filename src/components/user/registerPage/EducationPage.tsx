@@ -282,7 +282,7 @@ export default function EducationPage() {
     }
       dispatch(setEducation([{college:College,startYear:StartYear,endYear:EndYear}]));
 
-      router.push(`/register/namepage/educationpage/questionpage`);
+      router.push(`/user/register/namepage/educationpage/questionpage`);
     }
   };
 

@@ -1,43 +1,60 @@
+
 import { NextResponse } from "next/server";
 import type { NextRequest } from "next/server";
 
-const isUserProtectedRoute = (route: string) =>
-  route.startsWith("/home") || 
-  route.startsWith("/premium") ||
-  route.startsWith("/profile")||
-  route.startsWith("/rates");
-
+const isAdminRoute = (route: string) => route.startsWith("/admin") && route !== "/login";
+const isUserProtectedRoute = (route: string) => route.startsWith("/user") && route !== "/user/register";
+const isCompanyProtectedRoute = (route: string) => route.startsWith("/company") && route !== "/company/register";
 
 export function middleware(req: NextRequest) {
-  const ctoken = req.cookies.get("ctoken")?.value;
-
+  const userType = req.cookies.get("type")?.value;
+  const token = req.cookies.get("token")?.value;
   const url = req.nextUrl.clone();
-  const pathname = url.pathname;
+  const pathName = url.pathname;
 
-      console.log("ctoken",ctoken);
-      
 
-  if (!ctoken && isUserProtectedRoute(pathname)) {
-   
+  if (pathName === "/user/register" ||pathName==="/company/register/form" ||pathName==="/user/register/namepage"||pathName==="/user/register/namepage/educationpage/questionpage"|| pathName==="/user/register/namepage/educationpage"||pathName==="/user/register/namepage/educationpage/questionpage/jobpage"|| pathName === "/company/register") {
+    return NextResponse.next();
+  }
+
+
+  if (token && pathName === "/") {
+    if (userType === "Admin") url.pathname = "/admin";
+    else if (userType === "User") url.pathname = "/user/home";
+    else if (userType === "Company") url.pathname = "/company/home";
+    return NextResponse.redirect(url);
+  }
+
+
+  if (!token && (isUserProtectedRoute(pathName) || isCompanyProtectedRoute(pathName))) {
     url.pathname = "/";
     return NextResponse.redirect(url);
   }
 
-  if (ctoken && (pathname === "/"||pathname==="/c-login")) {
-
-    url.pathname = "/home";
+  
+  if (userType === "Admin" && (isUserProtectedRoute(pathName) || isCompanyProtectedRoute(pathName))) {
+    url.pathname = "/login";
     return NextResponse.redirect(url);
   }
 
 
-  // re validate the cache of token
-  const res= NextResponse.next();
+  if (userType === "User" && (isAdminRoute(pathName) || isCompanyProtectedRoute(pathName))) {
+    url.pathname = "/login";
+    return NextResponse.redirect(url);
+  }
+
+ 
+  if (userType === "Company" && (isAdminRoute(pathName) || isUserProtectedRoute(pathName))) {
+    url.pathname = "/login";
+    return NextResponse.redirect(url);
+  }
+
+  
+  const res = NextResponse.next();
   res.headers.set("Cache-Control", "no-store, must-revalidate");
-  return res;  
+  return res;
 }
 
 export const config = {
-  matcher: [
-    "/((?!_next|_next/static|_next/image|images|favicon.ico).*)",
-  ],
+  matcher: "/:path*",
 };

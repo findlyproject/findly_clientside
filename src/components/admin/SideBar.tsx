@@ -4,7 +4,9 @@ import user from "../../../public/assets/user-06.webp";
 import Link from "next/link";
 import api from "@/utils/api";
 import { useRouter } from "next/navigation";
-
+import { FaPlus } from "react-icons/fa6";
+import { MdOutlineReviews } from "react-icons/md";
+import { toast } from "react-toastify";
 const Sidebar = () => {
   const router = useRouter();
   const handleAdminLogout = async (e: React.MouseEvent<HTMLButtonElement>) => {
@@ -13,8 +15,8 @@ const Sidebar = () => {
     const response = await api.post("/admin/logout");
 
     if (response.status >= 200 && response.status < 300) {
-      alert("Admin Logout successful");
-      router.push("/"); // ✅ Redirect after logout
+      toast.success("Admin Logout successful");
+      router.push("/"); 
     } else {
       throw new Error(response.data?.message || "An error occurred");
     }
@@ -105,6 +107,10 @@ const Sidebar = () => {
                       Reports
                     </h2>
                   </Link>
+                
+
+
+
                   <Link
                     href=""
                     className="lg:flex items-center gap-3 hidden "
@@ -139,6 +145,21 @@ const Sidebar = () => {
               </div>
             </div>
           </li>
+
+          <li>
+            <Link href="/admin/ratings">
+              <div className="flex-col flex p-3 bg-white rounded-lg">
+                <div className="h-5 gap-3 flex">
+                  <div className="relative" title="ratings">
+                  <MdOutlineReviews className="text-2xl text-gray-500"/>
+                  </div>
+                  <h2 className="text-gray-500 text-sm font-medium leading-snug hidden lg:block">
+                    Ratings
+                  </h2>
+                </div>
+              </div>
+            </Link>
+          </li>
           <li>
             <Link href="/admin/users">
               <div className="flex-col gap-1 flex">
@@ -162,6 +183,35 @@ const Sidebar = () => {
                     </div>
                     <h2 className="text-gray-500 text-sm font-medium leading-snug hidden lg:block">
                       Users
+                    </h2>
+                  </div>
+                </div>
+              </div>
+            </Link>
+          </li>
+          <li>
+            <Link href="/admin/companies">
+              <div className="flex-col gap-1 flex">
+                <div className="flex-col flex bg-white rounded-lg p-3">
+                  <div className="h-5 gap-3 flex">
+                    <div className="relative" title="Users">
+                      <svg
+                        xmlns="http://www.w3.org/2000/svg"
+                        fill="none"
+                        viewBox="0 0 24 24"
+                        strokeWidth="1.5"
+                        stroke="#6B7280"
+                        className="size-6"
+                      >
+                        <path
+                          strokeLinecap="round"
+                          strokeLinejoin="round"
+                          d="M15 19.128a9.38 9.38 0 0 0 2.625.372 9.337 9.337 0 0 0 4.121-.952 4.125 4.125 0 0 0-7.533-2.493M15 19.128v-.003c0-1.113-.285-2.16-.786-3.07M15 19.128v.106A12.318 12.318 0 0 1 8.624 21c-2.331 0-4.512-.645-6.374-1.766l-.001-.109a6.375 6.375 0 0 1 11.964-3.07M12 6.375a3.375 3.375 0 1 1-6.75 0 3.375 3.375 0 0 1 6.75 0Zm8.25 2.25a2.625 2.625 0 1 1-5.25 0 2.625 2.625 0 0 1 5.25 0Z"
+                        />
+                      </svg>
+                    </div>
+                    <h2 className="text-gray-500 text-sm font-medium leading-snug hidden lg:block">
+                      Comapnies
                     </h2>
                   </div>
                 </div>
@@ -208,7 +258,7 @@ const Sidebar = () => {
         </div>
         <ul className="flex-col gap-1 flex">
           <li>
-            <Link href="">
+            <Link href="/admin/profile">
               <div className="p-3 rounded-lg items-center inline-flex">
                 <div className="h-5 items-center gap-3 flex">
                   <div className="relative" title="Profile">
@@ -231,6 +281,23 @@ const Sidebar = () => {
                   </div>
                   <h2 className="text-gray-500 text-sm font-medium leading-snug hidden lg:block">
                     Profile
+                  </h2>
+                </div>
+              </div>
+            </Link>
+          </li>
+
+
+
+          <li>
+            <Link href="/admin/create">
+              <div className="p-3 rounded-lg items-center inline-flex">
+                <div className="h-5 items-center gap-3 flex">
+                  <div className="relative" title="Profile">
+                  <FaPlus />
+                  </div>
+                  <h2 className="text-gray-500 text-sm font-medium leading-snug hidden lg:block">
+                    Create
                   </h2>
                 </div>
               </div>
@@ -265,6 +332,9 @@ const Sidebar = () => {
               </div>
             </Link>
           </li>
+
+
+        
           <li>
             <button  onClick={handleAdminLogout}>
               <div className="p-3 rounded-lg items-center inline-flex">

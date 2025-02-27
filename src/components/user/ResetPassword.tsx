@@ -36,6 +36,7 @@ function ResetPassword() {
       setOtp(newOtp);
     }
   };
+  
   const verifyotp = () => {
     const verify = data.otp == otp.join("")
     if(verify){

@@ -23,9 +23,10 @@ function Loginpage() {
     email: "",
     password: ""
   })
+
   const {googlestate} = useAppSelector((state)=>state.login)
 console.log("googlestate",googlestate);
-
+ 
 
   const dispatch = useAppDispatch()
   const handilchange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -37,7 +38,7 @@ console.log("googlestate",googlestate);
     const resultAction = await dispatch(loginUser(state));
 
     if (loginUser.fulfilled.match(resultAction)) {
-      router.push("/home");
+      router.push("/user/home");
       toast.success("Login Successful!")
     }
   };
@@ -99,7 +100,6 @@ console.log("googlestate",googlestate);
         toast.error("You Have no Accunt With This Email");
         return;
       }
-
       toast.success("OTP sent successfully!");
       router.push("/resetpassword");
     } catch (err) {
@@ -180,7 +180,7 @@ console.log("googlestate",googlestate);
             <FcGoogle className="mr-2" /> <span className="mb-2">google</span>
           </button>
           <div className="flex mt-3">
-            <p>Don&apos;t have any account? <a href="/register" className="underline">create account</a></p>
+            <p>Don&apos;t have any account? <a href="/user/register" className="underline">create account</a></p>
            
           </div>
 
