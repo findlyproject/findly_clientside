@@ -36,7 +36,6 @@ console.log(activeuser,activeCompany)
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
   const [searchQuery, setSearchQuery] = useState("");
   const [searchResults, setSearchResults] = useState<UserProfile[]>([]);
-<<<<<<< HEAD
  console.log(activeCompany)
 
     
@@ -51,40 +50,6 @@ console.log(activeuser,activeCompany)
             setSearchResults(response.data.results);
           } catch (error) {
             console.error("Error fetching users:", error);
-=======
-  const [isopen,setIsopen]=useState(false)
-
-    
-      useEffect(() => {
-        if (searchQuery.length > 0) {
-          const fetchUsers = async () => {
-            try {
-              const response = await api.get(
-                `/user/usersearch?firstName=${searchQuery}`
-              );
-    
-              setSearchResults(response.data.users);
-            } catch (error) {
-              console.error("Error fetching users:", error);
-            }
-          };
-    
-          fetchUsers();
-        } else {
-          setSearchResults([]);
-        }
-      }, [searchQuery]);
-  console.log("setIsopen",isopen);
-    
-      const handleSearchChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-        setSearchQuery(e.target.value);
-      };
-     const handleLogout = () => {
-          if(activeuser){  
-            dispatch(logoutUser())
-          }else if(activeCompany){
-            dispatch(logOutCompany())
->>>>>>> 7d00ce4b27af27c3da6d734e04c533b4c32100f3
           }
         };
   
@@ -223,7 +188,6 @@ console.log(activeuser,activeCompany)
                           <p className="tex-sm font-semibold">
                             {user.firstName} {user.lastName}
                           </p>
-<<<<<<< HEAD
                           <p className="text-sm text-gray-500">{user.email}</p>
                           ):(
                             <p className="tex-sm font-semibold">
@@ -231,8 +195,6 @@ console.log(activeuser,activeCompany)
                           </p>
                           )
                         }
-=======
->>>>>>> 7d00ce4b27af27c3da6d734e04c533b4c32100f3
                           <p className="text-sm text-gray-500">
                             {user.email}
                           </p>
@@ -323,14 +285,8 @@ console.log(activeuser,activeCompany)
                 )}
               </div>
               <Link
-<<<<<<< HEAD
                 href="/notification"
                 className="items w-10 h-10 sm:w-12 sm:h-12 rounded-full flex items-center justify-center hover:bg-gray-200"
-=======
-                href=""
-                className="items w-10 h-10 sm:w-12 sm:h-12 rounded-full flex items-center justify-center hover:bg-gray-00"
-                onClick={()=>setIsopen(!isopen)}
->>>>>>> 7d00ce4b27af27c3da6d734e04c533b4c32100f3
               >
                 <svg
                   xmlns="http://www.w3.org/2000/svg"
@@ -522,7 +478,6 @@ console.log(activeuser,activeCompany)
         </>
       )}
       {isMenuOpen && (
-<<<<<<< HEAD
         <div className="lg:hidden order-3 absolute top-16 left-0 w-full bg-white shadow-md z-50">
           <Link
             href="/"
@@ -575,67 +530,6 @@ console.log(activeuser,activeCompany)
           </Link>
         </div>
       )}
-=======
-            <div className="lg:hidden order-3 absolute top-16 left-0 w-full bg-white shadow-md z-50">
-              <Link
-                href="/"
-                className={`block font-montserrat px-4 py-2 rounded-full ${
-                  activeTab === "Home" ? "bg-black text-white" : ""
-                }`}
-                onClick={() => {
-                  setIsMenuOpen(false);
-                  setActiveTab("Home");
-                }}
-              >
-                Home
-              </Link>
-              <Link
-                href="/explore"
-                className={`block font-montserrat px-4 py-2 rounded-full ${
-                  activeTab === "Explore" ? "bg-black text-white" : ""
-                }`}
-                onClick={() => {
-                  setIsMenuOpen(false);
-                  setActiveTab("Explore");
-                }}
-              >
-                Explore
-              </Link>
-              <Link
-                href="/create"
-                className={`block font-montserrat px-4 py-2 rounded-full ${
-                  activeTab === "Create" ? "bg-black text-white" : ""
-                }`}
-                onClick={() => {
-                  setIsMenuOpen(false);
-                  setActiveTab("Create");
-                }}
-              >
-                Create
-              </Link>
-             
-              <Link
-                href="/create"
-                className={`md:hidden font-montserrat px-4 py-2 rounded-full ${
-                  activeTab === "Create" ? "bg-black text-white" : ""
-                }`}
-                onClick={() => {
-                  setIsMenuOpen(false);
-                  setActiveTab("Create");
-                }}
-              >
-                Community
-              </Link>
-              
-            </div>
-          )}
-
-          {isopen?(
-            <div>
-              <Notification/>
-            </div>
-          ):(null)}
->>>>>>> 7d00ce4b27af27c3da6d734e04c533b4c32100f3
     </header>
   );
 }
