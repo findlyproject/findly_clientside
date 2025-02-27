@@ -11,8 +11,10 @@ import { useAppSelector } from "@/lib/store/hooks";
 import api, { socket } from "@/utils/api";
 import { MdClose, MdImage, MdVideoCameraBack } from "react-icons/md";
 import { toast } from "react-toastify";
+import { useRouter } from "next/navigation";
 
 export default function ChatUI() {
+  const router=useRouter()
   const [community, setCommunity] = useState(null)
   const activeuser = useAppSelector((state) => state.user.activeuser)
   const [input, setInput] = useState({
@@ -196,7 +198,9 @@ export default function ChatUI() {
         {community ? (
           <>
             <header className="flex items-center justify-between bg-white p-4 border-b">
-              <div className="flex items-center">
+              <div className="flex items-center"
+              onClick={()=>router.push(`/community/details/${community._id}`)}
+              >
                 <Image
                   width={100}
                   height={100}
@@ -215,7 +219,7 @@ export default function ChatUI() {
             <div className="flex-1 overflow-y-auto p-4">
 
               <div>
-                {!community.members.includes(activeuser._id) ? (
+                {community.members.includes(activeuser._id) ? (
                   <div className="flex justify-center px-4 py-8">
                     <div className="border border-primary rounded-lg shadow-lg max-w-md w-full bg-white p-6">
                       <div className="text-center">
@@ -387,7 +391,7 @@ export default function ChatUI() {
               </div>
             </div>
             <footer className="p-4 h-20 bg-white border-t flex">
-              {community?.members.includes(activeuser._id) ? (
+              {!community?.members.includes(activeuser._id) ? (
                 <>
                   <input
                     type="text"
@@ -455,7 +459,7 @@ export default function ChatUI() {
                       controls
                       className="w-full rounded-lg max-h-72"
                     />
-                  
+                  )}
                 </div>
                 <div className="flex space-x-3">
                   <button

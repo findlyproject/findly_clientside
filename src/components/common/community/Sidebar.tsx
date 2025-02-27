@@ -1,4 +1,5 @@
 import api from '@/utils/api';
+import { Modal } from '@mui/material';
 import Image from 'next/image';
 import React, { useEffect, useState } from 'react';
 import { FaEllipsisV, FaSearch } from 'react-icons/fa';
@@ -67,7 +68,11 @@ const Sidebar: React.FC = ({props}) => {
   };
 
 
-
+  const getcommunity =async ()=>{
+    const response = await api.get("/message/all")
+    console.log("respons all comunity",response)
+    setCommunity(response.data.communities)
+}
 
 
   const handleImageChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -84,6 +89,9 @@ const Sidebar: React.FC = ({props}) => {
         description: input.description,
         profile,
       });
+      setIsModal(!isModal)
+      setIsMenuOpen(!isMenuOpen)
+      getcommunity()
       console.log('Response:', response);
     } catch (error) {
       console.error('Error posting data:', error);
@@ -143,11 +151,7 @@ const Sidebar: React.FC = ({props}) => {
     e.preventDefault();
     handleImageToCloud();
   };
-const getcommunity =async ()=>{
-    const response = await api.get("/message/all")
-    console.log("respons all comunity",response)
-    setCommunity(response.data.communities)
-}
+
 
 useEffect(()=>{
 getcommunity()
@@ -155,11 +159,12 @@ getcommunity()
 },[props.community])
 
 
+
   return (
     <aside className="w-1/4 bg-white border-r p-4 overflow-y-auto hidden md:block">
       <div className="flex justify-between">
         <h2 className="text-xl font-semibold">
-          Messages <span className="text-gray-500">(22)</span>
+          Messages 
         </h2>
         <div className="relative inline-block">
           <div className="cursor-pointer p-2 rounded-full hover:bg-gray-200" onClick={() => setIsMenuOpen(!isMenuOpen)}>
@@ -169,7 +174,7 @@ getcommunity()
           {isMenuOpen && (
             <div className="absolute right-0 mt-2 w-48 bg-white border rounded-lg shadow-lg z-50">
               <div className="py-2 text-sm text-gray-700">
-                <button className="px-4 py-2 hover:bg-gray-100 cursor-pointer" onClick={() => setIsModal(true)}>
+                <button className="px-4 py-2 hover:bg-gray-100 cursor-pointer" onClick={()=>setIsModal(!isModal)}>
                   New Community
                 </button>
 
