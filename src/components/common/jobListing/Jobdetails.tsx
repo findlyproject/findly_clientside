@@ -9,7 +9,6 @@ import { FaRegCopy, FaWhatsapp } from 'react-icons/fa';
 interface JobPosting {
   _id: string;
   title: string;
-  company: string;
   description: string;
   location: string;
   jobType: string;
@@ -26,7 +25,7 @@ interface JobPosting {
   applicationDeadline: string;
   contactEmail: string;
   contactPhone: string;
-  postedBy: {
+  company: {
     address: string;
     _id: string;
     name: string;
@@ -155,7 +154,7 @@ Don't miss out on this opportunity! ✨`;
 
             </div>
             <div className="flex items-center gap-2 mb-4">
-              <Image width={100} height={100} src={detail?.postedBy?.logo} alt={detail?.postedBy?.name} className="rounded" />
+              <Image width={100} height={100} src={detail?.company?.logo} alt={detail?.postedBy?.name} className="rounded" />
               <div>
                 <p className="font-medium">{detail?.company}</p>
                 <p className="text-sm text-gray-500">{detail?.location}</p>

@@ -107,6 +107,7 @@ interface LoginState {
   userdetails:UserProfile|null
   connectionRequest:UserProfile|null
   connections:UserProfile[]
+  peopleIknow:UserProfile[]
   forgotPassword:{
     email:string,
     otp:string,
@@ -119,6 +120,7 @@ const initialState: LoginState = {
   userdetails:null,
   connectionRequest:null,
   connections:[],
+  peopleIknow:[],
   forgotPassword:{
     email:"",
     otp:"",
@@ -258,7 +260,11 @@ state.connections=action.payload
     state.forgotPassword.otp = action.payload.otp;
     console.log("otpotp",action.payload)
    },
+   setPeopleKnow:(state,action)=>{
+    state.peopleIknow=action.payload
+        },
   },
+  
 });
 
 export const {
@@ -284,6 +290,7 @@ export const {
   setRemovejoblocation,
   setImages,
   setforgotPassword,
+  setPeopleKnow
 } = loginSlice.actions;
 
 export default loginSlice.reducer;

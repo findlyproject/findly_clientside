@@ -57,7 +57,7 @@ setAverage(Number(averageRating))
         findAverageRating()
       },[review])
       const findAllReviews=async()=>{
-        const response=await api.get(`/company/findrating/${targetedId}`)
+        const response=await api.get(`/${route}/findrating/${targetedId}`)
         console.log("responseeerr",response);
         if(response.status===200){
             const data=response.data.reviews
@@ -66,6 +66,7 @@ setAverage(Number(averageRating))
         }
        
       }
+      console.log("review",review)
       const handleDelete=async(id:string)=>{
         const response=await api.delete(`/company/deletereview/${id}`)
         if(response.status===200){
@@ -143,7 +144,7 @@ console.log("rewies",rewies);
     },
   ];
   return (
-    <div className={`min-h-screen  py-10 bg-gray-200  flex justify-center items-center  `}>
+    <div className={`min-h-screen  py-10 bg-gray-100  flex justify-center items-center  `}>
       <div className={ ` ${showModal&& "bg-black bg-opacity-10"} p-8 bg-white rounded-lg shadow-lg w-full max-w-3xl    `}>
 
        

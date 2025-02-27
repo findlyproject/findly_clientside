@@ -71,14 +71,14 @@ const grey = {
   900: '#1C2025',
 };
 
-const Modal = styled(Modal)`
-  position: fixed;
-  z-index: 1300;
-  inset: 0;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-`;
+// const Modal = styled(Modal)`
+//   position: fixed;
+//   z-index: 1300;
+//   inset: 0;
+//   display: flex;
+//   align-items: center;
+//   justify-content: center;
+// `;
 
 const StyledBackdrop = styled(Backdrop)`
   z-index: -1;
