@@ -11,6 +11,7 @@ import { UserProfile } from "@/lib/store/features/userSlice";
 import { logOutCompany } from "@/lib/store/features/actions/companyActions";
 import { logoutUser } from "@/lib/store/features/actions/userActions";
 import Image from "next/image";
+import Notification from "../notification/Notification";
 
 
 export const dropDownAfterlogin = (route: string) => [
@@ -38,6 +39,7 @@ console.log(activeuser,activeCompany)
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
   const [searchQuery, setSearchQuery] = useState("");
   const [searchResults, setSearchResults] = useState<UserProfile[]>([]);
+  const [isopen,setIsopen]=useState(false)
 
     
       useEffect(() => {
@@ -59,6 +61,7 @@ console.log(activeuser,activeCompany)
           setSearchResults([]);
         }
       }, [searchQuery]);
+  console.log("setIsopen",isopen);
     
       const handleSearchChange = (e: React.ChangeEvent<HTMLInputElement>) => {
         setSearchQuery(e.target.value);
@@ -217,7 +220,8 @@ console.log(activeuser,activeCompany)
               </div>
               <Link
                 href=""
-                className="items w-10 h-10 sm:w-12 sm:h-12 rounded-full flex items-center justify-center hover:bg-gray-200"
+                className="items w-10 h-10 sm:w-12 sm:h-12 rounded-full flex items-center justify-center hover:bg-gray-00"
+                onClick={()=>setIsopen(!isopen)}
               >
                 <svg
                   xmlns="http://www.w3.org/2000/svg"
@@ -587,6 +591,12 @@ console.log(activeuser,activeCompany)
               
             </div>
           )}
+
+          {isopen?(
+            <div>
+              <Notification/>
+            </div>
+          ):(null)}
     </header>
   );
 }

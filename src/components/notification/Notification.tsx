@@ -1,78 +1,319 @@
-// pages/index.js or app/page.js depending on your Next.js version
+"use client"
 import { useState } from 'react';
-import NotificationPanel from '../components/NotificationPanel';
 
-export default function Notification() {
-  const [showNotifications, setShowNotifications] = useState(false);
+const Notification = () => {
+  const [isOpen, setIsOpen] = useState(false);
+  const [activeTab, setActiveTab] = useState('All');
+  
+  // Sample notification data
+  const notifications = [
+    {
+      id: 1,
+      type: 'join',
+      user: {
+        name: 'Anna Srzand',
+        avatar: '/avatars/anna.jpg',
+      },
+      action: 'joined to',
+      target: '🔥 Final Presentation',
+      time: '2h ago',
+      category: 'Social Media Plan',
+      unread: true,
+    },
+    {
+      id: 2,
+      type: 'mention',
+      user: {
+        name: 'Jess Raddon',
+        initials: 'JR',
+        color: 'bg-orange-200',
+      },
+      action: 'mention you in',
+      target: '😍 Tennis List',
+      time: '4h ago',
+      category: 'Hobby List',
+      unread: true,
+    },
+    {
+      id: 3,
+      type: 'request',
+      user: {
+        name: 'Sandra Marx',
+        avatar: '/avatars/sandra.jpg',
+      },
+      action: 'is requesting to upgrade Plan',
+      time: '12h ago',
+      category: 'Hobby List',
+      requiresAction: true,
+      unread: true,
+    },
+    {
+      id: 4,
+      type: 'upload',
+      user: {
+        name: 'Adam Smith',
+        avatar: '/avatars/adam.jpg',
+      },
+      action: 'upload a file',
+      file: {
+        name: 'landing_page_ver2.fig',
+        size: '2mb',
+      },
+      time: '1d ago',
+      unread: false,
+    },
+    {
+      id: 5,
+      type: 'edit',
+      user: {
+        name: 'Ralph Turner',
+        initials: 'RT',
+        color: 'bg-purple-200',
+      },
+      action: 'edited',
+      target: '🎉 Celebrate Info',
+      time: '4h ago',
+      category: 'Hobby List',
+      followUp: "Let's add it to the main secret document",
+      secretKey: 'x9ys',
+      unread: false,
+    },
+    {
+      id: 5,
+      type: 'edit',
+      user: {
+        name: 'Ralph Turner',
+        initials: 'RT',
+        color: 'bg-purple-200',
+      },
+      action: 'edited',
+      target: '🎉 Celebrate Info',
+      time: '4h ago',
+      category: 'Hobby List',
+      followUp: "Let's add it to the main secret document",
+      secretKey: 'x9ys',
+      unread: false,
+    },
+    {
+      id: 5,
+      type: 'edit',
+      user: {
+        name: 'Ralph Turner',
+        initials: 'RT',
+        color: 'bg-purple-200',
+      },
+      action: 'edited',
+      target: '🎉 Celebrate Info',
+      time: '4h ago',
+      category: 'Hobby List',
+      followUp: "Let's add it to the main secret document",
+      secretKey: 'x9ys',
+      unread: false,
+    },
+    {
+      id: 5,
+      type: 'edit',
+      user: {
+        name: 'Ralph Turner',
+        initials: 'RT',
+        color: 'bg-purple-200',
+      },
+      action: 'edited',
+      target: '🎉 Celebrate Info',
+      time: '4h ago',
+      category: 'Hobby List',
+      followUp: "Let's add it to the main secret document",
+      secretKey: 'x9ys',
+      unread: false,
+    },
+    {
+      id: 5,
+      type: 'edit',
+      user: {
+        name: 'Ralph Turner',
+        initials: 'RT',
+        color: 'bg-purple-200',
+      },
+      action: 'edited',
+      target: '🎉 Celebrate Info',
+      time: '4h ago',
+      category: 'Hobby List',
+      followUp: "Let's add it to the main secret document",
+      secretKey: 'x9ys',
+      unread: false,
+    },
+    {
+      id: 5,
+      type: 'edit',
+      user: {
+        name: 'Ralph Turner',
+        initials: 'RT',
+        color: 'bg-purple-200',
+      },
+      action: 'edited',
+      target: '🎉 Celebrate Info',
+      time: '4h ago',
+      category: 'Hobby List',
+      followUp: "Let's add it to the main secret document",
+      secretKey: 'x9ys',
+      unread: false,
+    },
+    {
+      id: 5,
+      type: 'edit',
+      user: {
+        name: 'Ralph Turner',
+        initials: 'RT',
+        color: 'bg-purple-200',
+      },
+      action: 'edited',
+      target: '🎉 Celebrate Info',
+      time: '4h ago',
+      category: 'Hobby List',
+      followUp: "Let's add it to the main secret document",
+      secretKey: 'x9ys',
+      unread: false,
+    },
+  ];
 
-  return (
-    <div className="min-h-screen bg-gray-100">
-      <header className="bg-white shadow-sm">
-        <div className="max-w-7xl mx-auto px-4 py-4 flex justify-between items-center">
-          <div className="flex items-center space-x-4">
-            <input 
-              type="text" 
-              placeholder="Search" 
-              className="border rounded-md px-3 py-2 w-64"
-            />
-            <button className="text-gray-500 hover:text-gray-700">
-              Advanced ▼
-            </button>
-          </div>
+  const tabs = [
+    { name: 'All', count: 8 },
+    { name: 'Following', count: 6 },
+    { name: 'Archive', count: null },
+  ];
+
+
+  const markAllAsRead = () => {
+    console.log('Marked all as read');
+  };
+
+  const handleAccept = (id) => {
+    console.log('Accepted request', id);
+  };
+  
+  const handleDecline = (id) => {
+    console.log('Declined request', id);
+  };
+
+  const filterNotifications = () => {
+    return notifications;
+  };
+
+  const renderNotification = (notification) => {
+    return (
+      <div key={notification.id} className={`py-3 px-4 hover:bg-gray-50 ${notification.unread ? 'bg-blue-50/30' : ''}`}>
+        <div className="flex items-start gap-3">
+          {/* {renderAvatar(notification.user)} */}
           
-          <div className="flex items-center space-x-4">
-            <button className="text-gray-500 hover:text-gray-700">
-              <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 5a2 2 0 012-2h10a2 2 0 012 2v16l-7-3.5L5 21V5z" />
-              </svg>
-            </button>
-            <button className="text-gray-500 hover:text-gray-700">
-              <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 10V3L4 14h7v7l9-11h-7z" />
-              </svg>
-            </button>
-            <button 
-              className="text-gray-500 hover:text-gray-700 relative"
-              onClick={() => setShowNotifications(!showNotifications)}
-            >
-              <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 17h5l-1.405-1.405A2.032 2.032 0 0118 14.158V11a6.002 6.002 0 00-4-5.659V5a2 2 0 10-4 0v.341C7.67 6.165 6 8.388 6 11v3.159c0 .538-.214 1.055-.595 1.436L4 17h5m6 0v1a3 3 0 11-6 0v-1m6 0H9" />
-              </svg>
-              <span className="absolute top-0 right-0 h-2 w-2 bg-orange-500 rounded-full"></span>
-            </button>
-            <button className="text-gray-500 hover:text-gray-700">
-              <div className="h-8 w-8 bg-gray-200 rounded-full"></div>
-            </button>
-          </div>
-        </div>
-      </header>
-
-      <div className="max-w-7xl mx-auto px-4 py-8">
-        <div className="bg-white shadow rounded-lg p-6">
-          <div className="border-b pb-4 mb-4">
-            <div className="flex space-x-4">
-              <button className="px-4 py-2 font-medium border-b-2 border-black">Draft</button>
-              <button className="px-4 py-2 text-gray-500">Preview</button>
+          <div className="flex-1 min-w-0">
+            <div className="text-sm">
+              <span className="font-medium">{notification.user.name}</span>{' '}
+              <span className="text-gray-600">{notification.action}</span>{' '}
+              {notification.target && <span className="font-medium">{notification.target}</span>}
             </div>
-          </div>
-          
-          <div className="prose max-w-none">
-            <p>Hey @Anna Sosnovich</p>
-            <p>
-              Once you have a viable prototype (whether this is for a website, mobile app, or 
-              another digital product) you need to put it to the 
-              <a href="#" className="text-blue-600"> the test</a>.
-            </p>
-            <p>
-              You can <span className="underline">understand where the user is confused</span> and what 
-              they struggle with. The feedback you gain will inform the next stage of the 
-              development process, highlighting areas that need attention.
-            </p>
+            
+            <div className="flex items-center mt-1 text-xs text-gray-500">
+              <span>{notification.time}</span>
+              {notification.category && (
+                <>
+                  <span className="mx-1">•</span>
+                  <span>{notification.category}</span>
+                </>
+              )}
+            </div>
+            
+            {notification.file && (
+              <div className="mt-2 flex items-center p-2 bg-gray-50 rounded-md">
+                <div className="w-6 h-6 flex-shrink-0 mr-2">
+                  <span className="text-red-500">📄</span>
+                </div>
+                <div className="flex-1 min-w-0">
+                  <p className="text-xs font-medium truncate">{notification.file.name}</p>
+                  <p className="text-xs text-gray-500">{notification.file.size}</p>
+                </div>
+              </div>
+            )}
+            
+            {notification.requiresAction && (
+              <div className="mt-2 flex gap-2">
+                <button 
+                  onClick={() => handleAccept(notification.id)}
+                  className="px-4 py-1 bg-black text-white text-xs rounded-md hover:bg-gray-800"
+                >
+                  Accept
+                </button>
+                <button 
+                  onClick={() => handleDecline(notification.id)}
+                  className="px-4 py-1 bg-white text-black text-xs border border-gray-300 rounded-md hover:bg-gray-50"
+                >
+                  Decline
+                </button>
+              </div>
+            )}
+            
+            {notification.followUp && (
+              <div className="mt-2 text-sm">
+                {notification.followUp} 
+                {notification.secretKey && (
+                  <span className="ml-1 px-1 py-0.5 bg-purple-100 text-purple-800 rounded text-xs">
+                    {notification.secretKey}
+                  </span>
+                )}
+              </div>
+            )}
           </div>
         </div>
       </div>
+    );
+  };
 
-      {showNotifications && <NotificationPanel />}
+  return (
+    <div className="relative">
+           
+        <div className="absolute right-0 mt-2 w-96 bg-white rounded-md shadow-lg border border-gray-200 overflow-hidden z-50">
+          <div className="flex items-center justify-between px-4 py-3 border-b">
+            <h3 className="text-base font-semibold">Notifications</h3>
+            <button 
+              onClick={markAllAsRead} 
+              className="text-sm text-blue-600 hover:text-blue-800 hover:underline"
+            >
+              Mark all as read
+            </button>
+          </div>
+
+          {/* Tabs */}
+          <div className="flex border-b relative">
+            {tabs.map((tab,index) => (
+              <button
+                key={index}
+                className={`flex-1 px-4 py-2 text-sm font-medium ${
+                  activeTab === tab.name 
+                    ? 'text-black border-b-2 border-black' 
+                    : 'text-gray-600 hover:text-gray-800'
+                }`}
+                onClick={() => setActiveTab(tab.name)}
+              >
+                <div className="flex items-center justify-center">
+                  {tab.name}
+                  {tab.count && (
+                    <span className={`ml-1.5 px-1.5 py-0.5 rounded-full text-xs ${
+                      activeTab === tab.name ? 'bg-black text-white' : 'bg-gray-100'
+                    }`}>
+                      {tab.count}
+                    </span>
+                  )}
+                </div>
+              </button>
+            ))}
+          </div>
+
+          {/* Notification List */}
+          <div className="h-screen overflow-y-auto">
+            {filterNotifications().map(renderNotification)}
+          </div>
+        </div>
     </div>
   );
-}
+};
+
+export default Notification;
