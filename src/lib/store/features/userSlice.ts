@@ -36,6 +36,10 @@ export interface UserProfile {
   password: string;
   phoneNumber?: string;
   dateOfBirth?: Date;
+  type:string
+  name:string
+  logo:string
+
 
 
   
