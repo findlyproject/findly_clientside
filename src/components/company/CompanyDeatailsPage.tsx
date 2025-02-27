@@ -15,6 +15,7 @@ import { MdDelete } from "react-icons/md";
 
 
 const CompanyProfile = ({ id }: { id: string }) => {
+  const activeuser=useAppSelector((state)=>state.user.activeuser)
     const [showModal,setShowModal]=useState(false)
     const [review,setReview]=useState<companyData[]>([])
     const [companyProfile,setCompanyDetails]=useState<companyData>()
@@ -146,9 +147,13 @@ console.log("rewies",rewies);
   const handleFollow=async(companyid)=>{
     const response=await api.post(`/company/follow/${companyid}`)
     console.log("response of follow",response);
-    
+    findCompany()
     
   }
+  console.log("gggg",companyProfile);
+  console.log("activeuseractiveuser",activeuser);
+  
+  
   return (
     <div className={`min-h-screen  py-10 bg-gray-200  flex justify-center items-center  `}>
       <div className={ ` ${showModal&& "bg-black bg-opacity-10"} p-8 bg-white rounded-lg shadow-lg w-full max-w-3xl    `}>
@@ -188,10 +193,14 @@ console.log("rewies",rewies);
             className=" w-56 h-56 object-cover"
           />
           <br></br>
-          {
-            
+          {companyProfile?.followers.includes(activeuser._id)?(
+            <button onClick={()=>handleFollow(companyProfile?._id)} className="bg-primary p-1 rounded-md text-white font-semibold">UnFollow</button>
+          ):(
+<button onClick={()=>handleFollow(companyProfile?._id)} className="bg-primary p-1 rounded-md text-white font-semibold">Follow</button>
+          )
+
           }
-          <button onClick={()=>handleFollow(companyProfile?._id)} className="bg-primary p-1 rounded-md text-white font-semibold">Follow</button>
+          
           </div>
           
           <div className="">
