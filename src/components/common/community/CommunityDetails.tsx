@@ -37,7 +37,7 @@ console.log("isMember",isMember);
         router.push('/community');
       }
     } catch (error) {
-      // Improved error handling with TypeScript type checking
+      
       if (error instanceof AxiosError && error.response) {
         if (error.response.status === 400 || error.response.status === 404) {
           toast.warn(error.response.data.message);
