@@ -56,9 +56,14 @@ const AppliedUsers = () => {
   const postedJobs = async () => {
     const response = await api.get("/company/getjobs");
     if (response.status === 200) {
+      console.log("dd",response);
+      
       setJobs(response.data.postedJobs);
     }
   };
+
+  console.log("jobs",jobs);
+  
 
   const allApplications = async () => {
     const response = await api.get("/company/findapplications");
