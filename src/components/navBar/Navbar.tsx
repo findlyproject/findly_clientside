@@ -27,7 +27,7 @@ function Navbar() {
   const pathname = usePathname();
   const router = useRouter();
   const dispatch = useAppDispatch();
-
+  const [notification,setNotification]=useState(false)
   const { activeuser } = useAppSelector((state) => state.login);
   const { activeCompany } = useAppSelector((state) => state.companyLogin);
 console.log(activeuser,activeCompany)
@@ -284,8 +284,8 @@ console.log(activeuser,activeCompany)
                   </div>
                 )}
               </div>
-              <Link
-                href="/notification"
+              <button
+                onClick={()=>setNotification(!notification)}
                 className="items w-10 h-10 sm:w-12 sm:h-12 rounded-full flex items-center justify-center hover:bg-gray-200"
               >
                 <svg
@@ -302,7 +302,7 @@ console.log(activeuser,activeCompany)
                     d="M14.857 17.082a23.848 23.848 0 0 0 5.454-1.31A8.967 8.967 0 0 1 18 9.75V9A6 6 0 0 0 6 9v.75a8.967 8.967 0 0 1-2.312 6.022c1.733.64 3.56 1.085 5.455 1.31m5.714 0a24.255 24.255 0 0 1-5.714 0m5.714 0a3 3 0 1 1-5.714 0M3.124 7.5A8.969 8.969 0 0 1 5.292 3m13.416 0a8.969 8.969 0 0 1 2.168 4.5"
                   />
                 </svg>
-              </Link>
+              </button>
               <Link
                 href="/community"
                 className="hidden  items w-10 h-10 sm:w-12 sm:h-12 rounded-full md:flex items-center justify-center hover:bg-gray-200"
@@ -530,6 +530,7 @@ console.log(activeuser,activeCompany)
           </Link>
         </div>
       )}
+      {notification && <Notification/>}
     </header>
   );
 }
