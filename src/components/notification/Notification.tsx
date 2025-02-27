@@ -1,52 +1,317 @@
-import React from 'react';
+"use client"
+import { useState } from 'react';
 
 const Notification = () => {
+  const [isOpen, setIsOpen] = useState(false);
+  const [activeTab, setActiveTab] = useState('All');
+  
+  // Sample notification data
   const notifications = [
-    { id: 1, type: 'success', message: 'Your account has been created successfully!', log:"/assets/profile.png/" },
-    { id: 2, type: 'error', message: 'There was an issue with your payment. Please try again.', log:"/assets/profile.png/" },
-    { id: 3, type: 'info', message: 'Your profile was updated successfully.', log:"/assets/profile.png/" },
-    { id: 4, type: 'warning', message: 'Your session is about to expire.', log:"/assets/profile.png/" },
-    { id: 5, type: 'success', message: 'Your account has been created successfully!', log:"/assets/profile.png/" },
-    { id: 6, type: 'error', message: 'There was an issue with your payment. Please try again.', log:"/assets/profile.png/" },
-    { id: 7, type: 'info', message: 'Your profile was updated successfully.', log:"/assets/profile.png/" },
-    { id: 8, type: 'warning', message: 'Your session is about to expire.', log:"/assets/profile.png/" },
-    { id: 9, type: 'success', message: 'Your account has been created successfully!', log:"/assets/profile.png/" },
-    { id: 10, type: 'error', message: 'There was an issue with your payment. Please try again.', log:"/assets/profile.png/" },
-    { id: 11, type: 'info', message: 'Your profile was updated successfully.', log:"/assets/profile.png/" },
-    { id: 12, type: 'warning', message: 'Your session is about to expire.', log:"/assets/profile.png/" },
+    {
+      id: 1,
+      type: 'join',
+      user: {
+        name: 'Anna Srzand',
+        avatar: '/avatars/anna.jpg',
+      },
+      action: 'joined to',
+      target: '🔥 Final Presentation',
+      time: '2h ago',
+      category: 'Social Media Plan',
+      unread: true,
+    },
+    {
+      id: 2,
+      type: 'mention',
+      user: {
+        name: 'Jess Raddon',
+        initials: 'JR',
+        color: 'bg-orange-200',
+      },
+      action: 'mention you in',
+      target: '😍 Tennis List',
+      time: '4h ago',
+      category: 'Hobby List',
+      unread: true,
+    },
+    {
+      id: 3,
+      type: 'request',
+      user: {
+        name: 'Sandra Marx',
+        avatar: '/avatars/sandra.jpg',
+      },
+      action: 'is requesting to upgrade Plan',
+      time: '12h ago',
+      category: 'Hobby List',
+      requiresAction: true,
+      unread: true,
+    },
+    {
+      id: 4,
+      type: 'upload',
+      user: {
+        name: 'Adam Smith',
+        avatar: '/avatars/adam.jpg',
+      },
+      action: 'upload a file',
+      file: {
+        name: 'landing_page_ver2.fig',
+        size: '2mb',
+      },
+      time: '1d ago',
+      unread: false,
+    },
+    {
+      id: 5,
+      type: 'edit',
+      user: {
+        name: 'Ralph Turner',
+        initials: 'RT',
+        color: 'bg-purple-200',
+      },
+      action: 'edited',
+      target: '🎉 Celebrate Info',
+      time: '4h ago',
+      category: 'Hobby List',
+      followUp: "Let's add it to the main secret document",
+      secretKey: 'x9ys',
+      unread: false,
+    },
+    {
+      id: 5,
+      type: 'edit',
+      user: {
+        name: 'Ralph Turner',
+        initials: 'RT',
+        color: 'bg-purple-200',
+      },
+      action: 'edited',
+      target: '🎉 Celebrate Info',
+      time: '4h ago',
+      category: 'Hobby List',
+      followUp: "Let's add it to the main secret document",
+      secretKey: 'x9ys',
+      unread: false,
+    },
+    {
+      id: 5,
+      type: 'edit',
+      user: {
+        name: 'Ralph Turner',
+        initials: 'RT',
+        color: 'bg-purple-200',
+      },
+      action: 'edited',
+      target: '🎉 Celebrate Info',
+      time: '4h ago',
+      category: 'Hobby List',
+      followUp: "Let's add it to the main secret document",
+      secretKey: 'x9ys',
+      unread: false,
+    },
+    {
+      id: 5,
+      type: 'edit',
+      user: {
+        name: 'Ralph Turner',
+        initials: 'RT',
+        color: 'bg-purple-200',
+      },
+      action: 'edited',
+      target: '🎉 Celebrate Info',
+      time: '4h ago',
+      category: 'Hobby List',
+      followUp: "Let's add it to the main secret document",
+      secretKey: 'x9ys',
+      unread: false,
+    },
+    {
+      id: 5,
+      type: 'edit',
+      user: {
+        name: 'Ralph Turner',
+        initials: 'RT',
+        color: 'bg-purple-200',
+      },
+      action: 'edited',
+      target: '🎉 Celebrate Info',
+      time: '4h ago',
+      category: 'Hobby List',
+      followUp: "Let's add it to the main secret document",
+      secretKey: 'x9ys',
+      unread: false,
+    },
+    {
+      id: 5,
+      type: 'edit',
+      user: {
+        name: 'Ralph Turner',
+        initials: 'RT',
+        color: 'bg-purple-200',
+      },
+      action: 'edited',
+      target: '🎉 Celebrate Info',
+      time: '4h ago',
+      category: 'Hobby List',
+      followUp: "Let's add it to the main secret document",
+      secretKey: 'x9ys',
+      unread: false,
+    },
+    {
+      id: 5,
+      type: 'edit',
+      user: {
+        name: 'Ralph Turner',
+        initials: 'RT',
+        color: 'bg-purple-200',
+      },
+      action: 'edited',
+      target: '🎉 Celebrate Info',
+      time: '4h ago',
+      category: 'Hobby List',
+      followUp: "Let's add it to the main secret document",
+      secretKey: 'x9ys',
+      unread: false,
+    },
   ];
 
-  const getNotificationClass = (type:any) => {
-    switch (type) {
-      case 'success':
-        return 'bg-green-100 text-green-800';
-      case 'error':
-        return 'bg-red-100 text-red-800';
-      case 'info':
-        return 'bg-blue-100 text-blue-800';
-      case 'warning':
-        return 'bg-yellow-100 text-yellow-800';
-      default:
-        return '';
-    }
+  const tabs = [
+    { name: 'All', count: 8 },
+    { name: 'Following', count: 6 },
+    { name: 'Archive', count: null },
+  ];
+
+
+  const markAllAsRead = () => {
+    console.log('Marked all as read');
+  };
+
+  const handleAccept = (id) => {
+    console.log('Accepted request', id);
+  };
+  
+  const handleDecline = (id) => {
+    console.log('Declined request', id);
+  };
+
+  const filterNotifications = () => {
+    return notifications;
+  };
+
+  const renderNotification = (notification) => {
+    return (
+      <div key={notification.id} className={`py-3 px-4 hover:bg-gray-50 ${notification.unread ? 'bg-blue-50/30' : ''}`}>
+        <div className="flex items-start gap-3">
+          {/* {renderAvatar(notification.user)} */}
+          
+          <div className="flex-1 min-w-0">
+            <div className="text-sm">
+              <span className="font-medium">{notification.user.name}</span>{' '}
+              <span className="text-gray-600">{notification.action}</span>{' '}
+              {notification.target && <span className="font-medium">{notification.target}</span>}
+            </div>
+            
+            <div className="flex items-center mt-1 text-xs text-gray-500">
+              <span>{notification.time}</span>
+              {notification.category && (
+                <>
+                  <span className="mx-1">•</span>
+                  <span>{notification.category}</span>
+                </>
+              )}
+            </div>
+            
+            {notification.file && (
+              <div className="mt-2 flex items-center p-2 bg-gray-50 rounded-md">
+                <div className="w-6 h-6 flex-shrink-0 mr-2">
+                  <span className="text-red-500">📄</span>
+                </div>
+                <div className="flex-1 min-w-0">
+                  <p className="text-xs font-medium truncate">{notification.file.name}</p>
+                  <p className="text-xs text-gray-500">{notification.file.size}</p>
+                </div>
+              </div>
+            )}
+            
+            {notification.requiresAction && (
+              <div className="mt-2 flex gap-2">
+                <button 
+                  onClick={() => handleAccept(notification.id)}
+                  className="px-4 py-1 bg-black text-white text-xs rounded-md hover:bg-gray-800"
+                >
+                  Accept
+                </button>
+                <button 
+                  onClick={() => handleDecline(notification.id)}
+                  className="px-4 py-1 bg-white text-black text-xs border border-gray-300 rounded-md hover:bg-gray-50"
+                >
+                  Decline
+                </button>
+              </div>
+            )}
+            
+            {notification.followUp && (
+              <div className="mt-2 text-sm">
+                {notification.followUp} 
+                {notification.secretKey && (
+                  <span className="ml-1 px-1 py-0.5 bg-purple-100 text-purple-800 rounded text-xs">
+                    {notification.secretKey}
+                  </span>
+                )}
+              </div>
+            )}
+          </div>
+        </div>
+      </div>
+    );
   };
 
   return (
-    <div className="min-h-screen bg-gray-50 p-8">
-      <h1 className="text-2xl font-semibold text-gray-800 mb-4">Notifications</h1>
-      <div className="space-y-4">
-        {notifications.map((notification) => (
-          <div
-            key={notification.id}
-            className={`p-4 rounded-lg shadow-md flex items-center gap-3 ${getNotificationClass(notification.type)}`}
-          >
-            <img src={notification.log} alt="user logo" 
-            className='w-8 h-8 bg-transparent'
-            />
-            <p className="text-sm">{notification.message}</p>
+    <div className="relative">
+           
+        <div className="absolute right-0 mt-2 w-96 bg-white rounded-md shadow-lg border border-gray-200 overflow-hidden z-50">
+          <div className="flex items-center justify-between px-4 py-3 border-b">
+            <h3 className="text-base font-semibold">Notifications</h3>
+            <button 
+              onClick={markAllAsRead} 
+              className="text-sm text-blue-600 hover:text-blue-800 hover:underline"
+            >
+              Mark all as read
+            </button>
           </div>
-        ))}
-      </div>
+
+          {/* Tabs */}
+          <div className="flex border-b relative">
+            {tabs.map((tab,index) => (
+              <button
+                key={index}
+                className={`flex-1 px-4 py-2 text-sm font-medium ${
+                  activeTab === tab.name 
+                    ? 'text-black border-b-2 border-black' 
+                    : 'text-gray-600 hover:text-gray-800'
+                }`}
+                onClick={() => setActiveTab(tab.name)}
+              >
+                <div className="flex items-center justify-center">
+                  {tab.name}
+                  {tab.count && (
+                    <span className={`ml-1.5 px-1.5 py-0.5 rounded-full text-xs ${
+                      activeTab === tab.name ? 'bg-black text-white' : 'bg-gray-100'
+                    }`}>
+                      {tab.count}
+                    </span>
+                  )}
+                </div>
+              </button>
+            ))}
+          </div>
+
+          {/* Notification List */}
+          <div className="h-screen overflow-y-auto">
+            {filterNotifications().map(renderNotification)}
+          </div>
+        </div>
     </div>
   );
 };
