@@ -117,6 +117,7 @@ const DetailsUser = ({ id }: { id: string }) => {
   const user = useAppSelector(
     (state) => state.user.userdetails
   ) as UserProfile | null;
+console.log("usereeee",user);
 
 
   useEffect(() => {
@@ -130,8 +131,6 @@ const DetailsUser = ({ id }: { id: string }) => {
   }, [dispatch, id]);
 
   const handleRequest = async () => {
-    console.log("connection userid from params");
-
     const response = await api.post(`/connecting/request/${id}`);
     console.log(" responsevresponse connection", response.data.targetUser);
     dispatch(setDetailes(response.data.targetUser));

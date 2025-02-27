@@ -6,12 +6,16 @@ import { UserProfile } from "./userSlice";
 export interface companyData{
     email:string,
     password:string,
+    about:string
     name: string;
     age: number;
     contact: string;
     logo: string;
+    banner:string
+    startingDate:Date
     address: {
         city: string;
+        landmark:string
         country: string;
         pincode: string;
         state: string;
@@ -22,8 +26,28 @@ export interface companyData{
     isDeleted: boolean;
     subscriptionStartDate: string | null;
     subscriptionEndDate: string | null;
-    employees: string[]; 
+    employees:[
+        {
+            employee:string,
+            position:string
+        }
+    ] 
     _id: string;
+    services:string[]
+    socialMedia:{
+        facebook:string
+        instagram:string
+        linkedin:string
+        twitter:string
+      }
+      workHours:{
+        start:string,
+        end:string
+      }
+      founder:string
+      foundedAt:string;
+      headquarters:string
+      applications:applicationData[]
 }
 
 

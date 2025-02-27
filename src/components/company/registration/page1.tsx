@@ -7,12 +7,15 @@ import * as Yup from "yup";
 import api from "@/utils/api";
 import { useRouter } from "next/navigation";
 import { toast } from "react-toastify";
+import { useAppDispatch } from "@/lib/store/hooks";
+import { setActiveCompany } from "@/lib/store/features/companyslice";
 
 const Page1: React.FC = () => {
   const [loading, setLoading] = useState(false);
   const [otpSent, setOtpSent] = useState(false);
   const [resendCount, setResendCount] = useState(0); // State to track OTP resend attempts
   const router = useRouter();
+  const dispatch=useAppDispatch()
 
   // Validation Schema
   const validationSchema = Yup.object().shape({
@@ -52,8 +55,14 @@ const Page1: React.FC = () => {
     setLoading(true);
     try {
       const response = await api.post("company/verify-otp", values);
+      if(response.status===201){
+        const data= response.data.company
+        dispatch(setActiveCompany(data))
+      }
       toast.success("OTP verified successfully!");
+  
       router.push(`/company/register/form?email=${encodeURIComponent(values.email)}&name=${encodeURIComponent(values.name)}`);
+
     } catch (error) {
       toast.error("Invalid OTP. Please try again.");
     } finally {

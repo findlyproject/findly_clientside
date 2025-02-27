@@ -97,11 +97,11 @@ console.log("showLocationSuggestions",showLocationSuggestions);
 
  
   return (
-    <div className="w-full h-full">
-      <div className="flex flex-col md:flex-row items-center justify-center  w-full  pt-20 ">
+    <div className="w-full h-full bg-primary">
+      <div className="flex flex-col md:flex-row items-center justify-center  w-full   pt-20 ">
 
 
-        <div className="w-full flex flex-col-reverse md:flex-row justify-evenly items-center  space-y-8 md:space-y-0 md:space-x-10 p-4 md:p-8">
+        <div className="w-full flex flex-col-reverse md:flex-row justify-evenly items-center   space-y-8 md:space-y-0 md:space-x-10 p-4 md:p-8">
 
       
 
@@ -231,7 +231,7 @@ console.log("showLocationSuggestions",showLocationSuggestions);
         </div>
       </div>
       </section>
-      <div className="relative flex flex-col items-center bg-white py-20">
+      <div className="relative flex flex-col items-center bg-primary py-20">
 
         <div className="relative bg-white shadow-lg p-10 flex flex-col md:flex-row items-center w-2/3 justify-center z-10">
           <div className="md:w-2/3">

@@ -25,7 +25,7 @@ const router=useRouter()
           </button>
           {menu && (
   <div className=" size-36 rounded-full  fixed bottom-1 right-1 flex items-center justify-center ">
-    {/* First Icon - Positioned at the Top */}
+
     <svg
       xmlns="http://www.w3.org/2000/svg"
       fill="none"
@@ -42,7 +42,7 @@ const router=useRouter()
       />
     </svg>
 
-    {/* Second Icon - Positioned at the Bottom */}
+
     <svg
       xmlns="http://www.w3.org/2000/svg"
       fill="none"

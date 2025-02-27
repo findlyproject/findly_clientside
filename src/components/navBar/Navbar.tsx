@@ -33,12 +33,14 @@ const dispatch = useAppDispatch()
   const { activeuser } = useAppSelector((state) => state.login);
   const { activeCompany } = useAppSelector((state) => state.companyLogin);
 console.log(activeuser,activeCompany)
+const route=activeCompany?"company":"user"
   const [activeTab, setActiveTab] = useState("Home");
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
   const [searchQuery, setSearchQuery] = useState("");
   const [searchResults, setSearchResults] = useState<UserProfile[]>([]);
 
+    console.log("searchResults",searchResults);
     
       useEffect(() => {
         if (searchQuery.length > 0) {
@@ -48,7 +50,7 @@ console.log(activeuser,activeCompany)
                 `/user/usersearch?firstName=${searchQuery}`
               );
     
-              setSearchResults(response.data.users);
+              setSearchResults(response.data.results);
             } catch (error) {
               console.error("Error fetching users:", error);
             }
@@ -167,12 +169,40 @@ console.log(activeuser,activeCompany)
                 </form>
               </div>
               {searchQuery && searchResults.length > 0 && (
+  <div className="absolute top-full left-0 mt-2 w-full max-h-60 overflow-y-auto border border-gray-300 bg-white p-4 rounded-lg shadow-md z-50">
+    <ul className="mt-2 space-y-2">
+      {searchResults.map((item) => (
+        <li
+          key={item._id}
+          className="cursor-pointer flex items-center gap-2 pl-4 hover:bg-primary hover:bg-opacity-20 rounded-full"
+          onClick={() => router.push(`/${route}/${item._id}/${item.type}`)}
+        >
+          <img
+            width={100}
+            height={100}
+            src={item.type === "User" ? item.profileImage : item.logo}
+            alt={item.type === "User" ? `${item.firstName} ${item.lastName}` : item.name}
+            className="w-7 h-7 rounded-full"
+          />
+          <div>
+            <p className="text-sm font-semibold">
+              {item.type === "User" ? `${item.firstName} ${item.lastName}` : item.name}
+            </p>
+            <p className="text-sm text-gray-500">{item.email}</p>
+          </div>
+        </li>
+      ))}
+    </ul>
+  </div>
+)}
+
+              {/* {searchQuery && searchResults.length > 0 && (
                 <div className="absolute top-full left-0 mt-2 w-full max-h-60 overflow-y-auto border  border-gray-300 bg-white p-4 rounded-lg shadow-md z-50 ">
                   <ul className="mt-2 space-y-2 ">
                     {searchResults.map((user) => (
                       <li key={user._id} className="cursor-pointer flex items-center gap-2 pl-4 hover:bg-primary hover:bg-opacity-20 rounded-full"
 
-                        onClick={() => router.push(`/userdetails/${user._id}`)}
+                        onClick={() => router.push(`/${route}/${user._id}`)}
                       >
                         <Image
                           width={100}
@@ -181,10 +211,28 @@ console.log(activeuser,activeCompany)
                           alt={`${user.firstName} ${user.lastName}`}
                           className="w-7 h-7 rounded-full"
                         />
+                          ):(
+                            <img
+                          width={100}
+                          height={100}
+                          src={user.logo}
+                          alt={`${user.name} `}
+                          className="w-7 h-7 rounded-full"
+                        />
+                          )
+                        }
                         <div>
-                          <p className="tex-sm font-semibold">
+                        {
+                          user.type==="User"?(
+                            <p className="tex-sm font-semibold">
                             {user.firstName} {user.lastName}
                           </p>
+                          ):(
+                            <p className="tex-sm font-semibold">
+                            {user.name} 
+                          </p>
+                          )
+                        }
                           <p className="text-sm text-gray-500">
                             {user.email}
                           </p>
@@ -193,7 +241,7 @@ console.log(activeuser,activeCompany)
                     ))}
                   </ul>
                 </div>
-              )}
+              )} */}
             </div>
             
             {/* Right Section */}
