@@ -1,4 +1,5 @@
 import api from '@/utils/api';
+import { Modal } from '@mui/material';
 import Image from 'next/image';
 import React, { useEffect, useState } from 'react';
 import { FaEllipsisV, FaSearch } from 'react-icons/fa';
@@ -18,7 +19,7 @@ const Sidebar: React.FC = ({props}) => {
   const [isModal, setIsModal] = useState(false);
   const [community, setCommunity] = useState<Community[]>([]);
   const [selectedCommunity, setSelectedCommunity] = useState<Community | null>(null);
-console.log("selectedCommunity",selectedCommunity)
+
   const [input, setInput] = useState({
     name: '',
     description: '',
@@ -26,6 +27,37 @@ console.log("selectedCommunity",selectedCommunity)
   });
 
   const [image, setImage] = useState<File | null>(null);
+  const [searchQuery, setSearchQuery] = useState("");
+  const [searchResults, setSearchResults] = useState([]);
+  useEffect(() => {
+    if (searchQuery.length > 0) {
+      const fetchCommunity= async () => {
+        try {
+          const response = await api.get(
+           `/message/search?query=${searchQuery}`
+          );
+
+          setSearchResults(response.data.community);
+        } catch (error) {
+          console.error("Error fetching users:", error);
+        }
+      };
+
+      fetchCommunity();
+    } else {
+      setSearchResults([]);
+    }
+  }, [searchQuery]);
+ 
+   const handleSearchChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+          setSearchQuery(e.target.value);
+        };
+        console.log("searchResults",searchQuery,searchResults)
+
+
+
+
+
 
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
     const { name, value } = e.target;
@@ -34,6 +66,14 @@ console.log("selectedCommunity",selectedCommunity)
       [name]: value,
     }));
   };
+
+
+  const getcommunity =async ()=>{
+    const response = await api.get("/message/all")
+    console.log("respons all comunity",response)
+    setCommunity(response.data.communities)
+}
+
 
   const handleImageChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     if (e.target.files && e.target.files[0]) {
@@ -49,6 +89,9 @@ console.log("selectedCommunity",selectedCommunity)
         description: input.description,
         profile,
       });
+      setIsModal(!isModal)
+      setIsMenuOpen(!isMenuOpen)
+      getcommunity()
       console.log('Response:', response);
     } catch (error) {
       console.error('Error posting data:', error);
@@ -99,25 +142,29 @@ console.log("selectedCommunity",selectedCommunity)
     }
   };
 
+
+
+
+
+
   const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     handleImageToCloud();
   };
-const getcommunity =async ()=>{
-    const response = await api.get("/message/all")
-    console.log("respons all comunity",response)
-    setCommunity(response.data.communities)
-}
+
 
 useEffect(()=>{
 getcommunity()
 
 },[props.community])
+
+
+
   return (
     <aside className="w-1/4 bg-white border-r p-4 overflow-y-auto hidden md:block">
       <div className="flex justify-between">
         <h2 className="text-xl font-semibold">
-          Messages <span className="text-gray-500">(22)</span>
+          Messages 
         </h2>
         <div className="relative inline-block">
           <div className="cursor-pointer p-2 rounded-full hover:bg-gray-200" onClick={() => setIsMenuOpen(!isMenuOpen)}>
@@ -127,7 +174,7 @@ getcommunity()
           {isMenuOpen && (
             <div className="absolute right-0 mt-2 w-48 bg-white border rounded-lg shadow-lg z-50">
               <div className="py-2 text-sm text-gray-700">
-                <button className="px-4 py-2 hover:bg-gray-100 cursor-pointer" onClick={() => setIsModal(true)}>
+                <button className="px-4 py-2 hover:bg-gray-100 cursor-pointer" onClick={()=>setIsModal(!isModal)}>
                   New Community
                 </button>
 
@@ -194,9 +241,40 @@ getcommunity()
       </div>
 
       <div className="mt-4 relative">
-        <input type="text" placeholder="Search" className="w-full p-2 pl-10 border rounded-md focus:outline-none" />
-        <FaSearch className="absolute left-3 top-3 text-gray-400" />
-      </div>
+          <input
+            type="text"
+            placeholder="Search"
+            onChange={handleSearchChange}
+            className="w-full p-2 pl-10 border rounded-md focus:outline-none"
+          />
+          <FaSearch className="absolute left-3 top-3 text-gray-400" />
+          {searchQuery && searchResults.length > 0 && (
+                <div className="absolute top-full left-0 mt-2 w-full max-h-60 overflow-y-auto border  border-gray-300 bg-white p-4 rounded-lg shadow-md z-50 ">
+                  <ul className="mt-2 space-y-2 ">
+                    {searchResults.map((community) => (
+                      <li key={community._id} className="cursor-pointer flex items-center gap-2 pl-4 hover:bg-primary hover:bg-opacity-20 rounded-full"
+
+                        onClick={()=>props.setCommunity(community)}
+                      >
+                        <Image
+                          width={100}
+                          height={100}
+                          src={community.profile || "/default-profile.png"}
+                          alt={`${community.name}`}
+                          className="w-7 h-7 rounded-full"
+                        />
+                        <div>
+                          <p className="tex-sm font-semibold">
+                             {community.name}
+                          </p>
+                          
+                        </div>
+                      </li>
+                    ))}
+                  </ul>
+                </div>
+              )}
+        </div>
 
       <div className="space-y-4">
         {community.map((item) => (
