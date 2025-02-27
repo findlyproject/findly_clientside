@@ -20,7 +20,7 @@ export const CommunityPanel = () => {
             <div
               key={user._id}
               className="flex items-center p-3 hover:bg-gray-100 cursor-pointer rounded-lg transition"
-              onClick={() => router.push(`/userdetails/${user._id}`)}
+              onClick={() => router.push(`/user/${user._id}/User`)}
             >
               <div className="w-14 h-14 rounded-full overflow-hidden">
                 <Image src={user.profileImage} className="w-full h-full object-cover" width={20} height={20} alt={user.firstName} />

@@ -122,7 +122,7 @@ export const PostMenu = ({ post }: PostPreviewProps) => {
         {UpdateOpen && post?._id && (
           <section className="fixed inset-0 z-10 flex items-center justify-center bg-black bg-opacity-50">
             <OutsideClickHandler onOutsideClick={() => setIsUpdateOpen(false)}>
-              <UpdatePost post={post} setIsUpdateOpen={setIsUpdateOpen} />
+              <UpdatePost post={post}  />
             </OutsideClickHandler>
           </section>
         )}

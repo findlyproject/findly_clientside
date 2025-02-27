@@ -6,14 +6,14 @@ import { IPost } from "@/lib/store/features/postSlice";
 import Image from "next/image";
 import { toast } from "react-toastify";
 
-export const UpdatePost = ({ post,setIsUpdateOpen }: { post: IPost,setIsUpdateOpen:boolean }) => {
+export const UpdatePost = ({ post }: { post: IPost }) => {
   const dispatch = useAppDispatch();
   const [description, setDescription] = useState(post?.description ?? "");
   const [previewImages, setPreviewImages] = useState<string[]>([]);
   const [previewVideo, setPreviewVideo] = useState<string | null>(null);
   const [selectedFiles, setSelectedFiles] = useState<File[]>([]);
   const [oldPost, setOldPost] = useState<IPost | null>(post);
-
+console.log("jiii")
   useEffect(() => {
     setOldPost(post);   
   }, [post]);
@@ -74,13 +74,12 @@ export const UpdatePost = ({ post,setIsUpdateOpen }: { post: IPost,setIsUpdateOp
       .then(() => {
         toast.success("Post updated successfully!");
         dispatch(fetchAllPosts())
-        setIsUpdateOpen(false)
       })
       .catch((error) => console.error("Error updating post:", error));
   };
 
   return (
-    <div className="max-w-lg mx-auto bg-white p-8 rounded-lg shadow-lg">
+    <div className=" mx-auto bg-white p-8 rounded-lg shadow-lg z-50">
       <h2 className="text-2xl font-bold text-gray-900">Update Post</h2>
 
       {/* Existing Post View */}
@@ -89,10 +88,10 @@ export const UpdatePost = ({ post,setIsUpdateOpen }: { post: IPost,setIsUpdateOp
           <h3 className="text-lg font-semibold text-gray-800">Existing Post</h3>
 
           {/* Existing Images */}
-          {oldPost.images?.length > 0 && (
+          {oldPost?.images?.length && oldPost?.images?.length > 0 && (
             <div className="flex gap-2 flex-wrap mt-2">
               {oldPost.images?.map((src, index) => (
-                <img
+                <Image
                   key={index}
                   src={src} 
                   alt={`Old Image ${index + 1}`}

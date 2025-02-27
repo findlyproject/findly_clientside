@@ -2,11 +2,14 @@
 import Link from "next/link";
 import React from "react";
 import { useRouter } from "next/navigation";
+import { useAppSelector } from "@/lib/store/hooks";
 const ContactUs: React.FC = () => {
   const router=useRouter()
-
-  
+ const activeCompany = useAppSelector((state) => state.companyLogin.activeCompany)
+    const route=activeCompany?"company":"user"
+ 
   return (
+    
     <section className="w-full xl:py-24 lg:py-20 py-12  border-b border-gray-300 font-inter">
       <div className="w-full max-w-7xl px-6 lg:px-8 mx-auto">
         <div className="grid lg:grid-cols-1 grid-cols-1 gap-x-16 xl:gap-x-24 gap-y-14 max-w-lg md:max-w-3xl lg:max-w-full mx-auto">
@@ -108,7 +111,7 @@ const ContactUs: React.FC = () => {
                 </p>
               </div>
               <div 
-              onClick={()=>router.push(`/rateus`)}
+              onClick={()=>router.push(`${route}/rateus`)}
               className="rounded-2xl border border-gray-200 bg-white p-7 group transition-all duration-500 hover:bg-primary">
                 <Link
                   href="#"
