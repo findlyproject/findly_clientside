@@ -21,7 +21,7 @@ export interface Job {
   contactPhone: string;
   postedBy: PostedBy;
   likes: string[];
-  salary?: Salary; 
+  salary?: Salary[] | undefined; 
   comments: string[];
   reports: string[];
   status: string;

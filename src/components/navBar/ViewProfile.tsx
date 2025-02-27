@@ -9,6 +9,7 @@ import { useRouter } from "next/navigation";
 import Link from "next/link";
 
 import { UserProfile } from "@/lib/store/features/userSlice";
+import ModalUnstyled from "./Uploadresum";
 
 
 interface Connection {
@@ -20,7 +21,7 @@ interface Connection {
   };
 }
 
-const connections: Connection[] = []; 
+
 export default function ViewProfile() {
   const router = useRouter();
 
@@ -49,7 +50,7 @@ const route=currentUser?"user":"company"
 
 
   return (
-    <div className="max-w-4xl mx-auto bg-white shadow-lg rounded-lg overflow-hidden mt-5">
+    <div className="max-w-4xl mx-auto bg-slate-100 shadow-lg rounded-lg overflow-hidden mt-5 ">
       <div className="max-w-4xl mx-auto bg-white shadow-lg rounded-lg overflow-hidden mt-5">
         <div className="relative h-36 bg-gray-300">
           <Image
@@ -300,7 +301,7 @@ const route=currentUser?"user":"company"
                     ✓ Following
                   </button>
                 </div>
-               
+               <ModalUnstyled/>
               </div>
                
             
