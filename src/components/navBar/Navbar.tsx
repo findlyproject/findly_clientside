@@ -11,6 +11,7 @@ import { UserProfile } from "@/lib/store/features/userSlice";
 import { logOutCompany } from "@/lib/store/features/actions/companyActions";
 import { logoutUser } from "@/lib/store/features/actions/userActions";
 import Image from "next/image";
+import Notification from "../notification/Notification";
 
 
 export const dropDownAfterlogin = (route: string) => [
@@ -33,14 +34,13 @@ const dispatch = useAppDispatch()
   const { activeuser } = useAppSelector((state) => state.login);
   const { activeCompany } = useAppSelector((state) => state.companyLogin);
 console.log(activeuser,activeCompany)
-const route=activeCompany?"company":"user"
   const [activeTab, setActiveTab] = useState("Home");
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
   const [searchQuery, setSearchQuery] = useState("");
   const [searchResults, setSearchResults] = useState<UserProfile[]>([]);
+  const [isopen,setIsopen]=useState(false)
 
-    console.log("searchResults",searchResults);
     
       useEffect(() => {
         if (searchQuery.length > 0) {
@@ -50,7 +50,7 @@ const route=activeCompany?"company":"user"
                 `/user/usersearch?firstName=${searchQuery}`
               );
     
-              setSearchResults(response.data.results);
+              setSearchResults(response.data.users);
             } catch (error) {
               console.error("Error fetching users:", error);
             }
@@ -61,6 +61,7 @@ const route=activeCompany?"company":"user"
           setSearchResults([]);
         }
       }, [searchQuery]);
+  console.log("setIsopen",isopen);
     
       const handleSearchChange = (e: React.ChangeEvent<HTMLInputElement>) => {
         setSearchQuery(e.target.value);
@@ -169,40 +170,12 @@ const route=activeCompany?"company":"user"
                 </form>
               </div>
               {searchQuery && searchResults.length > 0 && (
-  <div className="absolute top-full left-0 mt-2 w-full max-h-60 overflow-y-auto border border-gray-300 bg-white p-4 rounded-lg shadow-md z-50">
-    <ul className="mt-2 space-y-2">
-      {searchResults.map((item) => (
-        <li
-          key={item._id}
-          className="cursor-pointer flex items-center gap-2 pl-4 hover:bg-primary hover:bg-opacity-20 rounded-full"
-          onClick={() => router.push(`/${route}/${item._id}/${item.type}`)}
-        >
-          <img
-            width={100}
-            height={100}
-            src={item.type === "User" ? item.profileImage : item.logo}
-            alt={item.type === "User" ? `${item.firstName} ${item.lastName}` : item.name}
-            className="w-7 h-7 rounded-full"
-          />
-          <div>
-            <p className="text-sm font-semibold">
-              {item.type === "User" ? `${item.firstName} ${item.lastName}` : item.name}
-            </p>
-            <p className="text-sm text-gray-500">{item.email}</p>
-          </div>
-        </li>
-      ))}
-    </ul>
-  </div>
-)}
-
-              {/* {searchQuery && searchResults.length > 0 && (
                 <div className="absolute top-full left-0 mt-2 w-full max-h-60 overflow-y-auto border  border-gray-300 bg-white p-4 rounded-lg shadow-md z-50 ">
                   <ul className="mt-2 space-y-2 ">
                     {searchResults.map((user) => (
                       <li key={user._id} className="cursor-pointer flex items-center gap-2 pl-4 hover:bg-primary hover:bg-opacity-20 rounded-full"
 
-                        onClick={() => router.push(`/${route}/${user._id}`)}
+                        onClick={() => router.push(`/userdetails/${user._id}`)}
                       >
                         <Image
                           width={100}
@@ -211,28 +184,10 @@ const route=activeCompany?"company":"user"
                           alt={`${user.firstName} ${user.lastName}`}
                           className="w-7 h-7 rounded-full"
                         />
-                          ):(
-                            <img
-                          width={100}
-                          height={100}
-                          src={user.logo}
-                          alt={`${user.name} `}
-                          className="w-7 h-7 rounded-full"
-                        />
-                          )
-                        }
                         <div>
-                        {
-                          user.type==="User"?(
-                            <p className="tex-sm font-semibold">
+                          <p className="tex-sm font-semibold">
                             {user.firstName} {user.lastName}
                           </p>
-                          ):(
-                            <p className="tex-sm font-semibold">
-                            {user.name} 
-                          </p>
-                          )
-                        }
                           <p className="text-sm text-gray-500">
                             {user.email}
                           </p>
@@ -241,7 +196,7 @@ const route=activeCompany?"company":"user"
                     ))}
                   </ul>
                 </div>
-              )} */}
+              )}
             </div>
             
             {/* Right Section */}
@@ -265,7 +220,8 @@ const route=activeCompany?"company":"user"
               </div>
               <Link
                 href=""
-                className="items w-10 h-10 sm:w-12 sm:h-12 rounded-full flex items-center justify-center hover:bg-gray-200"
+                className="items w-10 h-10 sm:w-12 sm:h-12 rounded-full flex items-center justify-center hover:bg-gray-00"
+                onClick={()=>setIsopen(!isopen)}
               >
                 <svg
                   xmlns="http://www.w3.org/2000/svg"
@@ -635,6 +591,12 @@ const route=activeCompany?"company":"user"
               
             </div>
           )}
+
+          {isopen?(
+            <div>
+              <Notification/>
+            </div>
+          ):(null)}
     </header>
   );
 }
