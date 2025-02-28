@@ -113,16 +113,19 @@ export const PostMenu = ({ post }: PostPreviewProps) => {
           </button>
         )}
         {isModalOpen && (
+           <OutsideClickHandler onOutsideClick={() => setIsModalOpen(false)}>
           <ReportPostModal
             postId={post._id}
             onClose={() => setIsModalOpen(false)}
+            
           />
+          </OutsideClickHandler>
         )}
 
         {UpdateOpen && post?._id && (
           <section className="fixed inset-0 z-10 flex items-center justify-center bg-black bg-opacity-50">
             <OutsideClickHandler onOutsideClick={() => setIsUpdateOpen(false)}>
-              <UpdatePost post={post}  />
+              <UpdatePost post={post} setIsUpdateOpen={setIsUpdateOpen} />
             </OutsideClickHandler>
           </section>
         )}
