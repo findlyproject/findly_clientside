@@ -166,13 +166,13 @@ export const PostPreview = ({ post }: PostPreviewProps) => {
         </div>
       </div>
 
-      {/* Like Button with Responsive Padding & Icon Size */}
+     
       <section className="space-y-2">
         <section className="flex items-center justify-around border-t border-gray-200 pt-2">
           {Array.isArray(localPost.likedBy) &&
           localPost.likedBy.find((item) => {
 
-            // return item === currentUser?._id;
+           
             return typeof item === "string" && item == currentUser?._id;
           }) ? (
             <div>

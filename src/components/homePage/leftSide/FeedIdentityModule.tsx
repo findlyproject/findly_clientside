@@ -1,16 +1,16 @@
 "use client";
-import { useRouter } from "next/navigation";
+
 import { useAppSelector } from "@/lib/store/hooks";
 import { useEffect, useState } from "react";
 import api from "@/utils/api";
 
-import Image from "next/image";
+
 
 export const FeedIdentityModule = () => {
   const [connections, setConnections] = useState([]);
-  const router = useRouter();
+  
   const { activeuser } = useAppSelector((state) => state.login);
-  const { activeCompany } = useAppSelector((state) => state.companyLogin);
+
  
   useEffect(() => {
     const fetchConnections = async () => {
@@ -55,7 +55,7 @@ export const FeedIdentityModule = () => {
           <p className="text-gray-500 text-sm">Post</p>
         </div>
         <div className="text-center">
-          <p className="font-bold text-lg">2022</p>
+          <p className="font-bold text-lg">{connections?.length}</p>
           <p className="text-gray-500 text-sm">Connections</p>
         </div>
         <div className="text-center">
