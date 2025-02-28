@@ -36,6 +36,8 @@ console.log(activeuser,activeCompany)
 const route=activeCompany?"company":"user"
   const [activeTab, setActiveTab] = useState("Home");
   const [isMenuOpen, setIsMenuOpen] = useState(false);
+  const [notification, setNotification] = useState(false);
+
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
   const [searchQuery, setSearchQuery] = useState("");
   const [searchResults, setSearchResults] = useState<UserProfile[]>([]);
@@ -202,7 +204,7 @@ const route=activeCompany?"company":"user"
                     {searchResults.map((user) => (
                       <li key={user._id} className="cursor-pointer flex items-center gap-2 pl-4 hover:bg-primary hover:bg-opacity-20 rounded-full"
 
-                        onClick={() => router.push(`/${route}/${user._id}`)}
+                        onClick={() => router.push(`/user/${user._id}/User`)}
                       >
                         <img
                           width={100}
@@ -227,12 +229,6 @@ const route=activeCompany?"company":"user"
                             <p className="tex-sm font-semibold">
                             {user.firstName} {user.lastName}
                           </p>
-                          ):(
-                            <p className="tex-sm font-semibold">
-                            {user.name} 
-                          </p>
-                          )
-                        }
                           <p className="text-sm text-gray-500">
                             {user.email}
                           </p>
@@ -263,8 +259,8 @@ const route=activeCompany?"company":"user"
                     />
                   </svg>
               </div>
-              <Link
-                href=""
+              <button
+              onClick={()=>setNotification(!notification)}
                 className="items w-10 h-10 sm:w-12 sm:h-12 rounded-full flex items-center justify-center hover:bg-gray-200"
               >
                 <svg
@@ -281,9 +277,9 @@ const route=activeCompany?"company":"user"
                     d="M14.857 17.082a23.848 23.848 0 0 0 5.454-1.31A8.967 8.967 0 0 1 18 9.75V9A6 6 0 0 0 6 9v.75a8.967 8.967 0 0 1-2.312 6.022c1.733.64 3.56 1.085 5.455 1.31m5.714 0a24.255 24.255 0 0 1-5.714 0m5.714 0a3 3 0 1 1-5.714 0M3.124 7.5A8.969 8.969 0 0 1 5.292 3m13.416 0a8.969 8.969 0 0 1 2.168 4.5"
                   />
                 </svg>
-              </Link>
+              </button>
               <Link
-                href=""
+                href="/community"
                 className="hidden  items w-10 h-10 sm:w-12 sm:h-12 rounded-full md:flex items-center justify-center hover:bg-gray-200"
               >
                 <svg
@@ -347,101 +343,33 @@ const route=activeCompany?"company":"user"
                         </button>
                       </div>
 
-                      <div className="py-3">
-                        <p className="px-4 text-xs">More options</p>
-                        <button className="block w-full text-left px-4 py-4 text-sm hover:bg-gray-100">
-                          Settings
-                        </button>
-                        <button className="block w-full text-left px-4 py-2 text-sm hover:bg-gray-100">
-                          Delete Account
-                        </button>
-                        <button className="block w-full text-left px-4 py-2 text-sm hover:bg-gray-100">
-                          Install the Windows app
-                        </button>
-                        <button className="block w-full text-left px-4 py-2 text-sm hover:bg-gray-100">
-                          Reports and Violations Centre
-                        </button>
-                        <button className="block w-full text-left px-4 py-2 text-sm hover:bg-gray-100">
-                          Your privacy rights
-                        </button>
-                        <button className="flex justify-between w-full text-left px-4 py-2 text-sm hover:bg-gray-100">
-                          Help Centre
-                          <svg
-                            xmlns="http://www.w3.org/2000/svg"
-                            fill="none"
-                            viewBox="0 0 24 24"
-                            strokeWidth={1.5}
-                            stroke="currentColor"
-                            className="size-5"
-                          >
-                            <path
-                              strokeLinecap="round"
-                              strokeLinejoin="round"
-                              d="M13.5 6H5.25A2.25 2.25 0 0 0 3 8.25v10.5A2.25 2.25 0 0 0 5.25 21h10.5A2.25 2.25 0 0 0 18 18.75V10.5m-10.5 6L21 3m0 0h-5.25M21 3v5.25"
-                            />
-                          </svg>
-                        </button>
-                        <button className=" flex justify-between  w-full text-left px-4 py-2 text-sm hover:bg-gray-100">
-                          Terms of Service
-                          <svg
-                            xmlns="http://www.w3.org/2000/svg"
-                            fill="none"
-                            viewBox="0 0 24 24"
-                            strokeWidth={1.5}
-                            stroke="currentColor"
-                            className="size-5"
-                          >
-                            <path
-                              strokeLinecap="round"
-                              strokeLinejoin="round"
-                              d="M13.5 6H5.25A2.25 2.25 0 0 0 3 8.25v10.5A2.25 2.25 0 0 0 5.25 21h10.5A2.25 2.25 0 0 0 18 18.75V10.5m-10.5 6L21 3m0 0h-5.25M21 3v5.25"
-                            />
-                          </svg>
-                        </button>
-                        <button className="flex justify-between  w-full text-left px-4 py-2 text-sm hover:bg-gray-100">
-                          Privacy Policy
-                          <svg
-                            xmlns="http://www.w3.org/2000/svg"
-                            fill="none"
-                            viewBox="0 0 24 24"
-                            strokeWidth={1.5}
-                            stroke="currentColor"
-                            className="size-5"
-                          >
-                            <path
-                              strokeLinecap="round"
-                              strokeLinejoin="round"
-                              d="M13.5 6H5.25A2.25 2.25 0 0 0 3 8.25v10.5A2.25 2.25 0 0 0 5.25 21h10.5A2.25 2.25 0 0 0 18 18.75V10.5m-10.5 6L21 3m0 0h-5.25M21 3v5.25"
-                            />
-                          </svg>
-                        </button>
-                        <button className="flex justify-between  w-full text-left px-4 py-2 text-sm hover:bg-gray-100">
-                          Be a beta tester
-                          <svg
-                            xmlns="http://www.w3.org/2000/svg"
-                            fill="none"
-                            viewBox="0 0 24 24"
-                            strokeWidth={1.5}
-                            stroke="currentColor"
-                            className="size-5"
-                          >
-                            <path
-                              strokeLinecap="round"
-                              strokeLinejoin="round"
-                              d="M13.5 6H5.25A2.25 2.25 0 0 0 3 8.25v10.5A2.25 2.25 0 0 0 5.25 21h10.5A2.25 2.25 0 0 0 18 18.75V10.5m-10.5 6L21 3m0 0h-5.25M21 3v5.25"
-                            />
-                          </svg>
-                        </button>
-                        <button
-                          className="block w-full text-left px-4 py-2 text-sm hover:bg-gray-100"
-                          onClick={handleLogout}
-                        >
-                          Log out
-                        </button>
-                      </div>
-                    </motion.div>
-                  )}
-                </div>
+                    <div className="py-3">
+                      <p className="px-4 text-xs">More options</p>
+                      <button
+                        className="block w-full text-left px-4 py-2 text-sm hover:bg-gray-100"
+                        onClick={() => router.push("/mynetwork")}
+                      >
+                        Networks
+                      </button>
+                      <button
+                        className="block w-full text-left px-4 py-2 text-sm hover:bg-gray-100"
+                        onClick={() => router.push("settings")}
+                      >
+                        Settings
+                      </button>
+                      <button className="block w-full text-left px-4 py-2 text-sm hover:bg-gray-100">
+                        Delete Account
+                      </button>
+                      <button
+                        className="block w-full text-left px-4 py-2 text-sm hover:bg-gray-100"
+                        onClick={handleLogout}
+                      >
+                        Log out
+                      </button>
+                    </div>
+                  </motion.div>
+                )}
+              </div>
             </div>
           </div>
           {isMenuOpen && (
@@ -582,59 +510,59 @@ const route=activeCompany?"company":"user"
         </>
       )}
       {isMenuOpen && (
-            <div className="lg:hidden order-3 absolute top-16 left-0 w-full bg-white shadow-md z-50">
-              <Link
-                href="/"
-                className={`block font-montserrat px-4 py-2 rounded-full ${
-                  activeTab === "Home" ? "bg-black text-white" : ""
-                }`}
-                onClick={() => {
-                  setIsMenuOpen(false);
-                  setActiveTab("Home");
-                }}
-              >
-                Home
-              </Link>
-              <Link
-                href="/explore"
-                className={`block font-montserrat px-4 py-2 rounded-full ${
-                  activeTab === "Explore" ? "bg-black text-white" : ""
-                }`}
-                onClick={() => {
-                  setIsMenuOpen(false);
-                  setActiveTab("Explore");
-                }}
-              >
-                Explore
-              </Link>
-              <Link
-                href="/create"
-                className={`block font-montserrat px-4 py-2 rounded-full ${
-                  activeTab === "Create" ? "bg-black text-white" : ""
-                }`}
-                onClick={() => {
-                  setIsMenuOpen(false);
-                  setActiveTab("Create");
-                }}
-              >
-                Create
-              </Link>
-             
-              <Link
-                href="/create"
-                className={`md:hidden font-montserrat px-4 py-2 rounded-full ${
-                  activeTab === "Create" ? "bg-black text-white" : ""
-                }`}
-                onClick={() => {
-                  setIsMenuOpen(false);
-                  setActiveTab("Create");
-                }}
-              >
-                Community
-              </Link>
-              
-            </div>
-          )}
+        <div className="lg:hidden order-3 absolute top-16 left-0 w-full bg-white shadow-md z-50">
+          <Link
+            href="/"
+            className={`block font-montserrat px-4 py-2 rounded-full ${
+              activeTab === "Home" ? "bg-black text-white" : ""
+            }`}
+            onClick={() => {
+              setIsMenuOpen(false);
+              setActiveTab("Home");
+            }}
+          >
+            Home
+          </Link>
+          <Link
+            href="/explore"
+            className={`block font-montserrat px-4 py-2 rounded-full ${
+              activeTab === "Explore" ? "bg-black text-white" : ""
+            }`}
+            onClick={() => {
+              setIsMenuOpen(false);
+              setActiveTab("Explore");
+            }}
+          >
+            Explore
+          </Link>
+          <Link
+            href="/create"
+            className={`block font-montserrat px-4 py-2 rounded-full ${
+              activeTab === "Create" ? "bg-black text-white" : ""
+            }`}
+            onClick={() => {
+              setIsMenuOpen(false);
+              setActiveTab("Create");
+            }}
+          >
+            Create
+          </Link>
+
+          <Link
+            href="/create"
+            className={`md:hidden font-montserrat px-4 py-2 rounded-full ${
+              activeTab === "Create" ? "bg-black text-white" : ""
+            }`}
+            onClick={() => {
+              setIsMenuOpen(false);
+              setActiveTab("Create");
+            }}
+          >
+            Community
+          </Link>
+        </div>
+      )}
+      {notification && <Notification/>}
     </header>
   );
 }

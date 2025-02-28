@@ -66,7 +66,7 @@ export const PostPreview = ({ post }: PostPreviewProps) => {
       <div className="bg-right-top flex justify-end top-2">
         <div
           className="cursor-pointer"
-          onClick={() => setIsShowMenu(!isShowMenu)}
+          onClick={() => setIsShowMenu(true)}
         >
           <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth="1.5" stroke="currentColor" className="size-6">
   <path strokeLinecap="round" strokeLinejoin="round" d="M12 6.75a.75.75 0 1 1 0-1.5.75.75 0 0 1 0 1.5ZM12 12.75a.75.75 0 1 1 0-1.5.75.75 0 0 1 0 1.5ZM12 18.75a.75.75 0 1 1 0-1.5.75.75 0 0 1 0 1.5Z" />
@@ -99,7 +99,7 @@ export const PostPreview = ({ post }: PostPreviewProps) => {
 
         <div className="ml-3">
           <Link
-            href={`/main/profile/${post.owner?._id}`}
+            href={`/user/${post.owner?._id}/User`}
             className="hover:underline"
           >
             <h3 className="text-xs lg:text-lg font-semibold text-gray-900">
