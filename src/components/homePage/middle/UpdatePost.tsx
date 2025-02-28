@@ -79,7 +79,7 @@ console.log("jiii")
   };
 
   return (
-    <div className=" mx-auto bg-white p-8 rounded-lg shadow-lg z-50">
+    <div className="w-full mx-auto bg-white p-8 rounded-lg shadow-lg z-50">
       <h2 className="text-2xl font-bold text-gray-900">Update Post</h2>
 
       {/* Existing Post View */}
@@ -95,6 +95,8 @@ console.log("jiii")
                   key={index}
                   src={src} 
                   alt={`Old Image ${index + 1}`}
+                  width={24}
+                  height={24}
                   className="w-24 h-24 object-cover rounded-md border"
                 />
               ))}

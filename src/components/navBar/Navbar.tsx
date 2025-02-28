@@ -33,6 +33,8 @@ function Navbar() {
 console.log(activeuser,activeCompany)
   const [activeTab, setActiveTab] = useState("Home");
   const [isMenuOpen, setIsMenuOpen] = useState(false);
+  const [notification, setNotification] = useState(false);
+
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
   const [searchQuery, setSearchQuery] = useState("");
   const [searchResults, setSearchResults] = useState<UserProfile[]>([]);
@@ -277,8 +279,8 @@ console.log(activeuser,activeCompany)
                   </div>
                 )}
               </div>
-              <Link
-                href="/notification"
+              <button
+              onClick={()=>setNotification(!notification)}
                 className="items w-10 h-10 sm:w-12 sm:h-12 rounded-full flex items-center justify-center hover:bg-gray-200"
               >
                 <svg
@@ -295,7 +297,7 @@ console.log(activeuser,activeCompany)
                     d="M14.857 17.082a23.848 23.848 0 0 0 5.454-1.31A8.967 8.967 0 0 1 18 9.75V9A6 6 0 0 0 6 9v.75a8.967 8.967 0 0 1-2.312 6.022c1.733.64 3.56 1.085 5.455 1.31m5.714 0a24.255 24.255 0 0 1-5.714 0m5.714 0a3 3 0 1 1-5.714 0M3.124 7.5A8.969 8.969 0 0 1 5.292 3m13.416 0a8.969 8.969 0 0 1 2.168 4.5"
                   />
                 </svg>
-              </Link>
+              </button>
               <Link
                 href="/community"
                 className="hidden  items w-10 h-10 sm:w-12 sm:h-12 rounded-full md:flex items-center justify-center hover:bg-gray-200"
@@ -367,7 +369,13 @@ console.log(activeuser,activeCompany)
                     <div className="py-3">
                       <p className="px-4 text-xs">More options</p>
                       <button
-                        className="block w-full text-left px-4 py-4 text-sm hover:bg-gray-100"
+                        className="block w-full text-left px-4 py-2 text-sm hover:bg-gray-100"
+                        onClick={() => router.push("/mynetwork")}
+                      >
+                        Networks
+                      </button>
+                      <button
+                        className="block w-full text-left px-4 py-2 text-sm hover:bg-gray-100"
                         onClick={() => router.push("settings")}
                       >
                         Settings
@@ -523,6 +531,7 @@ console.log(activeuser,activeCompany)
           </Link>
         </div>
       )}
+      {notification && <Notification/>}
     </header>
   );
 }
