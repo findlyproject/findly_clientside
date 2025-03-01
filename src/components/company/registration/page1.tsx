@@ -9,7 +9,7 @@ import { useRouter } from "next/navigation";
 import { toast } from "react-toastify";
 import { useAppDispatch } from "@/lib/store/hooks";
 import { setActiveCompany } from "@/lib/store/features/companyslice";
-
+import OtpInput from 'react-otp-input';
 const Page1: React.FC = () => {
   const [loading, setLoading] = useState(false);
   const [otpSent, setOtpSent] = useState(false);
@@ -145,7 +145,7 @@ const Page1: React.FC = () => {
             validationSchema={validationSchema}
             onSubmit={otpSent ? HandleOtpVerify : HandleOtpSend}
           >
-            {({ values, isSubmitting }) => (
+            {({ values, isSubmitting,setFieldValue }) => (
               <Form className="flex flex-col items-stretch pt-3 md:pt-8">
                 {/* Company Name */}
                 <div className="flex flex-col pt-4">
@@ -185,13 +185,24 @@ const Page1: React.FC = () => {
                 {otpSent && (
                   <>
                     <div className="flex flex-col pt-4">
-                      <div className="relative flex overflow-hidden rounded-md border-2 transition focus-within:border-primary">
-                        <Field
-                          type="number"
-                          name="otp"
-                          className="w-full bg-white py-2 px-4 text-base text-gray-700 placeholder-gray-400 focus:outline-none"
-                          placeholder="Enter OTP"
-                        />
+                      <div className="relative flex overflow-hidden transition focus-within:border-primary">
+                      <OtpInput
+                        value={values.otp}
+                        onChange={(otp) => setFieldValue("otp", otp)}
+                        numInputs={6}
+                        renderInput={(props) => <input {...props} />}
+                        
+                        inputStyle={{
+                          width: "55px",
+                          height: "55px",
+                          margin: "5px",
+                          fontSize: "20px",
+                          textAlign: "center",
+                          border: "1px solid #6b48ab",
+                          borderRadius: "5px",
+                         
+                        }}
+                      />
                       </div>
                       <ErrorMessage
                         name="otp"
