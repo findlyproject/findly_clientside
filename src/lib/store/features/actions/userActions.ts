@@ -94,9 +94,9 @@ export const logoutUser = createAsyncThunk(
     if (!response) {
       return rejectWithValue("logout failed");
     }
-    dispatch(SetLogout());
     const status: number = response.status;
     if (status >= 200 && status < 300) {
+    dispatch(SetLogout());
      
       return null;
     } else {
