@@ -22,6 +22,8 @@ const CompanyProfile = ({ id }: { id: string }) => {
     const activeCompany = useAppSelector((state) => state.companyLogin.activeCompany)
     const activeUser=useAppSelector((state)=>state.user.activeuser)
 const active=activeCompany||activeUser
+console.log("activeUsedddddddddddddddddddr",activeUser);
+
     const route=activeCompany?"company":"user"
   const companyId=id
   const targetedId=id
@@ -200,13 +202,24 @@ console.log("rewies",rewies);
             className=" w-56 h-56 object-cover"
           />
           <br></br>
-          {companyProfile?.followers.includes(activeuser._id)?(
-            <button onClick={()=>handleFollow(companyProfile?._id)} className="bg-primary p-1 rounded-md text-white font-semibold">UnFollow</button>
-          ):(
-<button onClick={()=>handleFollow(companyProfile?._id)} className="bg-primary p-1 rounded-md text-white font-semibold">Follow</button>
-          )
+          {activeUser && (
+  companyProfile?.followers?.includes(activeUser?._id) ? (
+    <button
+      onClick={() => handleFollow(companyProfile?._id)}
+      className="bg-primary p-1 rounded-md text-white font-semibold"
+    >
+      UnFollow
+    </button>
+  ) : (
+    <button
+      onClick={() => handleFollow(companyProfile?._id)}
+      className="bg-primary p-1 rounded-md text-white font-semibold"
+    >
+      Follow
+    </button>
+  )
+)}
 
-          }
           
           </div>
           
