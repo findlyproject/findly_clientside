@@ -45,7 +45,7 @@ export interface UserProfile {
   
 gender:string
 
-  location?: IlocationType;
+  location?: IlocationType[];
 
 
  

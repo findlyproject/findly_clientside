@@ -10,7 +10,7 @@ import { toast } from "react-toastify";
 import Image from "next/image";
 import { useAppDispatch } from "@/lib/store/hooks";
 import { setActiveCompany } from "@/lib/store/features/companyslice";
-import { Company, SelectChangeEvent } from "../../../../.next/types/Types";
+import { Company, SelectChangeEvent } from "../../../types/Types";
 import handleAsync from "@/utils/handleAsync";
 import PhoneInput from "react-phone-input-2";
 import "react-phone-input-2/lib/style.css"; // Import default styles

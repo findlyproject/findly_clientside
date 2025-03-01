@@ -135,6 +135,7 @@ export default function ManageAccount() {
   }
 
   const handleClickReason = (index: number, item: string) => {
+console.log("item",item);
 
     setSelectedReasons((prev) =>
       prev.includes(index) ? prev.filter((i) => i !== index) : [...prev, index]
