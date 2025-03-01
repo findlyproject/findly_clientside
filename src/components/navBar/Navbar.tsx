@@ -11,6 +11,7 @@ import { UserProfile } from "@/lib/store/features/userSlice";
 import { logOutCompany } from "@/lib/store/features/actions/companyActions";
 import { logoutUser } from "@/lib/store/features/actions/userActions";
 import Image from "next/image";
+import Notification from "../notification/Notification";
 
 
 export const dropDownAfterlogin = (route: string) => [
