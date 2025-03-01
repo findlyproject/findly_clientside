@@ -161,7 +161,7 @@ const loginSlice = createSlice({
     },
     SetLogout: (state) => {
       state.activeuser = null;
-      state.googlestate = true
+      state.googlestate = true;
     },
     setEducation: (state, action: PayloadAction<Ieducation>) => {
       state.activeuser?.education.push(action.payload);

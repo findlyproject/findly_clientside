@@ -40,11 +40,9 @@ export const loginCompany=createAsyncThunk(
       if (!response) {
         return rejectWithValue("logout failed")
       }
-      console.log("logout response",response);
-      
   
       dispatch(setCompanyLogOut())
-  return true
+  return null
      
     } )
 

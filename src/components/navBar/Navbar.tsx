@@ -11,26 +11,13 @@ import { logoutUser } from "@/lib/store/features/actions/userActions";
 import Image from "next/image";
 import Notification from "../notification/Notification";
 
-export const dropDownAfterlogin = (route: string) => [
-  { name: "Subscription", href: `/${route}/premium` },
-];
-
-export const dropDownAfterloginSmallerScreen = (route: string) => [
-  { name: "Home", href: "/" },
-  { name: "About", href: "/about" },
-  { name: "Contact", href: "/contactus" },
-
-  { name: "Subscription", href: `/${route}/premium` },
-];
 
 function Navbar() {
   const pathname = usePathname();
   const router = useRouter();
   const dispatch = useAppDispatch();
-
   const { activeuser } = useAppSelector((state) => state.login);
   const { activeCompany } = useAppSelector((state) => state.companyLogin);
-console.log(activeuser,activeCompany)
   const [activeTab, setActiveTab] = useState("Home");
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [notification, setNotification] = useState(false);
@@ -38,7 +25,6 @@ console.log(activeuser,activeCompany)
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
   const [searchQuery, setSearchQuery] = useState("");
   const [searchResults, setSearchResults] = useState<UserProfile[]>([]);
- console.log(activeCompany)
 
     
     useEffect(() => {
@@ -329,11 +315,19 @@ console.log(activeuser,activeCompany)
                       <Image
                         width={100}
                         height={100}
-                        src={activeuser?.profileImage}
+                        src={activeuser?.profileImage }
                         alt="User Profile"
                         className="w-full h-full object-cover"
                       />
-                    ) : (
+                    ) : activeCompany?.logo ? (
+                      <Image
+                        width={100}
+                        height={100}
+                        src={activeCompany?.logo }
+                        alt="User Profile"
+                        className="w-full h-full object-cover"
+                      />
+                    ):(
                       <div className="bg-gray-200 flex items-center justify-center w-full h-full text-lg text-black">
                         {activeuser?.firstName
                           ? activeuser?.firstName[0].toUpperCase()
