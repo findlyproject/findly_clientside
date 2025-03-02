@@ -11,32 +11,20 @@ import { logoutUser } from "@/lib/store/features/actions/userActions";
 import Image from "next/image";
 import Notification from "../notification/Notification";
 
-export const dropDownAfterlogin = (route: string) => [
-  { name: "Subscription", href: `/${route}/premium` },
-];
-
-export const dropDownAfterloginSmallerScreen = (route: string) => [
-  { name: "Home", href: "/" },
-  { name: "About", href: "/about" },
-  { name: "Contact", href: "/contactus" },
-
-  { name: "Subscription", href: `/${route}/premium` },
-];
 
 function Navbar() {
   const pathname = usePathname();
   const router = useRouter();
   const dispatch = useAppDispatch();
-  const [notification,setNotification]=useState(false)
   const { activeuser } = useAppSelector((state) => state.login);
   const { activeCompany } = useAppSelector((state) => state.companyLogin);
-console.log(activeuser,activeCompany)
   const [activeTab, setActiveTab] = useState("Home");
   const [isMenuOpen, setIsMenuOpen] = useState(false);
+  const [notification, setNotification] = useState(false);
+
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
   const [searchQuery, setSearchQuery] = useState("");
   const [searchResults, setSearchResults] = useState<UserProfile[]>([]);
- console.log(activeCompany)
 
     
     useEffect(() => {
@@ -175,7 +163,7 @@ console.log(activeuser,activeCompany)
                     {searchResults.map((user) => (
                       <li key={user._id} className="cursor-pointer flex items-center gap-2 pl-4 hover:bg-primary hover:bg-opacity-20 rounded-full"
 
-                        onClick={() => router.push(`/userdetails/${user._id}`)}
+                        onClick={() => router.push(`/user/${user._id}/User`)}
                       >
                         <Image
                           width={100}
@@ -188,13 +176,6 @@ console.log(activeuser,activeCompany)
                           <p className="tex-sm font-semibold">
                             {user.firstName} {user.lastName}
                           </p>
-                          <p className="text-sm text-gray-500">{user.email}</p>
-                          ):(
-                            <p className="tex-sm font-semibold">
-                            {user.name} 
-                          </p>
-                          )
-                        }
                           <p className="text-sm text-gray-500">
                             {user.email}
                           </p>
@@ -285,7 +266,9 @@ console.log(activeuser,activeCompany)
                 )}
               </div>
               <button
-                onClick={()=>setNotification(!notification)}
+
+
+              onClick={()=>setNotification(!notification)}
                 className="items w-10 h-10 sm:w-12 sm:h-12 rounded-full flex items-center justify-center hover:bg-gray-200"
               >
                 <svg
@@ -334,11 +317,19 @@ console.log(activeuser,activeCompany)
                       <Image
                         width={100}
                         height={100}
-                        src={activeuser?.profileImage}
+                        src={activeuser?.profileImage }
                         alt="User Profile"
                         className="w-full h-full object-cover"
                       />
-                    ) : (
+                    ) : activeCompany?.logo ? (
+                      <Image
+                        width={100}
+                        height={100}
+                        src={activeCompany?.logo }
+                        alt="User Profile"
+                        className="w-full h-full object-cover"
+                      />
+                    ):(
                       <div className="bg-gray-200 flex items-center justify-center w-full h-full text-lg text-black">
                         {activeuser?.firstName
                           ? activeuser?.firstName[0].toUpperCase()
@@ -374,7 +365,13 @@ console.log(activeuser,activeCompany)
                     <div className="py-3">
                       <p className="px-4 text-xs">More options</p>
                       <button
-                        className="block w-full text-left px-4 py-4 text-sm hover:bg-gray-100"
+                        className="block w-full text-left px-4 py-2 text-sm hover:bg-gray-100"
+                        onClick={() => router.push("/mynetwork")}
+                      >
+                        Networks
+                      </button>
+                      <button
+                        className="block w-full text-left px-4 py-2 text-sm hover:bg-gray-100"
                         onClick={() => router.push("settings")}
                       >
                         Settings

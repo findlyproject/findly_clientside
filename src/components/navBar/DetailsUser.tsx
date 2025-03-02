@@ -214,7 +214,7 @@ console.log("usereeee",user);
                     conn.connectionID?._id === activeuserid?._id &&
                     conn.status === true
                 ) ? (
-                  <button className="text-primary border border-primary font-semibold bg-white py-1 px-2 rounded-full">
+                  <button className="text-primary border border-primary font-semibold bg-white py-1 px-2 rounded-full" onClick={()=>router.push}>
                     Message
                   </button>
                 ) : (

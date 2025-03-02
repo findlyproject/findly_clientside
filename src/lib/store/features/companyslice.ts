@@ -94,14 +94,10 @@ export const loginSlice= createSlice({
    initialState,
    reducers:{
     setActiveCompany:(state,action)=>{
-        state.activeCompany=action.payload
-        console.log("state.activeCompany",state.activeCompany);
-        
+        state.activeCompany=action.payload 
     },
     setCompanyLogOut:(state)=>{
         state.activeCompany=null
-
-
     },
     setAppliedUsers:(state,action)=>{
        state.application=action.payload
@@ -109,7 +105,6 @@ export const loginSlice= createSlice({
     setforgotPassword:(state,action)=>{
         state.forgotPassword.email = action.payload.email;
         state.forgotPassword.otp = action.payload.otp;
-        console.log("otpotpcccc",action.payload)
        },
     
 

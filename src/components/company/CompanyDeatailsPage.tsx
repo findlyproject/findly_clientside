@@ -20,6 +20,9 @@ const CompanyProfile = ({ id }: { id: string }) => {
     const [review,setReview]=useState<companyData[]>([])
     const [companyProfile,setCompanyDetails]=useState<companyData>()
     const activeCompany = useAppSelector((state) => state.companyLogin.activeCompany)
+    const activeUser=useAppSelector((state)=>state.user.activeuser)
+const active=activeCompany||activeUser
+console.log("activeUsedddddddddddddddddddr",activeUser);
 
     const route=activeCompany?"company":"user"
   const companyId=id
@@ -58,6 +61,7 @@ setAverage(Number(averageRating))
         findAverageRating()
       },[review])
       const findAllReviews=async()=>{
+       try {
         const response=await api.get(`/${route}/findrating/${targetedId}`)
         console.log("responseeerr",response);
         if(response.status===200){
@@ -65,11 +69,15 @@ setAverage(Number(averageRating))
             setReview(data)
             findAverageRating()
         }
+       } catch (error) {
+        console.log("err",error);
+        
+       }
        
       }
       console.log("review",review)
       const handleDelete=async(id:string)=>{
-        const response=await api.delete(`/company/deletereview/${id}`)
+        const response=await api.delete(`/${route}/deletereview/${id}`)
         if(response.status===200){
           findAllReviews()
           findAverageRating()
@@ -194,13 +202,24 @@ console.log("rewies",rewies);
             className=" w-56 h-56 object-cover"
           />
           <br></br>
-          {companyProfile?.followers.includes(activeuser._id)?(
-            <button onClick={()=>handleFollow(companyProfile?._id)} className="bg-primary p-1 rounded-md text-white font-semibold">UnFollow</button>
-          ):(
-<button onClick={()=>handleFollow(companyProfile?._id)} className="bg-primary p-1 rounded-md text-white font-semibold">Follow</button>
-          )
+          {activeUser && (
+  companyProfile?.followers?.includes(activeUser?._id) ? (
+    <button
+      onClick={() => handleFollow(companyProfile?._id)}
+      className="bg-primary p-1 rounded-md text-white font-semibold"
+    >
+      UnFollow
+    </button>
+  ) : (
+    <button
+      onClick={() => handleFollow(companyProfile?._id)}
+      className="bg-primary p-1 rounded-md text-white font-semibold"
+    >
+      Follow
+    </button>
+  )
+)}
 
-          }
           
           </div>
           
@@ -357,9 +376,9 @@ console.log("rewies",rewies);
                    <div 
                    key={rev?._id}
                    className="mt-3 p-4 bg-gray-100 rounded-lg">
-                  <div className="flex justify-end ">
+                 {active?._id===rev?.userId?._id||rev.companyId?._id&& <div className="flex justify-end ">
                   <MdDelete onClick={()=>handleDelete(rev._id)}/>
-                  </div>
+                  </div>}
              
                    <p className="font-semibold"> {rev?.name || rev?.companyId?.name || rev?.userId?.firstName}</p>
                    <span>{rev?.email || rev?.companyId?.emial || rev?.userId?.email}</span>

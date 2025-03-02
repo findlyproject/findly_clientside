@@ -10,99 +10,119 @@ import { toast } from "react-toastify";
 import Image from "next/image";
 import { useAppDispatch } from "@/lib/store/hooks";
 import { setActiveCompany } from "@/lib/store/features/companyslice";
+import { Company, SelectChangeEvent } from "../../../types/Types";
+import handleAsync from "@/utils/handleAsync";
+import PhoneInput from "react-phone-input-2";
+import "react-phone-input-2/lib/style.css"; // Import default styles
 const RegistrationForm = () => {
   const searchParams = useSearchParams();
-  const Email = searchParams.get("email");
-  const Name = searchParams.get("name");
+  const Email = searchParams.get("email") || "";
+  const Name = searchParams.get("name") || "";
   const [showPassword, setShowPassword] = useState(false);
   const [showConfirmPassword, setShowConfirmPassword] = useState(false);
-  const [previewImage, setPreviewImage] = useState<string | null>(null);
-const dispatch=useAppDispatch()
+  const [previewImage, setPreviewImage] = useState<{
+    file: File | null;
+    url: string;
+  }>({
+    file: null,
+    url: "",
+  });
 
-const handleImageChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-  const file = e.target.files?.[0]; // Get the first file
-  if (file) {
-    const imageUrl = URL.createObjectURL(file); // Convert File to URL
-    setPreviewImage(imageUrl);
-  }
-};
-
+  const dispatch = useAppDispatch();
   const router = useRouter();
 
+  // formik validation
   const validationSchema = Yup.object().shape({
     name: Yup.string().required("Company Name is required"),
     email: Yup.string()
       .email("Invalid email format")
       .required("Email is required"),
     contact: Yup.string()
-      .matches(/^[0-9]{10}$/, "Invalid mobile number")
+      .matches(/^\+?[1-9]\d{1,14}$/, "Invalid mobile number")
       .required("Mobile Number is required"),
-    age: Yup.number()
-      .typeError("Age must be a number")
-      .positive("Age must be a positive number")
-      .integer("Age must be an integer")
-      .required("Age is required"),
-      
+    foundedAt: Yup.date()
+      .typeError("Invalid date format")
+      .required("Founded Date is required"),
+    founder: Yup.string().required("Founder Name is required"),
     password: Yup.string()
       .min(6, "Password must be at least 6 characters")
       .required("Password is required"),
     cpassword: Yup.string()
-      .oneOf([Yup.ref("password"), null], "Passwords must match")
+      .oneOf([Yup.ref("password")], "Passwords must match")
       .required("Confirm Password is required"),
     IndustryType: Yup.string().required("Industry Type is required"),
-    logo: Yup.mixed()
-    .required("Company logo is required")
-    .test("fileType", "Only image files are allowed", (value) => {
-      return value && ["image/jpeg", "image/png", "image/jpg"].includes(value.type);
-    }),
     address: Yup.object().shape({
       landmark: Yup.string().required("Landmark is required"),
       country: Yup.string().required("Country is required"),
-      state: Yup.string().required("State is required"),
-      city: Yup.string().required("City is required"),
-      pincode: Yup.string()
-        .matches(/^[0-9]{6}$/, "Invalid Pincode")
-        .required("Pincode is required"),
+      pincode: Yup.string().matches(/^[0-9]{6}$/, "Invalid Pincode"),
     }),
   });
 
+  // logo preview
+  const handleImageChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0];
+    if (file) {
+      const imageUrl = URL.createObjectURL(file);
+      setPreviewImage({ file, url: imageUrl });
+    }
+  };
 
-  const submit = async (values: any, { setSubmitting }: any) => {
-    console.log(values)
-    try {
-    
-      const formData = new FormData();
+  console.log(previewImage);
+  const industryTypes = [
+    { id: 1, name: "Information Technology" },
+    { id: 2, name: "Finance & Banking" },
+    { id: 3, name: "Healthcare & Pharmaceuticals" },
+    { id: 4, name: "Education & E-Learning" },
+    { id: 5, name: "Manufacturing" },
+    { id: 6, name: "Retail & E-commerce" },
+    { id: 7, name: "Real Estate & Construction" },
+    { id: 8, name: "Telecommunications" },
+    { id: 9, name: "Automobile & Transportation" },
+    { id: 10, name: "Energy & Utilities" },
+    { id: 11, name: "Hospitality & Tourism" },
+    { id: 12, name: "Media & Entertainment" },
+    { id: 13, name: "Legal & Consulting" },
+    { id: 14, name: "Agriculture & Farming" },
+    { id: 15, name: "Aerospace & Defense" },
+    { id: 16, name: "Biotechnology" },
+    { id: 17, name: "Fashion & Apparel" },
+    { id: 18, name: "Food & Beverage" },
+    { id: 19, name: "Government & Public Administration" },
+    { id: 20, name: "Marketing & Advertising" },
+    { id: 21, name: "Non-Profit & Social Services" },
+    { id: 22, name: "Sports & Fitness" },
+    { id: 23, name: "Supply Chain & Logistics" },
+  ];
 
-      Object.entries(values).forEach(([key, value]) => {
-        console.log(key, value);
-        if (key === "address" && typeof value === "object" && value !== null) {
-          Object.entries(value).forEach(([subKey, subValue]) => {
-            formData.append(`address[${subKey}]`, subValue);
-          });
-        } else {
-          formData.append(key, value);
-        }
-      });
+  //registration
+  const submit = async (values: Company) => {
+    const formData = new FormData();
 
-      if (previewImage instanceof File) {
-        formData.append("logo", previewImage);
+    Object.entries(values).forEach(([key, value]) => {
+      if (key === "address" && typeof value === "object" && value !== null) {
+        Object.entries(value)?.forEach(([subKey, subValue]) => {
+          formData.append(`address[${subKey}]`, String(subValue));
+        });
       } else {
-        console.warn("Invalid file: previewImage is not a File object");
+        formData.append(key, String(value));
       }
+    });
 
-      const response = await api.post("/company/final-register", formData);
-if(response.status==201){
-      // Handle success
+    if (previewImage && previewImage.file instanceof File) {
+      formData.append("logo", previewImage.file);
+    } else {
+      console.warn("Invalid file: previewImage is not a File object");
+    }
+
+    const response = await handleAsync(() =>
+      api.post("/company/final-register", formData)
+    );
+    if (response?.status == 201) {
       console.log("Registration successful:", response.data);
-      const data= response.data.company
-      dispatch(setActiveCompany(data))
+      const data = response.data.company;
+      dispatch(setActiveCompany(data));
       toast.success("Registration successful");
       router.push("/company/home");
-}
-
-    } catch (error) {
-      // Handle error
-      console.error("Error during registration:", error);
     }
   };
 
@@ -112,9 +132,9 @@ if(response.status==201){
         <div className="flex justify-center">
           <label className="relative cursor-pointer">
             <div className="w-24 h-24 md:w-28 md:h-28 mb-6 bg-gray-100 rounded-full flex items-center justify-center overflow-hidden group hover:bg-gray-200 transition-colors">
-              {previewImage ? (
+              {previewImage.url ? (
                 <Image
-                  src={previewImage}
+                  src={previewImage.url}
                   alt="Profilepreview"
                   className="w-full h-full object-cover"
                   width={300}
@@ -139,11 +159,12 @@ if(response.status==201){
           initialValues={{
             name: Name,
             email: Email,
-            contact: "",
-            age: "",
+            contact: undefined,
+            foundedAt: new Date(),
             password: "",
             cpassword: "",
             IndustryType: "",
+            founder: "",
             address: {
               landmark: "",
               country: "",
@@ -155,9 +176,9 @@ if(response.status==201){
           validationSchema={validationSchema}
           onSubmit={submit}
         >
-          {({ values, isSubmitting, setFieldValue,handleSubmit }) => (
-            <Form onSubmit={handleSubmit} className="space-y-6">
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+          {({ values, isSubmitting, setFieldValue }) => (
+            <Form className="space-y-6">
+              <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
                 <div className="space-y-2">
                   <label className="block text-sm text-gray-700">
                     Company Name <span className="text-red-500">*</span>
@@ -166,7 +187,7 @@ if(response.status==201){
                     type="text"
                     placeholder="company name"
                     name="name"
-                    className="w-full p-2.5 border rounded-lg focus:ring-2 focus:ring-blue-500 outline-none text-sm md:text-base"
+                    className="w-full p-2.5 border rounded-lg focus:ring-2 focus:ring-primary outline-none text-sm md:text-base"
                   />
                   <ErrorMessage
                     name="name"
@@ -174,19 +195,34 @@ if(response.status==201){
                     className="text-red-500 text-sm"
                   />
                 </div>
-
                 <div className="space-y-2">
                   <label className="block text-sm text-gray-700">
-                    Email <span className="text-red-500">*</span>
+                    Founder <span className="text-red-500">*</span>
                   </label>
                   <Field
-                    type="email"
-                    placeholder="email@gmail.com"
-                    name="email"
-                    className="w-full p-2.5 border rounded-lg focus:ring-2 focus:ring-blue-500 outline-none text-sm md:text-base"
+                    type="text"
+                    placeholder="founder name"
+                    name="founder"
+                    className="w-full p-2.5 border rounded-lg focus:ring-2 focus:ring-primary outline-none text-sm md:text-base"
                   />
                   <ErrorMessage
-                    name="email"
+                    name="founder"
+                    component="div"
+                    className="text-red-500 text-sm"
+                  />
+                </div>
+                <div className="space-y-2">
+                  <label className="block text-sm text-gray-700">
+                    Founded At
+                    <span className="text-red-500">*</span>
+                  </label>
+                  <Field
+                    type="date"
+                    name="foundedAt"
+                    className="w-full p-2.5 border rounded-lg focus:ring-2 focus:ring-primary outline-none text-sm md:text-base"
+                  />
+                  <ErrorMessage
+                    name="foundedAt"
                     component="div"
                     className="text-red-500 text-sm"
                   />
@@ -199,14 +235,16 @@ if(response.status==201){
                     Mobile Number <span className="text-red-500">*</span>
                   </label>
                   <div className="flex">
-                    <select className="p-2.5 border rounded-lg rounded-r-none border-r-0 focus:ring-2 focus:ring-blue-500 outline-none text-sm md:text-base min-w-[4rem]">
-                      <option>IN</option>
-                    </select>
-                    <Field
-                      type="tel"
-                      placeholder="00000 00000"
-                      name="contact"
-                      className="w-full p-2.5 border rounded-lg rounded-l-none focus:ring-2 focus:ring-blue-500 outline-none text-sm md:text-base"
+                    <PhoneInput
+                      country={"in"}
+                      value={values.contact}
+                      onChange={(phone) => setFieldValue("contact", phone)} // Update Formik state
+                      inputProps={{
+                        name: "contact",
+                        required: true,
+                        className:
+                          "w-full px-12 py-2.5 border rounded-lg focus:ring-2 focus:ring-primary outline-none text-sm md:text-base",
+                      }}
                     />
                   </div>
                   <ErrorMessage
@@ -217,17 +255,16 @@ if(response.status==201){
                 </div>
                 <div className="space-y-2">
                   <label className="block text-sm text-gray-700">
-                    Age of the company (Year){" "}
-                    <span className="text-red-500">*</span>
+                    Email <span className="text-red-500">*</span>
                   </label>
                   <Field
-                    type="number"
-                    placeholder="5"
-                    name="age"
-                    className="w-full p-2.5 border rounded-lg focus:ring-2 focus:ring-blue-500 outline-none text-sm md:text-base"
+                    type="email"
+                    placeholder="email@gmail.com"
+                    name="email"
+                    className="w-full p-2.5 border rounded-lg focus:ring-2 focus:ring-primary outline-none text-sm md:text-base"
                   />
                   <ErrorMessage
-                    name="age"
+                    name="email"
                     component="div"
                     className="text-red-500 text-sm"
                   />
@@ -244,7 +281,7 @@ if(response.status==201){
                       type={showPassword ? "text" : "password"}
                       placeholder="••••••"
                       name="password"
-                      className="w-full p-2.5 border rounded-lg focus:ring-2 focus:ring-blue-500 outline-none text-sm md:text-base"
+                      className="w-full p-2.5 border rounded-lg focus:ring-2 focus:ring-primary outline-none text-sm md:text-base"
                     />
                     <button
                       type="button"
@@ -270,7 +307,7 @@ if(response.status==201){
                       type={showConfirmPassword ? "text" : "password"}
                       placeholder="••••••"
                       name="cpassword"
-                      className="w-full p-2.5 border rounded-lg focus:ring-2 focus:ring-blue-500 outline-none text-sm md:text-base"
+                      className="w-full p-2.5 border rounded-lg focus:ring-2 focus:ring-primary outline-none text-sm md:text-base"
                     />
                     <button
                       type="button"
@@ -302,15 +339,18 @@ if(response.status==201){
                   <Field
                     as="select"
                     name="IndustryType"
-                    className="w-full p-2.5 border rounded-lg focus:ring-2 focus:ring-blue-500 outline-none text-sm md:text-base"
+                    className="w-full p-2.5 border rounded-lg focus:ring-2 focus:ring-primary outline-none text-sm md:text-base"
                     value={values.IndustryType || ""}
-                    onChange={(e) => {
+                    onChange={(e:SelectChangeEvent) => {
                       setFieldValue("IndustryType", e.target.value);
                     }}
                   >
-                    <option value=""></option>
-                    <option value="IT">IT</option>
-                    <option></option>
+                    <option value=""> choose your industry</option>
+                    {industryTypes.map((type) => (
+                      <option key={type.id} value={type.name}>
+                        {type.name}
+                      </option>
+                    ))}
                   </Field>
                   <ErrorMessage
                     name="IndustryType"
@@ -327,7 +367,7 @@ if(response.status==201){
                     name="address.landmark"
                     type="text"
                     placeholder="landmark"
-                    className="w-full p-2.5 border rounded-lg focus:ring-2 focus:ring-blue-500 outline-none text-sm md:text-base"
+                    className="w-full p-2.5 border rounded-lg focus:ring-2 focus:ring-primary outline-none text-sm md:text-base"
                   />
                   <ErrorMessage
                     name="address.landmark"
@@ -347,9 +387,9 @@ if(response.status==201){
                     <Field
                       as="select"
                       name="address.country"
-                      className="w-full p-2.5 border rounded-lg focus:ring-2 focus:ring-blue-500 outline-none text-sm md:text-base"
+                      className="w-full p-2.5 border rounded-lg focus:ring-2 focus:ring-primary outline-none text-sm md:text-base"
                       value={values.address.country || ""}
-                      onChange={(e) => {
+                      onChange={(e:SelectChangeEvent) => {
                         setFieldValue("address.country", e.target.value);
                       }}
                     >
@@ -374,9 +414,9 @@ if(response.status==201){
                     </label>
                     <Field
                       as="select"
-                      className="w-full p-2.5 border rounded-lg focus:ring-2 focus:ring-blue-500 outline-none text-sm md:text-base"
+                      className="w-full p-2.5 border rounded-lg focus:ring-2 focus:ring-primary outline-none text-sm md:text-base"
                       value={values.address.state || ""}
-                      onChange={(e) => {
+                      onChange={(e:SelectChangeEvent) => {
                         setFieldValue("address.state", e.target.value);
                       }}
                       name="state"
@@ -407,9 +447,9 @@ if(response.status==201){
                     </label>
                     <Field
                       as="select"
-                      className="w-full p-2.5 border rounded-lg focus:ring-2 focus:ring-blue-500 outline-none text-sm md:text-base"
+                      className="w-full p-2.5 border rounded-lg focus:ring-2 focus:ring-primary outline-none text-sm md:text-base"
                       value={values.address.city || ""}
-                      onChange={(e) =>
+                      onChange={(e:SelectChangeEvent) =>
                         setFieldValue("address.city", e.target.value)
                       }
                       name="city"
@@ -439,7 +479,7 @@ if(response.status==201){
                     </label>
                     <Field
                       type="number"
-                      className="w-full p-2.5 border rounded-lg focus:ring-2 focus:ring-blue-500 outline-none text-sm md:text-base"
+                      className="w-full p-2.5 border rounded-lg focus:ring-2 focus:ring-primary outline-none text-sm md:text-base"
                       placeholder="Enter Pincode"
                       name="address.pincode"
                     />
@@ -455,7 +495,6 @@ if(response.status==201){
               <button
                 type="submit"
                 className="w-full bg-gray-900 text-white p-3 rounded-lg hover:bg-gray-800 transition-colors text-sm md:text-base font-medium"
-                onClick={() => submit(values, { setSubmitting: () => {} })}
               >
                 {isSubmitting ? "Submitting..." : "Register"}
               </button>
