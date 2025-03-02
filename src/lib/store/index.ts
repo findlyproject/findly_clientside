@@ -16,7 +16,7 @@ import ratingReducer from "./features/ratingSlice"
 import postReducer from "./features/postSlice"
 import adminReducer from './features/adminSlice'
 import companyLoginReducer from "./features/companyslice"
-
+import jobReducer from './features/jobSlice'
 
 // Create persist configs for specific reducers
 const userPersistConfig = { key: "user", storage };
@@ -48,8 +48,8 @@ export const makeStore = () =>
       rating:persistedRatingReducer , 
       post:persistedpostReducer  , 
       admin:persistedadminReducer,
-      companyLogin:persistedCompanyReducer
-      
+      companyLogin:persistedCompanyReducer,
+      Job:jobReducer,
        
 
     },

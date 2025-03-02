@@ -111,7 +111,16 @@ interface LoginState {
   forgotPassword:{
     email:string,
     otp:string,
-  }
+  },
+  savedJobs:string[]
+  jobfilter:{
+    title: string,
+    experienceLevel: string,
+    industry: string,
+    jobType: string,
+  },
+  allJobs :string[]
+
 }
 
 const initialState: LoginState = {
@@ -124,7 +133,8 @@ const initialState: LoginState = {
   forgotPassword:{
     email:"",
     otp:"",
-  }
+  },
+  savedJobs:[],
 };
 
 // interface EditState {
@@ -263,6 +273,11 @@ state.connections=action.payload
    setPeopleKnow:(state,action)=>{
     state.peopleIknow=action.payload
         },
+
+    setSavedJobs:(state,action)=>{
+      state.savedJobs=action.payload
+    },
+    
   },
   
 });
@@ -290,7 +305,9 @@ export const {
   setRemovejoblocation,
   setImages,
   setforgotPassword,
-  setPeopleKnow
+  setPeopleKnow,
+  setSavedJobs,
+
 } = loginSlice.actions;
 
 export default loginSlice.reducer;
