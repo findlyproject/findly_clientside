@@ -118,7 +118,7 @@ console.log("googlestate",googlestate);
       <div className="flex flex-col md:flex-row bg-white shadow-lg sm:shadow-2xl rounded-2xl sm:rounded-3xl overflow-hidden w-full">
         {/* Logo */}
         <div className="absolute top-4 left-4 sm:top-8 sm:left-8 z-10">
-          <Logo className="w-24 sm:w-32" />
+          <Logo/>
         </div>
         
         {/* Form Section */}
