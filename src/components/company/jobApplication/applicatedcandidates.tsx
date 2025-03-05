@@ -1,4 +1,7 @@
-"use client"
+
+
+"use client";
+
 import { applicationList } from "@/lib/store/features/actions/companyActions";
 import { useAppDispatch } from "@/lib/store/hooks";
 import React, { useEffect, useState } from "react";
@@ -25,6 +28,7 @@ const AppliedUsers = () => {
       education: { college: string }[];
       firstName: string;
       profileImage: string;
+      jobTitle: string[];
     };
     title: string;
     company: string;
@@ -39,7 +43,8 @@ const AppliedUsers = () => {
   const [searchLocation, setSearchLocation] = useState<string>("");
 
   const dispatch = useAppDispatch();
-const router = useRouter()
+  const router = useRouter();
+
   useEffect(() => {
     dispatch(applicationList());
     postedJobs();
@@ -57,14 +62,9 @@ const router = useRouter()
   const postedJobs = async () => {
     const response = await api.get("/company/getjobs");
     if (response.status === 200) {
-      console.log("dd",response);
-      
       setJobs(response.data.postedJobs);
     }
   };
-
-  console.log("jobs",jobs);
-  
 
   const allApplications = async () => {
     const response = await api.get("/company/findapplications");
@@ -96,117 +96,120 @@ const router = useRouter()
   });
 
   const totalPages = Math.ceil(filteredApplications.length / itemsPerPage);
-console.log(filteredApplications)
+
   return (
-    <div className="p-6 bg-gray-100 min-h-screen">
-      {/* Search and Filter Section */}
-      <div className="flex justify-between items-center mb-4">
-        <h1 className="text-2xl font-semibold">Applied Users</h1>
-        <div className="flex gap-2">
+    <div className="p-6 bg-gray-100  ">
+      <div className="flex flex-col md:flex-row justify-end items-center mb-4 gap-4">
+        <div className="flex gap-2 w-full md:w-auto">
           <input
             type="text"
             placeholder="Find specific Profile"
-            className="border px-3 py-2 rounded-md"
+            className="border px-3 py-2 rounded-md w-full md:w-64"
             value={searchProfile}
             onChange={(e) => setSearchProfile(e.target.value)}
           />
           <input
             type="text"
             placeholder="Enter location"
-            className="border px-3 py-2 rounded-md"
+            className="border px-3 py-2 rounded-md w-full md:w-64"
             value={searchLocation}
             onChange={(e) => setSearchLocation(e.target.value)}
           />
-          <button className="bg-purple-600 text-white px-4 py-2 rounded-md">Search</button>
+          <button className="bg-primary text-white px-4 py-2 rounded-md w-full md:w-auto">
+            Search
+          </button>
         </div>
       </div>
 
-      <div className="flex gap-6">
-        {/* Sidebar Filters */}
-        <aside className="w-1/4 bg-white p-4 rounded-md shadow-md">
+      <h1 className="text-sm font-semibold text-end mb-3">
+        {selectedJobIds.length > 0 ? (
+          <span className="font-bold italic text-primary">
+            {jobs
+              .filter((job) => selectedJobIds.includes(job._id))
+              .map((job) => job.title)
+              .join(", ")}
+          </span>
+        ) : (
+          "All Applications"
+        )}
+      </h1>
+
+      <div className="flex flex-col lg:flex-row gap-6 ">
+       
+        <aside className="w-full lg:w-1/4 bg-white p-4 rounded-md shadow-md  max-h-fit ">
           <h2 className="text-lg font-semibold mb-2">Filter Profiles</h2>
           <div className="space-y-3">
             <div>
-              <h3 className="font-medium">Job title</h3>
+              <h3 className="font-medium mb-5">Job title</h3>
               <ul className="text-sm text-gray-600">
-                {jobs &&
-                  jobs.map((job) => (
-                    <li key={job?._id}>
-                      <input
-                        type="checkbox"
-                        className="mr-2"
-                        checked={selectedJobIds.includes(job._id)}
-                        onChange={() => handleCheckboxChange(job._id)}
-                      />{" "}
-                      {job.title}
-                    </li>
-                  ))}
+                {jobs.map((job) => (
+                  <li key={job._id} className="text-xl">
+                    <input
+                      type="checkbox"
+                      className="mr-2"
+                      checked={selectedJobIds.includes(job._id)}
+                      onChange={() => handleCheckboxChange(job._id)}
+                    />{" "}
+                    {job.title}
+                  </li>
+                ))}
               </ul>
             </div>
           </div>
         </aside>
 
-        {/* Candidate Grid */}
-        <main className="w-3/4" >
-          <h1 className="text-2xl font-semibold">
-            {selectedJobIds.length > 0 ? (
-              <span className="font-bold italic text-purple-600">
-                {jobs
-                  .filter((job) => selectedJobIds.includes(job._id))
-                  .map((job) => job.title)
-                  .join(", ")}
-              </span>
-            ) : (
-              "All Applications"
-            )}
-          </h1>
-
-          <div className="grid grid-cols-3 gap-4">
-            {filteredApplications.slice(startIndex, startIndex + itemsPerPage).map((user, index) => (
-              <div key={index} className="bg-white p-4 rounded-md shadow-md text-center" onClick={()=>router.push(`/company/candidatelist/${user.userId._id}/${user.jobId._id}`)}>
-                <div className="w-16 h-16 bg-gray-300 rounded-full mx-auto mb-3">
-                  <Image
-                    src={user.userId?.profileImage || ""}
-                    width={64}
-                    height={64}
-                    className="rounded-full"
-                    alt="Profile"
-                  />
-                </div>
-                <h3 className="text-lg font-semibold">{user.userId?.firstName}</h3>
-                <p className="text-sm text-gray-500">{user.userId?.education?.[0]?.college}</p>
-                <p className="text-sm text-gray-500">{user.userId?.phoneNumber}</p>
-                <p className="text-sm text-gray-500">{user.userId?.email}</p>
+      
+        <main className="w-full lg:w-3/4 flex flex-col justify-between  ">
+          <div>
+            {filteredApplications.length > 0 ? (
+              <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
+                {filteredApplications.slice(startIndex, startIndex + itemsPerPage).map((user, index) => (
+                  <div
+                    key={index}
+                    className="bg-white p-6 rounded-lg shadow-md flex flex-col items-center transition-transform transform hover:scale-[1.02] hover:shadow-lg cursor-pointer"
+                    onClick={() =>
+                      router.push(`/company/candidatelist/${user.userId._id}/${user.jobId._id}`)
+                    }
+                  >
+                    <div className="w-20 h-20 rounded-full bg-gray-300  border border-gray-200">
+                      <Image
+                        src={user.userId?.profileImage || "/default-profile.png"}
+                        width={80}
+                        height={80}
+                        className="object-cover"
+                        alt="Profile"
+                      />
+                    </div>
+                    <div className="flex flex-col items-center text-center mt-2">
+                      <h3 className="text-lg font-semibold text-gray-900">{user.userId?.firstName}</h3>
+                      <p className="text-sm text-gray-800">{user.userId?.jobTitle || "No Job Title"}</p>
+                      <p className="text-sm text-gray-600">{user.userId?.education?.[0]?.college || "No College Info"}</p>
+                      <p className="text-sm text-gray-600">{user.userId?.phoneNumber || "No Phone Number"}</p>
+                      <p className="text-sm text-gray-600">{user.userId?.email || "No Email"}</p>
+                    </div>
+                  </div>
+                ))}
               </div>
-            ))}
+            ) : (
+              <div className="flex justify-center items-center h-96">
+                <span className="bg-red-500 text-white text-lg px-4 py-2 rounded-md shadow-md">
+                  No Applications Received Yet
+                </span>
+              </div>
+            )}
           </div>
 
-          {/* Pagination Controls */}
-          <div className="flex justify-center mt-4">
-            <button
-              className={`px-3 py-1 border mx-1 ${currentPage === 1 ? "bg-gray-300" : ""}`}
-              onClick={() => setCurrentPage(currentPage - 1)}
-              disabled={currentPage === 1}
-            >
-              Prev
-            </button>
-            {Array.from({ length: totalPages }, (_, i) => (
-              <button
-                key={i}
-                className={`px-3 py-1 border mx-1 ${currentPage === i + 1 ? "bg-purple-600 text-white" : ""}`}
-                onClick={() => setCurrentPage(i + 1)}
-              >
-                {i + 1}
+    
+          {filteredApplications.length > 0 && (
+            <div className="flex justify-center mt-4">
+              <button className="px-3 py-1 border mx-1" onClick={() => setCurrentPage(currentPage - 1)} disabled={currentPage === 1}>
+                Prev
               </button>
-            ))}
-            <button
-              className={`px-3 py-1 border mx-1 ${currentPage === totalPages ? "bg-gray-300" : ""}`}
-              onClick={() => setCurrentPage(currentPage + 1)}
-              disabled={currentPage === totalPages}
-            >
-              Next
-            </button>
-          </div>
+              <button className="px-3 py-1 border mx-1" onClick={() => setCurrentPage(currentPage + 1)} disabled={currentPage === totalPages}>
+                Next
+              </button>
+            </div>
+          )}
         </main>
       </div>
     </div>
@@ -214,3 +217,4 @@ console.log(filteredApplications)
 };
 
 export default AppliedUsers;
+

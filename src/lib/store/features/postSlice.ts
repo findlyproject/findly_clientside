@@ -126,12 +126,9 @@ const postSlice = createSlice({
     setLikes: (state, action: PayloadAction<[]>) => {
       state.likes = action.payload
     },
-    setLikes: (state, action: PayloadAction<[]>) => {
-      state.likes = action.payload// Ensure likes is an array
-    },
     setSaved:(state,action:PayloadAction<[]>)=>{
       state.saved=action.payload
-        },
+    },
     
   },
   

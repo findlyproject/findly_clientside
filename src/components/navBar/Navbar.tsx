@@ -266,6 +266,8 @@ function Navbar() {
                 )}
               </div>
               <button
+
+
               onClick={()=>setNotification(!notification)}
                 className="items w-10 h-10 sm:w-12 sm:h-12 rounded-full flex items-center justify-center hover:bg-gray-200"
               >

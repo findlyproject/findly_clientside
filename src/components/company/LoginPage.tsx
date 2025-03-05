@@ -3,7 +3,7 @@
 import React, { useState } from "react";
 import { FcGoogle } from "react-icons/fc";
 
-import { IoMail } from "react-icons/io5";
+import { IoEyeOffSharp, IoEyeOutline, IoMail } from "react-icons/io5";
 import { FaLock } from "react-icons/fa";
 import { useAppDispatch, useAppSelector } from "@/lib/store/hooks";
 import { forgotPassword, loginCompany } from "@/lib/store/features/actions/companyActions";
@@ -16,6 +16,7 @@ const Login = () => {
   const router= useRouter()
     const dispatch=useAppDispatch()
     const activeCompany=useAppSelector((state)=>state.companyLogin.activeCompany)
+    const [isPassword,setIspassword] = useState(true)
     console.log("activeCompany",activeCompany);
     
     const [formData,setFormData]=useState({
@@ -113,11 +114,18 @@ const Login = () => {
             <span className="text-gray-500 px-2"><FaLock /></span>
             <input
               onChange={handleChange}
-              type="password"
+              type={isPassword? "password":"text"}
               name="password"
               placeholder="XXXXXXXXX"
+              value={formData.password}
               className="flex-1 outline-none"
             />
+            <button 
+            onClick={()=>setIspassword(!isPassword)}
+            >
+              {isPassword? <IoEyeOutline />:<IoEyeOffSharp />}
+
+            </button>
           </div>
           <a  onClick={forgotPasswordee} className="text-blue-500 text-sm mb-4 block">Forgot password?</a>
         </div>
