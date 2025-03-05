@@ -30,20 +30,21 @@ export default function ChatList() {
   }, []);
   useEffect(() => {
     const fetchMessages = async () => {
-      if (selectedUser) { // Ensure a user is selected
+      if (selectedUser) { 
         const responseofMessage = await api.get(
           `/message/conversation/${activeuser?._id}/${selectedUser.connectionID._id}`
         );
         console.log("responseofMessage", responseofMessage);
-        setMessages(responseofMessage.data.messages); // Set messages directly
+        setMessages(responseofMessage.data.messages); 
       }
     };
     fetchMessages();
   }, [selectedUser, activeuser?._id]);
   
   const handleUserSelect = (user) => {
+    console.log("user....",user)
     setSelectedUser(user);
-    setMessages([]); // Clear previous messages
+    setMessages([]); 
     socket.emit("joinRoom", user.connectionID._id);
   };
 
@@ -81,6 +82,7 @@ export default function ChatList() {
   }, [selectedUser?.connectionID?._id]);
 
   console.log("all messages", messages);
+console.log("selectedUser",selectedUser);
 
   return (
     <div className="flex h-screen">

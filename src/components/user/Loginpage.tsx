@@ -117,9 +117,9 @@ console.log("googlestate",googlestate);
     <div className="flex items-center justify-center min-h-[85vh]">
       <div className="flex flex-col md:flex-row bg-white shadow-lg sm:shadow-2xl rounded-2xl sm:rounded-3xl overflow-hidden w-full">
         {/* Logo */}
-        <div className="absolute top-4 left-4 sm:top-8 sm:left-8 z-10">
+        {/* <div className="absolute top-4 left-4 sm:top-8 sm:left-8 z-10">
           <Logo/>
-        </div>
+        </div> */}
         
         {/* Form Section */}
         <div className="w-full md:w-1/2 p-4 sm:p-6 md:p-8 flex flex-col justify-center">

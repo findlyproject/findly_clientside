@@ -1,5 +1,5 @@
 "use client";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { useAppDispatch, useAppSelector } from "@/lib/store/hooks";
 import { IPost, setSaved } from "@/lib/store/features/postSlice";
 import { ReportPostModal } from "@/components/homePage/middle/postPreview/ReportModal";
@@ -17,8 +17,10 @@ export const PostMenu = ({ post }: PostPreviewProps) => {
   const { activeuser } = useAppSelector((state) => state.login);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [UpdateOpen, setIsUpdateOpen] = useState(false); // post update
+  const saved=useAppSelector((state)=>state.post.saved )
+  
   const dispatch = useAppDispatch();
-  const saved=useAppSelector((state)=>state.post.saved )
+ 
   //delete post
   const deletePost = async (id: string) => {
     dispatch(DeletePost({ postId: id }));
@@ -38,7 +40,6 @@ dispatch(setSaved(res.data.saved))
 const isSaved = Array.isArray(saved) && saved.some((item) => item.postId==post._id);
   return (
     <section className="absolute z-10">
-      
       <div className=" bg-white text-sm rounded-lg shadow-lg  p-2">
         <button className="flex items-center w-full text-gray-700 hover:bg-gray-100 p-2 rounded-md transition">
           <svg
