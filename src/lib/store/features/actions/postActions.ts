@@ -11,14 +11,14 @@ export const fetchAllPosts = createAsyncThunk(
   async (_, { dispatch, rejectWithValue }) => {
     try {
       const response: AxiosResponse<{ posts: IPost[] }> = await api.get(
-        "/post/allposts"
+        `/post/allposts`
       );
 
       if (!response.data || !response.data.posts) {
         return rejectWithValue("No posts found.");
       }
 
-      dispatch(setPosts(response.data.posts)); // ✅ Update Redux store
+      dispatch(setPosts(response.data.posts)); 
       return response.data.posts;
     } catch (error) {
       console.error("Error fetching posts:", error);

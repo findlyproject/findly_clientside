@@ -4,7 +4,11 @@ import api from "@/utils/api";
 import { useParams, useRouter } from "next/navigation";
 import Image from "next/image";
 import { toast } from "react-toastify";
+<<<<<<< HEAD
+import { applicationData } from "../../../types/Job";
+=======
 import { applicationData } from "../../../types/Types";
+>>>>>>> 6d27253ffd7f2ceb7fb72e888ab8717decf1d9d7
 import handleAsync from "@/utils/handleAsync";
 import { useAppSelector } from "@/lib/store/hooks";
 

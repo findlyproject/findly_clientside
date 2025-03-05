@@ -32,14 +32,14 @@ export default function ChatList() {
     const fetchMessages = async () => {
       if (selectedUser) { // Ensure a user is selected
         const responseofMessage = await api.get(
-          `/message/conversation/${activeuser._id}/${selectedUser.connectionID._id}`
+          `/message/conversation/${activeuser?._id}/${selectedUser.connectionID._id}`
         );
         console.log("responseofMessage", responseofMessage);
         setMessages(responseofMessage.data.messages); // Set messages directly
       }
     };
     fetchMessages();
-  }, [selectedUser, activeuser._id]);
+  }, [selectedUser, activeuser?._id]);
   
   const handleUserSelect = (user) => {
     setSelectedUser(user);
@@ -65,7 +65,7 @@ export default function ChatList() {
     });
 
    
-    socket.emit("joinRoom", activeuser._id);
+    socket.emit("joinRoom", activeuser?._id);
 
     
     socket.on("receiveMessage", (data) => {

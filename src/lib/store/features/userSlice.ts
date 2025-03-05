@@ -39,6 +39,7 @@ export interface UserProfile {
   type:string
   name:string
   logo:string
+  following:UserProfile[]
 
 
 
