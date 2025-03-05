@@ -59,7 +59,6 @@ interface PostState {
   postsLength: number | null;
   commentReplay?:IReply[]
   commentsReplay?:IComment[] | null;
-  
   likes: string[]; 
   saved:ISavePost[]
 }
@@ -72,6 +71,12 @@ const initialState: PostState = {
   saved:[]
 };
 
+export interface ISavePost{
+  _id:string
+  description:string
+  images?:string[]
+  video?:string
+}
 const postSlice = createSlice({
   name: "post",
   initialState,
@@ -126,14 +131,12 @@ const postSlice = createSlice({
     setLikes: (state, action: PayloadAction<[]>) => {
       state.likes = action.payload
     },
-    setLikes: (state, action: PayloadAction<[]>) => {
-      state.likes = action.payload// Ensure likes is an array
-    },
     setSaved:(state,action:PayloadAction<[]>)=>{
-  state.saved=action.payload
+      state.saved=action.payload
     },
-   
+    
   },
+  
 });
 
 export const { setPosts,addPost,addComment,setComments,findCommentReplay,removeDeletedReply,setCommentWithReplay,updatePost,setLikes,setSaved} = postSlice.actions;

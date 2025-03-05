@@ -20,12 +20,12 @@ export const PostMenu = ({ post }: PostPreviewProps) => {
   const saved=useAppSelector((state)=>state.post.saved )
   
   const dispatch = useAppDispatch();
+ 
   //delete post
   const deletePost = async (id: string) => {
     dispatch(DeletePost({ postId: id }));
     dispatch(fetchAllPosts());
   };
-
   //save post
   const handleSave=async(postId:string)=>{
     
@@ -37,13 +37,7 @@ dispatch(setSaved(res.data.saved))
   }
 
 
-const isSaved = Array.isArray(saved) && saved.some((item) => item.postId == post._id);
-
-
-console.log("isSaved",isSaved);
-
-console.log("saved posts",saved);
-  
+const isSaved = Array.isArray(saved) && saved.some((item) => item.postId==post._id);
   return (
     <section className="absolute z-10">
       <div className=" bg-white text-sm rounded-lg shadow-lg  p-2">
@@ -130,44 +124,45 @@ console.log("saved posts",saved);
       </svg>
       <span>Save</span>
     </>
-  )}
+  )}
 </button>
-          
-
-            <button
-              className="flex items-center w-full text-gray-700 hover:bg-gray-100 p-2 rounded-md transition mt-2"
-              onClick={() => setIsModalOpen(true)}
+          <button
+            className="flex items-center w-full text-gray-700 hover:bg-gray-100 p-2 rounded-md transition mt-2"
+            onClick={() => setIsModalOpen(true)}
+          >
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              fill="none"
+              viewBox="0 0 24 24"
+              strokeWidth="1.5"
+              stroke="currentColor"
+              className="size-4"
             >
-              <svg
-                xmlns="http://www.w3.org/2000/svg"
-                fill="none"
-                viewBox="0 0 24 24"
-                strokeWidth="1.5"
-                stroke="currentColor"
-                className="size-4"
-              >
-                <path
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                  d="M3 3v1.5M3 21v-6m0 0 2.77-.693a9 9 0 0 1 6.208.682l.108.054a9 9 0 0 0 6.086.71l3.114-.732a48.524 48.524 0 0 1-.005-10.499l-3.11.732a9 9 0 0 1-6.085-.711l-.108-.054a9 9 0 0 0-6.208-.682L3 4.5M3 15V4.5"
-                />
-              </svg>
+              <path
+                strokeLinecap="round"
+                strokeLinejoin="round"
+                d="M3 3v1.5M3 21v-6m0 0 2.77-.693a9 9 0 0 1 6.208.682l.108.054a9 9 0 0 0 6.086.71l3.114-.732a48.524 48.524 0 0 1-.005-10.499l-3.11.732a9 9 0 0 1-6.085-.711l-.108-.054a9 9 0 0 0-6.208-.682L3 4.5M3 15V4.5"
+              />
+            </svg>
 
-              <span>Report</span>
-            </button>
+            <span>Report</span>
+          </button>
           </>
         )}
         {isModalOpen && (
+           <OutsideClickHandler onOutsideClick={() => setIsModalOpen(false)}>
           <ReportPostModal
             postId={post._id}
             onClose={() => setIsModalOpen(false)}
+            
           />
+          </OutsideClickHandler>
         )}
 
         {UpdateOpen && post?._id && (
           <section className="fixed inset-0 z-10 flex items-center justify-center bg-black bg-opacity-50">
             <OutsideClickHandler onOutsideClick={() => setIsUpdateOpen(false)}>
-              <UpdatePost post={post} />
+              <UpdatePost post={post} setIsUpdateOpen={setIsUpdateOpen} />
             </OutsideClickHandler>
           </section>
         )}

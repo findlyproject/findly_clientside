@@ -9,7 +9,7 @@ import { useRouter } from "next/navigation";
 import Link from "next/link";
 
 import { UserProfile } from "@/lib/store/features/userSlice";
-import ModalUnstyled from "./Uploadresum";
+// import ModalUnstyled from "./Uploadresum";
 
 
 interface Connection {
@@ -301,7 +301,7 @@ const route=currentUser?"user":"company"
                     ✓ Following
                   </button>
                 </div>
-               <ModalUnstyled/>
+               {/* <ModalUnstyled/> */}
               </div>
                
             

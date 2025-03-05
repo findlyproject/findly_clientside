@@ -32,14 +32,14 @@ export default function ChatList() {
     const fetchMessages = async () => {
       if (selectedUser) { 
         const responseofMessage = await api.get(
-          `/message/conversation/${activeuser._id}/${selectedUser.connectionID._id}`
+          `/message/conversation/${activeuser?._id}/${selectedUser.connectionID._id}`
         );
         console.log("responseofMessage", responseofMessage);
         setMessages(responseofMessage.data.messages); 
       }
     };
     fetchMessages();
-  }, [selectedUser, activeuser._id]);
+  }, [selectedUser, activeuser?._id]);
   
   const handleUserSelect = (user) => {
     console.log("user....",user)
@@ -66,7 +66,7 @@ export default function ChatList() {
     });
 
    
-    socket.emit("joinRoom", activeuser._id);
+    socket.emit("joinRoom", activeuser?._id);
 
     
     socket.on("receiveMessage", (data) => {
@@ -146,8 +146,7 @@ console.log("selectedUser",selectedUser);
                           
                         </div>
             </header>
-{/* Chat Messages Section */}
-<div className="flex-grow p-4 overflow-y-auto">
+            <div className="flex-grow p-4 overflow-y-auto">
   {messages.map((msg, index) => (
     <div
       key={index}
@@ -189,9 +188,6 @@ console.log("selectedUser",selectedUser);
     <LuSend />
   </button>
 </footer>
-
-
-           
           </>
         ) : (
           <div className="flex items-center justify-center h-full text-gray-500">

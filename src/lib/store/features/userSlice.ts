@@ -39,13 +39,14 @@ export interface UserProfile {
   type:string
   name:string
   logo:string
+  following:UserProfile[]
 
 
 
   
 gender:string
 
-  location?: IlocationType;
+  location?: IlocationType[];
 
 
  
@@ -111,7 +112,16 @@ interface LoginState {
   forgotPassword:{
     email:string,
     otp:string,
-  }
+  },
+  savedJobs:string[]
+  jobfilter:{
+    title: string,
+    experienceLevel: string,
+    industry: string,
+    jobType: string,
+  },
+  allJobs :string[]
+
 }
 
 const initialState: LoginState = {
@@ -124,7 +134,8 @@ const initialState: LoginState = {
   forgotPassword:{
     email:"",
     otp:"",
-  }
+  },
+  savedJobs:[],
 };
 
 // interface EditState {
@@ -161,7 +172,7 @@ const loginSlice = createSlice({
     },
     SetLogout: (state) => {
       state.activeuser = null;
-      state.googlestate = true
+      state.googlestate = true;
     },
     setEducation: (state, action: PayloadAction<Ieducation>) => {
       state.activeuser?.education.push(action.payload);
@@ -263,6 +274,11 @@ state.connections=action.payload
    setPeopleKnow:(state,action)=>{
     state.peopleIknow=action.payload
         },
+
+    setSavedJobs:(state,action)=>{
+      state.savedJobs=action.payload
+    },
+    
   },
   
 });
@@ -290,7 +306,9 @@ export const {
   setRemovejoblocation,
   setImages,
   setforgotPassword,
-  setPeopleKnow
+  setPeopleKnow,
+  setSavedJobs,
+
 } = loginSlice.actions;
 
 export default loginSlice.reducer;

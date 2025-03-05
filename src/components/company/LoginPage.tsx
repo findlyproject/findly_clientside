@@ -3,7 +3,7 @@
 import React, { useState } from "react";
 import { FcGoogle } from "react-icons/fc";
 
-import { IoMail } from "react-icons/io5";
+import { IoEyeOffSharp, IoEyeOutline, IoMail } from "react-icons/io5";
 import { FaLock } from "react-icons/fa";
 import { useAppDispatch, useAppSelector } from "@/lib/store/hooks";
 import { forgotPassword, loginCompany } from "@/lib/store/features/actions/companyActions";
@@ -16,6 +16,7 @@ const Login = () => {
   const router= useRouter()
     const dispatch=useAppDispatch()
     const activeCompany=useAppSelector((state)=>state.companyLogin.activeCompany)
+    const [isPassword,setIspassword] = useState(true)
     console.log("activeCompany",activeCompany);
     
     const [formData,setFormData]=useState({
@@ -74,8 +75,8 @@ const Login = () => {
        }
 
   return (
-    <div className="flex min-h-screen w-full border border-black justify-center items-center p-4">
-    <div className="flex flex-col md:flex-row h-auto md:h-4/6 bg-red-500 w-full max-w-4xl rounded-xl overflow-hidden border border-black shadow-lg">
+    <div className="flex min-h-screen w-full justify-center p-7">
+    <div className="flex flex-col md:flex-row  md:h-4/6 bg-red-500 w-full max-w-4xl rounded-xl overflow-hidden border border-black shadow-lg">
       {/* Left Section */}
       <div className="w-full md:w-1/2 flex flex-col justify-center items-center bg-white p-6 md:p-8">
         <h1 className="text-2xl md:text-3xl font-bold mb-4 text-center">Corporate Access</h1>
@@ -113,11 +114,18 @@ const Login = () => {
             <span className="text-gray-500 px-2"><FaLock /></span>
             <input
               onChange={handleChange}
-              type="password"
+              type={isPassword? "password":"text"}
               name="password"
               placeholder="XXXXXXXXX"
+              value={formData.password}
               className="flex-1 outline-none"
             />
+            <button 
+            onClick={()=>setIspassword(!isPassword)}
+            >
+              {isPassword? <IoEyeOutline />:<IoEyeOffSharp />}
+
+            </button>
           </div>
           <a  onClick={forgotPasswordee} className="text-blue-500 text-sm mb-4 block">Forgot password?</a>
         </div>

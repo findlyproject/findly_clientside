@@ -10,29 +10,21 @@ import { logOutCompany } from "@/lib/store/features/actions/companyActions";
 import { logoutUser } from "@/lib/store/features/actions/userActions";
 import Image from "next/image";
 import Notification from "../notification/Notification";
+import { InputChangeEvent } from "@/types/Types";
+import { toast } from "react-toastify";
 
-export const dropDownAfterlogin = (route: string) => [
-  { name: "Subscription", href: `/${route}/premium` },
-];
-
-export const dropDownAfterloginSmallerScreen = (route: string) => [
-  { name: "Home", href: "/" },
-  { name: "About", href: "/about" },
-  { name: "Contact", href: "/contactus" },
-
-  { name: "Subscription", href: `/${route}/premium` },
-];
 
 function Navbar() {
+
   const pathname = usePathname();
   const router = useRouter();
   const dispatch = useAppDispatch();
 
   const { activeuser } = useAppSelector((state) => state.login);
   const { activeCompany } = useAppSelector((state) => state.companyLogin);
-console.log(activeuser,activeCompany)
-  const [activeTab, setActiveTab] = useState("Home");
+
   const [isMenuOpen, setIsMenuOpen] = useState(false);
+  const [notification, setNotification] = useState(false);
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
   const [searchQuery, setSearchQuery] = useState("");
   const [searchResults, setSearchResults] = useState<UserProfile[]>([]);
@@ -51,7 +43,7 @@ console.log(activeuser,activeCompany)
   
             setSearchResults(response.data.results);
           } catch (error) {
-            console.error("Error fetching users:", error);
+            toast.error("Error fetching users:", error);
           }
         };
   
@@ -61,7 +53,7 @@ console.log(activeuser,activeCompany)
       }
     }, [searchQuery]);
 
-  const handleSearchChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+  const handleSearchChange = (e: InputChangeEvent) => {
     setSearchQuery(e.target.value);
   };
   const handleLogout = () => {
@@ -91,9 +83,7 @@ console.log(activeuser,activeCompany)
               <div className="hidden xl:flex md:space-x-2 space-x-4">
                 <Link
                   href="/"
-                  className={`home  text-primary flex items-center hover:bg-primary hover:bg-opacity-20 justify-center px-3 py-2 rounded-lg ${
-                    activeTab === "Home" ? " " : ""
-                  }`}
+                  className="home  text-primary flex items-center hover:bg-primary hover:bg-opacity-20 justify-center px-3 py-2 rounded-lg" 
                 >
                   Home
                 </Link>
@@ -295,8 +285,10 @@ console.log(activeuser,activeCompany)
                   </div>
                 )}
               </div>
-              <Link
-                href="/notification"
+              <button
+
+
+              onClick={()=>setNotification(!notification)}
                 className="items w-10 h-10 sm:w-12 sm:h-12 rounded-full flex items-center justify-center hover:bg-gray-200"
               >
                 <svg
@@ -313,7 +305,7 @@ console.log(activeuser,activeCompany)
                     d="M14.857 17.082a23.848 23.848 0 0 0 5.454-1.31A8.967 8.967 0 0 1 18 9.75V9A6 6 0 0 0 6 9v.75a8.967 8.967 0 0 1-2.312 6.022c1.733.64 3.56 1.085 5.455 1.31m5.714 0a24.255 24.255 0 0 1-5.714 0m5.714 0a3 3 0 1 1-5.714 0M3.124 7.5A8.969 8.969 0 0 1 5.292 3m13.416 0a8.969 8.969 0 0 1 2.168 4.5"
                   />
                 </svg>
-              </Link>
+              </button>
               <Link
                 href="/community"
                 className="hidden  items w-10 h-10 sm:w-12 sm:h-12 rounded-full md:flex items-center justify-center hover:bg-gray-200"
@@ -345,11 +337,19 @@ console.log(activeuser,activeCompany)
                       <Image
                         width={100}
                         height={100}
-                        src={activeuser?.profileImage}
+                        src={activeuser?.profileImage }
                         alt="User Profile"
                         className="w-full h-full object-cover"
                       />
-                    ) : (
+                    ) : activeCompany?.logo ? (
+                      <Image
+                        width={100}
+                        height={100}
+                        src={activeCompany?.logo }
+                        alt="User Profile"
+                        className="w-full h-full object-cover"
+                      />
+                    ):(
                       <div className="bg-gray-200 flex items-center justify-center w-full h-full text-lg text-black">
                         {activeuser?.firstName
                           ? activeuser?.firstName[0].toUpperCase()
@@ -374,12 +374,7 @@ console.log(activeuser,activeCompany)
                       >
                         Profile
                       </button>
-                      <button
-                        className="block w-full text-left px-4 py-2 text-sm hover:bg-gray-100"
-                        onClick={() => router.push("/user/posts")}
-                      >
-                        Posts
-                      </button>
+                      
                       <button
                         className="block w-full text-left px-4 py-2 text-sm hover:bg-gray-100"
                         onClick={() => router.push("")}
@@ -391,7 +386,19 @@ console.log(activeuser,activeCompany)
                     <div className="py-3">
                       <p className="px-4 text-xs">More options</p>
                       <button
-                        className="block w-full text-left px-4 py-4 text-sm hover:bg-gray-100"
+                        className="block w-full text-left px-4 py-2 text-sm hover:bg-gray-100"
+                        onClick={() => router.push("/mynetwork")}
+                      >
+                        Networks
+                      </button>
+                      <button
+                        className="block w-full text-left px-4 py-2 text-sm hover:bg-gray-100"
+                        onClick={() => router.push(`/${route}/premium`)}
+                      >
+                        Subscription
+                      </button>
+                      <button
+                        className="block w-full text-left px-4 py-2 text-sm hover:bg-gray-100"
                         onClick={() => router.push("settings")}
                       >
                         Settings
@@ -460,9 +467,9 @@ console.log(activeuser,activeCompany)
                 <ul className="mt-4 flex flex-col font-medium md:mt-0 md:flex-row md:space-x-8">
                   <li>
                     <Link
-                      className={`block border-b py-2 pr-4 pl-3  hover:text-white md:border-0  ${
+                      className={`block border-b py-2 pr-4 pl-3   md:border-0  ${
                         pathname === "/" ? "text-white" : "text-primary"
-                      }   md:p-0 md:hover:bg-transparent md:hover:text-purple-700`}
+                      }   md:p-0 md:hover:bg-transparent`}
                       href="/"
                     >
                       Home
@@ -472,7 +479,7 @@ console.log(activeuser,activeCompany)
                     <Link
                       className={`block border-b border-gray-700 py-2 pr-4 pl-3 hover:bg-gray-700 ${
                         pathname === "/" ? "text-white" : "text-primary"
-                      }  hover:text-white md:border-0 md:p-0 md:hover:bg-transparent md:hover:text-white`}
+                      }  md:border-0 md:p-0 md:hover:bg-transparent `}
                       href="/about"
                     >
                       About
@@ -482,7 +489,7 @@ console.log(activeuser,activeCompany)
                     <Link
                       className={`block border-b border-gray-700 py-2 pr-4 pl-3 hover:bg-gray-700 ${
                         pathname === "/" ? "text-white" : "text-primary"
-                      }  hover:text-white md:border-0 md:p-0 md:hover:bg-transparent md:hover:text-white`}
+                      }   md:border-0 md:p-0 md:hover:bg-transparent `}
                       href="/contactus"
                     >
                       Contact
@@ -498,36 +505,29 @@ console.log(activeuser,activeCompany)
         <div className="lg:hidden order-3 absolute top-16 left-0 w-full bg-white shadow-md z-50">
           <Link
             href="/"
-            className={`block font-montserrat px-4 py-2 rounded-full ${
-              activeTab === "Home" ? "bg-black text-white" : ""
-            }`}
+            className="block font-montserrat px-4 py-2 rounded-full "
             onClick={() => {
               setIsMenuOpen(false);
-              setActiveTab("Home");
+              
             }}
           >
             Home
           </Link>
           <Link
             href="/explore"
-            className={`block font-montserrat px-4 py-2 rounded-full ${
-              activeTab === "Explore" ? "bg-black text-white" : ""
-            }`}
+            className="block font-montserrat px-4 py-2 rounded-full "
             onClick={() => {
               setIsMenuOpen(false);
-              setActiveTab("Explore");
             }}
           >
             Explore
           </Link>
           <Link
             href="/create"
-            className={`block font-montserrat px-4 py-2 rounded-full ${
-              activeTab === "Create" ? "bg-black text-white" : ""
-            }`}
+            className="block font-montserrat px-4 py-2 rounded-full"
             onClick={() => {
               setIsMenuOpen(false);
-              setActiveTab("Create");
+             
             }}
           >
             Create
@@ -535,18 +535,17 @@ console.log(activeuser,activeCompany)
 
           <Link
             href="/create"
-            className={`md:hidden font-montserrat px-4 py-2 rounded-full ${
-              activeTab === "Create" ? "bg-black text-white" : ""
-            }`}
+            className="md:hidden font-montserrat px-4 py-2 rounded-full "
             onClick={() => {
               setIsMenuOpen(false);
-              setActiveTab("Create");
+            
             }}
           >
             Community
           </Link>
         </div>
       )}
+      {notification && <Notification/>}
     </header>
   );
 }

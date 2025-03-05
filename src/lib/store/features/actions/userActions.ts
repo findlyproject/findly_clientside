@@ -1,10 +1,12 @@
 
 import { createAsyncThunk } from "@reduxjs/toolkit";
 import api from "@/utils/api";
-import { setActive, setConnectionRequest, setforgotPassword, SetLogout, setPeopleKnow, UserProfile } from "../userSlice";
+import { setActive, setConnectionRequest, setforgotPassword, SetLogout, setPeopleKnow, setSavedJobs, UserProfile } from "../userSlice";
 import handleAsync from "@/utils/handleAsync";
 import { AxiosResponse } from "axios";
 import {setAllRatings,Rating} from '../ratingSlice'
+import { toast } from "react-toastify";
+import { setAlljobs } from "../jobSlice";
 
 //register
 interface RegisterResponse {
@@ -94,9 +96,9 @@ export const logoutUser = createAsyncThunk(
     if (!response) {
       return rejectWithValue("logout failed");
     }
-    dispatch(SetLogout());
     const status: number = response.status;
     if (status >= 200 && status < 300) {
+    dispatch(SetLogout());
      
       return null;
     } else {
@@ -168,7 +170,6 @@ export const forgotPassword = createAsyncThunk(
   "auth/forgotPassword",
   async (state: { email: string }, { dispatch, rejectWithValue }) => {
     try {
-      console.log("loginmail",state.email)
       const response = await api.post(`/user/sendotp/${state.email}`);
       dispatch(setforgotPassword({ email: state.email, otp: response.data.otp }));
       return response.data;
@@ -191,11 +192,55 @@ export const fetchPeopleKnow = createAsyncThunk(
         return rejectWithValue("No user found");
       }
 
-      dispatch(setPeopleKnow(response.data.suggestedUsers)); // ✅ Update Redux store
+      dispatch(setPeopleKnow(response.data.suggestedUsers)); 
       return response.data.suggestedUsers;
     } catch (error) {
       console.error("Error fetching posts:", error);
       return rejectWithValue("Failed to fetch posts.");
+    }
+  }
+);
+
+// get saved jobs//
+
+
+export const fetchSavedJobs = createAsyncThunk(
+  "/user/getsavedjobs",
+  async (page, { dispatch, rejectWithValue }) => {
+    try {
+      const response: AxiosResponse<{ suggestedUsers: UserProfile[] }> = await api.get(
+        `/user/getsavedjobs?page=${page}`
+      );
+      
+      if (!response.data.data || !response.data.data) {
+        return rejectWithValue("No user found");
+      }
+      dispatch(setSavedJobs(response.data?.data)); 
+      return response.data.suggestedUsers;
+    } catch (error) {
+      console.error("Error fetching saved jobs:", error);
+      dispatch(setSavedJobs([])); 
+      return rejectWithValue("Failed to fetch saved jobs.");
+    }
+  }
+);
+
+// save jobs 
+
+
+export const saveJobs = createAsyncThunk(
+  "/user/savejobs",
+  async (id, { dispatch,rejectWithValue }) => {
+    try {
+      const response: AxiosResponse<{ suggestedUsers: UserProfile[] }> = await api.post(
+       `/user/saveJobs/${id}`
+      );
+      dispatch(fetchSavedJobs())
+      toast.success(response.data.message)
+      return response.data;
+    } catch (error) {
+      console.error("Error save job:", error);
+      return rejectWithValue("Failed to save job.");
     }
   }
 );
