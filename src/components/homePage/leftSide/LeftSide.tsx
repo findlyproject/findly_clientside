@@ -4,7 +4,7 @@ import { FeedIdentityModule } from './FeedIdentityModule'
 
 export function LeftSideBar() {
   return (
-    <section className="md:block w-[700px] ml-5 sm:flex sm:justify-around lg:ml-10 md:w-64 mt-7">
+    <section className="md:block sm:flex sm:justify-around md:ml-10 md:w-64 lg:w-80 mt-7">
       <FeedIdentityModule />
       <CommunityPanel />
     </section>

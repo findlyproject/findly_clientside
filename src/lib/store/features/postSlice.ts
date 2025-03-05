@@ -32,7 +32,12 @@ export interface IComment {
 
 }
 
-
+export interface ISavePost{
+  _id:string
+  description:string
+  images?:string[]
+  video?:string
+}
 export interface IPost {
   _id: string;
   description?: string;
@@ -56,13 +61,15 @@ interface PostState {
   commentsReplay?:IComment[] | null;
   
   likes: string[]; 
+  saved:ISavePost[]
 }
 
 const initialState: PostState = {
   posts: null,
   comments:null,
   postsLength: null,
-  likes:[]
+  likes:[],
+  saved:[]
 };
 
 const postSlice = createSlice({
@@ -121,11 +128,14 @@ const postSlice = createSlice({
     },
     setLikes: (state, action: PayloadAction<[]>) => {
       state.likes = action.payload// Ensure likes is an array
-    }
-    
+    },
+    setSaved:(state,action:PayloadAction<[]>)=>{
+  state.saved=action.payload
+    },
+   
   },
 });
 
-export const { setPosts,addPost,addComment,setComments,findCommentReplay,removeDeletedReply,setCommentWithReplay,updatePost,setLikes} = postSlice.actions;
+export const { setPosts,addPost,addComment,setComments,findCommentReplay,removeDeletedReply,setCommentWithReplay,updatePost,setLikes,setSaved} = postSlice.actions;
 
 export default postSlice.reducer;

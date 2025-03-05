@@ -1,5 +1,5 @@
 "use client";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { Star } from "lucide-react";
 import { useRouter } from "next/navigation";
 
@@ -16,6 +16,20 @@ const RateUs: React.FC = () => {
   
 const activeuser=useAppSelector((state)=>state.user.activeuser)
    const route=activeuser?"user":"company"
+const activeCompany = useAppSelector((state) => state.companyLogin.activeCompany)
+
+useEffect(() => {
+  if (!activeCompany && !activeuser) {
+    toast.error("Login first to get access");
+    setTimeout(() => {
+      router.push("/");
+    }, 8000); // Delay navigation by 2 seconds
+  }
+}, [activeCompany, activeuser,router]);
+
+
+// If not authorized, return `null` (or a loader)
+if (!activeCompany && !activeuser) return null;
 
 
   const handleSubmit = async () => {

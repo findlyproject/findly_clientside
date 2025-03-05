@@ -46,7 +46,7 @@ export default function ManageAccount() {
               <span className="font-semibold">Email:</span> {user?.email}
             </p>
             <p className="text-lg text-gray-600">
-              <span className="font-semibold">Location:</span> {user?.location?.city}
+              <span className="font-semibold">Location:</span> {user?.location?.countryName},{user?.location?.city}
             </p>
           </div>
         </div>

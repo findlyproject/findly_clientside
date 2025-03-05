@@ -2,10 +2,8 @@
 
 import { useState } from "react";
 import api from "@/utils/api";
-import { useAppDispatch } from "@/lib/store/hooks";
 
 export const ReportPostModal = ({ postId, onClose }) => {
-  console.log("postId", postId);
   const [reason, setReason] = useState("");
 
   const handleSubmit = async () => {

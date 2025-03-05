@@ -1,10 +1,7 @@
 
-
-
-
 import { createAsyncThunk } from "@reduxjs/toolkit";
 import api from "@/utils/api";
-import { setActive, setConnectionRequest, setforgotPassword, SetLogout, UserProfile } from "../userSlice";
+import { setActive, setConnectionRequest, setforgotPassword, SetLogout, setPeopleKnow, UserProfile } from "../userSlice";
 import handleAsync from "@/utils/handleAsync";
 import { AxiosResponse } from "axios";
 import {setAllRatings,Rating} from '../ratingSlice'
@@ -180,3 +177,25 @@ export const forgotPassword = createAsyncThunk(
     }
   }
 )
+
+// fetch the people might i know
+export const fetchPeopleKnow = createAsyncThunk(
+  "post/fetchPeopleKnow",
+  async (_, { dispatch, rejectWithValue }) => {
+    try {
+      const response: AxiosResponse<{ suggestedUsers: UserProfile[] }> = await api.get(
+        "/user/people-you-might-know"
+      );
+
+      if (!response.data || !response.data.suggestedUsers) {
+        return rejectWithValue("No user found");
+      }
+
+      dispatch(setPeopleKnow(response.data.suggestedUsers)); // ✅ Update Redux store
+      return response.data.suggestedUsers;
+    } catch (error) {
+      console.error("Error fetching posts:", error);
+      return rejectWithValue("Failed to fetch posts.");
+    }
+  }
+);
