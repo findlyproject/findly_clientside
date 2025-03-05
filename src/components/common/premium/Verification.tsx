@@ -9,7 +9,7 @@ import { useRouter } from "next/navigation";
 
 const SubscribedPlanDetails: React.FC = () => {
   const  activeCompany=useAppSelector((state)=>state.companyLogin.activeCompany)
-  const route=activeCompany?"Comapny":"User"
+  const route=activeCompany?"company":"user"
     const router=useRouter()
   const searchParams = useSearchParams();
   const sessionId = searchParams.get("session_id");
@@ -17,6 +17,7 @@ const SubscribedPlanDetails: React.FC = () => {
   const allFeatures = useAppSelector((state) => state.payment.subscription);
 
   console.log("Subscription Details:", allFeatures);
+  console.log("sessionId", sessionId);
 
   useEffect(() => {
     if (sessionId) {

@@ -47,8 +47,9 @@ export const subscription=createAsyncThunk(
   export const features=createAsyncThunk(
     "features",
     async ({sessionId,route}:{sessionId:string,route:string}, { dispatch, rejectWithValue }) => {
+      console.log("route",route);
       
-      const response = await handleAsync<AxiosResponse>(() =>api.post(`/${route}/payment/findsubscriptionbyId/${sessionId}`));
+      const response = await handleAsync<AxiosResponse>(() =>api.get(`/${route}/payment/findsubscriptionbyId/${sessionId}`));
   
   console.log("subscrio",response)
       if (!response) {
