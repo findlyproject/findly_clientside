@@ -46,6 +46,7 @@ console.log(resultcometsreplay);
   }
 
   const { activeuser } = useAppSelector((state) => state.login);
+const routes=activeuser?"user":"company"
 
   const [isShowMenu, setIsShowMenu] = useState(false);
   const [commentData, setCommentData] = useState("");
@@ -68,7 +69,7 @@ console.log(resultcometsreplay);
 
   const dispatch = useAppDispatch();
   const replay = useAppSelector((state) => state.post.commentReplay);
-
+  const route = activeuser ? "user" : "company"
   if (!comments) return <div className="text-center p-4">Loading...</div>;
 
   const handleListCommentReplays = async (commentId: string) => {
@@ -89,7 +90,7 @@ console.log(resultcometsreplay);
     if (!newCommentData.trim()) {
       return;
     }
-    dispatch(addCommentonPost({ postId, comment: newCommentData }));
+    dispatch(addCommentonPost({ postId, comment: newCommentData,routes }));
     setnewCommentData("");
   };
 
@@ -137,7 +138,7 @@ console.log(resultcometsreplay);
 
   //getting the specific comment by id
   const getCommentById = (id: string) => {
-    dispatch(fetchCommentById(id))
+    dispatch(fetchCommentById({id,routes}))
       .unwrap()
       .then((fetchedComment) => {
         setCommentData(fetchedComment);
@@ -157,14 +158,14 @@ console.log(resultcometsreplay);
   const handleSaveEdit = () => {
     if (!commentData.trim()) return;
     dispatch(
-      updateAComment({ commentId: editingCommentId, newComment: commentData })
+      updateAComment({ commentId: editingCommentId, newComment: commentData,routes })
     );
     setEdit(false);
     dispatch(fetchAllPosts());
   };
   //delete comment
   const deleteComment = async (commentid: string) => {
-    dispatch(deleteAComment({ commentId: commentid }));
+    dispatch(deleteAComment({ commentId: commentid ,routes}));
     dispatch(fetchAllPosts());
   };
 
@@ -343,25 +344,41 @@ console.log(resultcometsreplay);
                   <div className="flex items-start space-x-3">
                    
                     <div className="w-8 h-8">
-                      <Image
-                        src={
-                          comment.user?.profileImage ||
-                          "https://res.cloudinary.com/dq1auwpkm/image/upload/v1738735360/profile_jtwxaj.png"
-                        }
-                        alt="userprofile"
-                        width={30}
-                        height={30}
-                        className="w-full h-full rounded-full object-cover"
-                      />
+                      {user ? (
+                        <Image
+                          src={comment.user?.profileImage}
+                          alt="Profile"
+                          width={30}
+                          height={30}
+                          className="w-full h-full rounded-full object-cover"
+                        />
+                      ) : (
+                        <Image
+                          src={comment.user?.logo}
+                          alt="Profile"
+                          width={30}
+                          height={30}
+                          className="w-full h-full rounded-full object-cover"
+                        />
+                      )}
+                    
+                     
                     </div>
 
                  
                     <div className="flex-grow">
                       <div className="flex justify-between">
                         <div>
-                          <h3 className="font-semibold text-sm">
-                            {comment.user?.firstName} {comment.user?.lastName}
-                          </h3>
+                          {activeuser ? (
+                            <h3 className="font-semibold text-sm">
+                              {comment.user?.firstName} {comment.user?.lastName}
+                            </h3>
+                          ) : (
+                            <h3 className="font-semibold text-sm">
+                              {comment.user?.name}
+                            </h3>
+                          )}
+                         
                         </div>
                         <div className="text-gray-500 text-xs">
                           {dayjs(comment.updatedAt).fromNow()}
@@ -372,8 +389,8 @@ console.log(resultcometsreplay);
 
                  
                       <div className="flex space-x-2 mt-2 text-gray-500 ">
-                      <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth="1.5" stroke="currentColor" className="size-4">
-  <path strokeLinecap="round" strokeLinejoin="round" d="M21 8.25c0-2.485-2.099-4.5-4.688-4.5-1.935 0-3.597 1.126-4.312 2.733-.715-1.607-2.377-2.733-4.313-2.733C5.1 3.75 3 5.765 3 8.25c0 7.22 9 12 9 12s9-4.78 9-12Z" />
+                      <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" className="size-4">
+  <path strokeLinecap="round" stroke-linejoin="round" d="M21 8.25c0-2.485-2.099-4.5-4.688-4.5-1.935 0-3.597 1.126-4.312 2.733-.715-1.607-2.377-2.733-4.313-2.733C5.1 3.75 3 5.765 3 8.25c0 7.22 9 12 9 12s9-4.78 9-12Z" />
 </svg>
 
                         <button

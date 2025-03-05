@@ -1,5 +1,6 @@
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 import { UserProfile } from "./userSlice";
+import { companyData } from "./companyslice";
 
 export interface IReport {
 _id: string; 
@@ -23,7 +24,7 @@ export interface IReply {
 
 export interface IComment {
   _id: string;
-  user: UserProfile | null;
+  user: UserProfile | companyData  | null;
   comment: string;
   replies: IReply[];  
   isDeleted: boolean;
