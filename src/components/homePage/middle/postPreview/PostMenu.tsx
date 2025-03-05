@@ -1,7 +1,7 @@
 "use client";
 import { useState } from "react";
 import { useAppDispatch, useAppSelector } from "@/lib/store/hooks";
-import { IPost } from "@/lib/store/features/postSlice";
+import { IPost, setSaved } from "@/lib/store/features/postSlice";
 import { ReportPostModal } from "@/components/homePage/middle/postPreview/ReportModal";
 import { UpdatePost } from "../UpdatePost";
 import OutsideClickHandler from "react-outside-click-handler";
@@ -9,6 +9,7 @@ import {
   DeletePost,
   fetchAllPosts,
 } from "@/lib/store/features/actions/postActions";
+import api from "@/utils/api";
 interface PostPreviewProps {
   post: IPost;
 }
@@ -17,11 +18,24 @@ export const PostMenu = ({ post }: PostPreviewProps) => {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [UpdateOpen, setIsUpdateOpen] = useState(false); // post update
   const dispatch = useAppDispatch();
+  const saved=useAppSelector((state)=>state.post.saved )
   //delete post
   const deletePost = async (id: string) => {
     dispatch(DeletePost({ postId: id }));
     dispatch(fetchAllPosts());
   };
+  //save post
+  const handleSave=async(postId:string)=>{
+    
+    const response=await api.post(`/post/user/save/${postId}`)
+console.log("response of saving a post",response);
+const res=await api.get("/post/user/all")
+dispatch(setSaved(res.data.saved))
+
+  }
+
+
+const isSaved = Array.isArray(saved) && saved.some((item) => item.postId==post._id);
   return (
     <section className="absolute z-10">
       
@@ -90,6 +104,27 @@ export const PostMenu = ({ post }: PostPreviewProps) => {
             </button>
           </>
         ) : (
+          <>
+          <button
+  className="flex items-center w-full text-gray-700 hover:bg-gray-100 p-2 rounded-md transition mt-2"
+  onClick={() => handleSave(post._id)}
+>
+  {isSaved ? (
+    <>
+      <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth="1.5" stroke="currentColor" className="size-4">
+        <path strokeLinecap="round" strokeLinejoin="round" d="m3 3 1.664 1.664M21 21l-1.5-1.5m-5.485-1.242L12 17.25 4.5 21V8.742m.164-4.078a2.15 2.15 0 0 1 1.743-1.342 48.507 48.507 0 0 1 11.186 0c1.1.128 1.907 1.077 1.907 2.185V19.5M4.664 4.664 19.5 19.5" />
+      </svg>
+      <span>Unsave</span>
+    </>
+  ) : (
+    <>
+      <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth="1.5" stroke="currentColor" className="size-4">
+        <path strokeLinecap="round" strokeLinejoin="round" d="M17.593 3.322c1.1.128 1.907 1.077 1.907 2.185V21L12 17.25 4.5 21V5.507c0-1.108.806-2.057 1.907-2.185a48.507 48.507 0 0 1 11.186 0Z" />
+      </svg>
+      <span>Save</span>
+    </>
+  )}
+</button>
           <button
             className="flex items-center w-full text-gray-700 hover:bg-gray-100 p-2 rounded-md transition mt-2"
             onClick={() => setIsModalOpen(true)}
@@ -111,6 +146,7 @@ export const PostMenu = ({ post }: PostPreviewProps) => {
 
             <span>Report</span>
           </button>
+          </>
         )}
         {isModalOpen && (
            <OutsideClickHandler onOutsideClick={() => setIsModalOpen(false)}>

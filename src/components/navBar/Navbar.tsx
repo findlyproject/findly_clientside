@@ -10,23 +10,25 @@ import { logOutCompany } from "@/lib/store/features/actions/companyActions";
 import { logoutUser } from "@/lib/store/features/actions/userActions";
 import Image from "next/image";
 import Notification from "../notification/Notification";
+import { InputChangeEvent } from "@/types/Types";
+import { toast } from "react-toastify";
 
 
 function Navbar() {
+
   const pathname = usePathname();
   const router = useRouter();
   const dispatch = useAppDispatch();
+
   const { activeuser } = useAppSelector((state) => state.login);
   const { activeCompany } = useAppSelector((state) => state.companyLogin);
-  const [activeTab, setActiveTab] = useState("Home");
+
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [notification, setNotification] = useState(false);
-
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
   const [searchQuery, setSearchQuery] = useState("");
   const [searchResults, setSearchResults] = useState<UserProfile[]>([]);
 
-    
     useEffect(() => {
       if (searchQuery.length > 0) {
         const fetchUsers = async () => {
@@ -37,7 +39,7 @@ function Navbar() {
   
             setSearchResults(response.data.results);
           } catch (error) {
-            console.error("Error fetching users:", error);
+            toast.error("Error fetching users:", error);
           }
         };
   
@@ -47,7 +49,7 @@ function Navbar() {
       }
     }, [searchQuery]);
 
-  const handleSearchChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+  const handleSearchChange = (e: InputChangeEvent) => {
     setSearchQuery(e.target.value);
   };
   const handleLogout = () => {
@@ -75,9 +77,7 @@ function Navbar() {
               <div className="hidden xl:flex md:space-x-2 space-x-4">
                 <Link
                   href="/"
-                  className={`home  text-primary flex items-center hover:bg-primary hover:bg-opacity-20 justify-center px-3 py-2 rounded-lg ${
-                    activeTab === "Home" ? " " : ""
-                  }`}
+                  className="home  text-primary flex items-center hover:bg-primary hover:bg-opacity-20 justify-center px-3 py-2 rounded-lg" 
                 >
                   Home
                 </Link>
@@ -370,6 +370,12 @@ function Navbar() {
                       </button>
                       <button
                         className="block w-full text-left px-4 py-2 text-sm hover:bg-gray-100"
+                        onClick={() => router.push(`/${route}/premium`)}
+                      >
+                        Subscription
+                      </button>
+                      <button
+                        className="block w-full text-left px-4 py-2 text-sm hover:bg-gray-100"
                         onClick={() => router.push("settings")}
                       >
                         Settings
@@ -438,9 +444,9 @@ function Navbar() {
                 <ul className="mt-4 flex flex-col font-medium md:mt-0 md:flex-row md:space-x-8">
                   <li>
                     <Link
-                      className={`block border-b py-2 pr-4 pl-3  hover:text-white md:border-0  ${
+                      className={`block border-b py-2 pr-4 pl-3   md:border-0  ${
                         pathname === "/" ? "text-white" : "text-primary"
-                      }   md:p-0 md:hover:bg-transparent md:hover:text-purple-700`}
+                      }   md:p-0 md:hover:bg-transparent`}
                       href="/"
                     >
                       Home
@@ -450,7 +456,7 @@ function Navbar() {
                     <Link
                       className={`block border-b border-gray-700 py-2 pr-4 pl-3 hover:bg-gray-700 ${
                         pathname === "/" ? "text-white" : "text-primary"
-                      }  hover:text-white md:border-0 md:p-0 md:hover:bg-transparent md:hover:text-white`}
+                      }  md:border-0 md:p-0 md:hover:bg-transparent `}
                       href="/about"
                     >
                       About
@@ -460,7 +466,7 @@ function Navbar() {
                     <Link
                       className={`block border-b border-gray-700 py-2 pr-4 pl-3 hover:bg-gray-700 ${
                         pathname === "/" ? "text-white" : "text-primary"
-                      }  hover:text-white md:border-0 md:p-0 md:hover:bg-transparent md:hover:text-white`}
+                      }   md:border-0 md:p-0 md:hover:bg-transparent `}
                       href="/contactus"
                     >
                       Contact
@@ -476,36 +482,29 @@ function Navbar() {
         <div className="lg:hidden order-3 absolute top-16 left-0 w-full bg-white shadow-md z-50">
           <Link
             href="/"
-            className={`block font-montserrat px-4 py-2 rounded-full ${
-              activeTab === "Home" ? "bg-black text-white" : ""
-            }`}
+            className="block font-montserrat px-4 py-2 rounded-full "
             onClick={() => {
               setIsMenuOpen(false);
-              setActiveTab("Home");
+              
             }}
           >
             Home
           </Link>
           <Link
             href="/explore"
-            className={`block font-montserrat px-4 py-2 rounded-full ${
-              activeTab === "Explore" ? "bg-black text-white" : ""
-            }`}
+            className="block font-montserrat px-4 py-2 rounded-full "
             onClick={() => {
               setIsMenuOpen(false);
-              setActiveTab("Explore");
             }}
           >
             Explore
           </Link>
           <Link
             href="/create"
-            className={`block font-montserrat px-4 py-2 rounded-full ${
-              activeTab === "Create" ? "bg-black text-white" : ""
-            }`}
+            className="block font-montserrat px-4 py-2 rounded-full"
             onClick={() => {
               setIsMenuOpen(false);
-              setActiveTab("Create");
+             
             }}
           >
             Create
@@ -513,12 +512,10 @@ function Navbar() {
 
           <Link
             href="/create"
-            className={`md:hidden font-montserrat px-4 py-2 rounded-full ${
-              activeTab === "Create" ? "bg-black text-white" : ""
-            }`}
+            className="md:hidden font-montserrat px-4 py-2 rounded-full "
             onClick={() => {
               setIsMenuOpen(false);
-              setActiveTab("Create");
+            
             }}
           >
             Community

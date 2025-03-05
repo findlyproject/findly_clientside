@@ -17,6 +17,7 @@
     "@headlessui/react": "^2.2.0",
     "@heroicons/react": "^2.2.0",
     "@hookform/resolvers": "^4.1.0",
+    "@material-tailwind/react": "^2.1.10",
     "@mui/icons-material": "^6.4.4",
     "@mui/material": "^6.4.5",
     "@react-pdf-viewer/core": "^3.12.0",
@@ -63,6 +64,7 @@
     "swiper": "^11.2.1",
     "tailwind-merge": "^3.0.2",
     "tailwindcss-animate": "^1.0.7",
+    "tw-elements-react": "^1.0.0-alpha-end",
     "yup": "^1.6.1"
   },
   "devDependencies": {

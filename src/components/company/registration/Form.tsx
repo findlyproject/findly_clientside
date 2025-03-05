@@ -10,26 +10,24 @@ import { toast } from "react-toastify";
 import Image from "next/image";
 import { useAppDispatch } from "@/lib/store/hooks";
 import { setActiveCompany } from "@/lib/store/features/companyslice";
-import { Company, SelectChangeEvent } from "../../../../.next/types/Types";
+import { Company, SelectChangeEvent } from "../../../types/Types";
 import handleAsync from "@/utils/handleAsync";
 import PhoneInput from "react-phone-input-2";
 import "react-phone-input-2/lib/style.css"; // Import default styles
 const RegistrationForm = () => {
   const searchParams = useSearchParams();
+  const dispatch = useAppDispatch();
+  const router = useRouter();
+
   const Email = searchParams.get("email") || "";
   const Name = searchParams.get("name") || "";
+
   const [showPassword, setShowPassword] = useState(false);
   const [showConfirmPassword, setShowConfirmPassword] = useState(false);
   const [previewImage, setPreviewImage] = useState<{
     file: File | null;
     url: string;
-  }>({
-    file: null,
-    url: "",
-  });
-
-  const dispatch = useAppDispatch();
-  const router = useRouter();
+  }>({ file: null, url: "" });
 
   // formik validation
   const validationSchema = Yup.object().shape({
@@ -67,7 +65,6 @@ const RegistrationForm = () => {
     }
   };
 
-  console.log(previewImage);
   const industryTypes = [
     { id: 1, name: "Information Technology" },
     { id: 2, name: "Finance & Banking" },
@@ -110,51 +107,51 @@ const RegistrationForm = () => {
 
     if (previewImage && previewImage.file instanceof File) {
       formData.append("logo", previewImage.file);
-    } else {
-      console.warn("Invalid file: previewImage is not a File object");
     }
 
     const response = await handleAsync(() =>
       api.post("/company/final-register", formData)
     );
-    if (response?.status == 201) {
-      console.log("Registration successful:", response.data);
-      const data = response.data.company;
-      dispatch(setActiveCompany(data));
-      toast.success("Registration successful");
-      router.push("/company/home");
+    if (response && response.status >= 200 && response.status < 300) {
+    const data = response?.data.company;
+    dispatch(setActiveCompany(data));
+    router.push("/company/home");
     }
   };
 
   return (
-    <div className=" min-h-screen p-4 flex items-center justify-center">
-      <div className="w-full mx-auto max-w-screen-lg rounded-xl  p-4 md:p-6 ">
-        <div className="flex justify-center">
-          <label className="relative cursor-pointer">
-            <div className="w-24 h-24 md:w-28 md:h-28 mb-6 bg-gray-100 rounded-full flex items-center justify-center overflow-hidden group hover:bg-gray-200 transition-colors">
-              {previewImage.url ? (
-                <Image
-                  src={previewImage.url}
-                  alt="Profilepreview"
-                  className="w-full h-full object-cover"
-                  width={300}
-                  height={300}
-                />
-              ) : (
-                <Camera className="w-8 h-8 md:w-10  md:h-10 text-gray-400 group-hover:text-gray-500" />
-              )}
-              <div className="absolute inset-0 mb-6 bg-black bg-opacity-0 group-hover:bg-opacity-20 rounded-full transition-all flex items-center justify-center">
-                <Camera className="w-8 h-8 md:w-10  md:h-10 text-white opacity-0 group-hover:opacity-100 transition-opacity" />
-              </div>
+    <div className="min-h-screen flex flex-col md:flex-row gap-18">
+      {/* coumn1  */}
+      <div className="flex justify-center items-center md:items-start md:m-16">
+        <span className="block text-sm text-gray-700">Logo <span className="text-red-500">*</span></span>
+        <label className="relative cursor-pointer">
+          <div className="w-24 h-24 md:w-28 md:h-28 mb-6 bg-gray-100 rounded-full flex items-center justify-center overflow-hidden group hover:bg-gray-200 transition-colors">
+            {previewImage.url ? (
+              <Image
+                src={previewImage.url}
+                alt="Profilepreview"
+                className="w-full h-full object-cover"
+                width={300}
+                height={300}
+              />
+            ) : (
+              <Camera className="w-8 h-8 md:w-10  md:h-10 text-primary group-hover:text-primary" />
+            )}
+            <div className="absolute inset-0 mb-6 bg-primary bg-opacity-0 group-hover:bg-opacity-20 rounded-full transition-all flex items-center justify-center">
+              <Camera className="w-8 h-8 md:w-10  md:h-10 text-primary opacity-0 group-hover:opacity-100 transition-opacity" />
             </div>
-            <input
-              type="file"
-              accept="image/*"
-              onChange={handleImageChange}
-              className="hidden"
-            />
-          </label>
-        </div>
+          </div>
+          <input
+            type="file"
+            accept="image/*"
+            onChange={handleImageChange}
+            className="hidden"
+          />
+        </label>
+      </div>
+      {/* column 2 */}
+
+      <div className="w-full my-10 max-w-screen-lg rounded-xl ">
         <Formik
           initialValues={{
             name: Name,
@@ -260,6 +257,7 @@ const RegistrationForm = () => {
                   <Field
                     type="email"
                     placeholder="email@gmail.com"
+                    readOnly
                     name="email"
                     className="w-full p-2.5 border rounded-lg focus:ring-2 focus:ring-primary outline-none text-sm md:text-base"
                   />
@@ -341,7 +339,7 @@ const RegistrationForm = () => {
                     name="IndustryType"
                     className="w-full p-2.5 border rounded-lg focus:ring-2 focus:ring-primary outline-none text-sm md:text-base"
                     value={values.IndustryType || ""}
-                    onChange={(e:SelectChangeEvent) => {
+                    onChange={(e: SelectChangeEvent) => {
                       setFieldValue("IndustryType", e.target.value);
                     }}
                   >
@@ -389,7 +387,7 @@ const RegistrationForm = () => {
                       name="address.country"
                       className="w-full p-2.5 border rounded-lg focus:ring-2 focus:ring-primary outline-none text-sm md:text-base"
                       value={values.address.country || ""}
-                      onChange={(e:SelectChangeEvent) => {
+                      onChange={(e: SelectChangeEvent) => {
                         setFieldValue("address.country", e.target.value);
                       }}
                     >
@@ -416,7 +414,7 @@ const RegistrationForm = () => {
                       as="select"
                       className="w-full p-2.5 border rounded-lg focus:ring-2 focus:ring-primary outline-none text-sm md:text-base"
                       value={values.address.state || ""}
-                      onChange={(e:SelectChangeEvent) => {
+                      onChange={(e: SelectChangeEvent) => {
                         setFieldValue("address.state", e.target.value);
                       }}
                       name="state"
@@ -439,7 +437,7 @@ const RegistrationForm = () => {
                   </div>
                 </div>
 
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-4 pt-4">
                   {/* City Dropdown */}
                   <div className="space-y-2">
                     <label className="block text-sm text-gray-700">
@@ -449,7 +447,7 @@ const RegistrationForm = () => {
                       as="select"
                       className="w-full p-2.5 border rounded-lg focus:ring-2 focus:ring-primary outline-none text-sm md:text-base"
                       value={values.address.city || ""}
-                      onChange={(e:SelectChangeEvent) =>
+                      onChange={(e: SelectChangeEvent) =>
                         setFieldValue("address.city", e.target.value)
                       }
                       name="city"
@@ -494,7 +492,7 @@ const RegistrationForm = () => {
 
               <button
                 type="submit"
-                className="w-full bg-gray-900 text-white p-3 rounded-lg hover:bg-gray-800 transition-colors text-sm md:text-base font-medium"
+                className="w-full bg-primary text-white p-3 rounded-lg hover:bg-gray-800 transition-colors text-sm md:text-base font-medium"
               >
                 {isSubmitting ? "Submitting..." : "Register"}
               </button>
