@@ -59,7 +59,7 @@ export const PostPreview = ({ post }: PostPreviewProps) => {
 
   
   const currentUser = useAppSelector((state) => state.user.activeuser);
-
+  const  activeCompany=useAppSelector((state)=>state.companyLogin.activeCompany)
   const handleLike = async (postId: string) => {
     const response = await api.post(`/post/user/likepost/${postId}`);
 
@@ -70,6 +70,8 @@ export const PostPreview = ({ post }: PostPreviewProps) => {
 
   return (
     <section className="flex flex-col border border-gray-300 bg-white rounded-lg mx-auto p-4 shadow-md relative">
+     
+
       {/* Post Owner Details */}
       <section className="flex justify-between ">
         <div className="flex items-center mb-3">
@@ -192,7 +194,9 @@ export const PostPreview = ({ post }: PostPreviewProps) => {
         <section className="flex items-center text-sm justify-around border-t border-gray-200 pt-2">
           {Array.isArray(localPost.likedBy) &&
           localPost.likedBy.find((item) => {
-            return typeof item === "string" && item == currentUser?._id;
+
+            // return item === currentUser?._id;
+            return typeof item === "string" && item == currentUser?._id||activeCompany?._id
           }) ? (
             <div>
               <button

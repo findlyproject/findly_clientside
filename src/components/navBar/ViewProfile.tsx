@@ -300,7 +300,7 @@ const route=currentUser?"user":"company"
                     ✓ Following
                   </button>
                 </div>
-               <ModalUnstyled/>
+               {/* <ModalUnstyled/> */}
               </div>
                
             

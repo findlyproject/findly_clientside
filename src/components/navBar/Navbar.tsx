@@ -28,7 +28,11 @@ function Navbar() {
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
   const [searchQuery, setSearchQuery] = useState("");
   const [searchResults, setSearchResults] = useState<UserProfile[]>([]);
+  
+ console.log(activeCompany)
 
+    const route=activeCompany?"company":"user"
+    
     useEffect(() => {
       if (searchQuery.length > 0) {
         const fetchUsers = async () => {
@@ -61,6 +65,8 @@ function Navbar() {
     // signOut()
     router.replace("/");
   };
+  
+  
   return (
     <header className="w-full">
       {activeuser || activeCompany ? (
@@ -157,31 +163,45 @@ function Navbar() {
                   </svg>
                 </form>
               </div>
-              {searchQuery && searchResults.length > 0 && (
+              {searchQuery && searchResults?.length > 0 && (
                 <div className="absolute top-full left-0 mt-2 w-full max-h-60 overflow-y-auto border  border-gray-300 bg-white p-4 rounded-lg shadow-md z-50 ">
                   <ul className="mt-2 space-y-2 ">
-                    {searchResults.map((user) => (
-                      <li key={user._id} className="cursor-pointer flex items-center gap-2 pl-4 hover:bg-primary hover:bg-opacity-20 rounded-full"
+                  {searchResults.map((item) => (
+                    
+                   
+        <li
+          key={item._id}
+          className="cursor-pointer flex items-center gap-2 pl-4 hover:bg-primary hover:bg-opacity-20 rounded-full"
+          // onClick={() => router.push(`/${route}/${item._id}/${item.type}`)}
+        
+          onClick={() =>
+            router.push(
+              item._id === activeuser?._id
+                ? `/${route}/profile`
+                :item._id===activeCompany?._id
+                ?`/${route}/profile`
 
-                        onClick={() => router.push(`/user/${user._id}/User`)}
-                      >
-                        <Image
-                          width={100}
-                          height={100}
-                          src={user.profileImage || "/default-profile.png"}
-                          alt={`${user.firstName} ${user.lastName}`}
-                          className="w-7 h-7 rounded-full"
-                        />
-                        <div>
-                          <p className="tex-sm font-semibold">
-                            {user.firstName} {user.lastName}
-                          </p>
-                          <p className="text-sm text-gray-500">
-                            {user.email}
-                          </p>
-                        </div>
-                      </li>
-                    ))}
+                : `/${route}/${item._id}/${item.type}`
+            )
+          }
+          
+          
+        >
+          <img
+            width={100}
+            height={100}
+            src={item.type === "User" ? item.profileImage : item.logo}
+            alt={item.type === "User" ? `${item.firstName} ${item.lastName}` : item.name}
+            className="w-7 h-7 rounded-full"
+          />
+          <div>
+            <p className="text-sm font-semibold">
+              {item.type === "User" ? `${item.firstName} ${item.lastName}` : item.name}
+            </p>
+            <p className="text-sm text-gray-500">{item.email}</p>
+          </div>
+        </li>
+      ))}
                   </ul>
                 </div>
               )}
@@ -354,6 +374,7 @@ function Navbar() {
                       >
                         Profile
                       </button>
+                      
                       <button
                         className="block w-full text-left px-4 py-2 text-sm hover:bg-gray-100"
                         onClick={() => router.push("")}

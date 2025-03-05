@@ -12,6 +12,7 @@ export interface companyData{
     contact: string;
     logo: string;
     banner:string
+    IndustryType:string
     startingDate:Date
     address: {
         city: string;

@@ -33,7 +33,12 @@ export interface IComment {
 
 }
 
-
+export interface ISavePost{
+  _id:string
+  description:string
+  images?:string[]
+  video?:string
+}
 export interface IPost {
   _id: string;
   description?: string;

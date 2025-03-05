@@ -3,8 +3,10 @@ import { useRouter } from 'next/navigation';
 import React from 'react'
 
 export default function Collection() {
-    const {activeuser}=useAppSelector((state)=>state.login)
-    const routes=activeuser?"user":"company"
+    const activeuser=useAppSelector((state)=>state.user.activeuser)
+    const routes=activeuser?'user':'company'
+    console.log("routes",routes);
+    
     const route=useRouter()
 
     const features = [
@@ -15,7 +17,7 @@ export default function Collection() {
             </svg>
           ),
           text: 'Saved items' ,
-           path:`${routes}/posts`
+           path:`/${routes}/posts`
         },
         { 
           icon: (
@@ -24,7 +26,7 @@ export default function Collection() {
             </svg>
           ),
           text: 'Liked posts' ,
-           path:`${routes}/appliedjobs`
+           path:`/${routes}/appliedjobs`
         },
         { 
           icon: (
@@ -33,7 +35,7 @@ export default function Collection() {
             </svg>
           ),
           text: 'my posts' ,
-           path:`${routes}/appliedjobs`
+           path:`/${routes}/appliedjobs`
         },
         { 
           icon: (
@@ -42,7 +44,7 @@ export default function Collection() {
             </svg>
           ),
           text: 'jobs' ,
-           path:`${routes}/appliedjobs`
+           path:`/${routes}/appliedjobs`
         },
         { 
             icon: (
@@ -51,7 +53,7 @@ export default function Collection() {
               </svg>
             ),
             text: 'applied jobs' ,
-            path:`${routes}/appliedjobs`
+            path:`/${routes}/appliedjobs`
           }
       ];
   return (
