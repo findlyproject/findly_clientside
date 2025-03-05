@@ -11,11 +11,13 @@ export interface CommentResponse {
 interface AddCommentArgs {
   postId: string;
   comment: string;
+  routes:string;
 }
 
 interface updateCommentArgs {
   commentId: string;
   newComment: string;
+  routes:string;
 }
 interface replayResponse{
   replies:IReply[]
@@ -28,7 +30,7 @@ export const fetchAllComments = createAsyncThunk(
   async (_, { dispatch, rejectWithValue }) => {
     try {
       const response: AxiosResponse<{ comments: IComment[] }> = await api.get(
-        "/post/allcomments"
+        "user/allcomments"
       );
       if (!response.data || !response.data.comments) {
         return rejectWithValue("No posts found.");
@@ -46,13 +48,13 @@ export const fetchAllComments = createAsyncThunk(
 export const addCommentonPost = createAsyncThunk(
   "post/addComment",
   async (
-    { postId, comment }: AddCommentArgs,
+    { postId, comment,routes }: AddCommentArgs,
 
     { dispatch,rejectWithValue }
   ) => {
     try {
       const response: AxiosResponse<CommentResponse> = await api.post(
-        `/post/comment`,
+        `/${routes}/comment`,
         { postId, comment }
       );
       if (!response.data || !response.data.comment) {
@@ -70,15 +72,15 @@ export const addCommentonPost = createAsyncThunk(
 
 export const fetchCommentById = createAsyncThunk(
   "post/fetchCommentById",
-  async (id: string, { rejectWithValue }) => {
+  async ({ id, routes }: { id: string; routes: string }, { rejectWithValue }) => {
     try {
       const response: AxiosResponse<CommentResponse> = await api.get(
-        `/post/viewcomment/${id}`
+        `/${routes}/viewcomment/${id}`
       );
       if (!response.data || !response.data.comment) {
         return rejectWithValue("No posts found.");
       }
-      
+      console.log(response.data.comment)
       return response.data.comment.comment;
     } catch (error) {
       console.error("Error fetching posts:", error);
@@ -91,12 +93,12 @@ export const fetchCommentById = createAsyncThunk(
 export const updateAComment = createAsyncThunk(
   "post/updateComment",
   async (
-    { commentId, newComment }: updateCommentArgs,
+    { commentId, newComment,routes }: updateCommentArgs,
     { dispatch, rejectWithValue }
   ) => {
     try {
       const response: AxiosResponse<CommentResponse> = await api.put(
-        `/post/edit-comment/${commentId}`,
+        `/${routes}/edit-comment/${commentId}`,
         { newComment }
       );
       if (!response.data || !response.data.comment) {
@@ -119,12 +121,12 @@ export const updateAComment = createAsyncThunk(
 export const deleteAComment = createAsyncThunk(
   "post/deleteAComment",
   async (
-    { commentId }: { commentId: string },
+    { commentId,routes }: { commentId: string ,routes:string},
     { rejectWithValue }
   ) => {
     try {
       const response: AxiosResponse<CommentResponse> = await api.post(
-        `/post/delete-comment/${commentId}`
+        `/${routes}/delete-comment/${commentId}`
       );
       if (!response.data || !response.data.comment) {
         return rejectWithValue("No posts found.");
