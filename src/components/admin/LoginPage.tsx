@@ -3,10 +3,10 @@
 import { loginAdmin } from "@/lib/store/features/actions/adminActions";
 import { useAppDispatch } from "@/lib/store/hooks";
 import { useRouter } from "next/navigation";
-import React, { ChangeEvent, FormEvent, useState } from "react";
+import React, { ChangeEvent, useState } from "react";
 import { toast } from "react-toastify";
 
-export default function LoginPage() {
+export const LoginPage() {
   const dispatch = useAppDispatch();
   const router = useRouter();
   const [showPassword, setShowPassword] = useState(false);
@@ -44,7 +44,7 @@ export default function LoginPage() {
     }
   };
   return (
-    <div className="flex items-center justify-center min-h-screen">
+    <div className="flex bg-black items-center justify-center min-h-screen">
       <div
         style={{
           backgroundImage:
@@ -58,7 +58,7 @@ export default function LoginPage() {
           left: 0,
           right: 0,
           bottom: 0,
-          zIndex: -1,
+          zIndex: 0,
         }}
       ></div>
       <div className="w-full lg:w-1/2 flex flex-col items-center justify-center">

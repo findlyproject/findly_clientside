@@ -5,7 +5,7 @@ import api from '@/utils/api';
 import { useRouter } from 'next/navigation';
 import React,{useEffect, useState} from 'react'
 
-export default function NetworkPage() {
+export const NetworkPage() {
   const router=useRouter()
     const[invitations,setInvitations]=useState([])
     const[connections,setConnections]=useState([])

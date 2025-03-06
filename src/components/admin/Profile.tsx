@@ -9,7 +9,7 @@ import { FaUser, FaEnvelope, FaCamera } from 'react-icons/fa';
 import { Formik, Field, Form, ErrorMessage } from 'formik';
 import * as Yup from 'yup';
 
-export default function Profile() {
+export const Profile() {
   const admin = useAppSelector((state) => state.admin.admin as AdminProfile);
   const dispatch = useAppDispatch();
 

@@ -10,7 +10,7 @@ import { useAppSelector } from '@/lib/store/hooks';
 
 
 const stripePromise = loadStripe('pk_test_51QKzP2DLv6HKVjIVhV1NRimyNycyutic87ft6z18N2tA5Z8CuS1UrkImWfFH1FqTmgAz0JWreMpMqeJKC2RbM5f300XJyTzrBU');
-export default function Checkoutpayment() {
+export const Checkoutpayment() {
 
 
     

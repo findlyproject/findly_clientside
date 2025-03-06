@@ -74,7 +74,7 @@ console.log("response of like and dislike",response);
 console.log("postss",post);
 
   return (
-    <section className="flex flex-col border border-gray-300 bg-white rounded-lg mx-auto p-4 shadow-md relative">
+    <section className="flex flex-col border  border-gray-300 bg-white rounded-lg mx-auto p-4 shadow-md relative">
      
 
       {/* Post Owner Details */}
@@ -189,7 +189,7 @@ console.log("postss",post);
         {/* Video */}
         {post.video && (
           <div className="flex justify-center">
-            <video width="100%" className="rounded-md sm:max-h-96" autoPlay controls>
+            <video width="100%" className="rounded-md sm:max-h-96" controls>
               <source src={post.video} type="video/mp4" />
             </video>
           </div>
@@ -232,7 +232,7 @@ console.log("postss",post);
               className="flex items-center text-gray-500 px-4 py-2 rounded-md hover:bg-gray-100 hover:text-black"
             >
               <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" className="size-6 text-primary">
-  <path strokeLinecap="round" stroke-linejoin="round" d="M21 8.25c0-2.485-2.099-4.5-4.688-4.5-1.935 0-3.597 1.126-4.312 2.733-.715-1.607-2.377-2.733-4.313-2.733C5.1 3.75 3 5.765 3 8.25c0 7.22 9 12 9 12s9-4.78 9-12Z" />
+  <path strokeLinecap="round" strokeLinejoin="round" d="M21 8.25c0-2.485-2.099-4.5-4.688-4.5-1.935 0-3.597 1.126-4.312 2.733-.715-1.607-2.377-2.733-4.313-2.733C5.1 3.75 3 5.765 3 8.25c0 7.22 9 12 9 12s9-4.78 9-12Z" />
 </svg>
 
               <span className="hidden sm:inline"></span>
@@ -274,7 +274,7 @@ console.log("postss",post);
       )}
       {isShowLikes && (
         <div
-          className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center px-4 z-50"
+          className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center px-4"
           onClick={toggleLikes}
         >
           <div
@@ -285,7 +285,7 @@ console.log("postss",post);
               Liked by
             </h2>
 
-            <div className="max-h-60 overflow-y-auto space-y-4 z-50">
+            <div className="max-h-60 overflow-y-auto space-y-4">
               {Array.isArray(post.likedBy) && post.likedBy.length > 0 ? (
                 post.likedBy.map((item) => (
                   <div

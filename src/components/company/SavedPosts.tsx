@@ -5,7 +5,7 @@ import api from "@/utils/api";
 import React, { useState, useEffect } from "react";
 import { formatDistanceToNowStrict } from "date-fns";
 
-export default function SavedPosts() {
+export const SavedPosts() {
   const [activeTab, setActiveTab] = useState("saved");
   const [posts, setPosts] = useState([]);
   const [savedPosts, setsavedPosts] = useState([]);

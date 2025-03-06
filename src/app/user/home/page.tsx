@@ -1,15 +1,12 @@
-import HomePage from '@/components/homePage/HomePage'
-import Navbar from '@/components/navBar/Navbar'
-import React from 'react'
+import HomePage from "@/components/homePage/HomePage";
+import Navbar from "@/components/navBar/Navbar";
+import React from "react";
 
-const page = () => {
+export default function page() {
   return (
     <div>
-      <div className='sticky top-0 left-0 right-0'><Navbar /></div>
-       
-       <HomePage/>
+      <Navbar />
+      <HomePage />
     </div>
-  )
-}
-
-export default page
+  );
+};

@@ -1,11 +1,11 @@
 import ChatList from "@/components/common/message/ChatList";
 
-export default function RightSide() {
+export const RightSide() {
   return (
     <>
         <div
           id="hs-sidebar-empty-content"
-          className="hs-overlay  h-screen z-40 [--auto-close:lg] border lg:block lg:translate-x-0 lg:start-auto lg:bottom-0  
+          className="hs-overlay  [--auto-close:lg] border lg:block lg:translate-x-0 lg:start-auto lg:bottom-0  
 hs-overlay-open:translate-x-0
 translate-x-full transition-all duration-300 transform 
 rounded-lg
