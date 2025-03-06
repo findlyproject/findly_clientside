@@ -1,4 +1,4 @@
-import ChatList from "@/components/common/message/ChatList";
+import {ChatList} from "@/components/common/message/ChatList";
 
 export  const RightSide() {
   return (

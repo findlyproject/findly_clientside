@@ -1,6 +1,6 @@
 import React from 'react'
 
-export const NotFound() {
+export const NotFound=()=> {
   return (
     
     <div className="mx-auto max-w-7xl px-4 sm:px-6">
