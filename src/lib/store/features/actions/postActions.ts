@@ -13,6 +13,7 @@ export const fetchAllPosts = createAsyncThunk(
       const response: AxiosResponse<{ posts: IPost[] }> = await api.get(
         `/post/allposts`
       );
+console.log("response of all post",response);
 
       if (!response.data || !response.data.posts) {
         return rejectWithValue("No posts found.");
@@ -80,6 +81,7 @@ export const fetchPostById = createAsyncThunk(
     const response = await handleAsync<AxiosResponse<{ post: IPost }>>(() =>
       api.get(`/post/post/${id}`)
     );
+console.log("post",response);
 
     if (!response?.data || !response.data.post) {
       return rejectWithValue("No posts found.");
