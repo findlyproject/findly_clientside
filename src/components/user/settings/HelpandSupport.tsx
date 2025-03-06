@@ -3,7 +3,7 @@ import React from "react";
 import { HiOutlineMail } from "react-icons/hi";
 import { IoCallOutline } from "react-icons/io5";
 
-export default function HelpandSupport() {
+export const HelpandSupport() {
   return (
     <div className="min-h-screen bg-gray-100 flex flex-col items-start py-8 px-4 space-y-8">
       <h1 className="text-2xl md:text-3xl font-semibold mb-4 text-center">Help & Support</h1>

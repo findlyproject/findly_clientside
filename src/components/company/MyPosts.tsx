@@ -8,7 +8,7 @@ import { useAppDispatch } from "@/lib/store/hooks";
 // import { UpdatePost } from "../UpdatePost";
 import OutsideClickHandler from "react-outside-click-handler";
 import { UpdatePost } from "../homePage/middle/UpdatePost";
-export default function MyPosts() {
+export const MyPosts() {
   const [activeTab, setActiveTab] = useState("My posts");
   const [posts, setPosts] = useState([]);
   const [userPosts, setUserPosts] = useState([]);

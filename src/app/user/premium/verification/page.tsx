@@ -1,12 +1,13 @@
 import Verification from '@/components/common/premium/Verification'
+import Navbar from '@/components/navBar/Navbar'
 import React from 'react'
 
-const page = () => {
+export default function page() {
   return (
     <div>
+      <Navbar/>
       <Verification/>
     </div>
   )
 }
 
-export default page

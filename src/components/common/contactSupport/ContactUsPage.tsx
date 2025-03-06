@@ -5,7 +5,7 @@ import { useAppSelector } from "@/lib/store/hooks";
 import api from "@/utils/api";
 import { useState } from "react";
 
-export default function ContactUsPage() {
+export const ContactUsPage() {
   const user = useAppSelector((state) => state.user.activeuser as UserProfile);
   const admin=useAppSelector((state)=>state.admin.admin as AdminProfile)
   console.log("useruser", user.email);

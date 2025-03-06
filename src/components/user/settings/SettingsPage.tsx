@@ -27,7 +27,7 @@ const menuItems = [
   {id:"back",name:"Back to home",icon:<FaHome/>}
 ];
 
-export default function SettingsPage() {
+export const SettingsPage() {
   const router=useRouter()
   const [selected, setSelected] = useState("edit-profile");
   const [isSidebarOpen, setIsSidebarOpen] = useState(false);

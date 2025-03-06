@@ -21,7 +21,7 @@ interface Connection {
 }
 
 
-export default function ViewProfile() {
+export const ViewProfile() {
   const router = useRouter();
 
   const currentUser = useAppSelector((state) => state.user.activeuser as UserProfile |null);

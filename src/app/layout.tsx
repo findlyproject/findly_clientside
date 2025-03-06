@@ -6,6 +6,7 @@ import SessionProvider from "@/providers/auth-provider";
 import { getServerSession } from "next-auth";
 import { Slide, ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
+import Navbar from "@/components/navBar/Navbar";
 
 
 // const geistSans = Geist({

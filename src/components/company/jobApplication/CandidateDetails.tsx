@@ -12,7 +12,7 @@ import { applicationData } from "../../../types/Types";
 import handleAsync from "@/utils/handleAsync";
 import { useAppSelector } from "@/lib/store/hooks";
 
-export default function CandidateDetails() {
+export const CandidateDetails() {
   const [activeTab, setActiveTab] = useState("CoverLetter");
   const [user, setUser] = useState<applicationData>();
   const [offerLetter, setOfferLetter] = useState("");

@@ -1,7 +1,7 @@
 "use client";
 import api from '@/utils/api'
 import { useState } from "react";
-export default function ContactUsPage() {
+export const ContactUsPage() {
   const [email, setEmail] = useState("");
   const [message, setMessage] = useState("");
   const [emailError, setemailError] = useState("");

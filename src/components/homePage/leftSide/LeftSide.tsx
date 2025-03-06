@@ -8,12 +8,12 @@ import Collection from './Collection'
 export function LeftSideBar() {
   const {activeuser}=useAppSelector((state)=>state.login)
   return (
-    <section className="md:block sm:flex sm:justify-around mt-7 ">
-      <FeedIdentityModule />
-      {activeuser&&
-      <CommunityPanel />}
-      <PremiumFeaturesMenu/>
-      <Collection/>
-    </section>
+    <section className="md:block sm:flex sm:justify-around mt-7 h-screen ">
+  <FeedIdentityModule />
+  {activeuser && <CommunityPanel />}
+  <PremiumFeaturesMenu />
+  <Collection />
+</section>
+
   )
 }

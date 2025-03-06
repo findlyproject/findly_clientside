@@ -1,7 +1,7 @@
 import Sidebar from "@/components/admin/SideBar";
 import "@/styles/globals.css";
 
-export default function AdminLayout({ children }: { children: React.ReactNode }) {
+export const AdminLayout({ children }: { children: React.ReactNode }) {
   return (
     <div className="flex bg-[#f1f5f9]">
       {/* Sidebar (Left) */}

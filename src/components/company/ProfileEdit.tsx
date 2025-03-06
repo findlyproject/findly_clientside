@@ -18,7 +18,7 @@ import api from "@/utils/api";
 import { setActiveCompany } from "@/lib/store/features/companyslice";
 import { toast } from "react-toastify";
 import { UserProfile } from "@/lib/store/features/userSlice";
-export default function ProfileEdit() {
+export const ProfileEdit() {
   const activecompany = useAppSelector(
     (state) => state.companyLogin.activeCompany
   );

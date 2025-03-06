@@ -1,14 +1,12 @@
-import Navbar from '@/components/navBar/Navbar'
-import Edit from '@/components/user/profileupdate/Edit'
-import React from 'react'
+import Navbar from "@/components/navBar/Navbar";
+import Edit from "@/components/user/profileupdate/Edit";
+import React from "react";
 
-function page() {
+export function page() {
   return (
     <div>
-        <Navbar/>
-      <Edit/>
+      <Navbar />
+      <Edit />
     </div>
-  )
+  );
 }
-
-export default page

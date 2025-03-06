@@ -1,12 +1,12 @@
-import Page1 from '@/components/company/registration/page1'
-import React from 'react'
+import Page1 from "@/components/company/registration/page1";
+import Navbar from "@/components/navBar/Navbar";
+import React from "react";
 
-function page() {
+export default function page() {
   return (
     <div>
-        <Page1/>
+      <Navbar />
+      <Page1 />
     </div>
-  )
+  );
 }
-
-export default page
