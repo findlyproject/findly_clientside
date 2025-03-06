@@ -75,8 +75,8 @@ const Login = () => {
        }
 
   return (
-    <div className="flex min-h-screen w-full border border-black justify-center items-center p-4">
-    <div className="flex flex-col md:flex-row h-auto md:h-4/6 bg-red-500 w-full max-w-4xl rounded-xl overflow-hidden border border-black shadow-lg">
+    <div className="flex min-h-screen w-full justify-center p-7">
+    <div className="flex flex-col md:flex-row  md:h-4/6 bg-red-500 w-full max-w-4xl rounded-xl overflow-hidden border border-black shadow-lg">
       {/* Left Section */}
       <div className="w-full md:w-1/2 flex flex-col justify-center items-center bg-white p-6 md:p-8">
         <h1 className="text-2xl md:text-3xl font-bold mb-4 text-center">Corporate Access</h1>

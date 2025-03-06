@@ -50,7 +50,7 @@ const router=useRouter()
       strokeWidth="1.5"
       stroke="currentColor"
       className="size-8 p-1 bg-white shadow-xl rounded-full absolute bottom-16 left-1/4 "
-      onClick={()=>router.push("")}
+      onClick={()=>router.push("/company/jobpost")}
     >
       <path
         strokeLinecap="round"

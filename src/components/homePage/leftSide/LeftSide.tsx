@@ -1,12 +1,19 @@
 "use client"
+import { useAppSelector } from '@/lib/store/hooks'
 import { CommunityPanel } from './CommunityPanel'
 import { FeedIdentityModule } from './FeedIdentityModule'
+import PremiumFeaturesMenu from './Premium'
+import Collection from './Collection'
 
 export function LeftSideBar() {
+  const {activeuser}=useAppSelector((state)=>state.login)
   return (
-    <section className="md:block sm:flex sm:justify-around md:ml-10 md:w-64 lg:w-80 mt-7">
+    <section className="md:block sm:flex sm:justify-around mt-7 ">
       <FeedIdentityModule />
-      <CommunityPanel />
+      {activeuser&&
+      <CommunityPanel />}
+      <PremiumFeaturesMenu/>
+      <Collection/>
     </section>
   )
 }

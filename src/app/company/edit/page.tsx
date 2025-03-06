@@ -1,14 +1,12 @@
+import ProfileEdit from '@/components/company/ProfileEdit'
 import Navbar from '@/components/navBar/Navbar'
-import Loginpage from '@/components/user/Loginpage'
 import React from 'react'
 
-const page = () => {
+export default function page() {
   return (
     <div>
       <Navbar/>
-      <Loginpage/>
+      <ProfileEdit/>
     </div>
   )
 }
-
-export default page

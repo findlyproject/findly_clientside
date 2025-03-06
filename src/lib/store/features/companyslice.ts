@@ -12,6 +12,7 @@ export interface companyData{
     contact: string;
     logo: string;
     banner:string
+    IndustryType:string
     startingDate:Date
     address: {
         city: string;
@@ -98,6 +99,7 @@ export const loginSlice= createSlice({
     },
     setCompanyLogOut:(state)=>{
         state.activeCompany=null
+        
     },
     setAppliedUsers:(state,action)=>{
        state.application=action.payload

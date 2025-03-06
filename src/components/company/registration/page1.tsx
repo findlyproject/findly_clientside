@@ -6,16 +6,15 @@ import { Formik, Form, Field, ErrorMessage } from "formik";
 import * as Yup from "yup";
 import api from "@/utils/api";
 import { useRouter } from "next/navigation";
-import { toast } from "react-toastify";
 import { useAppDispatch } from "@/lib/store/hooks";
 import { setActiveCompany } from "@/lib/store/features/companyslice";
-import OtpInput from 'react-otp-input';
+import OtpInput from "react-otp-input";
+import handleAsync from "@/utils/handleAsync";
 const Page1: React.FC = () => {
-  const [loading, setLoading] = useState(false);
+  const dispatch = useAppDispatch();
+
   const [otpSent, setOtpSent] = useState(false);
-  const [resendCount, setResendCount] = useState(0); // State to track OTP resend attempts
   const router = useRouter();
-  const dispatch=useAppDispatch()
 
   // Validation Schema
   const validationSchema = Yup.object().shape({
@@ -23,50 +22,36 @@ const Page1: React.FC = () => {
     email: Yup.string()
       .email("* Invalid email ")
       .required("* Email is required"),
-    otp: otpSent
-      ? Yup.number().required("* OTP is required") 
-      : Yup.string(), 
+    otp: otpSent ? Yup.number().required("* OTP is required") : Yup.string(),
   });
 
   // Handle OTP sending
   const HandleOtpSend = async (values: { name: string; email: string }) => {
-    if (resendCount >= 3) {
-      alert("You have reached the maximum OTP resend attempts.");
-      return;
-    }
-    
-    setLoading(true);
-    try {
-      const response = await api.post("company/send-otp", values);
-      console.log("Response:", response);
-      toast.success("OTP sent successfully! Check your email.");
+    const response = await handleAsync(() =>
+      api.post("company/send-otp", values)
+    );
+    if (response && response.status >= 200 && response.status < 300) {
       setOtpSent(true);
-      setResendCount(resendCount + 1); 
-    } catch (error) {
-      console.error("Error sending OTP:", error);
-      toast.error("Failed to send OTP. Please try again.");
-    } finally {
-      setLoading(false);
     }
   };
 
   // Handle OTP verification
-  const HandleOtpVerify = async (values: { otp: string; email: string;name:string }) => {
-    setLoading(true);
-    try {
-      const response = await api.post("company/verify-otp", values);
-      if(response.status===201){
-        const data= response.data.company
-        dispatch(setActiveCompany(data))
-      }
-      toast.success("OTP verified successfully!");
-  
-      router.push(`/company/register/form?email=${encodeURIComponent(values.email)}&name=${encodeURIComponent(values.name)}`);
-
-    } catch (error) {
-      toast.error("Invalid OTP. Please try again.");
-    } finally {
-      setLoading(false);
+  const HandleOtpVerify = async (values: {
+    otp: string;
+    email: string;
+    name: string;
+  }) => {
+    const response = await handleAsync(() =>
+      api.post("company/verify-otp", values)
+    );
+    if (response && response.status >= 200 && response.status < 300) {
+      const data = response.data.company;
+      dispatch(setActiveCompany(data));
+      router.push(
+        `/company/register/form?email=${encodeURIComponent(
+          values.email
+        )}&name=${encodeURIComponent(values.name)}`
+      );
     }
   };
 
@@ -111,8 +96,7 @@ const Page1: React.FC = () => {
           <p className="mt-6 text-center font-medium md:text-left">
             Already using Findly?
             <Link
-          
-              href="/company/login"
+              href="/login/company"
               className="whitespace-nowrap font-semibold text-purple-800"
             >
               {" "}
@@ -145,7 +129,7 @@ const Page1: React.FC = () => {
             validationSchema={validationSchema}
             onSubmit={otpSent ? HandleOtpVerify : HandleOtpSend}
           >
-            {({ values, isSubmitting,setFieldValue }) => (
+            {({ values, isSubmitting, setFieldValue }) => (
               <Form className="flex flex-col items-stretch pt-3 md:pt-8">
                 {/* Company Name */}
                 <div className="flex flex-col pt-4">
@@ -180,60 +164,65 @@ const Page1: React.FC = () => {
                     className="text-red-500 text-sm mt-1"
                   />
                 </div>
-
+                <div className={`${otpSent? "flex flex-col pt-4 space-y-0" :""}`}>
                 {/* OTP Input (only visible after OTP is sent) */}
                 {otpSent && (
                   <>
-                    <div className="flex flex-col pt-4">
+                    
                       <div className="relative flex overflow-hidden transition focus-within:border-primary">
-                      <OtpInput
-                        value={values.otp}
-                        onChange={(otp) => setFieldValue("otp", otp)}
-                        numInputs={6}
-                        renderInput={(props) => <input {...props} />}
-                        
-                        inputStyle={{
-                          width: "55px",
-                          height: "55px",
-                          margin: "5px",
-                          fontSize: "20px",
-                          textAlign: "center",
-                          border: "1px solid #6b48ab",
-                          borderRadius: "5px",
-                         
-                        }}
-                      />
+                        <OtpInput
+                          value={values.otp}
+                          onChange={(otp) => setFieldValue("otp", otp)}
+                          numInputs={6}
+                          renderInput={(props) => <input {...props} />}
+                          inputStyle={{
+                            width: "55px",
+                            height: "55px",
+                            margin: "5px",
+                            fontSize: "20px",
+                            textAlign: "center",
+                            border: "1px solid #6b48ab",
+                            borderRadius: "5px",
+                          }}
+                        />
                       </div>
                       <ErrorMessage
                         name="otp"
                         component="div"
                         className="text-red-500 text-sm mt-1"
                       />
-                    </div>
+                      
 
                     {/* Resend OTP Button */}
-                    <button
-                      type="button"
-                      onClick={() => HandleOtpSend(values)} // Pass the form values here
-                      className="mt-4 text-sm text-primary underline"
-                    >
-                      Resend OTP
-                    </button>
+                    
                   </>
                 )}
 
                 {/* Submit Button */}
+                <div className="flex justify-between">
+                      
                 <button
                   type="submit"
-                  className="mt-6 bg-primary text-white rounded-lg px-4 py-2 font-semibold shadow-md transition hover:bg-blue-700 md:w-32"
-                  disabled={isSubmitting || loading}
+                  className={`${otpSent?"mt-[10px]":""} mt-6 bg-primary text-white rounded-lg px-4 py-2 font-semibold shadow-md transition hover:bg-opacity-95 md:w-32`}
+                  disabled={isSubmitting}
                 >
-                  {loading
+                  {isSubmitting
                     ? "Sending..."
                     : otpSent
                     ? "Verify OTP"
                     : "Send Email"}
                 </button>
+                <button
+                      type="button"
+                      onClick={() => HandleOtpSend(values)} // Pass the form values here
+                      className="w-20 text-sm  text-primary underline"
+                    >
+                      Resend OTP
+                    </button>
+                </div>
+                
+                </div>
+
               </Form>
             )}
           </Formik>

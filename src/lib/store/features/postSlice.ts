@@ -1,5 +1,6 @@
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 import { UserProfile } from "./userSlice";
+import { companyData } from "./companyslice";
 
 export interface IReport {
 _id: string; 
@@ -23,7 +24,7 @@ export interface IReply {
 
 export interface IComment {
   _id: string;
-  user: UserProfile | null;
+  user: UserProfile | companyData  | null;
   comment: string;
   replies: IReply[];  
   isDeleted: boolean;
@@ -32,7 +33,12 @@ export interface IComment {
 
 }
 
-
+export interface ISavePost{
+  _id:string
+  description:string
+  images?:string[]
+  video?:string
+}
 export interface IPost {
   _id: string;
   description?: string;
@@ -50,28 +56,38 @@ export interface IPost {
 
 interface PostState {
   posts: IPost[] | null;
+
   comments:IComment[] | null;
   postsLength: number | null;
   commentReplay?:IReply[]
   commentsReplay?:IComment[] | null;
-  
   likes: string[]; 
+  saved:ISavePost[]
 }
 
 const initialState: PostState = {
   posts: null,
   comments:null,
   postsLength: null,
-  likes:[]
+  likes:[],
+  saved:[]
 };
 
+export interface ISavePost{
+  _id:string
+  description:string
+  images?:string[]
+  video?:string
+}
 const postSlice = createSlice({
   name: "post",
   initialState,
   reducers: {
     setPosts: (state, action: PayloadAction<IPost[]>) => {
-      state.posts = action.payload;
+      state.posts = [...(state.posts ?? []), ...action.payload];
+      
     },
+  
     addPost: (state, action: PayloadAction<IPost[]>) => {
       if(state.posts!==null)
         state.posts=state.posts.concat(action.payload);
@@ -119,13 +135,16 @@ const postSlice = createSlice({
     setLikes: (state, action: PayloadAction<[]>) => {
       state.likes = action.payload
     },
-    setLikes: (state, action: PayloadAction<[]>) => {
-      state.likes = action.payload// Ensure likes is an array
-    }
+    setSaved:(state,action:PayloadAction<[]>)=>{
+      state.saved=action.payload
+    },
+
+    resetPostState: () => initialState,
     
   },
+  
 });
 
-export const { setPosts,addPost,addComment,setComments,findCommentReplay,removeDeletedReply,setCommentWithReplay,updatePost,setLikes} = postSlice.actions;
+export const { setPosts,addPost,addComment,setComments,findCommentReplay,removeDeletedReply,setCommentWithReplay,updatePost,setLikes,setSaved,resetPostState,} = postSlice.actions;
 
 export default postSlice.reducer;

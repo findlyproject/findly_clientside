@@ -1,9 +1,12 @@
+
+
 "use client";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
 import { setEmail, setPassword } from "@/lib/store/features/registerSlice";
 import { useAppDispatch } from "@/lib/store/hooks";
 import api from "@/utils/api";
+import Link from "next/link";
 
 
 export default function RegisterPage() {
@@ -21,10 +24,7 @@ export default function RegisterPage() {
 
   const router = useRouter();
 
-  // const validateEmail = (email: string): boolean => {
-  //   const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-  //   return emailRegex.test(email);
-  // };
+ 
   const validateEmail = (email: string): boolean => {
     const emailRegex = /^[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,}$/;
     return emailRegex.test(email);
@@ -109,15 +109,15 @@ console.log("emaillllllllll" ,Email);
 
   return (
     <div className="flex justify-center items-center min-h-screen py-8 px-4">
-      <div className="w-full max-w-sm p-8 rounded-lg shadow-lg">
-        <h1 className="text-3xl font-semibold text-gray-800 mb-4">
+      <div className="w-full max-w-md p-8 rounded-lg shadow-lg">
+        <h1 className="text-3xl font-semibold text-gray-800 mb-2">
           Create Account
         </h1>
-        <p className="text-gray-600 mb-6">
+        <p className="text-gray-600 mb-2">
           Sign up, explore jobs, and build your skills
         </p>
 
-        <div className="space-y-4">
+        <div className="space-y-2">
           <div>
             <label htmlFor="email" className="block text-gray-700">
               Email
@@ -265,7 +265,7 @@ console.log("emaillllllllll" ,Email);
           </button>
         </div>
 
-        <div className="flex items-center my-6">
+        <div className="flex items-center my-4">
           <hr className="flex-1 border-t border-gray-300" />
           <span className="mx-4 text-gray-600">or</span>
           <hr className="flex-1 border-t border-gray-300" />
@@ -281,16 +281,16 @@ console.log("emaillllllllll" ,Email);
 
         <p className="mt-4 text-center text-gray-600">
           Have an account?{" "}
+          <Link href={`/login/user`}>
           <span className="text-blue-500 cursor-pointer hover:underline">
             Sign in
           </span>
+          </Link>
+          
         </p>
       </div>
 
-      <img
-        src="https://i.pinimg.com/736x/d8/7c/cf/d87ccf6c788636ccb74610dfb35380b2.jpg"
-        className="rounded-md h-[600px]"
-      />
+     
     </div>
   );
 }
