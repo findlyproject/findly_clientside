@@ -7,6 +7,7 @@ import { AxiosResponse } from "axios";
 import {setAllRatings,Rating} from '../ratingSlice'
 import { toast } from "react-toastify";
 import { setAlljobs } from "../jobSlice";
+import { resetPostState } from "../postSlice";
 
 //register
 interface RegisterResponse {
@@ -99,6 +100,7 @@ export const logoutUser = createAsyncThunk(
     const status: number = response.status;
     if (status >= 200 && status < 300) {
     dispatch(SetLogout());
+     dispatch(resetPostState())
      
       return null;
     } else {

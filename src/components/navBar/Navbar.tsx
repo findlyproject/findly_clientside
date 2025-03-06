@@ -29,8 +29,7 @@ function Navbar() {
   const [searchQuery, setSearchQuery] = useState("");
   const [searchResults, setSearchResults] = useState<UserProfile[]>([]);
   
- console.log(activeCompany)
-
+ 
     const route=activeCompany?"company":"user"
     
     useEffect(() => {

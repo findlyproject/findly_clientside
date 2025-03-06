@@ -1,10 +1,10 @@
 
 
 "use client";
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { Posts } from "./middle/Posts";
 import { LeftSideBar } from "./leftSide/LeftSide";
-import { fetchAllPosts } from "@/lib/store/features/actions/postActions"; // ✅ Import the asyncThunk
+import { fetchAllPosts } from "@/lib/store/features/actions/postActions"; 
 import { useAppDispatch, useAppSelector } from "@/lib/store/hooks";
 import { fetchAllComments } from "@/lib/store/features/actions/commentActions";
 import { fetchPeopleKnow } from "@/lib/store/features/actions/userActions";
@@ -12,14 +12,42 @@ import RightSide from "./rightSide/RightSide";
 import { motion } from "framer-motion";
 
 const HomePage = () => {
+  const lastFetchedPage = useRef<number>(null);
+  const [page, setPage] = useState<number>(1); // Current page
+  const [loading, setLoading] = useState(false);
   const dispatch = useAppDispatch(); 
 const {activeuser}=useAppSelector(state=>state.login)
   useEffect(() => {
-    dispatch(fetchAllPosts());
+ 
     dispatch(fetchAllComments());
     if(activeuser){dispatch(fetchPeopleKnow())}
 
-  }, [dispatch]);
+  }, [dispatch])
+  useEffect(()=>{
+   Display()
+  },[])
+
+  const Display=async()=>{
+    console.log("lastFetchedPage.current",lastFetchedPage.current);
+    
+    if (lastFetchedPage.current === page) return; 
+    lastFetchedPage.current = page;
+    const result=await dispatch(fetchAllPosts(1))
+    console.log("stttuts",result);
+    
+  }
+  const loadMorePosts = async () => {
+    console.log('he');
+    
+    // if (lastFetchedPage.current === page) return; 
+    // lastFetchedPage.current = page;
+    console.log('ho');
+    setLoading(true);
+    await dispatch(fetchAllPosts(page + 1));
+    setPage((prevPage) => prevPage + 1);
+    setLoading(false);
+  };
+
   const [showMessage,setShowMessage]=useState(true)
 
   return (
@@ -31,7 +59,7 @@ const {activeuser}=useAppSelector(state=>state.login)
 <div className="sticky top-0 self-start h-screen">
     <LeftSideBar />
   </div>
-  <Posts />
+  <Posts loadMorePosts={loadMorePosts} loading={loading} />
   {activeuser&&
   <>
   <button
