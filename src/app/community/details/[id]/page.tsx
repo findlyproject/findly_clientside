@@ -1,16 +1,14 @@
-import CommunityDetails from '@/components/common/community/CommunityDetails'
-import React from 'react'
+import CommunityDetails from "@/components/common/community/CommunityDetails";
+import Navbar from "@/components/navBar/Navbar";
+import React from "react";
 
 export default function page({ params }: { params: { id: string } }) {
-  const { id } =  params; 
-console.log("idv",id);
+  const { id } = params;
 
   return (
     <div>
-        
-      <CommunityDetails id={id}/>
+      <Navbar />
+      <CommunityDetails id={id} />
     </div>
-  )
+  );
 }
-
-

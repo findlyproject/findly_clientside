@@ -1,12 +1,12 @@
-import Apply from '@/components/common/jobListing/Apply'
-import React from 'react'
+import Apply from "@/components/common/jobListing/Apply";
+import Navbar from "@/components/navBar/Navbar";
+import React from "react";
 
-function page() {
+export function page() {
   return (
     <div>
-      <Apply/>
+      <Navbar />
+      <Apply />
     </div>
-  )
+  );
 }
-
-export default page

@@ -2,7 +2,7 @@ import AppliedUsers from '@/components/company/jobApplication/applicatedcandidat
 import Navbar from '@/components/navBar/Navbar'
 import React from 'react'
 
-const page = () => {
+export const page = () => {
   return (
     <div>
       <Navbar/>
@@ -11,5 +11,4 @@ const page = () => {
   )
 }
 
-export default page
 

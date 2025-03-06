@@ -11,7 +11,6 @@ import { logoutUser } from "@/lib/store/features/actions/userActions";
 import Image from "next/image";
 import Notification from "../notification/Notification";
 import { InputChangeEvent } from "@/types/Types";
-import { toast } from "react-toastify";
 
 
 function Navbar() {
@@ -31,20 +30,18 @@ function Navbar() {
   
  console.log(activeCompany)
 
-    const route=activeCompany?"company":"user"
+  const route=activeCompany?"company":"user"
     
     useEffect(() => {
       if (searchQuery.length > 0) {
         const fetchUsers = async () => {
-          try {
+         
             const response = await api.get(
               `/user/usersearch?firstName=${searchQuery}`
             );
   
             setSearchResults(response.data.results);
-          } catch (error) {
-            toast.error("Error fetching users:", error);
-          }
+          
         };
   
         fetchUsers();
@@ -68,10 +65,10 @@ function Navbar() {
   
   
   return (
-    <header className="w-full">
+    <header className="w-full  ">
       {activeuser || activeCompany ? (
         <>
-          <div className=" flex items-center justify-between bg-gray-100 px-4 py-3 lg:px-8 lg:py-4">
+          <div className=" flex w-full fixed z-50 items-center justify-between bg-gray-100 px-4 py-3 lg:px-8 lg:py-4">
             {/* Left Section */}
             <div className="left flex items-center md:space-x-4">
               <Link
@@ -120,7 +117,7 @@ function Navbar() {
               <form className="relative hidden md:block md:ml-[10px]">
                 <input
                   type="search"
-                  className="relative z-10 h-12 w-full rounded-full border border-primary bg-transparent pl-16 pr-4 outline-none"
+                  className="relative  h-12 w-full rounded-full border border-primary bg-transparent pl-16 pr-4 outline-none"
                   placeholder="Search..."
                   onChange={handleSearchChange}
                 />
@@ -144,7 +141,7 @@ function Navbar() {
                 <form action="" className="relative w-full mx-auto">
                   <input
                     type="search"
-                    className="peer cursor-pointer relative z-10 h-12 w-12 rounded-full border bg-transparent pl-12 outline-none transition-all duration-300 focus:w-full focus:cursor-text focus:border-primary focus:pl-16 focus:pr-4 "
+                    className="peer cursor-pointer relative h-12 w-12 rounded-full border bg-transparent pl-12 outline-none transition-all duration-300 focus:w-full focus:cursor-text focus:border-primary focus:pl-16 focus:pr-4 "
                     onChange={handleSearchChange}
                   />
                   <svg
@@ -164,7 +161,7 @@ function Navbar() {
                 </form>
               </div>
               {searchQuery && searchResults?.length > 0 && (
-                <div className="absolute top-full left-0 mt-2 w-full max-h-60 overflow-y-auto border  border-gray-300 bg-white p-4 rounded-lg shadow-md z-50 ">
+                <div className="absolute top-full left-0 mt-2 w-full max-h-60 overflow-y-auto border  border-gray-300 bg-white p-4 rounded-lg shadow-md  ">
                   <ul className="mt-2 space-y-2 ">
                   {searchResults.map((item) => (
                     
@@ -187,10 +184,12 @@ function Navbar() {
           
           
         >
-          <img
+          <Image
             width={100}
             height={100}
-            src={item.type === "User" ? item.profileImage : item.logo}
+            src={item.type === "User" 
+              ? item.profileImage ?? "https://res.cloudinary.com/dq1auwpkm/image/upload/v1738735360/profile_jtwxaj.png" 
+              : item.logo ?? "https://res.cloudinary.com/dq1auwpkm/image/upload/v1738735360/profile_jtwxaj.png"} 
             alt={item.type === "User" ? `${item.firstName} ${item.lastName}` : item.name}
             className="w-7 h-7 rounded-full"
           />
@@ -231,7 +230,7 @@ function Navbar() {
                   </svg>
                 </div>
                 {isMenuOpen && (
-                  <div className="xl:hidden absolute rounded-2xl bg-white shadow-md z-50">
+                  <div className="xl:hidden absolute rounded-2xl bg-white shadow-md ">
                     <Link
                       href="/"
                       className="block font-montserrat px-4 py-2 rounded-full"
@@ -364,7 +363,7 @@ function Navbar() {
                     animate={{ opacity: 1, y: 0 }}
                     exit={{ opacity: 0, y: -10 }}
                     transition={{ duration: 0.3, ease: "easeInOut" }}
-                    className="absolute top-full right-0  w-64 bg-white shadow-lg rounded-lg p-2 z-50"
+                    className="absolute top-full right-0  w-64 bg-white shadow-lg rounded-lg p-2 "
                   >
                     <div className="py-2">
                       <p className="px-4 text-xs">Your accounts</p>
@@ -502,7 +501,7 @@ function Navbar() {
         </>
       )}
       {isMenuOpen && (
-        <div className="lg:hidden order-3 absolute top-16 left-0 w-full bg-white shadow-md z-50">
+        <div className="lg:hidden order-3 absolute top-16 left-0 w-full bg-white shadow-md ">
           <Link
             href="/"
             className="block font-montserrat px-4 py-2 rounded-full "

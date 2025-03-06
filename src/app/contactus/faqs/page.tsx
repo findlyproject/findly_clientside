@@ -1,14 +1,12 @@
-import Faqs from '@/components/common/contactSupport/Faqs'
-import Navbar from '@/components/navBar/Navbar'
-import React from 'react'
+import Faqs from "@/components/common/contactSupport/Faqs";
+import Navbar from "@/components/navBar/Navbar";
+import React from "react";
 
-const page = () => {
+export const page = () => {
   return (
     <div>
-        <Navbar/>
-      <Faqs/>
+      <Navbar />
+      <Faqs />
     </div>
-  )
-}
-
-export default page
+  );
+};

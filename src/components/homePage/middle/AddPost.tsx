@@ -75,7 +75,7 @@ const router=useRouter()
       )}
 
       {open === true && (
-        <section className="fixed inset-0 z-10 flex items-center justify-center bg-black bg-opacity-50">
+        <section className="fixed inset-x-0 inset-y-0 z-50 flex items-center justify-center bg-black bg-opacity-50">
           <OutsideClickHandler onOutsideClick={() => setOpen(false)}>
             <CreatePost />
           </OutsideClickHandler>
