@@ -8,8 +8,9 @@ import { fetchAllPosts } from "@/lib/store/features/actions/postActions";
 import { useAppDispatch, useAppSelector } from "@/lib/store/hooks";
 import { fetchAllComments } from "@/lib/store/features/actions/commentActions";
 import { fetchPeopleKnow } from "@/lib/store/features/actions/userActions";
-import RightSide from "./rightSide/RightSide";
+
 import { motion } from "framer-motion";
+import RightSide from "./rightSide/RightSide";
 
 const HomePage = () => {
   const lastFetchedPage = useRef<number>(null);
@@ -113,7 +114,7 @@ const [isLeftSticky, setIsLeftSticky] = useState(false);
     transition={{ duration: 0.3, ease: "easeInOut" }}
   >
   
-  <RightSide  />
+  <RightSide/>
   </motion.div>}
   </>}
 </section>

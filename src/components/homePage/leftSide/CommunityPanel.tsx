@@ -3,7 +3,7 @@ import { useAppSelector } from "@/lib/store/hooks";
 import Image from "next/image";
 import { useRouter } from "next/navigation"; // ✅ Correct import for Next.js 13+
 
-export default function CommunityPanel(){
+export  function CommunityPanel(){
   const router = useRouter();
   const {peopleIknow}=useAppSelector((state)=>state.login)
 
