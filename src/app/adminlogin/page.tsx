@@ -1,4 +1,4 @@
-import LoginPage from "@/components/admin/LoginPage";
+import {LoginPage} from "@/components/admin/LoginPage";
 
 import React from "react";
 
