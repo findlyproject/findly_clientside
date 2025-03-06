@@ -59,14 +59,19 @@ export const PostPreview = ({ post }: PostPreviewProps) => {
 
   
   const currentUser = useAppSelector((state) => state.user.activeuser);
+  const route=currentUser?"user":"company"
   const  activeCompany=useAppSelector((state)=>state.companyLogin.activeCompany)
+  const [isExpanded, setIsExpanded] = useState(false);
+  const MAX_LENGTH = 50;
   const handleLike = async (postId: string) => {
     const response = await api.post(`/post/user/likepost/${postId}`);
+console.log("response of like and dislike",response);
 
     dispatch(setLikes(response.data.post));
     setLocalPost(response.data.post);
     dispatch(fetchAllPosts());
   };
+console.log("postss",post);
 
   return (
     <section className="flex flex-col border border-gray-300 bg-white rounded-lg mx-auto p-4 shadow-md relative">
@@ -81,7 +86,7 @@ export const PostPreview = ({ post }: PostPreviewProps) => {
           >
             <Image
               src={
-                post.owner?.profileImage ||
+                post.owner?.type==='Company'?post.owner?.logo:post.owner?.profileImage ||
                 "https://res.cloudinary.com/dq1auwpkm/image/upload/v1738735360/profile_jtwxaj.png"
               }
               className="rounded-full object-cover"
@@ -93,15 +98,16 @@ export const PostPreview = ({ post }: PostPreviewProps) => {
 
           <div className="ml-3">
             <Link
-              href={`/user/${post.owner?._id}/User`}
+              href={post.owner?._id===currentUser?._id? `/${route}/profile`:post.owner?._id===activeCompany?._id? `/${route}/profile`:`/${route}/${post.owner?._id}/${post.owner?.type}`}
               className="hover:underline"
             >
               <h3 className="text-lg font-semibold text-gray-900">
-                {post.owner?.firstName || "Unknown User"}
+                {post.owner?.firstName || post.owner?.name ||'Unknown User'}
               </h3>
             </Link>
             <div className="text-[10px] text-gray-500">
-              {dayjs(post.updatedAt).fromNow()}
+               <p className="text-xs text-gray-500">{post.owner?.IndustryType||post.owner?.jobTitle?.[0]} • {dayjs(post.createdAt).fromNow()} </p>
+              
             </div>
           </div>
         </div>
@@ -128,7 +134,17 @@ export const PostPreview = ({ post }: PostPreviewProps) => {
 
       {/* Post Content */}
       <div className="space-y-3 px-2">
-        <h1 className="text-sm ">{post.description}</h1>
+      <p className="mt-2 text-gray-800 text-sm">
+      {isExpanded ? post.description : `${post.description.slice(0, MAX_LENGTH)} `}
+      {post.description.length > MAX_LENGTH && (
+        <span
+          className="text-blue-600 font-semibold cursor-pointer"
+          onClick={() => setIsExpanded(!isExpanded)}
+        >
+          {isExpanded ? " Show less" : " ...Read more"}
+        </span>
+      )}
+    </p>
 
         {post.images && post.images.length > 0 && (
   <div className="w-full relative ">
