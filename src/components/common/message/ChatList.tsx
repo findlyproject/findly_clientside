@@ -7,7 +7,7 @@ import api, { socket } from "@/utils/api";
 import { useAppSelector } from "@/lib/store/hooks";
 import { FaEllipsisV } from "react-icons/fa";
 
-export default function ChatList() {
+export const ChatList() {
   const [selectedUser, setSelectedUser] = useState(null);
   const [message, setMessage] = useState("");
   const [messages, setMessages] = useState([]);

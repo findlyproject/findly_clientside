@@ -4,7 +4,7 @@ import { useAppSelector } from "@/lib/store/hooks";
 import Image from "next/image";
 import { useRouter } from "next/navigation";
 
-export const FeedIdentityModule = () => { 
+export default function FeedIdentityModule  (){ 
   const { activeuser } = useAppSelector((state) => state.login);
   const { activeCompany } = useAppSelector((state) => state.companyLogin);
 

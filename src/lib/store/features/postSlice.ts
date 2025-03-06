@@ -56,6 +56,7 @@ export interface IPost {
 
 interface PostState {
   posts: IPost[] | null;
+
   comments:IComment[] | null;
   postsLength: number | null;
   commentReplay?:IReply[]
@@ -83,8 +84,10 @@ const postSlice = createSlice({
   initialState,
   reducers: {
     setPosts: (state, action: PayloadAction<IPost[]>) => {
-      state.posts = action.payload;
+      state.posts = [...(state.posts ?? []), ...action.payload];
+      
     },
+  
     addPost: (state, action: PayloadAction<IPost[]>) => {
       if(state.posts!==null)
         state.posts=state.posts.concat(action.payload);
@@ -135,11 +138,13 @@ const postSlice = createSlice({
     setSaved:(state,action:PayloadAction<[]>)=>{
       state.saved=action.payload
     },
+
+    resetPostState: () => initialState,
     
   },
   
 });
 
-export const { setPosts,addPost,addComment,setComments,findCommentReplay,removeDeletedReply,setCommentWithReplay,updatePost,setLikes,setSaved} = postSlice.actions;
+export const { setPosts,addPost,addComment,setComments,findCommentReplay,removeDeletedReply,setCommentWithReplay,updatePost,setLikes,setSaved,resetPostState,} = postSlice.actions;
 
 export default postSlice.reducer;

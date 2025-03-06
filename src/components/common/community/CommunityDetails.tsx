@@ -6,7 +6,7 @@ import React, { useEffect, useState } from "react";
 import { FaEllipsisV } from "react-icons/fa";
 import { toast } from "react-toastify";
 import { useAppSelector } from '@/lib/store/hooks';
-export default function CommunityDetails({ id }: { id: string }) {
+export const CommunityDetails({ id }: { id: string }) {
   const [activeTab, setActiveTab] = useState("images");
   const activeuser=useAppSelector((state)=>state.user.activeuser)
   const [message,setMessage]=useState([])

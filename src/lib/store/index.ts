@@ -13,7 +13,7 @@ import paymentReducer from "./features/paymentSlice";
 import loginReducer from "./features/userSlice";
 import userReducer from "./features/userSlice";
 import ratingReducer from "./features/ratingSlice"
-import postReducer from "./features/postSlice"
+import postReducer, { resetPostState } from "./features/postSlice"  
 import adminReducer from './features/adminSlice'
 import companyLoginReducer from "./features/companyslice"
 import jobReducer from './features/jobSlice'
@@ -27,7 +27,9 @@ const registerPersistConfig={key:"register",storage};
 const postPersistConfig={key:"post",storage}
 const adminPersistConfig={key:"admin",storage}
 const companyPersistConfig={key:"company",storage}
-
+window.addEventListener("beforeunload", () => {
+  store.dispatch(resetPostState());
+});
 // Wrap reducers with persistReducer
 const persistedUserReducer = persistReducer(userPersistConfig, userReducer);
 const persistedRegisterReducer = persistReducer(registerPersistConfig, registerReducer);

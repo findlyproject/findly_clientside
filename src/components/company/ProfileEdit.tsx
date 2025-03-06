@@ -18,7 +18,7 @@ import api from "@/utils/api";
 import { setActiveCompany } from "@/lib/store/features/companyslice";
 import { toast } from "react-toastify";
 import { UserProfile } from "@/lib/store/features/userSlice";
-export default function ProfileEdit() {
+export const ProfileEdit() {
   const activecompany = useAppSelector(
     (state) => state.companyLogin.activeCompany
   );
@@ -159,6 +159,7 @@ export default function ProfileEdit() {
       console.log("File selected:", file); // Debugging log
     }
   };
+console.log("selectedFile...",selectedFile);
 
   const handleBannerChange=(e:React.ChangeEvent<HTMLInputElement>)=>{
     const file=e.target.files?.[0]
@@ -194,6 +195,8 @@ export default function ProfileEdit() {
     }
   };
   
+
+
 
   const handlebannerUpload = async () => {
     if (!selectedBanner) return;
@@ -279,10 +282,11 @@ export default function ProfileEdit() {
         />
 
        
-        {selectedFile ? (
+        {selectedFile!==null ? (
           <button
             onClick={handleUpload}
-            className="absolute bottom-[-30px] left-1/2 transform -translate-x-1/2 bg-primary text-white py-1 px-3 rounded"
+            className="absolute inset-0 flex items-center justify-center bg-primary text-white p-1 rounded"
+
           >
             Upload
           </button>

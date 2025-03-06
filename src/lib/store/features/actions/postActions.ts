@@ -6,26 +6,50 @@ import handleAsync from "@/utils/handleAsync";
 import api from "@/utils/api";
 
 // fetch all the posts
+// export const fetchAllPosts = createAsyncThunk(
+//   "post/fetchAllPosts",
+//   async (_, { dispatch, rejectWithValue }) => {
+//     try {
+//       const response: AxiosResponse<{ posts: IPost[] }> = await api.get(
+//         `/post/allposts`
+//       );
+
+//       if (!response.data || !response.data.posts) {
+//         return rejectWithValue("No posts found.");
+//       }
+
+//       dispatch(setPosts(response.data.posts)); 
+//       return response.data.posts;
+//     } catch (error) {
+//       console.error("Error fetching posts:", error);
+//       return rejectWithValue("Failed to fetch posts.");
+//     }
+//   }
+// );
+
 export const fetchAllPosts = createAsyncThunk(
   "post/fetchAllPosts",
-  async (_, { dispatch, rejectWithValue }) => {
+  async (page=1 , { dispatch, rejectWithValue }) => {
     try {
+      console.log("fffsssssssssssssss");
+      
       const response: AxiosResponse<{ posts: IPost[] }> = await api.get(
-        `/post/allposts`
+        `/post/allposts?page=${page}&limit=5` // Fetch 5 posts per page
       );
+console.log("response of all post",response);
 
       if (!response.data || !response.data.posts) {
         return rejectWithValue("No posts found.");
       }
-
       dispatch(setPosts(response.data.posts)); 
-      return response.data.posts;
+      return response.data.posts; 
     } catch (error) {
       console.error("Error fetching posts:", error);
       return rejectWithValue("Failed to fetch posts.");
     }
   }
 );
+
 
 export const addPostByUser = createAsyncThunk(
   "posts/addPost",
@@ -80,6 +104,7 @@ export const fetchPostById = createAsyncThunk(
     const response = await handleAsync<AxiosResponse<{ post: IPost }>>(() =>
       api.get(`/post/post/${id}`)
     );
+console.log("post",response);
 
     if (!response?.data || !response.data.post) {
       return rejectWithValue("No posts found.");

@@ -1,6 +1,6 @@
 import ChatList from "@/components/common/message/ChatList";
 
-export default function RightSide() {
+export const RightSide() {
   return (
     <>
         <div

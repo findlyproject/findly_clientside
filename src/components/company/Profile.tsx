@@ -4,48 +4,81 @@
 import { companyData } from "@/lib/store/features/companyslice";
 import { useAppSelector } from "@/lib/store/hooks";
 import api from "@/utils/api";
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { formatDistanceToNow } from "date-fns";
 import { MdDelete } from "react-icons/md";
-
+// import { Button } from "@/components/ui/button"
 import { FaStar, FaEnvelope, FaPhone, FaGlobe, FaBookmark, FaFacebook, FaInstagram, FaLinkedin, FaTwitter } from "react-icons/fa";
+import Modal, { modalProps } from "./JobPostModal";
+import PostModal from "./PostModal";
+import { MdVerified } from "react-icons/md";
 
 const CompanyProfile = () => {
+  const [isOpen, setIsOpen] = useState(false);
+  const [isOpenPosts, setIsOpenPosts] = useState(false);
   const [reviews,setReviews]=useState<companyData[]>([])
+  const [jobs,setJobs]=useState<modalProps[]>([])
+  const [posts,setPosts]=useState([])
+  const [currentPage, setCurrentPage] = useState<number>(1);
+  const [totalPages, setTotalPages] = useState(1);
+  
+  const itemsPerPage = 6;
   const activeCompany = useAppSelector((state) => state.companyLogin.activeCompany)
-  console.log("reviewswwwwwww",reviews);
+  const lastFetchedPage = useRef<number>(null);
+
+console.log("posts",posts);
+
+  
 
   useEffect(()=>{
     findAllReviews()
+    findJobPsts(currentPage)
+    findposts()
   },[])
+
+  const findposts=async()=>{
+    try {
+      const response=await api.get("/company/findposts")
+    if(response.status===200){
+
+      console.log("ddddaa",response);
+      
+      const data=response.data.posts
+      setPosts(data)
+    }
+    } catch (error) {
+      console.log("error",error);
+      
+    }
+  }
+  const findJobPsts=async(page=1)=>{
+    try {
+      if (lastFetchedPage.current === page) return; 
+      lastFetchedPage.current = page;
+    
+      const response=await api.get(`/company/getjobs?page=${page}&limit=${itemsPerPage}`)
+    console.log("success",response);
+          if(response.status===200){
+            const data=response.data.postedJobs
+            setTotalPages(response.data.totalPages || 1);
+            // setJobs(data)
+          setJobs((prevJobs)=>[...prevJobs, ...data])
+            // setTotalPages(totalPages)
+          }
+    
+    } catch (error) {
+      console.log("dddd",error);
+      
+    }
+  }
   const findAllReviews=async()=>{
     const response=await api.get("/rating/findreviews")
     const data=response.data.reviews
     setReviews(data)
   }
-  const blogs = [
-    {
-      id: 1,
-      title: "Fintech 101: Exploring the Basics of Electronic Payments",
-      author: "Harsh C.",
-      image: "https://pagedone.io/asset/uploads/1696244553.png",
-      date: "2 years ago",
-    },
-    {
-      id: 2,
-      title: "From Classroom to Cyberspace: The Growing Influence of EdTech in Fintech",
-      author: "John D.",
-      image: "https://pagedone.io/asset/uploads/1696244579.png",
-      date: "2 years ago",
-    },
-    {
-      id: 3,
-      title: "Fintech Solutions for Student Loans: Easing the Burden of Education Debt",
-      author: "Alexa H.",
-      image: "https://pagedone.io/asset/uploads/1696244619.png",
-      date: "2 years ago",
-    },
-  ];
+  
+
+  
 
 const handleDelete=async(id:string)=>{
   const response=await api.delete(`/company/deletereview/${id}`)
@@ -64,11 +97,7 @@ const handleDelete=async(id:string)=>{
           />
           <div className="">
             <h2 className="text-2xl font-bold">{activeCompany?.name}</h2>
-            {/* <p className="text-blue-500">Product Designer</p>
-            <div className="flex items-center gap-2 mt-2 text-yellow-500">
-              <FaStar /><FaStar /><FaStar /><FaStar /><FaStar className="text-gray-300" />
-              <span className="text-gray-600">8.6</span>
-            </div> */}
+        
             <div className="mt-6 border-t pt-4">
               <h3 className="text-xl font-semibold">Contact Information</h3>
               <p className="flex items-center gap-2 text-blue-500 mt-2"><FaPhone /> {activeCompany?.contact}</p>
@@ -90,9 +119,13 @@ const handleDelete=async(id:string)=>{
               </a>
             </div>
           </div>
+        {activeCompany?.role === "premium" &&(
           <div className="">
-            <FaBookmark className="ml-auto text-gray-500 cursor-pointer" />
+            <MdVerified className="ml-auto text-primary text-2xl cursor-pointer" />
           </div>
+        )
+            
+        }
         </div>
 
 
@@ -149,49 +182,28 @@ const handleDelete=async(id:string)=>{
         </div>
 
         <div className="mt-6 border-t pt-4">
-          
-          <section className="py-2">
-      <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
-        <h2 className="font-manrope text-4xl font-bold text-gray-900 text-center mb-14">
-        Posts
-        </h2>
+          <h3 className="text-lg font-semibold">Posts</h3>
+          <p className="mb-5">Manage your company's job listings and posts here. Keep your updates organized and relevant.  
+  You can add new job openings, share company news, or remove outdated posts anytime.  
+  Keeping this section updated ensures your team has the latest information.</p>
+ 
 
-        <div className="flex justify-center mb-14 gap-y-8 lg:gap-y-0 flex-wrap md:flex-wrap lg:flex-nowrap lg:flex-row lg:justify-between lg:gap-x-8">
-          {blogs.map((blog) => (
-            <div
-              key={blog.id}
-              className="group cursor-pointer w-full max-lg:max-w-xl lg:w-1/3 border border-gray-300 rounded-2xl p-5 transition-all duration-300 hover:border-indigo-600"
-            >
-              <div className="flex items-center mb-6">
-                <img
-                  src={blog.image}
-                  alt={blog.author}
-                  className="rounded-lg w-full object-cover"
-                />
-              </div>
-              <div className="block">
-                <h4 className="text-gray-900 font-medium leading-8 mb-9">
-                  {blog.title}
-                </h4>
-                <div className="flex items-center justify-between font-medium">
-                  <h6 className="text-sm text-gray-500">By {blog.author}</h6>
-                  <span className="text-sm text-indigo-600">{blog.date}</span>
-                </div>
-              </div>
-            </div>
-          ))}
-        </div>
+  <button 
+       onClick={() => setIsOpenPosts(true)}
+     className="px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition">
+  Posts
+</button>
+<button
+   onClick={() => setIsOpen(true)}
+className="px-4 py-2 bg-green-600 text-white  rounded-lg hover:bg-green-700 transition ml-2">
+  Job Posts
+</button>
 
-        <a
-          href="#"
-          className="cursor-pointer border border-gray-300 shadow-sm rounded-full py-3.5 px-7 w-52 flex justify-center items-center text-gray-900 font-semibold mx-auto transition-all duration-300 hover:bg-gray-100"
-        >
-          View All
-        </a>
-      </div>
-    </section>
+    <Modal isOpen={isOpen} setIsOpen={setIsOpen} jobs={jobs} findJobPsts={findJobPsts} currentPage={currentPage} totalPages={totalPages}/>
+    <PostModal isOpenPosts={isOpenPosts} setIsOpenPosts={setIsOpenPosts} />
          
         </div>
+        <hr className="mt-5" />
 
 
         <div className="mt-6">

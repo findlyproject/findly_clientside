@@ -2,7 +2,7 @@ import CommunityDetails from "@/components/common/community/CommunityDetails";
 import Navbar from "@/components/navBar/Navbar";
 import React from "react";
 
-export default function page({ params }: { params: { id: string } }) {
+export const page({ params }: { params: { id: string } }) {
   const { id } = params;
 
   return (

@@ -5,7 +5,7 @@ import aboutimage1 from "../../../../public/assets/aboutimage1.jpg";
 import aboutimage2 from "../../../../public/assets/aboutimage2.jpg";
 import aboutimage3 from "../../../../public/assets/aboutimage3.jpg";
 
-export default function AboutPage() {
+export const AboutPage() {
   return (
     <div>
       <section className="flex flex-col lg:flex-row items-center justify-center px-4 md:px-8 lg:px-20 py-10 gap-6 lg:gap-10">

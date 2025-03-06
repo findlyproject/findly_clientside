@@ -10,7 +10,7 @@
  
 // } from "@/lib/store/features/registerSlice";
 
-// export default function EducationPage() {
+// export const EducationPage() {
 //   const dispatch = useAppDispatch();
 //   const [Location, setLocallocation] = useState("");
 //   const [College, setLocalcollege] = useState("");
@@ -169,7 +169,7 @@ import {
  
 } from "@/lib/store/features/registerSlice";
 
-export default function EducationPage() {
+export const EducationPage() {
   const dispatch = useAppDispatch();
   const [Location, setLocallocation] = useState({
     country: "",

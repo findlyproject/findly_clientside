@@ -3,7 +3,7 @@ import Navbar from "@/components/navBar/Navbar";
 import Footer from "@/components/common/footer/Footer";
 import LandingPage from "@/components/common/landingPage/LandingPage";
 
-export default function Home() {
+export const Home() {
   return (
     <div>
       <Navbar />

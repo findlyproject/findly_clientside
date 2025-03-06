@@ -20,7 +20,7 @@ import DeleteAccount from './DeleteAccount';
 import { SetLogout } from '@/lib/store/features/userSlice';
 import { setCompanyLogOut } from '@/lib/store/features/companyslice';
 
-export default function ManageAccount() {
+export const ManageAccount() {
   const router = useRouter()
 
   const [otpModal, setOtpModal] = useState(false);

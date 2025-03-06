@@ -35,7 +35,7 @@ export default function Collection() {
             </svg>
           ),
           text: 'my posts' ,
-           path:`/${routes}/appliedjobs`
+           path:`/${routes}/posts/myposts`
         },
         { 
           icon: (
@@ -44,7 +44,7 @@ export default function Collection() {
             </svg>
           ),
           text: 'jobs' ,
-           path:`/${routes}/appliedjobs`
+           path:`/${routes}/posts/jobs`
         },
         { 
             icon: (

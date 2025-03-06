@@ -4,8 +4,7 @@ import Image from "next/image";
 import { useRouter } from "next/navigation";
 import register4 from "../../../../public/assets/register4.jpg";
 import register3 from "../../../../public/assets/register3.jpg";
-import landingTop from "../../../../public/assets/register3.jpg";
-import { FaSearch, FaMapMarkerAlt, FaCheckCircle } from "react-icons/fa";
+import { FaSearch, FaCheckCircle } from "react-icons/fa";
 import { FaUserPlus, FaUpload } from "react-icons/fa";
 import goup from "../../../../public/landingPage-group-discussion.png";
 
