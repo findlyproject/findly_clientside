@@ -172,7 +172,6 @@ function Navbar() {
         <li
           key={item._id}
           className="cursor-pointer flex items-center gap-2 pl-4 hover:bg-primary hover:bg-opacity-20 rounded-full"
-          // onClick={() => router.push(`/${route}/${item._id}/${item.type}`)}
         
           onClick={() =>
             router.push(
