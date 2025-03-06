@@ -22,12 +22,12 @@ const CompanyProfile = ({ id }: { id: string }) => {
     const activeCompany = useAppSelector((state) => state.companyLogin.activeCompany)
     const activeUser=useAppSelector((state)=>state.user.activeuser)
 const active=activeCompany||activeUser
-console.log("activeUsedddddddddddddddddddr",activeUser);
+
 
     const route=activeCompany?"company":"user"
   const companyId=id
   const targetedId=id
-  console.log("review",review);
+ 
   
     
     const [rating, setRating] = useState(0);
@@ -153,7 +153,7 @@ console.log("rewies",rewies);
     },
   ];
 
-  const handleFollow=async(companyid)=>{
+  const handleFollow=async(companyid:string)=>{
     const response=await api.post(`/company/follow/${companyid}`)
     console.log("response of follow",response);
     findCompany()

@@ -23,22 +23,6 @@ const {activeuser}=useAppSelector(state=>state.login)
   const [showMessage,setShowMessage]=useState(true)
 
   return (
-  //   <section className="grid bg-gray-100 w-full grid-cols-1 md:[grid-template-columns:20%_40%_40%] px-10 ">
-  //     <LeftSideBar />
-  //     <Posts />
-  //     <button type="button" onClick={()=>setShowMessage(!showMessage)}   className="fixed right-0 py-10 px-2 inline-flex justify-center bg-white items-center gap-x-2 text-start  text-primary text-sm font-medium rounded-lg shadow-sm align-middle focus:outline-none "
-  //   aria-haspopup="dialog" 
-  //   aria-expanded="false" 
-  //   aria-controls="hs-sidebar-empty-content" 
-  //   aria-label="Toggle navigation" 
-  //   data-hs-overlay="#hs-sidebar-empty-content"
-  //   style={{ writingMode: "vertical-rl", textOrientation: "sideways" }}
-  // >
-  //   message
-  // </button>
-  // {showMessage&&
-  //     <RightSide/>}
-  //   </section>
   <section
   className={`grid bg-gray-100 px-10 min-h-screen transition-all duration-300 ${
     showMessage && activeuser? "grid-cols-[20%_40%_40%]" : "grid-cols-[20%_40%] justify-center"
