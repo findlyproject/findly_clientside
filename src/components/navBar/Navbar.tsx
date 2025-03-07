@@ -366,9 +366,9 @@ function Navbar() {
                     <div className="py-2">
                       <p className="px-4 text-xs">Your accounts</p>
                       <button
-                        className="block w-full text-left px-4 py-2 text-sm hover:bg-gray-100"
-                        onClick={() => router.push("/user/profile")}
-                      >
+  className="block w-full text-left px-4 py-2 text-sm hover:bg-gray-100"
+  onClick={() => router.push(activeuser ? "/user/profile" : "/company/profile")}
+>
                         Profile
                       </button>
                       

@@ -347,12 +347,22 @@ const routes=activeuser?"user":"company"
                    
                     <div className="w-8 h-8">
                     <Image
-  src={comment.user?.logo ||"https://res.cloudinary.com/dq1auwpkm/image/upload/v1738735360/profile_jtwxaj.png"}
-  alt="userprofile"
+  src={
+    comment.user
+      ? "profileImage" in comment.user && comment.user.profileImage
+        ? comment.user.profileImage
+        : comment.user.logo || "https://res.cloudinary.com/dq1auwpkm/image/upload/v1738735360/profile_jtwxaj.png"
+      : "https://res.cloudinary.com/dq1auwpkm/image/upload/v1738735360/profile_jtwxaj.png"
+  }
+  alt="User Profile"
   width={30}
   height={30}
   className="w-full h-full rounded-full object-cover"
 />
+
+
+
+                    
                      
                     </div>
 
