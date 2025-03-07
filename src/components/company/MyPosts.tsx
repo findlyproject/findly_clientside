@@ -8,7 +8,7 @@ import { useAppDispatch } from "@/lib/store/hooks";
 // import { UpdatePost } from "../UpdatePost";
 import OutsideClickHandler from "react-outside-click-handler";
 import { UpdatePost } from "../homePage/middle/UpdatePost";
-export const MyPosts() {
+export default function MyPosts() {
   const [activeTab, setActiveTab] = useState("My posts");
   const [posts, setPosts] = useState([]);
   const [userPosts, setUserPosts] = useState([]);
@@ -181,11 +181,6 @@ const [UpdateOpen, setIsUpdateOpen] = useState(false);
                   ) : null}
 
                 </div>
-          
-                {/* Footer */}
-                {/* <p className="text-sm text-gray-600 mt-2">Starting a New Position</p> */}
-          
-                {/* Reactions & Comments */}
                 <div className="flex justify-between items-center mt-3 text-gray-500 text-sm">
                   <div className="flex items-center gap-2">
                     <span className="text-blue-500">             

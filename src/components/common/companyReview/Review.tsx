@@ -3,7 +3,7 @@
 import { useState } from "react";
 import { Star } from "lucide-react";
 
-export const ReviewSection() {
+export const ReviewSection=()=> {
   const [rating, setRating] = useState(0);
 
   return (

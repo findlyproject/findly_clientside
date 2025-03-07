@@ -61,5 +61,18 @@ export default {
   		}
   	}
   },
-  plugins: [require("tailwindcss-animate")],
+  plugins: [
+    require("tailwindcss-animate"),
+    function ({ addUtilities }) {
+      addUtilities({
+        ".scrollbar-hidden": {
+          "-ms-overflow-style": "none" /* Hide scrollbar for IE/Edge */,
+          "scrollbar-width": "none" /* Hide scrollbar for Firefox */,
+        },
+        ".scrollbar-hidden::-webkit-scrollbar": {
+          display: "none" /* Hide scrollbar for Chrome/Safari */,
+        },
+      });
+    },
+  ],
 } satisfies Config;

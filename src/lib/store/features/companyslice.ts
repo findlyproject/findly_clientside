@@ -49,6 +49,7 @@ export interface companyData{
       foundedAt:string;
       headquarters:string
       applications:applicationData[]
+      isBlocked:boolean
 }
 
 

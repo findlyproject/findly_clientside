@@ -19,7 +19,7 @@ function Navbar() {
   const router = useRouter();
   const dispatch = useAppDispatch();
 
-  const { activeuser } = useAppSelector((state) => state.login);
+  const { activeuser } = useAppSelector((state) => state.user);
   const { activeCompany } = useAppSelector((state) => state.companyLogin);
 
   const [isMenuOpen, setIsMenuOpen] = useState(false);
@@ -28,6 +28,8 @@ function Navbar() {
   const [searchQuery, setSearchQuery] = useState("");
   const [searchResults, setSearchResults] = useState<UserProfile[]>([]);
   
+ console.log("isMenuOpen",isMenuOpen);
+ console.log("activeuser",activeuser);
  
     const route=activeCompany?"company":"user"
     
@@ -366,9 +368,9 @@ function Navbar() {
                     <div className="py-2">
                       <p className="px-4 text-xs">Your accounts</p>
                       <button
-                        className="block w-full text-left px-4 py-2 text-sm hover:bg-gray-100"
-                        onClick={() => router.push("/user/profile")}
-                      >
+  className="block w-full text-left px-4 py-2 text-sm hover:bg-gray-100"
+  onClick={() => router.push(activeuser ? "/user/profile" : "/company/profile")}
+>
                         Profile
                       </button>
                       
