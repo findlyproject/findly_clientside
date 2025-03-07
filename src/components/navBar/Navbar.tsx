@@ -19,7 +19,7 @@ function Navbar() {
   const router = useRouter();
   const dispatch = useAppDispatch();
 
-  const { activeuser } = useAppSelector((state) => state.login);
+  const { activeuser } = useAppSelector((state) => state.user);
   const { activeCompany } = useAppSelector((state) => state.companyLogin);
 
   const [isMenuOpen, setIsMenuOpen] = useState(false);
@@ -28,6 +28,8 @@ function Navbar() {
   const [searchQuery, setSearchQuery] = useState("");
   const [searchResults, setSearchResults] = useState<UserProfile[]>([]);
   
+ console.log("isMenuOpen",isMenuOpen);
+ console.log("activeuser",activeuser);
  
     const route=activeCompany?"company":"user"
     

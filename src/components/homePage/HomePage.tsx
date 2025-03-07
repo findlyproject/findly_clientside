@@ -14,7 +14,7 @@ import RightSide from "./rightSide/RightSide";
 
 const HomePage = () => {
   const lastFetchedPage = useRef<number>(null);
-  const [page, setPage] = useState<number>(1); // Current page
+  const [page, setPage] = useState<number>(1); 
   const [loading, setLoading] = useState(false);
   const dispatch = useAppDispatch(); 
 const {activeuser}=useAppSelector(state=>state.login)
@@ -103,14 +103,14 @@ const [isLeftSticky, setIsLeftSticky] = useState(false);
     style={{ writingMode: "vertical-rl", textOrientation: "sideways" }}
     onMouseEnter={() => setShowMessage(true)}
   >
-    message
+    messages
   </button>
   { showMessage &&
     <motion.div 
     className=" w-[580px] sticky pt-7   right-10"
-    initial={{ opacity: 0, x: 50 }}  // Starts from right
-    animate={{ opacity: 1, x: 0 }}   // Moves to normal position
-    exit={{ opacity: 0, x: 50, scale: 0.9 }}  // Closes smoothly (moves right & shrinks)
+    initial={{ opacity: 0, x: 50 }}
+    animate={{ opacity: 1, x: 0 }}   
+    exit={{ opacity: 0, x: 50, scale: 0.9 }}  
     transition={{ duration: 0.3, ease: "easeInOut" }}
   >
   
