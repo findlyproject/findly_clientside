@@ -7,7 +7,7 @@ import api, { socket } from "@/utils/api";
 import { useAppSelector } from "@/lib/store/hooks";
 import { FaEllipsisV } from "react-icons/fa";
 
-export const ChatList() {
+export const ChatList=()=> {
   const [selectedUser, setSelectedUser] = useState(null);
   const [message, setMessage] = useState("");
   const [messages, setMessages] = useState([]);
@@ -21,10 +21,6 @@ export const ChatList() {
       const response = await api.get(`/connecting/getconnection`);
       console.log("response of members", response);
       setMembers(response.data.connections);
-
-
-      
-      
     };
     fetch();
   }, []);
