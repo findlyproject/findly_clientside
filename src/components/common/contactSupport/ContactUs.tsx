@@ -4,31 +4,30 @@ import React from "react";
 import { useRouter } from "next/navigation";
 import { useAppSelector } from "@/lib/store/hooks";
 const ContactUs: React.FC = () => {
-  const router=useRouter()
- const activeCompany = useAppSelector((state) => state.companyLogin.activeCompany)
-    const route=activeCompany?"company":"user"
- 
+  const router = useRouter();
+  const activeCompany = useAppSelector(
+    (state) => state.companyLogin.activeCompany
+  );
+  const route = activeCompany ? "company" : "user";
+
   return (
-    
     <section className="w-full py-10 font-inter">
       <div className="w-full max-w-7xl px-6 lg:px-8 mx-auto">
         <div className="grid lg:grid-cols-1 grid-cols-1 gap-x-16 xl:gap-x-24 gap-y-14 max-w-lg md:max-w-3xl lg:max-w-full mx-auto">
-          
           <div>
             <h1 className="font-manrope text-gray-900 md:text-5xl text-4xl font-bold leading-tight mb-8 lg:text-left text-center">
               Contact Us
             </h1>
             <p className="text-gray-900 text-lg font-normal leading-7 lg:text-left text-center">
-              We are here to assist you! Whether you have questions, feedback, or
-              inquiries, our team is ready to help.
+              We are here to assist you! Whether you have questions, feedback,
+              or inquiries, our team is ready to help.
             </p>
 
-            
             <div className="my-12 grid lg:grid-cols-4 md:grid-cols-2 grid-cols-1 md:gap-x-8 gap-y-8">
-              
-              <div 
-              onClick={()=>router.push(`/contactus/contact`)}
-              className="rounded-2xl border border-gray-200 bg-white p-7 group transition-all duration-500 hover:bg-primary">
+              <div
+                onClick={() => router.push(`/contactus/contact`)}
+                className="rounded-2xl border border-gray-200 bg-white p-7 group transition-all duration-500 hover:bg-primary"
+              >
                 <Link
                   href="#"
                   className="w-14 h-14 bg-primary rounded-full flex items-center justify-center mb-5 transition-all duration-500 group-hover:bg-white cursor-pointer"
@@ -53,7 +52,6 @@ const ContactUs: React.FC = () => {
                 </p>
               </div>
 
-             
               <div className="rounded-2xl border border-gray-200 bg-white p-7 group transition-all duration-500 hover:bg-primary">
                 <Link
                   href="#"
@@ -78,11 +76,11 @@ const ContactUs: React.FC = () => {
                   Explore informative articles and guides.
                 </p>
               </div>
-            
-            
-              <div 
-              onClick={()=>router.push(`/contactus/faqs`)}
-              className="rounded-2xl border border-gray-200 bg-white p-7 group transition-all duration-500 hover:bg-primary">
+
+              <div
+                onClick={() => router.push(`/contactus/faqs`)}
+                className="rounded-2xl border border-gray-200 bg-white p-7 group transition-all duration-500 hover:bg-primary"
+              >
                 <Link
                   href="#"
                   className="w-14 h-14 bg-primary rounded-full flex items-center justify-center mb-5 transition-all duration-500 group-hover:bg-white cursor-pointer"
@@ -110,9 +108,10 @@ const ContactUs: React.FC = () => {
                   Questions (FAQs) section.
                 </p>
               </div>
-              <div 
-              onClick={()=>router.push(`${route}/rateus`)}
-              className="rounded-2xl border border-gray-200 bg-white p-7 group transition-all duration-500 hover:bg-primary">
+              <div
+                onClick={() => router.push(`${route}/rateus`)}
+                className="rounded-2xl border border-gray-200 bg-white p-7 group transition-all duration-500 hover:bg-primary"
+              >
                 <Link
                   href="#"
                   className="w-14 h-14 bg-primary rounded-full flex items-center justify-center mb-5 transition-all duration-500 group-hover:bg-white cursor-pointer pl-[10px] pt-1"

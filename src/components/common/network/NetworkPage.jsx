@@ -5,7 +5,7 @@ import api from '@/utils/api';
 import { useRouter } from 'next/navigation';
 import React,{useEffect, useState} from 'react'
 
-export const NetworkPage() {
+export default function NetworkPage() {
   const router=useRouter()
     const[invitations,setInvitations]=useState([])
     const[connections,setConnections]=useState([])
@@ -69,7 +69,7 @@ export const NetworkPage() {
         <h2 className="text-xl font-semibold">Manage My Network</h2>
         <button className='hover:bg-gray-300 w-full'
         onClick={()=>router.push(`/mynetwork/networklist`)}>
-        <p className="text-gray-500 mt-2">Connections                 {connections?connections.length:0}</p>
+        <p className="text-gray-500 mt-2">Connections {connections?connections.length:0}</p>
 
         </button>
        

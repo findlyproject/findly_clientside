@@ -3,7 +3,7 @@ import React, { useState } from "react";
 import { useRouter } from "next/navigation";
 import { useAppDispatch, useAppSelector } from "@/lib/store/hooks";
 import { setfirstName, setlastName,setGender } from "@/lib/store/features/registerSlice";
-export const NamePage() {
+export  default function NamePage() {
   const dispatch = useAppDispatch();
   const [gender, setgender] = useState("");
 

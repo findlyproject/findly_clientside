@@ -1,6 +1,6 @@
 import React from 'react'
 
-export const Notifications() {
+export default function Notifications() {
   return (
     <div className="min-h-screen bg-gray-100 flex flex-col items-start py-8 px-4">
       <h1 className="text-3xl font-bold text-gray-800 mb-6">Notification Preferences</h1>

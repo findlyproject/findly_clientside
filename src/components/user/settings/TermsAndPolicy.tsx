@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 
-export const TermsAndPolicy() {
+export default function TermsAndPolicy() {
   const [openSection, setOpenSection] = useState(null);
 
   const toggleSection = (section) => {

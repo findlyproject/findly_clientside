@@ -7,7 +7,7 @@ import { useRouter } from 'next/navigation';
 import { useEffect, useState } from 'react';
 
 
-export const ConnectionsList() {
+export default function ConnectionsList() {
   const router=useRouter()
   const[connections,setConnections]=useState([])
   
