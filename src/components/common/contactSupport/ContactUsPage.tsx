@@ -5,10 +5,9 @@ import { useAppSelector } from "@/lib/store/hooks";
 import api from "@/utils/api";
 import { useState } from "react";
 
-export const ContactUsPage() {
+export default function ContactUsPage() {
   const user = useAppSelector((state) => state.user.activeuser as UserProfile);
   const admin=useAppSelector((state)=>state.admin.admin as AdminProfile)
-  console.log("useruser", user.email);
 
   const [email, setEmail] = useState({
     email: user?.email || "",
@@ -16,7 +15,6 @@ export const ContactUsPage() {
   const [message, setMessage] = useState("");
   const [emailError, setemailError] = useState("");
   const [messageError, setmessageError] = useState("");
-  console.log("email", email, "message", message);
 
   const validateEmail = (email: string): boolean => {
     const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
@@ -56,7 +54,6 @@ export const ContactUsPage() {
           message,
         });
 
-        console.log("response of emailus", response);
         if (response.status === 200) {
           setEmail({ email: "" });
           setMessage("");
