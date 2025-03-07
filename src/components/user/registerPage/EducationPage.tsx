@@ -169,7 +169,7 @@ import {
  
 } from "@/lib/store/features/registerSlice";
 
-export const EducationPage() {
+export  default function EducationPage() {
   const dispatch = useAppDispatch();
   const [Location, setLocallocation] = useState({
     country: "",

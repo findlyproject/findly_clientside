@@ -76,10 +76,10 @@ export default function ContactUsPage() {
         <h2 className="text-2xl font-bold text-white">Contact Us</h2>
         <div className="bg-white/20 backdrop-blur-lg p-4 rounded-lg text-white">
           <p className="flex items-center mb-2">
-            <span className="mr-2">📞</span> {admin.phoneNumber}
+            <span className="mr-2">📞</span> {admin?.phoneNumber}
           </p>
           <p className="flex items-center mb-2">
-            <span className="mr-2">📧</span> {admin.email}
+            <span className="mr-2">📧</span> {admin?.email}
           </p>
           <p className="flex items-center">
             <span className="mr-2">📍</span> 654 Sycamore Avenue, Meadowville,
