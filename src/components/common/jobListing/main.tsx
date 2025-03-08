@@ -6,6 +6,7 @@ import { RxCross2 } from 'react-icons/rx'
 import { IoFilterSharp } from 'react-icons/io5'
 import ApplyedJobs from './ApplyedJobs'
 import SavedJobs from './SavedJobs'
+import RecommendedJobs from './RecommendedJobs'
 
 function Jobelist() {
     const [page, setPage] = useState(1)
@@ -46,12 +47,17 @@ function Jobelist() {
                         </button>
                         <button
                             onClick={() => setPage(2)}
-                            className={`text-lg font-medium transition-colors duration-200 ${page === 2 ? "font-bold text-blue-600 border-b-2 border-blue-600" : "text-gray-600 hover:text-blue-600"}`}>
-                            Saved Jobs
+                            className={`text-lg font-medium transition-colors duration-200 ${page === 2? "font-bold text-blue-600 border-b-2 border-blue-600" : "text-gray-600 hover:text-blue-600"}`}>
+                            Recommended Jobs
                         </button>
                         <button
                             onClick={() => setPage(3)}
                             className={`text-lg font-medium transition-colors duration-200 ${page === 3 ? "font-bold text-blue-600 border-b-2 border-blue-600" : "text-gray-600 hover:text-blue-600"}`}>
+                            Saved Jobs
+                        </button>
+                        <button
+                            onClick={() => setPage(4)}
+                            className={`text-lg font-medium transition-colors duration-200 ${page === 4 ? "font-bold text-blue-600 border-b-2 border-blue-600" : "text-gray-600 hover:text-blue-600"}`}>
                             Applied Jobs
                         </button>
                     </div>
@@ -59,8 +65,9 @@ function Jobelist() {
 
                 <div className="flex-1 overflow-y-auto p-4">
                     {page === 1 && <AllJobs input={input} />}
-                    {page === 2 && <SavedJobs />}
-                    {page === 3 && <ApplyedJobs />}
+                    {page === 2 && <RecommendedJobs input={input} />}
+                    {page === 3 && <SavedJobs />}
+                    {page === 4 && <ApplyedJobs />}
                 </div>
             </div>
         </div>
