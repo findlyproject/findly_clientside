@@ -1,5 +1,3 @@
-
-import { ChatList } from "@/components/common/message/ChatList";
 import { findnMembers } from "@/lib/store/features/actions/communityActions";
 import { useAppDispatch, useAppSelector } from "@/lib/store/hooks";
 import { LuSend } from "react-icons/lu";
@@ -113,7 +111,7 @@ console.log("selectedUser",selectedUser);
     <>
         <div
           id="hs-sidebar-empty-content"
-          className="hs-overlay  [--auto-close:lg] border lg:block lg:translate-x-0 lg:start-auto lg:bottom-0   
+          className="hs-overlay z-50 [--auto-close:lg] border lg:block lg:translate-x-0 lg:start-auto lg:bottom-0   
 hs-overlay-open:translate-x-0
 translate-x-full transition-all duration-300 transform 
 rounded-lg
@@ -166,7 +164,7 @@ bg-white border-s border-gray-200 dark:bg-neutral-800 dark:border-neutral-700"
                         <div className="flex items-center">
                        < IoMdArrowBack onClick={()=>setSelectedUser(null)} className="text-xl"/>
                           <img
-                            src={selectedUser.connectionID.profileImage}
+                            src={selectedUser?.connectionID.profileImage}
                             className="w-10 h-10 rounded-full"
                             alt="User"
                           />

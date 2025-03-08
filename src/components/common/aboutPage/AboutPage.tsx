@@ -55,7 +55,7 @@ export default function AboutPage() {
             recommendations, seamless applications, and real-time updates.
           </p>
           <p className="mt-2 text-gray-600">
-            Whether you're seeking your next career move or the perfect
+            Whether you are seeking your next career move or the perfect
             candidate, Findly is here to make it happen.
           </p>
           <button className="mt-6 bg-primary text-white px-6 py-2 rounded-lg shadow-md hover:bg-primary transition w-full md:w-auto">

@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import {
   faComment,
@@ -64,15 +64,29 @@ export const PostPreview = ({ post }: PostPreviewProps) => {
   const  activeCompany=useAppSelector((state)=>state.companyLogin.activeCompany)
   const [isExpanded, setIsExpanded] = useState(false);
   const MAX_LENGTH = 50;
+
+  const [currentIndex, setCurrentIndex] = useState(0);
+  useEffect(() => {
+    const interval = setInterval(() => {
+      nextSlide();
+    }, 3000);
+    return () => clearInterval(interval);
+  }, [currentIndex]);
+
+  const prevSlide = () => {
+    setCurrentIndex((prev) => (prev === 0 ? image.length - 1 : prev - 1));
+  };
+
+  const nextSlide = () => {
+    setCurrentIndex((prev) => (prev === image.length - 1 ? 0 : prev + 1));
+  };
   const handleLike = async (postId: string) => {
-    const response = await api.post(`/post/user/likepost/${postId}`);
-console.log("response of like and dislike",response);
+    const response = await api.post(`/${route}/likepost/${postId}`);
 
     dispatch(setLikes(response.data.post));
     setLocalPost(response.data.post);
-    dispatch(fetchAllPosts());
+    
   };
-console.log("postss",post);
 
   return (
     <section className="flex flex-col border  border-gray-300 bg-white rounded-lg mx-auto p-4 shadow-md relative">
@@ -288,9 +302,9 @@ console.log("postss",post);
 
             <div className="max-h-60 overflow-y-auto space-y-4">
               {Array.isArray(post.likedBy) && post.likedBy.length > 0 ? (
-                post.likedBy.map((item) => (
+                post.likedBy.map((item,index) => (
                   <div
-                    key={item._id}
+                  key={`${item._id}-${index}`}
                     className="flex items-center space-x-4 bg-gray-100 p-3 rounded-lg"
                   >
                     <Image
