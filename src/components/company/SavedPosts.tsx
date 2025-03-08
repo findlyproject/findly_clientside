@@ -1,46 +1,58 @@
 "use client";
 import { setSaved } from "@/lib/store/features/postSlice";
 import { useAppDispatch, useAppSelector } from "@/lib/store/hooks";
-import api from "@/utils/api";
 import React, { useState, useEffect } from "react";
 import { formatDistanceToNowStrict } from "date-fns";
+import api from "@/lib/api"; // Ensure this is correctly imported
 
-export const SavedPosts() {
+export default function SavedPosts() {
   const [activeTab, setActiveTab] = useState("saved");
   const [posts, setPosts] = useState([]);
   const [savedPosts, setsavedPosts] = useState([]);
   const save = useAppSelector((state) => state.post.saved);
   const dispatch = useAppDispatch();
-  const [isExpanded, setIsExpanded] = useState(false);
+  const [expandedPosts, setExpandedPosts] = useState<{ [key: string]: boolean }>({});
   const MAX_LENGTH = 50;
-  useEffect(() => {
-    const fetch = async () => {
-      const saveResponse = await api.get(`/company/saveds`);
-      console.log("saveResponse", saveResponse);
-      setsavedPosts(saveResponse.data.saved);
 
-      const res = await api.get("/company/all");
-      dispatch(setSaved(res.data.saved));
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        const saveResponse = await api.get(`/company/saveds`);
+        setsavedPosts(saveResponse.data.saved || []);
+
+        const res = await api.get("/company/all");
+        dispatch(setSaved(res.data.saved || []));
+      } catch (error) {
+        console.error("Error fetching saved posts:", error);
+      }
     };
-    fetch();
-  }, []);
+    fetchData();
+  }, [dispatch]);
 
   useEffect(() => {
     if (activeTab === "saved") {
       setPosts(savedPosts);
     }
   }, [activeTab, savedPosts]);
-  console.log("ppoooo", save);
 
   const handleUnsave = async (postid: string) => {
-    const res = await api.post(`/company/save/${postid}`);
-    console.log("res", res);
-    setsavedPosts((pre) => pre.filter((item) => item.postId._id !== postid));
-    const response = await api.get("/post/user/all");
-    dispatch(setSaved(response.data.saved));
+    try {
+      await api.post(`/company/save/${postid}`);
+      setsavedPosts((prev) => prev.filter((item) => item.postId?._id !== postid));
+
+      const response = await api.get("/post/user/all");
+      dispatch(setSaved(response.data.saved || []));
+    } catch (error) {
+      console.error("Error unsaving post:", error);
+    }
   };
 
-  console.log("savedsssss", posts);
+  const toggleExpand = (postId: string) => {
+    setExpandedPosts((prev) => ({
+      ...prev,
+      [postId]: !prev[postId],
+    }));
+  };
 
   return (
     <div className="min-h-screen bg-gray-100">
@@ -66,10 +78,10 @@ export const SavedPosts() {
 
         <div className="mt-6 grid grid-cols-1 md:grid-cols-2 gap-6">
           {activeTab === "saved" ? (
-            posts && posts.length > 0 ? ( // Ensure posts exist
+            posts && posts.length > 0 ? (
               posts.map((item) =>
-                item.postId ? ( // Ensure postId exists before accessing properties
-                  <div className="max-w-md mx-auto bg-white rounded-lg shadow-md p-4">
+                item.postId ? (
+                  <div key={item.postId._id} className="max-w-md mx-auto bg-white rounded-lg shadow-md p-4">
                     {/* Profile Header */}
                     <div className="relative flex items-center gap-3">
                       <button
@@ -83,7 +95,7 @@ export const SavedPosts() {
                           item.postId?.owner.type === "Company"
                             ? item.postId?.owner.logo
                             : item.postId?.owner.profileImage || "/profile.jpg"
-                        } // Replace with actual profile image URL
+                        }
                         alt="Profile"
                         className="w-12 h-12 rounded-full border"
                       />
@@ -93,10 +105,9 @@ export const SavedPosts() {
                             ? item.postId.owner.name
                             : `${item.postId.owner.firstName} ${item.postId.owner.lastName}`}
                         </h2>
-
                         <p className="text-xs text-gray-500">
                           {item.postId.owner.IndustryType ||
-                            item.postId.owner.jobTitle[0]}{" "}
+                            item.postId.owner.jobTitle?.[0]}{" "}
                           •{" "}
                           {formatDistanceToNowStrict(
                             new Date(item.postId.createdAt),
@@ -108,18 +119,20 @@ export const SavedPosts() {
 
                     {/* Post Content */}
                     <p className="mt-2 text-gray-800 text-sm">
-      {isExpanded ? item.postId.description : `${item.postId.description.slice(0, MAX_LENGTH)} `}
-      {item.postId.description.length > MAX_LENGTH && (
-        <span
-          className="text-blue-600 font-semibold cursor-pointer"
-          onClick={() => setIsExpanded(!isExpanded)}
-        >
-          {isExpanded ? " Show less" : " ...Read more"}
-        </span>
-      )}
-    </p>
+                      {expandedPosts[item.postId._id]
+                        ? item.postId.description
+                        : `${item.postId.description.slice(0, MAX_LENGTH)} `}
+                      {item.postId.description.length > MAX_LENGTH && (
+                        <span
+                          className="text-blue-600 font-semibold cursor-pointer"
+                          onClick={() => toggleExpand(item.postId._id)}
+                        >
+                          {expandedPosts[item.postId._id] ? " Show less" : " ...Read more"}
+                        </span>
+                      )}
+                    </p>
 
-                    <div className="  mt-3">
+                    <div className="mt-3">
                       {item.postId.images?.length > 0 ? (
                         <img
                           src={item.postId.images[0]}
@@ -153,9 +166,9 @@ export const SavedPosts() {
                             />
                           </svg>
                         </span>
-                        <span>{item.postId?.likedBy.length || 0}</span>
+                        <span>{item.postId?.likedBy?.length || 0}</span>
                       </div>
-                      <span>{item.postId?.comments.length || 0} comment</span>
+                      <span>{item.postId?.comments?.length || 0} comment</span>
                     </div>
                   </div>
                 ) : null

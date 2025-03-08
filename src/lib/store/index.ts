@@ -28,9 +28,12 @@ const communityPersistConfig={key:"community",storage}
 const postPersistConfig={key:"post",storage}
 const adminPersistConfig={key:"admin",storage}
 const companyPersistConfig={key:"company",storage}
-window.addEventListener("beforeunload", () => {
-  store.dispatch(resetPostState());
-});
+if (typeof window !== "undefined") {
+  window.addEventListener("beforeunload", () => {
+    store.dispatch(resetPostState());
+  });
+}
+
 // Wrap reducers with persistReducer
 const persistedUserReducer = persistReducer(userPersistConfig, userReducer);
 const persistedRegisterReducer = persistReducer(registerPersistConfig, registerReducer);
