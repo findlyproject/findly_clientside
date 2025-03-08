@@ -27,7 +27,6 @@ import "swiper/css/navigation";
 import "swiper/css/pagination";
 import { Swiper, SwiperSlide } from "swiper/react";
 import { Navigation, Pagination } from "swiper/modules";
-import ShareMenu from "@/components/common/share/Share";
 
 interface PostPreviewProps {
   post: IPost;
@@ -57,29 +56,13 @@ export const PostPreview = ({ post }: PostPreviewProps) => {
   const [isShowLikes, setIsShowLikes] = useState(false);
   const toggleLikes = () => setIsShowLikes((prev) => !prev);
   const [isShowComments, setIsShowComments] = useState(false);
-  const [share, setShare] = useState(false);
+
   
   const currentUser = useAppSelector((state) => state.user.activeuser);
   const route=currentUser?"user":"company"
   const  activeCompany=useAppSelector((state)=>state.companyLogin.activeCompany)
   const [isExpanded, setIsExpanded] = useState(false);
   const MAX_LENGTH = 50;
-
-  const [currentIndex, setCurrentIndex] = useState(0);
-  useEffect(() => {
-    const interval = setInterval(() => {
-      nextSlide();
-    }, 3000);
-    return () => clearInterval(interval);
-  }, [currentIndex]);
-
-  const prevSlide = () => {
-    setCurrentIndex((prev) => (prev === 0 ? image.length - 1 : prev - 1));
-  };
-
-  const nextSlide = () => {
-    setCurrentIndex((prev) => (prev === image.length - 1 ? 0 : prev + 1));
-  };
   const handleLike = async (postId: string) => {
     const response = await api.post(`/${route}/likepost/${postId}`);
 
@@ -329,7 +312,7 @@ export const PostPreview = ({ post }: PostPreviewProps) => {
           </div>
         </div>
       )}
-      {share && <ShareMenu/>}
+      
     </section>
   );
 };
