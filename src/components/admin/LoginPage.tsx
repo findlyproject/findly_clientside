@@ -6,7 +6,7 @@ import { useRouter } from "next/navigation";
 import React, { ChangeEvent, useState } from "react";
 import { toast } from "react-toastify";
 
-export const LoginPage() {
+export const LoginPage=()=> {
   const dispatch = useAppDispatch();
   const router = useRouter();
   const [showPassword, setShowPassword] = useState(false);
