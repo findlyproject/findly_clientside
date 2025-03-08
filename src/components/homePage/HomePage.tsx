@@ -8,12 +8,13 @@ import { fetchAllPosts } from "@/lib/store/features/actions/postActions";
 import { useAppDispatch, useAppSelector } from "@/lib/store/hooks";
 import { fetchAllComments } from "@/lib/store/features/actions/commentActions";
 import { fetchPeopleKnow } from "@/lib/store/features/actions/userActions";
-import RightSide from "./rightSide/RightSide";
+
 import { motion } from "framer-motion";
+import RightSide from "./rightSide/RightSide";
 
 const HomePage = () => {
   const lastFetchedPage = useRef<number>(null);
-  const [page, setPage] = useState<number>(1); // Current page
+  const [page, setPage] = useState<number>(1); 
   const [loading, setLoading] = useState(false);
   const dispatch = useAppDispatch(); 
 const {activeuser}=useAppSelector(state=>state.login)
@@ -61,8 +62,6 @@ const [isLeftSticky, setIsLeftSticky] = useState(false);
   const loadMorePosts = async () => {
     console.log('he');
     
-    // if (lastFetchedPage.current === page) return; 
-    // lastFetchedPage.current = page;
     console.log('ho');
     setLoading(true);
     await dispatch(fetchAllPosts(page + 1));
@@ -75,7 +74,7 @@ const [isLeftSticky, setIsLeftSticky] = useState(false);
   return (
   <section
   className={`grid bg-gray-100 pt-16 px-10 -z-10 transition-all duration-300 ${
-    showMessage && activeuser? "grid-cols-[20%_40%_40%]" : "grid-cols-[20%_40%] justify-center"
+    showMessage && activeuser? "lg:grid-cols-[20%_40%_40%]" : "grid-cols-1 lg:grid-cols-[20%_40%] justify-center"
   }`}
 >
 <div
@@ -102,18 +101,17 @@ const [isLeftSticky, setIsLeftSticky] = useState(false);
     style={{ writingMode: "vertical-rl", textOrientation: "sideways" }}
     onMouseEnter={() => setShowMessage(true)}
   >
-    message
+    messages
   </button>
   { showMessage &&
     <motion.div 
-    className=" w-[580px] sticky pt-7   right-10"
-    initial={{ opacity: 0, x: 50 }}  // Starts from right
-    animate={{ opacity: 1, x: 0 }}   // Moves to normal position
-    exit={{ opacity: 0, x: 50, scale: 0.9 }}  // Closes smoothly (moves right & shrinks)
+    className="lg:sticky pt-7 right-0" 
+    initial={{ opacity: 0, x: 50 }}
+    animate={{ opacity: 1, x: 0 }}   
+    exit={{ opacity: 0, x: 50, scale: 0.9 }}  
     transition={{ duration: 0.3, ease: "easeInOut" }}
   >
-  
-  <RightSide  />
+  <RightSide/>
   </motion.div>}
   </>}
 </section>

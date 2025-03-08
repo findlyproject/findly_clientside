@@ -123,7 +123,7 @@ function LandingPage() {
                             <div className="absolute rounded-full -inset-px bg-gradient-to-r from-white to-purple-500"></div>
                             <div className="relative">
                                 <div className="absolute inset-y-0 left-0 flex items-center pl-6">
-                                    <svg className="w-5 h-5 text-gray-500" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                                    <svg className="w-5 h-5 text-gray-500" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth="2">
                                         <path strokeLinecap="round" strokeLinejoin="round" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
                                     </svg>
                                 </div>
@@ -322,7 +322,7 @@ function LandingPage() {
                         <p className="self-stretch text-center text-gray-400 text-base font-normal leading-relaxed">Sign up with your details to get started.</p>
                     </div>
                     <svg className="md:flex hidden" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none">
-                        <path d="M5.50159 6L11.5018 12.0002L5.49805 18.004M12.5016 6L18.5018 12.0002L12.498 18.004" stroke="#4F46E5" stroke-width="1.6" strokeLinecap="round" strokeLinejoin="round"/>
+                        <path d="M5.50159 6L11.5018 12.0002L5.49805 18.004M12.5016 6L18.5018 12.0002L12.498 18.004" stroke="#4F46E5" strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round"/>
                     </svg>
                     <div className="grow shrink basis-0 flex-col justify-start items-center gap-2.5 inline-flex">
                         <div className="self-stretch flex-col justify-start items-center gap-0.5 flex">
@@ -332,7 +332,7 @@ function LandingPage() {
                         <p className="self-stretch text-center text-gray-400 text-base font-normal leading-relaxed">Search and explore job listings that match your profile.</p>
                     </div>
                     <svg className="md:flex hidden" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none">
-                        <path d="M5.50159 6L11.5018 12.0002L5.49805 18.004M12.5016 6L18.5018 12.0002L12.498 18.004" stroke="#4F46E5" stroke-width="1.6" strokeLinecap="round" strokeLinejoin="round"/>
+                        <path d="M5.50159 6L11.5018 12.0002L5.49805 18.004M12.5016 6L18.5018 12.0002L12.498 18.004" stroke="#4F46E5" strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round"/>
                     </svg>
                     <div className="grow shrink basis-0 flex-col justify-start items-center gap-2.5 inline-flex">
                         <div className="self-stretch flex-col justify-start items-center gap-0.5 flex">
@@ -342,7 +342,7 @@ function LandingPage() {
                         <p className="self-stretch text-center text-gray-400 text-base font-normal leading-relaxed">Upload your resume to showcase your skills and experience.</p>
                     </div>
                     <svg className="md:flex hidden" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none">
-                        <path d="M5.50159 6L11.5018 12.0002L5.49805 18.004M12.5016 6L18.5018 12.0002L12.498 18.004" stroke="#4F46E5" stroke-width="1.6" strokeLinecap="round" strokeLinejoin="round"/>
+                        <path d="M5.50159 6L11.5018 12.0002L5.49805 18.004M12.5016 6L18.5018 12.0002L12.498 18.004" stroke="#4F46E5" strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round"/>
                     </svg>
                     <div className="grow shrink basis-0 flex-col justify-start items-center gap-2.5 inline-flex">
                         <div className="self-stretch flex-col justify-start items-center gap-0.5 flex">

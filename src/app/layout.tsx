@@ -1,29 +1,10 @@
 import type { Metadata } from "next";
-// import { Geist, Geist_Mono } from "next/font/google";
 import "../styles/globals.css";
 import StoreProvider from "@/lib/store/store-provider";
 import SessionProvider from "@/providers/auth-provider";
 import { getServerSession } from "next-auth";
 import { Slide, ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
-import Navbar from "@/components/navBar/Navbar";
-
-
-// const geistSans = Geist({
-//   variable: "--font-geist-sans",
-//   subsets: ["latin"],
-// });
-
-// const geistMono = Geist_Mono({
-//   variable: "--font-geist-mono",
-//   subsets: ["latin"],
-// });
-
-// const geistMono = Geist_Mono({
-//   variable: "--font-geist-mono",
-//   subsets: ["latin"],
-// });
-
 
 export const strokeWidthdata: Metadata = {
   title: "Findly",
@@ -45,7 +26,7 @@ export default async function RootLayout({
             autoClose={1000}
             position="bottom-right"
             hideProgressBar={true}
-            closeOnClick 
+            closeOnClick
             pauseOnHover
             draggable
             theme="colored"
@@ -60,6 +41,6 @@ export default async function RootLayout({
           />
         </StoreProvider>
       </body>
-  </html>
-);
+    </html>
+  );
 }

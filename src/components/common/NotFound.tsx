@@ -1,6 +1,8 @@
+"use client"
 import React from 'react'
 
-export const NotFound() {
+export default function NotFound() {
+  
   return (
     
     <div className="mx-auto max-w-7xl px-4 sm:px-6">
@@ -41,7 +43,7 @@ export const NotFound() {
                 </svg>
                 <div className="block text-center mt-5">
                   <h5 className="md:text-xl text-lg leading-8 text-gray-900 font-medium mb-1.5"><span className="text-indigo-600 font-semibold ">Oops!</span> It seems like you've taken a wrong turn</h5>
-                  <p className="text-sm text-gray-500"> We're working to bring it back.</p>
+                  <p className="text-sm text-gray-500"> We are working to bring it back.</p>
                 </div>
             </div>
           </div>

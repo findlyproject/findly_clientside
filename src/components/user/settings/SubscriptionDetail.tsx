@@ -6,7 +6,7 @@ import { useRouter } from "next/navigation";
 import api from "@/utils/api";
 import { FaCheckCircle } from "react-icons/fa";
 
-export const SubscriptionDetail() {
+export default function SubscriptionDetail(){
   const router = useRouter();
   const [details, setDetails] = useState([]);
   useEffect(() => {

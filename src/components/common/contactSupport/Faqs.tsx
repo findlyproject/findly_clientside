@@ -3,6 +3,7 @@
 
 import React, { useState } from "react";
 import { ChevronDown } from "lucide-react";
+import Image from "next/image";
 
 interface FAQItem {
   question: string;
@@ -45,10 +46,12 @@ const FAQSection: React.FC = () => {
         <div className="flex flex-col h-screen justify-center items-center gap-x-16 gap-y-5 xl:gap-28 lg:flex-row lg:justify-between max-lg:max-w-2xl mx-auto max-w-full">
         
           <div className="w-full lg:w-1/2">
-            <img
+            <Image
               src="https://pagedone.io/asset/uploads/1696230182.png"
               alt="FAQ section"
               className="w-96 rounded-xl object-cover"
+              height={30}
+              width={30}
             />
           </div>
 

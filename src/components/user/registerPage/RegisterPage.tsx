@@ -9,7 +9,7 @@ import api from "@/utils/api";
 import Link from "next/link";
 
 
-export const RegisterPage() {
+export const RegisterPage=()=> {
   const dispatch = useAppDispatch();
   const [Email, setLocalemail] = useState("");
   const [Password, setLocalpassword] = useState("");

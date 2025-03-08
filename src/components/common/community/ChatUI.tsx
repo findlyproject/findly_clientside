@@ -12,7 +12,7 @@ import { MdClose, MdImage, MdVideoCameraBack } from "react-icons/md";
 import { toast } from "react-toastify";
 import { useRouter } from "next/navigation";
 
-export const ChatUI() {
+export default function ChatUI() {
   const router = useRouter();
   const [community, setCommunity] = useState(null);
   const activeuser = useAppSelector((state) => state.user.activeuser);
@@ -439,7 +439,7 @@ export const ChatUI() {
                                       width={32}
                                       height={32}
                                       src={
-                                        activeuser.profileImage ||
+                                        activeuser?.profileImage ||
                                         "/default-avatar.png"
                                       }
                                       alt="Your Profile"
@@ -587,4 +587,3 @@ export const ChatUI() {
     </div>
   );
 }
-

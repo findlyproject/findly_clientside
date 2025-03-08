@@ -11,19 +11,30 @@ export function middleware(req: NextRequest) {
   const token = req.cookies.get("token")?.value;
   const url = req.nextUrl.clone();
   const pathName = url.pathname;
+  console.log("userType",userType);
+  console.log("token",token);
+  console.log("pathName",pathName);
+  console.log("isUserProtectedRoute",isUserProtectedRoute(pathName));
+  console.log("isCompanyProtectedRoute",isCompanyProtectedRoute(pathName));
   
-
-  if (pathName === "/user/register" ||pathName==="/company/register/form" ||pathName==="/user/register/namepage"||pathName==="/user/register/namepage/educationpage/questionpage"|| pathName==="/user/register/namepage/educationpage"||pathName==="/user/register/namepage/educationpage/questionpage/jobpage"|| pathName === "/company/register") {
-    return NextResponse.next();
-  }
-
-
-  if (token && pathName === "/") {
+  if (token && (pathName === "/"||pathName==="/user/register"||pathName === "/"||pathName==="/company/register"||pathName==="/login/company"||pathName==="/login/user")) {
+    console.log("dff");
+    
     if (userType === "Admin") url.pathname = "/admin";
     else if (userType === "User") url.pathname = "/user/home";
     else if (userType === "Company") url.pathname = "/company/home";
     return NextResponse.redirect(url);
   }
+
+
+  if (pathName === "/user/register" ||pathName==="/company/register/form" ||pathName==="/user/register/namepage"||pathName==="/user/register/namepage/educationpage/questionpage"|| pathName==="/user/register/namepage/educationpage"||pathName==="/user/register/namepage/educationpage/questionpage/jobpage"|| pathName === "/company/register") {
+    return NextResponse.next();
+  }
+  if(token&&pathName==="/user/register"){
+    return NextResponse.redirect(url);
+  }
+
+
 
 
   if (!token && (isUserProtectedRoute(pathName) || isCompanyProtectedRoute(pathName))) {
@@ -54,7 +65,13 @@ export function middleware(req: NextRequest) {
   res.headers.set("Cache-Control", "no-store, must-revalidate");
   return res;
 }
+// export const config = {
+//   matcher: "/:path*",
+// };
+
 
 export const config = {
-  matcher: "/:path*",
+  matcher: [
+    "/((?!_next|assets|favicon.ico|api/|reset-password|forgot-password|verify-otp).*)",
+  ],
 };

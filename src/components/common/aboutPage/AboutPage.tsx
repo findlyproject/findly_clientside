@@ -5,7 +5,7 @@ import aboutimage1 from "../../../../public/assets/aboutimage1.jpg";
 import aboutimage2 from "../../../../public/assets/aboutimage2.jpg";
 import aboutimage3 from "../../../../public/assets/aboutimage3.jpg";
 
-export const AboutPage() {
+export default function AboutPage() {
   return (
     <div>
       <section className="flex flex-col lg:flex-row items-center justify-center px-4 md:px-8 lg:px-20 py-10 gap-6 lg:gap-10">
@@ -55,7 +55,7 @@ export const AboutPage() {
             recommendations, seamless applications, and real-time updates.
           </p>
           <p className="mt-2 text-gray-600">
-            Whether you're seeking your next career move or the perfect
+            Whether you are seeking your next career move or the perfect
             candidate, Findly is here to make it happen.
           </p>
           <button className="mt-6 bg-primary text-white px-6 py-2 rounded-lg shadow-md hover:bg-primary transition w-full md:w-auto">

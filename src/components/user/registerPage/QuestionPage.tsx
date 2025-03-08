@@ -2,7 +2,7 @@
 import React from "react";
 import { useRouter } from "next/navigation";
 
-export const QuestionPage() {
+export  default function QuestionPage() {
   const router = useRouter();
 
   const handleContinue = (e: React.MouseEvent<HTMLButtonElement>) => {

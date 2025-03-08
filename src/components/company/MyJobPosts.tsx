@@ -27,7 +27,7 @@ export const MyJobPosts = () => {
   console.log("jooobs ",jobs);
   
   return (
-    <div className="max-w-4xl mx-auto mt-8">
+    <div className="max-w-4xl mx-auto pt-24">
       {currentJobs.map((job) => (
         <div
           key={job._id}

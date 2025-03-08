@@ -10,7 +10,8 @@ import { JobLocationType } from "@/lib/store/features/registerSlice";
 import { Country, State, City } from "country-state-city";
 import api from "@/utils/api";
 import { TitleType } from "@/lib/store/features/adminSlice";
-export const JobPage() {
+
+export default function JobPage() {
   const formData=useAppSelector((state)=>state.register)
   console.log("formData",formData);
   
