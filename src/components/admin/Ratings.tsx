@@ -6,7 +6,7 @@ import { IoMdStar, IoMdStarHalf, IoMdStarOutline } from "react-icons/io";
 import api from '@/utils/api';
 import { approveRating, removeRating, setAllRatings } from '@/lib/store/features/ratingSlice';
 import { TiTickOutline } from "react-icons/ti";
-export const Ratings() {
+export const Ratings=()=> {
   const[ratings,setRatings]=useState([])
     const dispatch=useAppDispatch()
     // const ratings=useAppSelector((state)=>state.rating.ratings)
@@ -58,7 +58,7 @@ export const Ratings() {
                
                   <img
                     className="w-10 h-10 me-4 rounded-full"
-                    src={item.userId.profileImage}
+                    src={item.userId?.profileImage}
                     alt="profile image of user"
                   />
                 
@@ -72,7 +72,7 @@ export const Ratings() {
                       dateTime="2014-08-16 19:00"
                       className="block text-sm text-gray-500 dark:text-gray-400"
                     >
-                      Joined on {new Date(item.userId.createdAt).toLocaleDateString("en-GB", {
+                      Joined on {new Date(item.userId?.createdAt).toLocaleDateString("en-GB", {
     day: "2-digit",
     month: "short",
     year: "numeric",
