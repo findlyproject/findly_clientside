@@ -1,12 +1,14 @@
+
+
 "use client";
 
 import { loginAdmin } from "@/lib/store/features/actions/adminActions";
 import { useAppDispatch } from "@/lib/store/hooks";
 import { useRouter } from "next/navigation";
-import React, { ChangeEvent, useState } from "react";
+import React, { ChangeEvent, FormEvent, useState } from "react";
 import { toast } from "react-toastify";
 
-export const LoginPage=()=> {
+export default function LoginPage() {
   const dispatch = useAppDispatch();
   const router = useRouter();
   const [showPassword, setShowPassword] = useState(false);
@@ -44,7 +46,7 @@ export const LoginPage=()=> {
     }
   };
   return (
-    <div className="flex bg-black items-center justify-center min-h-screen">
+    <div className="flex items-center justify-center min-h-screen">
       <div
         style={{
           backgroundImage:
@@ -66,7 +68,7 @@ export const LoginPage=()=> {
         <p className="text-sm  mb-6">Please login to Admin Dashboard.</p>
 
         <form onSubmit={handleSubmit} className="w-full max-w-sm space-y-4">
-          <div>
+          <div className="relative">
             <label htmlFor="email" className="sr-only">
               Username
             </label>
@@ -146,7 +148,7 @@ export const LoginPage=()=> {
 
           <button
             type="submit"
-            className="w-full px-4 py-2 text-sm font-medium text-white bg-primary hover:bg-white-600 rounded-md focus:outline-none focus:ring-2 focus:ring-orange-500"
+            className=" relative w-full px-4 py-2 text-sm font-medium text-white bg-primary hover:bg-white-600 rounded-md focus:outline-none focus:ring-2 focus:ring-orange-500"
           >
             Login
           </button>

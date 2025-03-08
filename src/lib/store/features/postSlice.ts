@@ -56,7 +56,7 @@ export interface IPost {
 
 interface PostState {
   posts: IPost[] | null;
-
+  postsAdmin:IPost[]|null
   comments:IComment[] | null;
   postsLength: number | null;
   commentReplay?:IReply[]
@@ -66,6 +66,7 @@ interface PostState {
 }
 
 const initialState: PostState = {
+  postsAdmin:null,
   posts: null,
   comments:null,
   postsLength: null,
@@ -85,6 +86,10 @@ const postSlice = createSlice({
   reducers: {
     setPosts: (state, action: PayloadAction<IPost[]>) => {
       state.posts = [...(state.posts ?? []), ...action.payload];
+      
+    },
+    setPostsAdmin: (state, action: PayloadAction<IPost[]>) => {
+      state.postsAdmin =action.payload
       
     },
   
@@ -145,6 +150,6 @@ const postSlice = createSlice({
   
 });
 
-export const { setPosts,addPost,addComment,setComments,findCommentReplay,removeDeletedReply,setCommentWithReplay,updatePost,setLikes,setSaved,resetPostState,} = postSlice.actions;
+export const {setPostsAdmin, setPosts,addPost,addComment,setComments,findCommentReplay,removeDeletedReply,setCommentWithReplay,updatePost,setLikes,setSaved,resetPostState,} = postSlice.actions;
 
 export default postSlice.reducer;

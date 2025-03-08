@@ -1,13 +1,27 @@
 "use client";
 
-import { useAppSelector } from "@/lib/store/hooks";
+import { fetchAllPosts, fetchAllPostsAdmin } from "@/lib/store/features/actions/postActions";
+import { useAppDispatch, useAppSelector } from "@/lib/store/hooks";
 import handleAsync from "@/utils/handleAsync";
 import Image from "next/image";
 import { useRouter } from "next/navigation";
+import { useEffect, useRef, useState } from "react";
 
 const Posts = () => {
-  const { posts } = useAppSelector((state) => state.post);
+
+  const dispatch=useAppDispatch()
+
+  const posts  = useAppSelector((state) => state.post.postsAdmin);
+
+
+
+  console.log("posts",posts);
   
+
+  useEffect(()=>{
+     dispatch(fetchAllPostsAdmin())
+  },[])
+ 
   
 const router =useRouter()
   return (

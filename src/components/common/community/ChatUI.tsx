@@ -439,7 +439,7 @@ export default function ChatUI() {
                                       width={32}
                                       height={32}
                                       src={
-                                        activeuser.profileImage ||
+                                        activeuser?.profileImage ||
                                         "/default-avatar.png"
                                       }
                                       alt="Your Profile"

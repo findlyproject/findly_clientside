@@ -40,7 +40,7 @@ export const Comments = ({ postId, comments }: CommentsProps) => {
   }, []);
 
   const display = async () => {
-    const resultcometsreplay = await dispatch(getcommentswithreplies())
+    const resultcometsreplay = await dispatch(getcommentswithreplies(routes))
 console.log(resultcometsreplay);
 
   }
@@ -71,12 +71,11 @@ const routes=activeuser?"user":"company"
 
   const dispatch = useAppDispatch();
   const replay = useAppSelector((state) => state.post.commentReplay);
-  const route = activeuser ? "user" : "company"
   if (!comments) return <div className="text-center p-4">Loading...</div>;
 
   const handleListCommentReplays = async (commentId: string) => {
   
-    const result = await dispatch(findReplies(commentId));
+    const result = await dispatch(findReplies({commentId,routes}));
     
     if (result.type === "get/findReplies/fulfilled") {
       setIsShowReplyList((prev) => !prev);
@@ -125,12 +124,12 @@ const routes=activeuser?"user":"company"
   };
   const handleUpdateReply = async (replayedId: string, commentId: string) => {
     const resultUpdate = await dispatch(
-      updateReplay({ replayedId, commentId, newReplyText: editReplyText })
+      updateReplay({ replayedId, commentId, newReplyText: editReplyText,routes })
     );
     console.log("ress update", resultUpdate);
     if (resultUpdate.type === "updateReplay/fulfilled") {
       setIsOptionsMenuOpen(null);
-      await dispatch(findReplies(commentId));
+      await dispatch(findReplies({commentId,routes}));
       
       setEdit(false);
     }
@@ -180,7 +179,7 @@ const routes=activeuser?"user":"company"
 
     try {
       const resultPostReplies = await dispatch(
-        postReplay({ postId, commentId, replyText })
+        postReplay({ postId, commentId, replyText,routes })
       );
 
  
@@ -188,7 +187,7 @@ const routes=activeuser?"user":"company"
       if (resultPostReplies.type === "post/replay/fulfilled") {
         setReplyText("");
 
-        await dispatch(findReplies(commentId));
+        await dispatch(findReplies({commentId,routes}));
   
         getCommentById(commentId);
       } else {
@@ -208,12 +207,12 @@ const routes=activeuser?"user":"company"
   const handleDeleteReply = async (replayId: string, commentId: string) => {
    
 
-    const resultDelete = await dispatch(deleteReplay({ commentId, replayId }));
+    const resultDelete = await dispatch(deleteReplay({ commentId, replayId,routes }));
     console.log("result delete", resultDelete);
     if (resultDelete.type === "delete/replay/fulfilled") {
     
 
-     await dispatch(findReplies(commentId));
+     await dispatch(findReplies({commentId,routes}));
       
     }
   };
@@ -371,20 +370,20 @@ const routes=activeuser?"user":"company"
                       <div className="flex justify-between">
                         <div>
                           
-                        {/* <h3 className="font-semibold text-sm">
+                        <h3 className="font-semibold text-sm">
   {comment.user && typeof comment.user === "object"
     ? "firstName" in comment.user
       ? `${comment.user.firstName} ${comment.user.lastName || ""}`
       : comment.user.name || "Unknown User"
     : "Unknown User"}
-</h3>                */}
-<h3 className="font-semibold text-sm">
+</h3>               
+{/* <h3 className="font-semibold text-sm">
   {comment.user
     ? "firstName" in comment.user
       ? `${comment?.user?.firstName} ${comment?.user?.lastName}`
       : comment.user?.name
     : "Unknown User"} 
-</h3>
+</h3> */}
                         </div>
                         <div className="text-gray-500 text-xs">
                           {dayjs(comment.updatedAt).fromNow()}
@@ -446,13 +445,16 @@ const routes=activeuser?"user":"company"
                 {isShowReplyList && commentID === comment._id && (
                   <div className="mt-2 pl-10">
                     <div className="flex items-center space-x-2">
-                      <Image
-                        src={activeuser?.profileImage || "/default-profile.png"}
-                        alt="User"
-                        height={30}
-                        width={30}
-                        className="w-8 h-8 rounded-full object-cover"
-                      />
+                    <Image
+                src={
+                  (activeuser?.profileImage || activeCompany?.logo) ??
+                  "https://res.cloudinary.com/dq1auwpkm/image/upload/v1738735360/profile_jtwxaj.png"
+                }
+                alt="Profile"
+                width={30}
+                height={30}
+                className="w-8 h-8 rounded-full object-cover"
+              />
                       
                        <div className="flex-grow flex items-center border rounded-lg px-3  space-x-2 bg-gray-100">
               <input
@@ -554,26 +556,32 @@ const routes=activeuser?"user":"company"
                                 <div className="flex items-start justify-center p-1 ">
                    
                    <div className="w-8 h-8">
-                     <Image
-                       src={
-                         comment.user?.profileImage ||
-                         "https://res.cloudinary.com/dq1auwpkm/image/upload/v1738735360/profile_jtwxaj.png"
-                       }
-                       alt="userprofile"
-                       width={30}
-                       height={30}
-                       className="w-full h-full rounded-full object-cover"
-                     />
+                   <Image
+  src={
+    r.user
+      ? "profileImage" in r.user && r.user.profileImage
+        ? r.user.profileImage
+        : r.user.logo || "https://res.cloudinary.com/dq1auwpkm/image/upload/v1738735360/profile_jtwxaj.png"
+      : "https://res.cloudinary.com/dq1auwpkm/image/upload/v1738735360/profile_jtwxaj.png"
+  }
+  alt=" Profile"
+  width={30}
+  height={30}
+  className="w-full h-full rounded-full object-cover"
+/>
                    </div>
 
                 
                    <div className="flex-grow">
                      <div className="flex justify-between">
                        <div className="px-2">
-                         <h3 className="font-semibold text-sm">
-                           {r.user?.firstName} {r.user?.lastName}
-                           
-                         </h3>
+                       <h3 className="font-semibold text-sm">
+  {r.user && typeof r.user === "object"
+    ? "firstName" in r.user
+      ? `${r.user.firstName} ${r.user.lastName || ""}`
+      : r.user.name || "Unknown User"
+    : "Unknown User"}
+</h3>   
                      <p className="text-gray-700">{r.reply}</p>
 
                        </div>

@@ -1,31 +1,31 @@
 "use client";
 import { createAsyncThunk } from "@reduxjs/toolkit";
 import { AxiosResponse } from "axios";
-import { setPosts, addPost, IPost } from "../postSlice";
+import { setPosts, addPost, IPost, setPostsAdmin } from "../postSlice";
 import handleAsync from "@/utils/handleAsync";
 import api from "@/utils/api";
 
 // fetch all the posts
-// export const fetchAllPosts = createAsyncThunk(
-//   "post/fetchAllPosts",
-//   async (_, { dispatch, rejectWithValue }) => {
-//     try {
-//       const response: AxiosResponse<{ posts: IPost[] }> = await api.get(
-//         `/post/allposts`
-//       );
+export const fetchAllPostsAdmin = createAsyncThunk(
+  "post/fetchAllPosts",
+  async (_, { dispatch, rejectWithValue }) => {
+    try {
+      const response: AxiosResponse<{ posts: IPost[] }> = await api.get(
+        `/admin/findallposts`
+      );
 
-//       if (!response.data || !response.data.posts) {
-//         return rejectWithValue("No posts found.");
-//       }
+      if (!response.data || !response.data.posts) {
+        return rejectWithValue("No posts found.");
+      }
 
-//       dispatch(setPosts(response.data.posts)); 
-//       return response.data.posts;
-//     } catch (error) {
-//       console.error("Error fetching posts:", error);
-//       return rejectWithValue("Failed to fetch posts.");
-//     }
-//   }
-// );
+      dispatch(setPostsAdmin(response.data.posts)); 
+      return response.data.posts;
+    } catch (error) {
+      console.error("Error fetching posts:", error);
+      return rejectWithValue("Failed to fetch posts.");
+    }
+  }
+);
 
 export const fetchAllPosts = createAsyncThunk(
   "post/fetchAllPosts",

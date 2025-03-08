@@ -3,7 +3,7 @@ import { setSaved } from "@/lib/store/features/postSlice";
 import { useAppDispatch, useAppSelector } from "@/lib/store/hooks";
 import React, { useState, useEffect } from "react";
 import { formatDistanceToNowStrict } from "date-fns";
-import api from "@/lib/api"; // Ensure this is correctly imported
+import api from "@/utils/api";
 
 export default function SavedPosts() {
   const [activeTab, setActiveTab] = useState("saved");
