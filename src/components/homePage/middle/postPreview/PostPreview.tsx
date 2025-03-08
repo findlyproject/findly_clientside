@@ -27,6 +27,7 @@ import "swiper/css/navigation";
 import "swiper/css/pagination";
 import { Swiper, SwiperSlide } from "swiper/react";
 import { Navigation, Pagination } from "swiper/modules";
+import ShareMenu from "@/components/common/share/Share";
 
 interface PostPreviewProps {
   post: IPost;
@@ -56,7 +57,7 @@ export const PostPreview = ({ post }: PostPreviewProps) => {
   const [isShowLikes, setIsShowLikes] = useState(false);
   const toggleLikes = () => setIsShowLikes((prev) => !prev);
   const [isShowComments, setIsShowComments] = useState(false);
-
+  const [share, setShare] = useState(false);
   
   const currentUser = useAppSelector((state) => state.user.activeuser);
   const route=currentUser?"user":"company"
@@ -135,8 +136,8 @@ console.log("postss",post);
       {/* Post Content */}
       <div className="space-y-3 px-2">
       <p className="mt-2 text-gray-800 text-sm">
-      {isExpanded ? post.description : `${post.description.slice(0, MAX_LENGTH)} `}
-      {post.description.length > MAX_LENGTH && (
+      {isExpanded ? post.description : `${post.description&&post.description.slice(0, MAX_LENGTH)} `}
+      {post.description&&post.description.length > MAX_LENGTH && (
         <span
           className="text-blue-600 font-semibold cursor-pointer"
           onClick={() => setIsExpanded(!isExpanded)}
@@ -249,7 +250,7 @@ console.log("postss",post);
             />
             <span className="hidden sm:inline">Comment</span>
           </button>
-          <button className="flex items-center text-gray-500 px-4 py-2 rounded-md hover:bg-gray-100 hover:text-black">
+          <button className="flex items-center text-gray-500 px-4 py-2 rounded-md hover:bg-gray-100 hover:text-black" onClick={()=>setShare(true)}>
             <FontAwesomeIcon
               icon={faShare}
               className="w-5 h-5 mr-2 text-primary"
@@ -314,6 +315,7 @@ console.log("postss",post);
           </div>
         </div>
       )}
+      {share && <ShareMenu/>}
     </section>
   );
 };
