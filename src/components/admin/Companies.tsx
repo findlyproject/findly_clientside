@@ -54,8 +54,8 @@ const Companies = () => {
                 </tr>
               </thead>
               <tbody className="divide-y divide-gray-300">
-                {data.map((user) => (
-                  <tr key={user._id} className="bg-white hover:bg-gray-50">
+                {data.map((user,index) => (
+                  <tr key={`${user._id}-${index}`}> className="bg-white hover:bg-gray-50">
                     <td className="p-5 text-sm text-gray-900">{user._id}</td>
                     <td className="p-5 text-sm text-gray-900">
                       <div className="flex items-center gap-3">

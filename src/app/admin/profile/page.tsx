@@ -1,4 +1,4 @@
-import Profile from "@/components/admin/Profile";
+import {Profile} from "@/components/admin/Profile";
 import React from "react";
 
 function page() {

@@ -1,37 +1,92 @@
 
 
 "use client";
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { Posts } from "./middle/Posts";
 import { LeftSideBar } from "./leftSide/LeftSide";
-import { fetchAllPosts } from "@/lib/store/features/actions/postActions"; // ✅ Import the asyncThunk
+import { fetchAllPosts } from "@/lib/store/features/actions/postActions"; 
 import { useAppDispatch, useAppSelector } from "@/lib/store/hooks";
 import { fetchAllComments } from "@/lib/store/features/actions/commentActions";
 import { fetchPeopleKnow } from "@/lib/store/features/actions/userActions";
-import RightSide from "./rightSide/RightSide";
+
 import { motion } from "framer-motion";
+import RightSide from "./rightSide/RightSide";
 
 const HomePage = () => {
+  const lastFetchedPage = useRef<number>(null);
+  const [page, setPage] = useState<number>(1); 
+  const [loading, setLoading] = useState(false);
   const dispatch = useAppDispatch(); 
 const {activeuser}=useAppSelector(state=>state.login)
+const [isLeftSticky, setIsLeftSticky] = useState(false);
+  const leftSidebarRef = useRef(null);
+
   useEffect(() => {
-    dispatch(fetchAllPosts());
+    const handleScroll = () => {
+      if (!leftSidebarRef.current) return;
+      
+      const sidebarBottom = leftSidebarRef.current.getBoundingClientRect().bottom;
+      const windowHeight = window.innerHeight;
+      
+      if (sidebarBottom <= windowHeight) {
+        setIsLeftSticky(true);  // Make it sticky when it reaches the end
+      } else {
+        setIsLeftSticky(false); // Allow normal scrolling
+      }
+    };
+
+    window.addEventListener("scroll", handleScroll);
+    return () => window.removeEventListener("scroll", handleScroll);
+  }, []);
+
+  
+  useEffect(() => {
+ 
     dispatch(fetchAllComments());
     if(activeuser){dispatch(fetchPeopleKnow())}
 
-  }, [dispatch]);
+  }, [dispatch])
+  useEffect(()=>{
+   Display()
+  },[])
+
+  const Display=async()=>{
+    console.log("lastFetchedPage.current",lastFetchedPage.current);
+    
+    if (lastFetchedPage.current === page) return; 
+    lastFetchedPage.current = page;
+    const result=await dispatch(fetchAllPosts(1))
+    console.log("stttuts",result);
+    
+  }
+  const loadMorePosts = async () => {
+    console.log('he');
+    
+    console.log('ho');
+    setLoading(true);
+    await dispatch(fetchAllPosts(page + 1));
+    setPage((prevPage) => prevPage + 1);
+    setLoading(false);
+  };
+
   const [showMessage,setShowMessage]=useState(true)
 
   return (
   <section
-  className={`grid bg-gray-100 px-10 min-h-screen transition-all duration-300 ${
-    showMessage && activeuser? "grid-cols-[20%_40%_40%]" : "grid-cols-[20%_40%] justify-center"
+  className={`grid bg-gray-100 pt-16 px-10 -z-10 transition-all duration-300 ${
+    showMessage && activeuser? "lg:grid-cols-[20%_40%_40%]" : "grid-cols-1 lg:grid-cols-[20%_40%] justify-center"
   }`}
 >
-<div className="sticky top-0 self-start h-screen">
-    <LeftSideBar />
-  </div>
-  <Posts />
+<div
+        ref={leftSidebarRef}
+        className={`overflow-y-auto ${
+          isLeftSticky ? "sticky top-0 h-screen" : "h-auto"
+        }`}
+      >
+        <LeftSideBar />
+      </div>
+
+  <Posts loadMorePosts={loadMorePosts} loading={loading} />
   {activeuser&&
   <>
   <button
@@ -46,18 +101,17 @@ const {activeuser}=useAppSelector(state=>state.login)
     style={{ writingMode: "vertical-rl", textOrientation: "sideways" }}
     onMouseEnter={() => setShowMessage(true)}
   >
-    message
+    messages
   </button>
   { showMessage &&
     <motion.div 
-    className="top-[100px] w-[580px] fixed right-10"
-    initial={{ opacity: 0, x: 50 }}  // Starts from right
-    animate={{ opacity: 1, x: 0 }}   // Moves to normal position
-    exit={{ opacity: 0, x: 50, scale: 0.9 }}  // Closes smoothly (moves right & shrinks)
+    className="lg:sticky pt-7 right-0" 
+    initial={{ opacity: 0, x: 50 }}
+    animate={{ opacity: 1, x: 0 }}   
+    exit={{ opacity: 0, x: 50, scale: 0.9 }}  
     transition={{ duration: 0.3, ease: "easeInOut" }}
   >
-  
-  <RightSide  />
+  <RightSide/>
   </motion.div>}
   </>}
 </section>

@@ -69,7 +69,7 @@ export default function NetworkPage() {
         <h2 className="text-xl font-semibold">Manage My Network</h2>
         <button className='hover:bg-gray-300 w-full'
         onClick={()=>router.push(`/mynetwork/networklist`)}>
-        <p className="text-gray-500 mt-2">Connections                 {connections?connections.length:0}</p>
+        <p className="text-gray-500 mt-2">Connections {connections?connections.length:0}</p>
 
         </button>
        

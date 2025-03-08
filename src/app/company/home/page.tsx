@@ -1,17 +1,14 @@
-import HomePage from '@/components/homePage/HomePage'
-import React from 'react'
+// import HomePage from "@/components/homePage/HomePage";
+import React from "react";
 import Navbar from "@/components/navBar/Navbar";
+import HomePage from "@/components/homePage/HomePage";
 
-
-
-function page() {
+export default function page() {
   return (
     <div>
-      <Navbar/>
+      <Navbar />
       <HomePage/>
-  
     </div>
-  )
+  );
 }
 
-export default page

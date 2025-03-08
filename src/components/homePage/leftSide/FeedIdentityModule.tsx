@@ -1,11 +1,10 @@
 "use client";
 
 import { useAppSelector } from "@/lib/store/hooks";
+import Image from "next/image";
 import { useRouter } from "next/navigation";
 
-
-
-export const FeedIdentityModule = () => { 
+export  function FeedIdentityModule  (){ 
   const { activeuser } = useAppSelector((state) => state.login);
   const { activeCompany } = useAppSelector((state) => state.companyLogin);
 
@@ -15,17 +14,21 @@ export const FeedIdentityModule = () => {
       {activeuser ? (
         <>
       <div className="relative">
-        <img
-          src={activeuser.banner}
+        <Image
+          src={activeuser.banner || "https://res.cloudinary.com/dq1auwpkm/image/upload/v1740220803/linkedinheaders-desktop_fw5iio.jpg"}
           alt="Cover"
           className="w-full h-24 rounded-t-lg object-cover"
+          width={500}
+          height={200}
         />
         {/* Profile Image */}
         <div className="absolute left-1/2 top-12 transform -translate-x-1/2">
-          <img
-            src={activeuser.profileImage}
+          <Image
+            src={activeuser.profileImage ||"https://res.cloudinary.com/dq1auwpkm/image/upload/v1738735360/profile_jtwxaj.png"}
             alt="User"
             className="w-20 h-20 rounded-full border-4 border-white "
+            width={100}
+            height={100}
           />
         </div>
       </div>
@@ -57,17 +60,21 @@ export const FeedIdentityModule = () => {
       ):(
         <>
         <div className="relative">
-          <img
-            src={activeCompany?.banner}
+          <Image
+            src={activeCompany?.banner || "https://res.cloudinary.com/dq1auwpkm/image/upload/v1740220803/linkedinheaders-desktop_fw5iio.jpg"}
             alt="Cover"
             className="w-full h-24 rounded-t-lg object-cover"
+            width={500}
+            height={200}
           />
           {/* Profile Image */}
           <div className="absolute left-1/2 top-12 transform -translate-x-1/2">
-            <img
-              src={activeCompany?.logo}
+            <Image
+              src={activeCompany?.logo||"https://res.cloudinary.com/dq1auwpkm/image/upload/v1738735360/profile_jtwxaj.png"}
               alt="User"
               className="w-20 h-20 rounded-full border-4 border-white "
+               width={100}
+            height={100}
             />
           </div>
         </div>

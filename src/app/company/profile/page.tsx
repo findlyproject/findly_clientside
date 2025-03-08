@@ -2,7 +2,7 @@ import CompanyProfile from '@/components/company/Profile'
 import Navbar from '@/components/navBar/Navbar'
 import React from 'react'
 
-const page = () => {
+export default function page() {
   return (
     <div>
       <Navbar/>
@@ -11,4 +11,3 @@ const page = () => {
   )
 }
 
-export default page

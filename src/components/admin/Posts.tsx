@@ -49,8 +49,8 @@ const router =useRouter()
               </tr>
             </thead>
             <tbody className="divide-y divide-gray-300 bg-white">
-              {Array.isArray(posts) && posts.map((post) => (
-                <tr key={post._id} className="hover:bg-gray-50" onClick={()=>router.push(`/admin/posts/${post._id}`)}>
+              {Array.isArray(posts) && posts.map((post,index) => (
+                <tr key={`${post._id}-${index}`} className="hover:bg-gray-50" onClick={()=>router.push(`/admin/posts/${post._id}`)}>
                   
                   <td className="p-3 text-xs sm:text-sm text-gray-900">{post._id}</td>
                   <td className="p-3">

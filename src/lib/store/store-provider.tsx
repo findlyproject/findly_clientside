@@ -4,7 +4,7 @@
 // import { Provider } from "react-redux";
 // import { makeStore, AppStore } from "./";
 
-// export default function StoreProvider({
+// export const StoreProvider({
 //   children,
 // }: {
 //   children: React.ReactNode;

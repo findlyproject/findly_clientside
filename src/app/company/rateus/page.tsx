@@ -1,14 +1,13 @@
-import Navbar from '@/components/navBar/Navbar'
-import RateUs from '@/components/common/contactSupport/RateUs'
-import React from 'react'
+import RateUs from "@/components/common/contactSupport/RateUs";
+import Navbar from "@/components/navBar/Navbar";
+import React from "react";
 
-function page() {
+export function page() {
   return (
     <div>
-        <Navbar/>
-
-        <RateUs/></div>
-  )
+      <Navbar />
+      <RateUs />
+    </div>
+  );
 }
 
-export default page

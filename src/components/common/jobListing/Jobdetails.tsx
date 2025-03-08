@@ -144,7 +144,7 @@ Don't miss out on this opportunity! ✨`;
 
   return (
     <>
-    <Navbar/>
+    
     
     <div className='w-5/6 flex md:flex-col sm:flex-col lg:flex-row 2xl:flex-col mx-auto p-5 gap-4'>
       {loading ? (

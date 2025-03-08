@@ -1,10 +1,11 @@
-import { JobPost } from '@/components/company/JobPost'
-import React from 'react'
-
+import { JobPost } from "@/components/company/JobPost";
+import Navbar from "@/components/navBar/Navbar";
+import React from "react";
 export default function page() {
   return (
     <div>
-        <JobPost/>
+      <Navbar />
+      <JobPost />
     </div>
-  )
+  );
 }

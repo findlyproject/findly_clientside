@@ -1,13 +1,14 @@
+import Navbar from '@/components/navBar/Navbar'
 import FileUpload from '@/components/user/ressume/Upload'
 import React from 'react'
 
-const page = () => {
+export default function page() {
   return (
     <div>
+      <Navbar/>
       <FileUpload/>
     </div>
   )
 }
 
-export default page
   

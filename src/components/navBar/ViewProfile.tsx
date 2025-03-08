@@ -7,7 +7,7 @@ import { useState, useEffect } from "react";
 import api from "@/utils/api";
 import { useRouter } from "next/navigation";
 import Link from "next/link";
-
+import { MdVerified } from "react-icons/md";
 import { UserProfile } from "@/lib/store/features/userSlice";
 
 
@@ -21,7 +21,7 @@ interface Connection {
 }
 
 
-export default function ViewProfile() {
+export const ViewProfile=()=> {
   const router = useRouter();
 
   const currentUser = useAppSelector((state) => state.user.activeuser as UserProfile |null);
@@ -78,14 +78,13 @@ const route=currentUser?"user":"company"
                   {currentUser?.firstName} {currentUser?.lastName}
                 </h2>
                 <span>
-                  {currentUser?.role === "premium" && (
-                    <Image
-                      src={verification}
-                      width={30}
-                      height={20}
-                      alt="Verified"
-                    />
-                  )}
+                {currentUser?.role === "premium" &&(
+          <div className="">
+            <MdVerified className="ml-auto text-primary text-2xl cursor-pointer" />
+          </div>
+        )
+            
+        }
                 </span>
               </div>
               <p className="text-gray-900">

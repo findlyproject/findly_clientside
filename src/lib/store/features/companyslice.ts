@@ -49,6 +49,7 @@ export interface companyData{
       foundedAt:string;
       headquarters:string
       applications:applicationData[]
+      isBlocked:boolean
 }
 
 
@@ -99,6 +100,7 @@ export const loginSlice= createSlice({
     },
     setCompanyLogOut:(state)=>{
         state.activeCompany=null
+        
     },
     setAppliedUsers:(state,action)=>{
        state.application=action.payload

@@ -8,6 +8,7 @@ import { AxiosResponse } from "axios";
 
 import { setActiveCompany, setAppliedUsers, setCompanyLogOut } from "../companyslice";
 import { setforgotPassword } from "../companyslice";
+import { resetPostState } from "../postSlice";
 
 
 export const loginCompany=createAsyncThunk(
@@ -42,6 +43,7 @@ export const loginCompany=createAsyncThunk(
       }
   
       dispatch(setCompanyLogOut())
+      dispatch(resetPostState())
   return null
      
     } )

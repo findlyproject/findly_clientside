@@ -55,6 +55,7 @@ const Testimonials = () => {
           spaceBetween={32}
           loop={true}
           centeredSlides={true}
+          
           pagination={{ clickable: true }}
           autoplay={{ delay: 2500, disableOnInteraction: false }}
           breakpoints={{
@@ -66,7 +67,7 @@ const Testimonials = () => {
           className="mySwiper"
         >
           {ratings.map((rating, index) => (
-            <SwiperSlide key={rating._id}>
+            <SwiperSlide key={rating._id} >
               <div className="group bg-white border border-gray-300 rounded-xl p-6 transition-all duration-500 mx-auto hover:border-indigo-600 hover:shadow-sm">
                 <div className="flex items-center mb-7 gap-2 text-amber-500">
                   {[...Array(rating.starsRating)].map((_, index) => (
@@ -85,7 +86,7 @@ const Testimonials = () => {
                 </div>
 
 
-                <p className="text-base text-gray-600 leading-6 pb-8 group-hover:text-gray-800">
+                <p className="text-base text-gray-600 leading-6 pb-8 group-hover:text-gray-800 ">
                   {expandedIndex === index
                     ? rating.review
                     : truncateReview(rating.review, 150)}
@@ -99,7 +100,7 @@ const Testimonials = () => {
                   )}
                 </p>
 
-                <div className="flex items-center gap-5 border-t border-gray-200 pt-5">  
+                <div className="flex items-center gap-5 border-t border-gray-200 pt-5 overflow-hidden">  
                   <Image 
                   src={rating.userId?.profileImage||"/default-profile.png"}
                   width={50}
@@ -111,8 +112,9 @@ const Testimonials = () => {
                       {rating.userId?.firstName} {rating.userId?.lastName}
                     </h5>
                     <span className="text-sm text-gray-500">
-                      {rating.userId?.jobTitle}
-                    </span>
+  {rating.userId?.jobTitle?.[0]}
+</span>
+
                   </div>
                 </div>
               </div>

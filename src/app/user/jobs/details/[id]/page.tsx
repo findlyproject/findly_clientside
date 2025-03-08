@@ -1,12 +1,12 @@
-import JobDetails from '@/components/common/jobListing/Jobdetails'
-import React from 'react'
+import JobDetails from "@/components/common/jobListing/Jobdetails";
+import Navbar from "@/components/navBar/Navbar";
+import React from "react";
 
-function page() {
+export default function page() {
   return (
     <div>
-      <JobDetails/>   
+      <Navbar />
+      <JobDetails />
     </div>
-  )
+  );
 }
-
-export default page

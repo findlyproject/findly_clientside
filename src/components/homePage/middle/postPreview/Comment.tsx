@@ -40,12 +40,14 @@ export const Comments = ({ postId, comments }: CommentsProps) => {
   }, []);
 
   const display = async () => {
-    const resultcometsreplay = await dispatch(getcommentswithreplies())
+    const resultcometsreplay = await dispatch(getcommentswithreplies(routes))
 console.log(resultcometsreplay);
 
   }
 
   const { activeuser } = useAppSelector((state) => state.login);
+  const { activeCompany } = useAppSelector((state) => state.companyLogin);
+
 const routes=activeuser?"user":"company"
 
   const [isShowMenu, setIsShowMenu] = useState(false);
@@ -69,12 +71,11 @@ const routes=activeuser?"user":"company"
 
   const dispatch = useAppDispatch();
   const replay = useAppSelector((state) => state.post.commentReplay);
-  const route = activeuser ? "user" : "company"
   if (!comments) return <div className="text-center p-4">Loading...</div>;
 
   const handleListCommentReplays = async (commentId: string) => {
   
-    const result = await dispatch(findReplies(commentId));
+    const result = await dispatch(findReplies({commentId,routes}));
     
     if (result.type === "get/findReplies/fulfilled") {
       setIsShowReplyList((prev) => !prev);
@@ -123,12 +124,12 @@ const routes=activeuser?"user":"company"
   };
   const handleUpdateReply = async (replayedId: string, commentId: string) => {
     const resultUpdate = await dispatch(
-      updateReplay({ replayedId, commentId, newReplyText: editReplyText })
+      updateReplay({ replayedId, commentId, newReplyText: editReplyText,routes })
     );
     console.log("ress update", resultUpdate);
     if (resultUpdate.type === "updateReplay/fulfilled") {
       setIsOptionsMenuOpen(null);
-      await dispatch(findReplies(commentId));
+      await dispatch(findReplies({commentId,routes}));
       
       setEdit(false);
     }
@@ -178,7 +179,7 @@ const routes=activeuser?"user":"company"
 
     try {
       const resultPostReplies = await dispatch(
-        postReplay({ postId, commentId, replyText })
+        postReplay({ postId, commentId, replyText,routes })
       );
 
  
@@ -186,7 +187,7 @@ const routes=activeuser?"user":"company"
       if (resultPostReplies.type === "post/replay/fulfilled") {
         setReplyText("");
 
-        await dispatch(findReplies(commentId));
+        await dispatch(findReplies({commentId,routes}));
   
         getCommentById(commentId);
       } else {
@@ -206,12 +207,12 @@ const routes=activeuser?"user":"company"
   const handleDeleteReply = async (replayId: string, commentId: string) => {
    
 
-    const resultDelete = await dispatch(deleteReplay({ commentId, replayId }));
+    const resultDelete = await dispatch(deleteReplay({ commentId, replayId,routes }));
     console.log("result delete", resultDelete);
     if (resultDelete.type === "delete/replay/fulfilled") {
     
 
-     await dispatch(findReplies(commentId));
+     await dispatch(findReplies({commentId,routes}));
       
     }
   };
@@ -227,7 +228,7 @@ const routes=activeuser?"user":"company"
             <div className="w-8 h-8">
               <Image
                 src={
-                  activeuser?.profileImage ||
+                  (activeuser?.profileImage || activeCompany?.logo) ??
                   "https://res.cloudinary.com/dq1auwpkm/image/upload/v1738735360/profile_jtwxaj.png"
                 }
                 alt="Profile"
@@ -280,19 +281,19 @@ const routes=activeuser?"user":"company"
 
    
         <section className="mt-3 space-y-4">
-          {comments
+          {comments&&comments 
             .slice()
             .sort(
               (a, b) =>
                 new Date(b.createdAt).getTime() -
                 new Date(a.createdAt).getTime()
             )
-            .map((comment) => (
+            .map((comment,index) => (
               <div
-                key={comment._id}
+              key={`${comment._id}-${index}`}
                 className="p-3 border rounded-lg shadow-sm bg-white"
               >
-                {edit && editingCommentId === comment._id ? (
+                {edit && editingCommentId === comment?._id ? (
                   
                   <div>
                     <div className="relative flex border rounded-lg px-4 py-2">
@@ -344,23 +345,22 @@ const routes=activeuser?"user":"company"
                   <div className="flex items-start space-x-3">
                    
                     <div className="w-8 h-8">
-                      {user ? (
-                        <Image
-                          src={comment.user?.profileImage}
-                          alt="Profile"
-                          width={30}
-                          height={30}
-                          className="w-full h-full rounded-full object-cover"
-                        />
-                      ) : (
-                        <Image
-                          src={comment.user?.logo||""}
-                          alt="Profile"
-                          width={30}
-                          height={30}
-                          className="w-full h-full rounded-full object-cover"
-                        />
-                      )}
+                    <Image
+  src={
+    comment.user
+      ? "profileImage" in comment.user && comment.user.profileImage
+        ? comment.user.profileImage
+        : comment.user.logo || "https://res.cloudinary.com/dq1auwpkm/image/upload/v1738735360/profile_jtwxaj.png"
+      : "https://res.cloudinary.com/dq1auwpkm/image/upload/v1738735360/profile_jtwxaj.png"
+  }
+  alt="User Profile"
+  width={30}
+  height={30}
+  className="w-full h-full rounded-full object-cover"
+/>
+
+
+
                     
                      
                     </div>
@@ -369,16 +369,21 @@ const routes=activeuser?"user":"company"
                     <div className="flex-grow">
                       <div className="flex justify-between">
                         <div>
-                          {activeuser ? (
-                            <h3 className="font-semibold text-sm">
-                              {comment.user?.firstName} {comment.user?.lastName}
-                            </h3>
-                          ) : (
-                            <h3 className="font-semibold text-sm">
-                              {comment.user?.name}
-                            </h3>
-                          )}
-                         
+                          
+                        <h3 className="font-semibold text-sm">
+  {comment.user && typeof comment.user === "object"
+    ? "firstName" in comment.user
+      ? `${comment.user.firstName} ${comment.user.lastName || ""}`
+      : comment.user.name || "Unknown User"
+    : "Unknown User"}
+</h3>               
+{/* <h3 className="font-semibold text-sm">
+  {comment.user
+    ? "firstName" in comment.user
+      ? `${comment?.user?.firstName} ${comment?.user?.lastName}`
+      : comment.user?.name
+    : "Unknown User"} 
+</h3> */}
                         </div>
                         <div className="text-gray-500 text-xs">
                           {dayjs(comment.updatedAt).fromNow()}
@@ -413,6 +418,7 @@ const routes=activeuser?"user":"company"
                             <FontAwesomeIcon icon={faEllipsis} />
 
                             {isShowMenu && openCommentId == comment._id && (
+                              <OutsideClickHandler onOutsideClick={() => setIsShowMenu(false)}>
                               <div className="absolute  bg-white border border-gray-200 rounded-lg shadow-lg z-50">
                                 <div className="border-t border-gray-200">
                                   <button
@@ -429,6 +435,7 @@ const routes=activeuser?"user":"company"
                                   </button>
                                 </div>
                               </div>
+                              </OutsideClickHandler>
                             )}
                           </button>
                         )}
@@ -440,13 +447,16 @@ const routes=activeuser?"user":"company"
                 {isShowReplyList && commentID === comment._id && (
                   <div className="mt-2 pl-10">
                     <div className="flex items-center space-x-2">
-                      <Image
-                        src={activeuser?.profileImage || "/default-profile.png"}
-                        alt="User"
-                        height={30}
-                        width={30}
-                        className="w-8 h-8 rounded-full object-cover"
-                      />
+                    <Image
+                src={
+                  (activeuser?.profileImage || activeCompany?.logo) ??
+                  "https://res.cloudinary.com/dq1auwpkm/image/upload/v1738735360/profile_jtwxaj.png"
+                }
+                alt="Profile"
+                width={30}
+                height={30}
+                className="w-8 h-8 rounded-full object-cover"
+              />
                       
                        <div className="flex-grow flex items-center border rounded-lg px-3  space-x-2 bg-gray-100">
               <input
@@ -492,8 +502,8 @@ const routes=activeuser?"user":"company"
 
                     {replay && replay.length > 0 && (
                       <div className="mt-4 pl-6 border-l-2 border-gray-300">
-                        {replay.map((r) => (
-                          <div key={r._id} className="flex flex-col space-y-2">
+                        {replay.map((r,index) => (
+                          <div  key={`${r._id}-${index}`} className="flex flex-col space-y-2">
                             {editReplyId === r._id ? (
                               <div className="flex items-center space-x-2 pl-8">
                                 <div className="relative flex border rounded-lg px-4 py-2">
@@ -548,26 +558,32 @@ const routes=activeuser?"user":"company"
                                 <div className="flex items-start justify-center p-1 ">
                    
                    <div className="w-8 h-8">
-                     <Image
-                       src={
-                         comment.user?.profileImage ||
-                         "https://res.cloudinary.com/dq1auwpkm/image/upload/v1738735360/profile_jtwxaj.png"
-                       }
-                       alt="userprofile"
-                       width={30}
-                       height={30}
-                       className="w-full h-full rounded-full object-cover"
-                     />
+                   <Image
+  src={
+    r.user
+      ? "profileImage" in r.user && r.user.profileImage
+        ? r.user.profileImage
+        : r.user.logo || "https://res.cloudinary.com/dq1auwpkm/image/upload/v1738735360/profile_jtwxaj.png"
+      : "https://res.cloudinary.com/dq1auwpkm/image/upload/v1738735360/profile_jtwxaj.png"
+  }
+  alt=" Profile"
+  width={30}
+  height={30}
+  className="w-full h-full rounded-full object-cover"
+/>
                    </div>
 
                 
                    <div className="flex-grow">
                      <div className="flex justify-between">
                        <div className="px-2">
-                         <h3 className="font-semibold text-sm">
-                           {r.user?.firstName} {r.user?.lastName}
-                           
-                         </h3>
+                       <h3 className="font-semibold text-sm">
+  {r.user && typeof r.user === "object"
+    ? "firstName" in r.user
+      ? `${r.user.firstName} ${r.user.lastName || ""}`
+      : r.user.name || "Unknown User"
+    : "Unknown User"}
+</h3>   
                      <p className="text-gray-700">{r.reply}</p>
 
                        </div>

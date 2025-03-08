@@ -1,16 +1,12 @@
-import Navbar from '@/components/navBar/Navbar'
-import ViewProfile from '@/components/navBar/ViewProfile'
-import React from 'react'
+import Navbar from "@/components/navBar/Navbar";
+import {ViewProfile} from "@/components/navBar/ViewProfile";
+import React from "react";
 
-const page = () => {
+export default function page() {
   return (
     <div>
-    <Navbar/>
-      <ViewProfile/>
-
-      
+      <Navbar />
+      <ViewProfile />
     </div>
-  )
-}
-
-export default page
+  );
+};

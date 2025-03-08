@@ -11,7 +11,7 @@ import { MdDelete } from "react-icons/md";
 import { FaStar, FaEnvelope, FaPhone, FaGlobe, FaBookmark, FaFacebook, FaInstagram, FaLinkedin, FaTwitter } from "react-icons/fa";
 import Modal, { modalProps } from "./JobPostModal";
 import PostModal from "./PostModal";
-
+import { MdVerified } from "react-icons/md";
 
 const CompanyProfile = () => {
   const [isOpen, setIsOpen] = useState(false);
@@ -119,9 +119,13 @@ const handleDelete=async(id:string)=>{
               </a>
             </div>
           </div>
+        {activeCompany?.role === "premium" &&(
           <div className="">
-            <FaBookmark className="ml-auto text-gray-500 cursor-pointer" />
+            <MdVerified className="ml-auto text-primary text-2xl cursor-pointer" />
           </div>
+        )
+            
+        }
         </div>
 
 

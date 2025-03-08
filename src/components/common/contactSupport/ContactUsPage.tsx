@@ -8,7 +8,6 @@ import { useState } from "react";
 export default function ContactUsPage() {
   const user = useAppSelector((state) => state.user.activeuser as UserProfile);
   const admin=useAppSelector((state)=>state.admin.admin as AdminProfile)
-  console.log("useruser", user.email);
 
   const [email, setEmail] = useState({
     email: user?.email || "",
@@ -16,7 +15,6 @@ export default function ContactUsPage() {
   const [message, setMessage] = useState("");
   const [emailError, setemailError] = useState("");
   const [messageError, setmessageError] = useState("");
-  console.log("email", email, "message", message);
 
   const validateEmail = (email: string): boolean => {
     const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
@@ -56,7 +54,6 @@ export default function ContactUsPage() {
           message,
         });
 
-        console.log("response of emailus", response);
         if (response.status === 200) {
           setEmail({ email: "" });
           setMessage("");
@@ -79,10 +76,10 @@ export default function ContactUsPage() {
         <h2 className="text-2xl font-bold text-white">Contact Us</h2>
         <div className="bg-white/20 backdrop-blur-lg p-4 rounded-lg text-white">
           <p className="flex items-center mb-2">
-            <span className="mr-2">📞</span> {admin.phoneNumber}
+            <span className="mr-2">📞</span> {admin?.phoneNumber}
           </p>
           <p className="flex items-center mb-2">
-            <span className="mr-2">📧</span> {admin.email}
+            <span className="mr-2">📧</span> {admin?.email}
           </p>
           <p className="flex items-center">
             <span className="mr-2">📍</span> 654 Sycamore Avenue, Meadowville,

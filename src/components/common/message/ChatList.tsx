@@ -4,10 +4,12 @@ import { useEffect, useState } from "react";
 import { HiPaperClip } from "react-icons/hi2";
 import React from "react";
 import api, { socket } from "@/utils/api";
-import { useAppSelector } from "@/lib/store/hooks";
+import { useAppDispatch, useAppSelector } from "@/lib/store/hooks";
 import { FaEllipsisV } from "react-icons/fa";
+import { findnMembers } from "@/lib/store/features/actions/communityActions";
 
-export default function ChatList() {
+export const ChatList=()=> {
+  const dispatch=useAppDispatch()
   const [selectedUser, setSelectedUser] = useState(null);
   const [message, setMessage] = useState("");
   const [messages, setMessages] = useState([]);
@@ -21,13 +23,18 @@ export default function ChatList() {
       const response = await api.get(`/connecting/getconnection`);
       console.log("response of members", response);
       setMembers(response.data.connections);
-
-
-      
-      
     };
     fetch();
+    fetchMembers()
   }, []);
+
+
+  const fetchMembers=()=>{
+        const result =dispatch(findnMembers)
+        console.log("result",result);
+        
+  }
+
   useEffect(() => {
     const fetchMessages = async () => {
       if (selectedUser) { 

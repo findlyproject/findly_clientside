@@ -132,8 +132,8 @@ const router =useRouter()
                 </tr>
               </thead>
               <tbody>
-                {filteredPosts.map((post) => (
-                  <tr key={post._id} className="bg-white hover:bg-gray-50 border-b" >
+                {filteredPosts.map((post,index) => (
+                  <tr key={`${post._id}-${index}`}> className="bg-white hover:bg-gray-50 border-b" >
                     
                     <td className="p-5"  onClick={()=>router.push(`/admin/posts/${post._id}`)}>{post._id}</td>
                     <td className="p-5 flex items-center gap-3"  onClick={()=>router.push(`/admin/posts/${post._id}`)}>

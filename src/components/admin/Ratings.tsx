@@ -6,7 +6,7 @@ import { IoMdStar, IoMdStarHalf, IoMdStarOutline } from "react-icons/io";
 import api from '@/utils/api';
 import { approveRating, removeRating, setAllRatings } from '@/lib/store/features/ratingSlice';
 import { TiTickOutline } from "react-icons/ti";
-export default function Ratings() {
+export const Ratings=()=> {
   const[ratings,setRatings]=useState([])
     const dispatch=useAppDispatch()
     // const ratings=useAppSelector((state)=>state.rating.ratings)

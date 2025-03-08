@@ -59,7 +59,7 @@ const JobFiltersSidebar: React.FC = (props) => {
   }
 
   return (
-    <div className="p-6 h-screen overflow-y-auto mb-32 bg-white">
+    <div className="p-6 h-screen overflow-y-auto mb-32 ">
       {/* Filters Section */}
       <div className="mb-4 flex justify-between">
         <h2 className="font-semibold">Filters</h2>
