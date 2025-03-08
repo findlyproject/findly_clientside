@@ -135,8 +135,8 @@ console.log("postss",post);
       {/* Post Content */}
       <div className="space-y-3 px-2">
       <p className="mt-2 text-gray-800 text-sm">
-      {isExpanded ? post.description : `${post.description.slice(0, MAX_LENGTH)} `}
-      {post.description.length > MAX_LENGTH && (
+      {isExpanded ? post.description : `${post.description&&post.description.slice(0, MAX_LENGTH)} `}
+      {post.description&&post.description.length > MAX_LENGTH && (
         <span
           className="text-blue-600 font-semibold cursor-pointer"
           onClick={() => setIsExpanded(!isExpanded)}
