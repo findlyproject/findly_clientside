@@ -45,7 +45,7 @@ console.log(resultcometsreplay);
 
   }
 
-  const { activeuser } = useAppSelector((state) => state.login);
+  const { activeuser } = useAppSelector((state) => state.user);
   const { activeCompany } = useAppSelector((state) => state.companyLogin);
 
 const routes=activeuser?"user":"company"
