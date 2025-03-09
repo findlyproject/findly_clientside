@@ -157,7 +157,7 @@ const Sidebar: React.FC = ({ props }) => {
   );
   const route = activeCompany ? "company" : "user";
   return (
-    <aside className="w-full h-screen bg-white border-r p-4">
+    <aside className="w-full h-screen bg-white border-r p-4 ">
       <div className="flex justify-between">
         <h2 className="text-xl font-semibold">Messages</h2>
         <div className="relative inline-block">

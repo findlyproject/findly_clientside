@@ -22,7 +22,7 @@ function Loginpage() {
     password: ""
   })
 const [ispassword,setPassword] = useState(false)
-  const {googlestate} = useAppSelector((state)=>state.login)
+  const {googlestate} = useAppSelector((state)=>state.user)
 console.log("googlestate",googlestate);
  
 

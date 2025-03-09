@@ -5,7 +5,7 @@ import { useRouter } from "next/navigation"; // ✅ Correct import for Next.js 1
 
 export  function CommunityPanel(){
   const router = useRouter();
-  const {peopleIknow}=useAppSelector((state)=>state.login)
+  const {peopleIknow}=useAppSelector((state)=>state.user)
 
 
   return (
