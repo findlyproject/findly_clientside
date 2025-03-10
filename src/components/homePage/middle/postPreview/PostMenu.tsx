@@ -14,7 +14,7 @@ interface PostPreviewProps {
   post: IPost;
 }
 export const PostMenu = ({ post }: PostPreviewProps) => {
-  const { activeuser } = useAppSelector((state) => state.login);
+  const { activeuser } = useAppSelector((state) => state.user);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [UpdateOpen, setIsUpdateOpen] = useState(false); // post update
   const saved=useAppSelector((state)=>state.post.saved )

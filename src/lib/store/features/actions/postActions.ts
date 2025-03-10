@@ -1,54 +1,77 @@
 "use client";
 import { createAsyncThunk } from "@reduxjs/toolkit";
 import { AxiosResponse } from "axios";
-import { setPosts, addPost, IPost } from "../postSlice";
+import { setPosts, addPost, IPost, setPostsAdmin, PostState } from "../postSlice";
 import handleAsync from "@/utils/handleAsync";
 import api from "@/utils/api";
 
 // fetch all the posts
-// export const fetchAllPosts = createAsyncThunk(
-//   "post/fetchAllPosts",
-//   async (_, { dispatch, rejectWithValue }) => {
-//     try {
-//       const response: AxiosResponse<{ posts: IPost[] }> = await api.get(
-//         `/post/allposts`
-//       );
-
-//       if (!response.data || !response.data.posts) {
-//         return rejectWithValue("No posts found.");
-//       }
-
-//       dispatch(setPosts(response.data.posts)); 
-//       return response.data.posts;
-//     } catch (error) {
-//       console.error("Error fetching posts:", error);
-//       return rejectWithValue("Failed to fetch posts.");
-//     }
-//   }
-// );
-
-export const fetchAllPosts = createAsyncThunk(
+export const fetchAllPostsAdmin = createAsyncThunk(
   "post/fetchAllPosts",
-  async (page=1 , { dispatch, rejectWithValue }) => {
+  async (_, { dispatch, rejectWithValue }) => {
     try {
-      console.log("fffsssssssssssssss");
-      
       const response: AxiosResponse<{ posts: IPost[] }> = await api.get(
-        `/post/allposts?page=${page}&limit=5` // Fetch 5 posts per page
+        `/admin/findallposts`
       );
-console.log("response of all post",response);
 
       if (!response.data || !response.data.posts) {
         return rejectWithValue("No posts found.");
       }
-      dispatch(setPosts(response.data.posts)); 
-      return response.data.posts; 
+
+      dispatch(setPostsAdmin(response.data.posts)); 
+      return response.data.posts;
     } catch (error) {
       console.error("Error fetching posts:", error);
       return rejectWithValue("Failed to fetch posts.");
     }
   }
 );
+export const fetchAllPosts = createAsyncThunk(
+  "post/fetchAllPosts",
+  async (page = 1, { dispatch, rejectWithValue, getState }) => {
+    try {
+      const response: AxiosResponse<{ posts: IPost[] }> = await api.get(
+        `/post/allposts?page=${page}&limit=5`
+      );
+      console.log("response of all post", response);
+
+      if (!response.data || !response.data.posts) {
+        return rejectWithValue("No posts found.");
+      }
+
+      const data: IPost[] = response.data.posts;
+
+     
+
+      
+      const { post } = getState() as { post: PostState };
+      const prevPosts = post.posts ?? []; // Ensure it's an array
+
+   
+      const updatedPosts = [...prevPosts];
+
+      data.forEach((job) => {
+        if (!job.isDeleted) {
+          const index = updatedPosts.findIndex((j) => j?._id === job?._id);
+          if (index !== -1) {
+            updatedPosts[index] = { ...job }; // Ensure immutability
+          } else {
+            updatedPosts.push({ ...job });
+          }
+        }
+      });
+
+      // Dispatch the correct action
+      dispatch(setPosts(updatedPosts));
+
+      return updatedPosts;
+    } catch (error) {
+      console.error("Error fetching posts:", error);
+      return rejectWithValue("Failed to fetch posts.");
+    }
+  }
+);
+
 
 
 export const addPostByUser = createAsyncThunk(

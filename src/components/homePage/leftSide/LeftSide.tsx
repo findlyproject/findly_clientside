@@ -6,7 +6,7 @@ import PremiumFeaturesMenu from './Premium'
 import Collection from './Collection'
 
 export function LeftSideBar() {
-  const {activeuser}=useAppSelector((state)=>state.login)
+  const {activeuser}=useAppSelector((state)=>state.user)
   return (
     <section className="md:block sm:flex sm:justify-around mt-7 h-screen ">
   <FeedIdentityModule />

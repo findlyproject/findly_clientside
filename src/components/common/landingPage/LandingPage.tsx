@@ -4,8 +4,6 @@ import Image from "next/image";
 import { useRouter } from "next/navigation";
 import register4 from "../../../../public/assets/register4.jpg";
 import register3 from "../../../../public/assets/register3.jpg";
-import { FaSearch, FaCheckCircle } from "react-icons/fa";
-import { FaUserPlus, FaUpload } from "react-icons/fa";
 import goup from "../../../../public/landingPage-group-discussion.png";
 
 import Testimonials from "./Testimonial";
@@ -13,6 +11,7 @@ import { useEffect, useState } from "react";
 import api from "@/utils/api";
 import CountUp from "react-countup";
 import { toast } from "react-toastify";
+import { formChangeEvent } from "@/types/Types";
 
 function LandingPage() {
   const [users, setUsers] = useState([]);
@@ -44,28 +43,7 @@ function LandingPage() {
   };
 
   const router = useRouter();
-  const steps = [
-    {
-      title: "Create an Account",
-      desc: "Sign up with your details to get started.",
-      icon: <FaUserPlus />,
-    },
-    {
-      title: "Upload Your CV/Resume",
-      desc: "Upload your resume to showcase your skills and experience.",
-      icon: <FaUpload />,
-    },
-    {
-      title: "Find a Suitable Job",
-      desc: "Search and explore job listings that match your profile.",
-      icon: <FaSearch />,
-    },
-    {
-      title: "Apply for a Job",
-      desc: "Submit your application and get hired.",
-      icon: <FaCheckCircle />,
-    },
-  ];
+  
   
   interface Job {
     _id: string;
@@ -107,6 +85,12 @@ function LandingPage() {
     }
   };
 
+
+  const handleSubmit = (e:formChangeEvent) => {
+    e.preventDefault();
+    toast.error("please login");
+  };
+  
   return (
     <div className="w-full h-full bg-primary">
       <>
@@ -131,7 +115,7 @@ function LandingPage() {
                             </div>
                         </div>
                         <div className="sm:absolute flex sm:right-1.5 sm:inset-y-1.5 mt-4 sm:mt-0">
-                            <button type="submit" className="inline-flex items-center justify-center w-full px-5 py-5 text-sm font-semibold tracking-widest text-primary uppercase transition-all duration-200 bg-white rounded-full sm:w-auto sm:py-3 hover:opacity-90" onClick={()=>toast.error("please login")}>Find A Job</button>
+                            <button type="submit" className="inline-flex items-center justify-center w-full px-5 py-5 text-sm font-semibold tracking-widest text-primary uppercase transition-all duration-200 bg-white rounded-full sm:w-auto sm:py-3 hover:opacity-90" onClick={handleSubmit}>Find A Job</button>
                         </div>
                     </form>
 

@@ -3,7 +3,7 @@ import { useRouter } from 'next/navigation';
 import React from 'react';
 
 const PremiumFeaturesMenu = () => {
-    const {activeuser}=useAppSelector(state=>state.login)
+    const {activeuser}=useAppSelector(state=>state.user)
     const routes=activeuser?"user":"company"
     const route=useRouter()
   

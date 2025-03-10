@@ -47,7 +47,7 @@ const rejectJobApplication = async () => {
   }
 };
 
-// Approve job application
+
 const approveApplication = async () => {
   const response = await handleAsync(() =>
     api.put(`/company/approve/${userId}/${jobId}`, { offerLetter })
@@ -60,7 +60,7 @@ const approveApplication = async () => {
   }
 };
   return (
-    <div className=" min-h-screen font-sans">
+    <div className=" min-h-screen font-sans pt-24">
       {/* Header */}
       <div className=" mx-auto p-4">
         <div className="grid grid-cols-1 md:grid-cols-4 gap-6">

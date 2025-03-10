@@ -2,7 +2,6 @@
 "use client"
 import React, { useState } from "react";
 import { FcGoogle } from "react-icons/fc";
-
 import { IoEyeOffSharp, IoEyeOutline, IoMail } from "react-icons/io5";
 import { FaLock } from "react-icons/fa";
 import { useAppDispatch, useAppSelector } from "@/lib/store/hooks";
@@ -75,12 +74,16 @@ const Login = () => {
        }
 
   return (
-    <div className="flex min-h-screen w-full justify-center p-7">
-    <div className="flex flex-col md:flex-row  md:h-4/6 bg-red-500 w-full max-w-4xl rounded-xl overflow-hidden border border-black shadow-lg">
+    <div className="flex min-h-screen w-full bg-gray-100 justify-center p-7 bg-cover bg-center bg-no-repea"
+ 
+    >
+
+
+    <div className="flex flex-col md:flex-row  h-4/6     max-w-2xl rounded-xl overflow-hidden border border-black shadow-lg">
       {/* Left Section */}
       <div className="w-full md:w-1/2 flex flex-col justify-center items-center bg-white p-6 md:p-8">
         <h1 className="text-2xl md:text-3xl font-bold mb-4 text-center">Corporate Access</h1>
-        <p className="text-gray-500 mb-6 text-center">Let’s get started with your 30-day free trial</p>
+      
 
         {/* Google Button */}
         <div className="flex space-x-4 mb-4 w-full justify-center">
@@ -94,14 +97,14 @@ const Login = () => {
 
         {/* Email Input */}
         <div className="w-full max-w-sm">
-          <label className="text-gray-700">Email *</label>
+          <label className="text-primary">Email *</label>
           <div className="flex items-center border rounded-lg p-2 mb-4">
             <span className="text-gray-500 px-2"><IoMail /></span>
             <input
               onChange={handleChange}
               type="email"
               name="email"
-              placeholder="harsh@pagedone.com"
+              placeholder="Enter email.."
               className="flex-1 outline-none"
             />
           </div>
@@ -109,14 +112,14 @@ const Login = () => {
 
         {/* Password Input */}
         <div className="w-full max-w-sm">
-          <label className="text-gray-700">Password *</label>
+          <label className="text-primary">Password *</label>
           <div className="flex items-center border rounded-lg p-2 mb-2">
             <span className="text-gray-500 px-2"><FaLock /></span>
             <input
               onChange={handleChange}
               type={isPassword? "password":"text"}
               name="password"
-              placeholder="XXXXXXXXX"
+              placeholder="Enter password..."
               value={formData.password}
               className="flex-1 outline-none"
             />
@@ -133,7 +136,7 @@ const Login = () => {
         {/* Login Button */}
         <button
           onClick={handleSubmit}
-          className="w-full max-w-sm bg-purple-600 text-white py-2 rounded-lg hover:bg-purple-700 mb-4">
+          className="w-full max-w-sm bg-primary text-white py-2 rounded-lg hover:bg-purple-700 mb-4">
           Login
         </button>
 
@@ -142,10 +145,8 @@ const Login = () => {
           Don’t have an account? <a  onClick={() => router.push(`/company/register`)} href="#" className="text-blue-500">Sign Up</a>
         </p>
       </div>
-
-      {/* Right Section - Image */}
-      <div className="hidden md:block w-1/2">
-        <img className="h-full w-full object-cover" src="https://media.tacdn.com/media/attractions-splice-spp-674x446/07/80/19/43.jpg" alt="Corporate Access" />
+      <div className="hidden md:block w-1/2 ">
+        <img className="h-full w-full object-cover" src="https://i.pinimg.com/736x/a5/79/5f/a5795fa00be3cfb313cd561f31a991ae.jpg" alt="" />
       </div>
     </div>
   </div>
@@ -153,3 +154,4 @@ const Login = () => {
 };
 
 export default Login;
+

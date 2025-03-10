@@ -6,7 +6,6 @@ import { HiPaperClip } from "react-icons/hi";
 import { LuSend } from "react-icons/lu";
 import { FaEllipsisV, FaTrash, FaCopy } from "react-icons/fa";
 import { useAppSelector } from "@/lib/store/hooks";
-
 import api, { socket } from "@/utils/api";
 import { MdClose, MdImage, MdVideoCameraBack } from "react-icons/md";
 import { toast } from "react-toastify";
@@ -231,7 +230,7 @@ export default function ChatUI() {
   });
   console.log("isopen", isopen);
   return (
-    <div className="w-full flex bg-gray-100 relative h-screen">
+    <div className="w-full flex bg-gray-100 relative h-screen pt-24">
       <div className={`${isopen ? "flex absolute left-0 z-50" : ""}`}>
         <div
           className={`w-auto relative h-screen overflow-y-auto ${
