@@ -22,7 +22,7 @@ const Sidebar = () => {
     }
   };
   return (
-    <div className="xl:p-4 p-2 flex-col justify-start items-start gap-5 inline-flex ">
+    <div className="xl:p-4 p-2 flex-col justify-start items-start gap-5 inline-flex  fixed">
       <div className="w-full pt-4 justify-between items-center gap-2.5 inline-flex">
         <Link href="">
           <Image src={user} alt="Pagedone logo image" className="w-2 h-2" />

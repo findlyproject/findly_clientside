@@ -401,7 +401,7 @@ function Navbar() {
         <>
           <nav
             className={`border-gray-200 ${
-              pathname === "/" ? "bg-primary" : "bg-gray-100"
+              pathname === "/" ? "bg-primary" : "bg-gray-200"
             }  py-2.5`}
           >
             <div className="mx-auto flex max-w-screen-xl flex-wrap items-center justify-between px-4">
@@ -523,7 +523,10 @@ function Navbar() {
           </Link>
         </div>
       )}
+<<<<<<< HEAD
+=======
       
+>>>>>>> c1091033971d9175dfb0b31933ad163858d3bf47
     </header>
   );
 }

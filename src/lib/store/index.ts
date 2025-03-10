@@ -21,8 +21,13 @@ import communityReducer from "./features/communitySlice"
 
 // Create persist configs for specific reducers
 const userPersistConfig = { key: "user", storage };
+<<<<<<< HEAD
+// const loginPersistConfig = { key: "login", storage };
+const ratingPersistConfig={key:"login",storage};
+=======
 const loginPersistConfig = { key: "login", storage };
 const ratingPersistConfig={key:"rating",storage};
+>>>>>>> c1091033971d9175dfb0b31933ad163858d3bf47
 const registerPersistConfig={key:"register",storage};
 const communityPersistConfig={key:"community",storage}
 const postPersistConfig={key:"post",storage}

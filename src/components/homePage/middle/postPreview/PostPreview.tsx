@@ -176,10 +176,7 @@ export const PostPreview = ({ post }: PostPreviewProps) => {
       ))}
     </Swiper>
 
-    {/* Navigation Buttons */}
-    
 
-    {/* Swiper Pagination */}
     <div className="swiper-pagination"></div>
   </div>
 )}

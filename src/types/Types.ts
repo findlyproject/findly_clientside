@@ -4,6 +4,7 @@ import { UserProfile } from "@/lib/store/features/userSlice";
 // event
 export type SelectChangeEvent = React.ChangeEvent<HTMLSelectElement>;
 export type InputChangeEvent = React.ChangeEvent<HTMLInputElement>;
+export type formChangeEvent=React.FormEvent<HTMLFormElement>
 
 export interface Company {
   name: string;
