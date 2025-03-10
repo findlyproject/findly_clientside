@@ -4,8 +4,6 @@ import Image from "next/image";
 import { useRouter } from "next/navigation";
 import register4 from "../../../../public/assets/register4.jpg";
 import register3 from "../../../../public/assets/register3.jpg";
-import { FaSearch, FaCheckCircle } from "react-icons/fa";
-import { FaUserPlus, FaUpload } from "react-icons/fa";
 import goup from "../../../../public/landingPage-group-discussion.png";
 
 import Testimonials from "./Testimonial";
@@ -45,28 +43,7 @@ function LandingPage() {
   };
 
   const router = useRouter();
-  const steps = [
-    {
-      title: "Create an Account",
-      desc: "Sign up with your details to get started.",
-      icon: <FaUserPlus />,
-    },
-    {
-      title: "Upload Your CV/Resume",
-      desc: "Upload your resume to showcase your skills and experience.",
-      icon: <FaUpload />,
-    },
-    {
-      title: "Find a Suitable Job",
-      desc: "Search and explore job listings that match your profile.",
-      icon: <FaSearch />,
-    },
-    {
-      title: "Apply for a Job",
-      desc: "Submit your application and get hired.",
-      icon: <FaCheckCircle />,
-    },
-  ];
+  
   
   interface Job {
     _id: string;

@@ -73,10 +73,9 @@ const [isLeftSticky, setIsLeftSticky] = useState(false);
 
   return (
   <section
-  className={`grid bg-gray-100 pt-16 px-10 -z-10 transition-all duration-300 ${
-    showMessage && activeuser? "lg:grid-cols-[20%_40%_40%]" : "grid-cols-1 lg:grid-cols-[20%_40%] justify-center"
-  }`}
+  className="grid bg-gray-100 pt-16 -z-10 transition-all duration-300 grid-cols-1 lg:grid-cols-[15%_20%_40%_25%] lg:justify-center "
 >
+  <div className="w-full"></div>
 <div
         ref={leftSidebarRef}
         className={`overflow-y-auto ${
@@ -105,7 +104,7 @@ const [isLeftSticky, setIsLeftSticky] = useState(false);
   </button>
   { showMessage &&
     <motion.div 
-    className="lg:sticky pt-7 right-0" 
+    className="pr-10  pt-7 " 
     initial={{ opacity: 0, x: 50 }}
     animate={{ opacity: 1, x: 0 }}   
     exit={{ opacity: 0, x: 50, scale: 0.9 }}  
