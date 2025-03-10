@@ -2,41 +2,42 @@
 
 "use client";
 
+import { blockUser, fetchUsers } from "@/lib/store/features/actions/adminActions";
 import { UserProfile } from "@/lib/store/features/userSlice";
+import { useAppDispatch, useAppSelector } from "@/lib/store/hooks";
 import api from "@/utils/api";
 import { useEffect, useState } from "react";
 
 const Users = () => {
-  const [data, setData] = useState<UserProfile[]>([]);
+  
   const [currentPage, setCurrentPage] = useState(1);
   const usersPerPage = 10;  
+  const dispatch=useAppDispatch()
+  const users=useAppSelector((state)=>state.admin.users)
 
-  useEffect(() => {
-    const fetchUsers = async () => {
-      const response = await api.get("admin/users");
-      const nonAdminUsers = response.data.users;
-      setData(nonAdminUsers);
-    };
-    fetchUsers();
-  }, []);
+  useEffect(()=>{
+    findUsers()
+  },[])
+
+  const findUsers=async()=>{
+    await dispatch(fetchUsers())
+ 
+  }
 
   const handleBlock = async (id: string) => {
-    const response = await api.patch(`/admin/blockandunblock/${id}`);
-    const updatedUser = response.data.data;
-    setData((prevData) =>
-      prevData.map((user) =>
-        user._id === updatedUser._id
-          ? { ...user, isBlocked: updatedUser.isBlocked }
-          : user
-      )
-    );
+
+    const result=await dispatch(blockUser(id))
+    if(result.type==="block/uses/fulfilled"){
+      findUsers()
+    }
+
   };
 
-  // Pagination Logic
-  const totalPages = Math.ceil(data.length / usersPerPage);
+  
+  const totalPages = Math.ceil(users.length / usersPerPage);
   const indexOfLastUser = currentPage * usersPerPage;
   const indexOfFirstUser = indexOfLastUser - usersPerPage;
-  const currentUsers = data.slice(indexOfFirstUser, indexOfLastUser);
+  const currentUsers = users.slice(indexOfFirstUser, indexOfLastUser);
 
   const goToPage = (pageNumber: number) => {
     setCurrentPage(pageNumber);

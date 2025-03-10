@@ -6,46 +6,47 @@ import { IoMdStar, IoMdStarHalf, IoMdStarOutline } from "react-icons/io";
 import api from '@/utils/api';
 import { approveRating, removeRating, setAllRatings } from '@/lib/store/features/ratingSlice';
 import { TiTickOutline } from "react-icons/ti";
+import { adminApproveReviews, adminRemove, adminRemoveRating, findlyReviews } from '@/lib/store/features/actions/adminActions';
 export const Ratings=()=> {
   const[ratings,setRatings]=useState([])
     const dispatch=useAppDispatch()
-    // const ratings=useAppSelector((state)=>state.rating.ratings)
+    const reviews=useAppSelector((state)=>state.admin.reviews)
+
     console.log("ratings",ratings);
+    console.log("reviews",reviews);
 
+  
+
+const findReviews=async()=>{
+  const result=await dispatch(findlyReviews())
+console.log("result",result);
+
+}
     useEffect(()=>{
-     const fetch=async()=>{
-      const response=await api.get(`/admin/ratings`)
-      console.log("response",response);
-     setRatings(response.data.ratings)
-
-      
-     }
-     fetch()
+         findReviews()
     },[])
     const handleRemove=async(ratingID:string)=>{
-        const response=await api.patch(`/admin/remove/${ratingID}`)
-        console.log("response of rating remove",response);
-   setRatings((prev)=>prev.filter((item)=>item._id!==ratingID))      
-    // dispatch(removeRating(ratingID))
-       
+
+      const result=await dispatch(adminRemoveRating(ratingID))
+      console.log("result",result);
+      if(result.type==="remove/reviews/fulfilled"){
+        findReviews()
+      }
+
+
     }
 
     const handleAccept=async(id:string)=>{
-      console.log("iddd",id);
-      
-        const response=await api.patch(`/admin/approve/${id}`)
-        console.log("response of rating approve",response);
-        setRatings((prev) =>
-          prev.map((item) => 
-            item._id === id ? { ...item, status: true } : item
-          )
-        );
-    // dispatch(approveRating(id))
+     
+      const result=await dispatch(adminApproveReviews(id))
+      if(result.type==="approve/reviews/fulfilled"){
+        findReviews()
+      }
 
     }
   return (
      <div>
-      {ratings.map((item, index) => {
+      {reviews.map((item) => {
          const rating = item.starsRating;
         const fullStars = Math.floor(rating);
      const halfStars = rating % 1 !== 0 ? 1 : 0;

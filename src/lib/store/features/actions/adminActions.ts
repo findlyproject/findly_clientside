@@ -4,7 +4,7 @@ import { createAsyncThunk } from "@reduxjs/toolkit";
 import handleAsync from "@/utils/handleAsync";
 import { AxiosResponse } from "axios";
 import api from "@/utils/api";
-import { AdminProfile, setAdmin, setCompanies, setJOBTitles, setSkills } from "../adminSlice";
+import { AdminProfile, setAdmin, setCompanies, setJOBTitles, setReviews, setSkills, setUsers } from "../adminSlice";
 
 //login
 interface LoginResponse {
@@ -32,6 +32,27 @@ interface LoginResponse {
     }
   );
 
+  export const logOutAdmin = createAsyncThunk(
+    "auth/logoutAdmin",
+    async (
+     _,{ dispatch, rejectWithValue }
+    ) => {
+      const response = await handleAsync<AxiosResponse<LoginResponse>>(() =>
+        api.post("/admin/logout")
+      );
+      
+      
+      if (!response) {
+        return rejectWithValue("Logout failed. Please try again.");
+      }
+      
+  
+      dispatch(setAdmin(null));
+      return response?.data?.findAdmin;
+    }
+  );
+
+
   export const fetchCompanies = createAsyncThunk(
     "find/companies",
     async (
@@ -47,6 +68,42 @@ interface LoginResponse {
 
 
       dispatch(setCompanies(data))
+      return data
+    }
+  );
+  export const fetchUsers = createAsyncThunk(
+    "find/uses",
+    async (
+      _,
+      { dispatch, rejectWithValue }
+    ) => {
+      const response = await handleAsync<AxiosResponse>(() =>api.get("admin/users"));
+      if (!response) {
+        return rejectWithValue("fetch users failed.");
+      }
+
+      const data=response.data.users
+
+
+      dispatch(setUsers(data))
+      return data
+    }
+  );
+
+  export const blockUser = createAsyncThunk(
+    "block/uses",
+    async (
+      id:string,
+      { dispatch, rejectWithValue }
+    ) => {
+      const response = await handleAsync<AxiosResponse>(() =>api.patch(`/admin/blockandunblock/${id}`));
+      if (!response) {
+        return rejectWithValue("blocking the user failed.");
+      }
+
+      const data=response.data
+
+
       return data
     }
   );
@@ -73,7 +130,7 @@ return updatedUser
     ) => {
       const response = await handleAsync<AxiosResponse>(() =>api.get(`/admin/allskills`));
       if (!response) {
-        return rejectWithValue("block company failed.");
+        return rejectWithValue("fetch skills failed.");
       }
       const data = response.data.skills
    console.log("dddddddd",data);
@@ -89,7 +146,7 @@ return data
     ) => {
       const response = await handleAsync<AxiosResponse>(() =>api.get(`/admin/alladmin`));
       if (!response) {
-        return rejectWithValue("block company failed.");
+        return rejectWithValue("d=fetch titles failed.");
       }
       const data = response.data.titles
    console.log("dddddddd",data);
@@ -109,7 +166,7 @@ return data
         newskill: skill,
       }));
       if (!response) {
-        return rejectWithValue("block company failed.");
+        return rejectWithValue("edit skill failed.");
       }
       const data = response.data.skills
 
@@ -127,7 +184,7 @@ return data
         name: formattedSkill,
       }));
       if (!response) {
-        return rejectWithValue("block company failed.");
+        return rejectWithValue("post skill failed.");
       }
       const data = response.data.skills
 
@@ -145,7 +202,7 @@ return data
         newTitle: titles,
       }));
       if (!response) {
-        return rejectWithValue("block company failed.");
+        return rejectWithValue("edit title failed.");
       }
       const data = response.data.skills
 
@@ -162,7 +219,7 @@ return data
         name: formattedTitles,
       }));
       if (!response) {
-        return rejectWithValue("block company failed.");
+        return rejectWithValue("post title failed.");
       }
       const data = response.data
 
@@ -171,6 +228,172 @@ return data
     }
   );
 
+  export const handleApproveSkill = createAsyncThunk(
+    "approve/skills",
+    async (skillid:string,{ dispatch, rejectWithValue }
+    ) => {
+      const response = await handleAsync<AxiosResponse>(() => api.patch(`/admin/approveskill/${skillid}`));
+      if (!response) {
+        return rejectWithValue("approved skills failed.");
+      }
+      const data = response.data
+
+   
+return data
+    }
+  );
+
+
+  export const handleApproveTitle = createAsyncThunk(
+    "approve/title",
+    async (titleid:string,{ dispatch, rejectWithValue }
+    ) => {
+      const response = await handleAsync<AxiosResponse>(() => api.patch(`/admin/approvetitle/${titleid}`));
+      if (!response) {
+        return rejectWithValue("approved title failed.");
+      }
+      const data = response.data
+
+   
+return data
+    }
+  );
+
+  export const handleRemoveTitle = createAsyncThunk(
+    "remove/title",
+    async (titleId:string,{ dispatch, rejectWithValue }
+    ) => {
+      const response = await handleAsync<AxiosResponse>(() => api.patch(`/admin/removetitle/${titleId}`));
+      if (!response) {
+        return rejectWithValue("title removing failed.");
+      }
+      const data = response.data
+
+   
+return data
+    }
+  );
+
+
+  
+  export const handleRemoveSkill = createAsyncThunk(
+    "remove/skill",
+    async (skillId:string,{ dispatch, rejectWithValue }
+    ) => {
+      const response = await handleAsync<AxiosResponse>(() => api.patch(`/admin/removeskill/${skillId}`));
+      if (!response) {
+        return rejectWithValue(" skill removing failed.");
+      }
+      const data = response.data
+
+   
+return data
+    }
+  );
+
+
+
+  export const editAdminProfile = createAsyncThunk(
+    "edit/admin",
+    async (formDataToSend:FormData,{ dispatch, rejectWithValue }
+    ) => {
+      const response = await handleAsync<AxiosResponse>(() => api.patch(`/admin/editprofile`, formDataToSend, {
+        headers: { 'Content-Type': 'multipart/form-data' },
+      }));
+      if (!response) {
+        return rejectWithValue("admin edit profile  failed.");
+      }
+      const data = response.data.admin
+dispatch(setAdmin(data))
+   
+return data
+    }
+  );
+
+  export const adminRemoveRating = createAsyncThunk(
+    "remove/reviews",
+    async (ratingID:string,{ dispatch, rejectWithValue }
+    ) => {
+      const response = await handleAsync<AxiosResponse>(() => api.patch(`/admin/remove/${ratingID}`));
+      if (!response) {
+        return rejectWithValue("admin edit profile  failed.");
+      }
+      const data = response.data
+
+      
+return data
+    }
+  );
+
+  export const adminApproveReviews = createAsyncThunk(
+    "approve/reviews",
+    async (id:string,{ dispatch, rejectWithValue }
+    ) => {
+      const response = await handleAsync<AxiosResponse>(() => api.patch(`/admin/approve/${id}`));
+      if (!response) {
+        return rejectWithValue("admin remove reviews failed.");
+      }
+      const data = response.data
+
+      
+return data
+    }
+  );
+
+
+
+  export const findlyReviews = createAsyncThunk(
+    "reviews/findly",
+    async (_,{ dispatch, rejectWithValue }
+    ) => {
+      const response = await handleAsync<AxiosResponse>(() => api.get(`/admin/ratings`));
+      if (!response) {
+        return rejectWithValue("review finding failed.");
+      }
+      const data =response.data.ratings
+      
+      
+      dispatch(setReviews(data))
+   
+return data
+    }
+  );
+
+
+
+  export const adminDeletePost = createAsyncThunk(
+    "delete/post",
+    async (postId:string,{ dispatch, rejectWithValue }
+    ) => {
+      const response = await handleAsync<AxiosResponse>(() => api.patch(`admin/deletepost/${postId}`, {
+        isDeleted: true,
+      }));
+      if (!response) {
+        return rejectWithValue("post deleting failed.");
+      }
+      const data =response.data.ratings
+      
+      
+      dispatch(setReviews(data))
+   
+return data
+    }
+  );
+
+
+  export const removeReports = createAsyncThunk(
+    "remove/reports",
+    async (postId:string,{ dispatch, rejectWithValue }
+    ) => {
+      const response = await handleAsync<AxiosResponse>(() => api.post(`/admin/dismissreports/${postId}`));
+      if (!response) {
+        return rejectWithValue("post deleting failed.");
+      }
+      const data =response.data.ratings
+   
+return data
+    }
+  );
 
 
 

@@ -45,7 +45,7 @@ export const fetchAllPosts = createAsyncThunk(
 
       
       const { post } = getState() as { post: PostState };
-      const prevPosts = post.posts ?? []; // Ensure it's an array
+      const prevPosts = post.posts ?? []; 
 
    
       const updatedPosts = [...prevPosts];
@@ -54,14 +54,14 @@ export const fetchAllPosts = createAsyncThunk(
         if (!job.isDeleted) {
           const index = updatedPosts.findIndex((j) => j?._id === job?._id);
           if (index !== -1) {
-            updatedPosts[index] = { ...job }; // Ensure immutability
+            updatedPosts[index] = { ...job }; 
           } else {
             updatedPosts.push({ ...job });
           }
         }
       });
 
-      // Dispatch the correct action
+     
       dispatch(setPosts(updatedPosts));
 
       return updatedPosts;

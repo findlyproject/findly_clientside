@@ -7,18 +7,17 @@ import { useRouter } from "next/navigation";
 import { FaPlus } from "react-icons/fa6";
 import { MdOutlineReviews } from "react-icons/md";
 import { toast } from "react-toastify";
+import { logOutAdmin } from "@/lib/store/features/actions/adminActions";
+import { useAppDispatch } from "@/lib/store/hooks";
 const Sidebar = () => {
   const router = useRouter();
+  const dispatch=useAppDispatch()
   const handleAdminLogout = async (e: React.MouseEvent<HTMLButtonElement>) => {
     e.preventDefault();
 
-    const response = await api.post("/admin/logout");
-
-    if (response.status >= 200 && response.status < 300) {
-      toast.success("Admin Logout successful");
-      router.push("/"); 
-    } else {
-      throw new Error(response.data?.message || "An error occurred");
+    const result=await dispatch(logOutAdmin())
+    if(result.type==="auth/logoutAdmin/fulfilled"){
+      router.push("/");
     }
   };
   return (

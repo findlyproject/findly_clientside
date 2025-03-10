@@ -11,7 +11,7 @@ import { VscVerifiedFilled } from "react-icons/vsc";
 import { VscVerified } from "react-icons/vsc";
 import { MdEdit } from "react-icons/md";
 import { useAppDispatch, useAppSelector } from "@/lib/store/hooks";
-import { editSkill, editTitle, handleBlock, postSkill, postTitle, showSkills, showSTitles } from "@/lib/store/features/actions/adminActions";
+import { editSkill, editTitle, handleApproveSkill, handleApproveTitle, handleBlock, handleRemoveSkill, handleRemoveTitle, postSkill, postTitle, showSkills, showSTitles } from "@/lib/store/features/actions/adminActions";
 
 const Create = () => {
   const [skill, setSkill] = useState("");
@@ -105,27 +105,32 @@ console.log("resultpodtgfftf",result);
   };
 
   const handleRemove = async (skillId: string) => {
-    const response = await api.patch(`/admin/removeskill/${skillId}`);
+    console.log("skillId",skillId);
+    
+   const result=await dispatch(handleRemoveSkill(skillId))
+   console.log("result",result);
+   
+   if(result.type==="remove/skill/fulfilled"){
+         dispatch(showSkills())
+   }
 
-    setallSkills((prevskill) =>
-      prevskill.filter((skill) => skill._id !== skillId)
-    );
   };
 
   const handleTitleRemove = async (titleId: string) => {
-    const response = await api.patch(`/admin/removetitle/${titleId}`);
-
-    setallTitles((prevTitle) =>
-      prevTitle.filter((title) => title._id !== titleId)
-    );
+    const result =await dispatch(handleRemoveTitle(titleId))
+  if(result.type==="remove/title/fulfilled"){
+    dispatch(showSTitles())
+  }
   };
 
   const handleTitleApprove = async (titleid: string) => {
-    const response = await api.patch(`/admin/approvetitle/${titleid}`);
 
-    setallTitles((prevTitles) =>
-      prevTitles.map((s) => (s._id === titleid ? { ...s, status: true } : s))
-    );
+    const result=await dispatch(handleApproveTitle(titleid))
+
+    if(result.type==="approve/title/fulfilled"){
+      dispatch(showSTitles())
+    }
+
   };
 
   const handleTitleEdit = async (Item: TitleType) => {
@@ -141,11 +146,10 @@ console.log("resultpodtgfftf",result);
   };
 
   const handleApprove = async (skillid: string) => {
-    const response = await api.patch(`/admin/approveskill/${skillid}`);
-
-    setallSkills((prevSkills) =>
-      prevSkills.map((s) => (s._id === skillid ? { ...s, status: true } : s))
-    );
+   const result=await dispatch(handleApproveSkill(skillid))
+                if(result.type==="approve/skills/fulfilled"){
+                 dispatch(showSkills())
+                }
   };
   return (
     <div className="flex flex-col items-start min-h-screen bg-gray-100 p-6">
