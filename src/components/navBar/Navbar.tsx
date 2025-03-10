@@ -523,10 +523,7 @@ function Navbar() {
           </Link>
         </div>
       )}
-<<<<<<< HEAD
-=======
       
->>>>>>> c1091033971d9175dfb0b31933ad163858d3bf47
     </header>
   );
 }
