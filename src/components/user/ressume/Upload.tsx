@@ -1,14 +1,13 @@
-
-
-
 "use client";
 
-import { postresume, removeResume } from "@/lib/store/features/actions/resumeActions";
+import {
+  postresume,
+  removeResume,
+} from "@/lib/store/features/actions/resumeActions";
 import { useAppDispatch, useAppSelector } from "@/lib/store/hooks";
 
 import React, { useState, ChangeEvent, useEffect } from "react";
 import { toast } from "react-toastify";
-
 
 interface FilesState {
   resume: File | null;
@@ -18,7 +17,9 @@ interface FilesState {
 const FileUpload = () => {
   const dispatch = useAppDispatch();
   const resumePdf = useAppSelector((state) => state.user.activeuser?.resumePDF);
-  const resumevideo = useAppSelector((state) => state.user.activeuser?.resumeVideo);
+  const resumevideo = useAppSelector(
+    (state) => state.user.activeuser?.resumeVideo
+  );
 
   const [files, setFiles] = useState<FilesState>({
     resume: null,
@@ -30,17 +31,21 @@ const FileUpload = () => {
   const [modalContent, setModalContent] = useState<string | null>(null);
   const [isModalOpen, setIsModalOpen] = useState<boolean>(false);
 
-
   useEffect(() => {
     setFiles({
-      resume: resumePdf?.[0] ? new File([""], "Existing Resume.pdf", { type: "application/pdf" }) : null,
-      introductionVideo: resumevideo?.[0] ? new File([""], "Existing Video.mp4", { type: "video/mp4" }) : null,
+      resume: resumePdf?.[0]
+        ? new File([""], "Existing Resume.pdf", { type: "application/pdf" })
+        : null,
+      introductionVideo: resumevideo?.[0]
+        ? new File([""], "Existing Video.mp4", { type: "video/mp4" })
+        : null,
     });
   }, [resumePdf, resumevideo]);
 
-  
-
-  const handleFileUpload = (event: ChangeEvent<HTMLInputElement>, type: keyof FilesState) => {
+  const handleFileUpload = (
+    event: ChangeEvent<HTMLInputElement>,
+    type: keyof FilesState
+  ) => {
     const selectedFile = event.target.files ? event.target.files[0] : null;
     if (selectedFile) {
       setFiles((prevFiles) => ({ ...prevFiles, [type]: selectedFile }));
@@ -49,8 +54,7 @@ const FileUpload = () => {
 
   const handleUpload = async () => {
     const formData = new FormData();
-    
-    
+
     const { resume, introductionVideo } = files;
     if (!resume && !introductionVideo) {
       setErrorMessage("Please select a file to upload");
@@ -61,15 +65,13 @@ const FileUpload = () => {
     if (introductionVideo) formData.append("video", introductionVideo);
 
     try {
- 
-      
       setLoading(true);
       setErrorMessage("");
       const result = await dispatch(postresume(formData));
-    
+
       setFiles({ resume: null, introductionVideo: null });
-      if(result.type==="post/resume/fulfilled"){
-        toast.success("resume uploaded")
+      if (result.type === "post/resume/fulfilled") {
+        toast.success("resume uploaded");
       }
     } catch (error) {
       setErrorMessage("An error occurred during the upload.");
@@ -93,61 +95,68 @@ const FileUpload = () => {
     setModalContent(null);
   };
 
-
-  const handleRemoveResume =async (type:string) => {
-   const removeResult=await dispatch(removeResume(type)); 
-   if(removeResult.type==="remove/resume/fulfilled"){
-    setFiles({ resume: null, introductionVideo: null });
-
-   }   
-
-   }
-   
-
+  const handleRemoveResume = async (type: string) => {
+    const removeResult = await dispatch(removeResume(type));
+    if (removeResult.type === "remove/resume/fulfilled") {
+      setFiles({ resume: null, introductionVideo: null });
+    }
+  };
 
   return (
     <div className="flex flex-col items-center justify-center h-screen p-10 bg-gray-100">
       <div className="flex flex-col gap-6 w-full max-w-lg p-6 bg-white shadow-lg rounded-lg">
         <h2 className="text-xl font-bold text-center">Upload Your Files</h2>
 
-        {(["resume", "introductionVideo"] as (keyof FilesState)[]).map((type) => (
-          <div key={type} className="p-6 border rounded-lg shadow-md text-center">
-            {files[type] || (type === "resume" && resumePdf?.length) || (type === "introductionVideo" && resumevideo?.length) ? (
-              <div>
-                <p className="text-sm font-semibold">{files[type]?.name || "Uploaded File"}</p>
-                <div className="flex justify-center gap-4 mt-2">
-                  <button
-                    className="px-4 py-2 bg-blue-500 text-white rounded hover:bg-blue-600"
-                    onClick={() => openModal(type)}
-                  >
-                    View {type}
-                  </button>
-                  <button
-                    className="px-4 py-2 bg-red-500 text-white rounded hover:bg-red-600"
-                    onClick={() => handleRemoveResume(type)}
-                  >
-                    Remove {type}
-                  </button>
+        {(["resume", "introductionVideo"] as (keyof FilesState)[]).map(
+          (type) => (
+            <div
+              key={type}
+              className="p-6 border rounded-lg shadow-md text-center"
+            >
+              {files[type] ||
+              (type === "resume" && resumePdf?.length) ||
+              (type === "introductionVideo" && resumevideo?.length) ? (
+                <div>
+                  <p className="text-sm font-semibold">
+                    {files[type]?.name || "Uploaded File"}
+                  </p>
+                  <div className="flex justify-center gap-4 mt-2">
+                    <button
+                      className="px-4 py-2 bg-blue-500 text-white rounded hover:bg-blue-600"
+                      onClick={() => openModal(type)}
+                    >
+                      View {type}
+                    </button>
+                    <button
+                      className="px-4 py-2 bg-red-500 text-white rounded hover:bg-red-600"
+                      onClick={() => handleRemoveResume(type)}
+                    >
+                      Remove {type}
+                    </button>
+                  </div>
                 </div>
-              </div>
-            ) : (
-              <label className="cursor-pointer flex flex-col items-center p-6 border-2 border-dashed rounded-lg hover:bg-gray-100">
-                <span className="text-sm font-semibold">
-                  Upload {type === "resume" ? "Resume (PDF)" : "Introduction Video"}
-                </span>
-                <input
-                  type="file"
-                  accept={type === "resume" ? ".pdf" : "video/*"}
-                  className="hidden"
-                  onChange={(e) => handleFileUpload(e, type)}
-                  disabled={loading}
-                />
-              </label>
-            )}
-          </div>
-        ))}
+              ) : (
+                <label className="cursor-pointer flex flex-col items-center p-6 border-2 border-dashed rounded-lg hover:bg-gray-100">
+                  <span className="text-sm font-semibold">
+                    Upload{" "}
+                    {type === "resume" ? "Resume (PDF)" : "Introduction Video"}
+                  </span>
+                  <input
+                    type="file"
+                    accept={type === "resume" ? ".pdf" : "video/*"}
+                    className="hidden"
+                    onChange={(e) => handleFileUpload(e, type)}
+                    disabled={loading}
+                  />
+                </label>
+              )}
+            </div>
+          )
+        )}
 
-        {errorMessage && <p className="text-red-500 text-center mt-4">{errorMessage}</p>}
+        {errorMessage && (
+          <p className="text-red-500 text-center mt-4">{errorMessage}</p>
+        )}
 
         <button
           className="mt-6 px-6 py-2 bg-blue-500 text-white rounded-lg hover:bg-blue-600"
@@ -158,7 +167,6 @@ const FileUpload = () => {
         </button>
       </div>
 
-     
       {isModalOpen && modalContent && (
         <div className="fixed inset-0 bg-black bg-opacity-50 flex justify-center items-center z-50">
           <div className="bg-white p-6 rounded-lg w-3/4 max-w-2xl">
@@ -169,13 +177,13 @@ const FileUpload = () => {
               X
             </button>
             {modalContent.includes(".pdf") ? (
-          <iframe 
-          className="text-black"
-          src={`https://docs.google.com/gview?url=${modalContent}&embedded=true`} 
-          width="100%" 
-          height="500px"
-          style={{ border: "none" }} 
-        />
+              <iframe
+                className="text-black"
+                src={`https://docs.google.com/gview?url=${modalContent}&embedded=true`}
+                width="100%"
+                height="500px"
+                style={{ border: "none" }}
+              />
             ) : (
               <video controls width="100%" height="500px">
                 <source src={modalContent} type="video/mp4" />
@@ -190,5 +198,3 @@ const FileUpload = () => {
 };
 
 export default FileUpload;
-
-

@@ -16,7 +16,7 @@ import PhoneInput from "react-phone-input-2";
 import "react-phone-input-2/lib/style.css";
 import api from "@/utils/api";
 import { setActiveCompany } from "@/lib/store/features/companyslice";
-import { UserProfile } from "@/lib/store/features/userSlice";
+import { User } from "@/types/Types";
 export default function ProfileEdit() {
   const activecompany = useAppSelector(
     (state) => state.companyLogin.activeCompany
@@ -34,7 +34,7 @@ export default function ProfileEdit() {
 
   const dispatch = useAppDispatch();
   const [searchQuery, setSearchQuery] = useState("");
-  const [employees, setEmployees] = useState<UserProfile[]>([]);
+  const [employees, setEmployees] = useState<User[]>([]);
   const [showDropdown, setShowDropdown] = useState(false);
   const [selectedEmployee, setSelectedEmployee] = useState("");
   const [positions, setPosition] = useState({

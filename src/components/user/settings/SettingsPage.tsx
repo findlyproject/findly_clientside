@@ -16,7 +16,6 @@ import HelpandSupport from "./HelpandSupport";
 import TermsAndPolicy from "./TermsAndPolicy";
 import SubscriptionDetail from "./SubscriptionDetail";
 import { FaHome } from "react-icons/fa";
-import Link from "next/link";
 import { useRouter } from "next/navigation";
 const menuItems = [
   { id: "edit-profile", name: "Manage Account", icon: <FaUser /> },
@@ -24,19 +23,18 @@ const menuItems = [
   { id: "subscription", name: "My Subscription", icon: <TbPremiumRights /> },
   { id: "support", name: "Help & Support", icon: <FaQuestionCircle /> },
   { id: "terms", name: "Terms & Policies", icon: <FaInfoCircle /> },
-  {id:"back",name:"Back to home",icon:<FaHome/>}
+  { id: "back", name: "Back to home", icon: <FaHome /> },
 ];
 
 export default function SettingsPage() {
-  const router=useRouter()
+  const router = useRouter();
   const [selected, setSelected] = useState("edit-profile");
   const [isSidebarOpen, setIsSidebarOpen] = useState(false);
-if(selected==="back"){
-router.push(`/user/home`)
-}
+  if (selected === "back") {
+    router.push(`/user/home`);
+  }
   return (
     <div className="flex flex-col md:flex-row min-h-screen bg-gray-100">
-      {/* Sidebar */}
       <div
         className={`fixed top-0 left-0 z-20 w-64 h-screen overflow-y-auto bg-white shadow-lg p-4 transform ${
           isSidebarOpen ? "translate-x-0" : "-translate-x-full"
@@ -55,18 +53,16 @@ router.push(`/user/home`)
               }`}
               onClick={() => {
                 setSelected(item.id);
-                setIsSidebarOpen(false); // Close sidebar on mobile
+                setIsSidebarOpen(false);
               }}
             >
               {item.icon}
               <span>{item.name}</span>
             </li>
-            
           ))}
         </ul>
       </div>
 
-      {/* Mobile Menu Toggle */}
       <button
         className="md:hidden p-4 fixed top-4 right-4 z-30"
         onClick={() => setIsSidebarOpen(!isSidebarOpen)}
@@ -78,16 +74,13 @@ router.push(`/user/home`)
         )}
       </button>
 
-      {/* Content */}
       <div className="md:ml-64 flex-1 p-6">
         {selected === "edit-profile" && <ManageAccount />}
         {selected === "notifications" && <Notifications />}
         {selected === "subscription" && <SubscriptionDetail />}
         {selected === "support" && <HelpandSupport />}
         {selected === "terms" && <TermsAndPolicy />}
-        
       </div>
-
     </div>
   );
 }

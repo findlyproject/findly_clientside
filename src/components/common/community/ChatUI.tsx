@@ -13,41 +13,50 @@ import { useRouter } from "next/navigation";
 import { IoReorderThreeOutline } from "react-icons/io5";
 import { RxCross2 } from "react-icons/rx";
 import CommunityDetails from "./CommunityDetails";
+import { Community, CommunityMessage } from "@/lib/store/features/communitySlice";
+interface FilePreview {
+  type: "image" | "video";
+  url: string;
+  file: File;
+}
 
 export default function ChatUI() {
-  const router = useRouter();
-  const [selectedCommunity, setSelectedCommunity] = useState(null);
-  const [community, setCommunity] = useState(null);
+  
+  const [selectedCommunity, setSelectedCommunity] = useState<Community|null>(null);
+  const [community, setCommunity] = useState<Community|null>(null);
   const activeuser = useAppSelector((state) => state.user.activeuser);
   const [input, setInput] = useState({
     message: "",
     type: "text",
   });
-  const [message, setMessage] = useState([]);
+  const [message, setMessage] = useState<CommunityMessage[]>([]);
   const [showFileModal, setShowFileModal] = useState(false);
-  const [filePreview, setFilePreview] = useState(null);
-  const fileInputRef = useRef(null);
-  const [activeDropdown, setActiveDropdown] = useState(null);
+  const [filePreview, setFilePreview] = useState<FilePreview | null>(null);
+
+  const fileInputRef = useRef<HTMLInputElement | null>(null);
+  const [activeDropdown, setActiveDropdown] = useState<string|null>(null);
   console.log("input", input);
   console.log("community", community);
   const activeCompany = useAppSelector(
     (state) => state.companyLogin.activeCompany
   );
-  const handleCommunityClick = async (community) => {
+  const handleCommunityClick = async (community:Community) => {
     setSelectedCommunity(community);
   };
   useEffect(() => {
-    const handleClickOutside = (event) => {
-      if (activeDropdown && !event.target.closest(".message-dropdown")) {
+    const handleClickOutside = (event: MouseEvent) => {
+      const target = event.target as HTMLElement | null;
+      if (target && activeDropdown && !target.closest(".message-dropdown")) {
         setActiveDropdown(null);
       }
     };
-
+  
     document.addEventListener("mousedown", handleClickOutside);
     return () => {
       document.removeEventListener("mousedown", handleClickOutside);
     };
   }, [activeDropdown]);
+  
 
   const toggleFileModal = () => {
     setShowFileModal(!showFileModal);
@@ -58,17 +67,19 @@ export default function ChatUI() {
   };
 
  
-  const handleFileSelect = (type) => {
-    fileInputRef.current.setAttribute(
-      "accept",
-      type === "image" ? "image/*" : "video/*"
-    );
-    fileInputRef.current.click();
+  const handleFileSelect = (type: string) => {
+    if (fileInputRef.current) {
+      fileInputRef.current.setAttribute(
+        "accept",
+        type === "image" ? "image/*" : "video/*"
+      );
+      fileInputRef.current.click();
+    }
   };
 
   
-  const handleFileChange = async (e) => {
-    const file = e.target.files[0];
+  const handleFileChange = async (e:React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0];
     if (!file) return;
 
     
@@ -82,7 +93,7 @@ export default function ChatUI() {
   console.log("filePreview", filePreview);
 
   // Delete message function
-  const onDelete = async (messageId) => {
+  const onDelete = async (messageId:string) => {
     try {
       const response = await api.post(
         `message/deletCommuntyMessage/${messageId}`
@@ -100,7 +111,7 @@ export default function ChatUI() {
 
   //// send message in community
 
-  const sendmessage = async (id) => {
+  const sendmessage = async (id:string) => {
     console.log("iiii", id);
 
     try {
@@ -118,10 +129,8 @@ export default function ChatUI() {
       });
       socket.on("sendedMessage", (data) => {
         console.log("socketdata", data);
-        setCommunity((priv) => ({
-          ...priv,
-          data,
-        }));
+        setCommunity((prev) => prev ? { ...prev, data } : prev);
+
       });
     } catch (error) {
       console.log("error", error);
@@ -160,21 +169,28 @@ export default function ChatUI() {
         message: data.secure_url,
         type: filePreview.type,
       });
-
+      if (!community) {
+        toast.error("Community not found!");
+        return;
+      }
+      
       sendmessage(community._id);
+      
+      
       return;
     } catch {
       toast.error(`Error uploading`);
       return null;
     }
   };
+console.log("commuu",community);
 
   const cancelFileSelection = () => {
     setFilePreview(null);
   };
 
   //// join to community
-  const handleJoin = async (id) => {
+  const handleJoin = async (id:string) => {
     try {
       const response = await api.patch(`/message/join/${id}`);
       console.log("response join", response);
@@ -208,7 +224,8 @@ export default function ChatUI() {
     }
   }, [community, input]);
 
-  const messagesEndRef = useRef(null);
+  const messagesEndRef = useRef<HTMLDivElement | null>(null);
+
 
   useEffect(() => {
     messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
@@ -219,7 +236,7 @@ export default function ChatUI() {
   useEffect(() => {
     const mediaQuery = window.matchMedia("(min-width: 768px)");
 
-    const handleChange = (e) => {
+    const handleChange = (e:MediaQueryListEvent) => {
       if (e.matches) {
         setIsopen(false);
       }
@@ -237,7 +254,11 @@ export default function ChatUI() {
             isopen ? "block absolute left-0 sm:hidden" : "hidden sm:block"
           }`}
         >
-          <Sidebar props={{ setCommunity, community, isopen, setIsopen }} />
+          {/* <Sidebar props={{ setCommunity, community, isopen, setIsopen }} /> */}
+          <Sidebar  setCommunity={setCommunity} 
+  community={community} 
+  isopen={isopen} 
+  setIsopen={setIsopen}/>
         </div>
         <span
           className={`${
@@ -288,8 +309,8 @@ export default function ChatUI() {
                     <div>
                       {community.members.find(
                         (member) =>
-                          member.memberId === activeCompany?._id ||
-                          member.memberId === activeuser?._id
+                          member.memberId._id === activeCompany?._id ||
+                          member.memberId._id === activeuser?._id
                       ) ? (
                         <div>
                           <ul className="flex flex-col space-y-4 p-4  rounded-lg">
@@ -309,9 +330,9 @@ export default function ChatUI() {
                                   message[index - 1].sender?._id;
                               const showTimestamp =
                                 index === 0 ||
-                                new Date(item.createdAt).getTime() -
+                                new Date(item.timestamp).getTime() -
                                   new Date(
-                                    message[index - 1].createdAt
+                                    message[index - 1].timestamp
                                   ).getTime() >
                                   300000;
 
@@ -349,9 +370,9 @@ export default function ChatUI() {
                                             }'s Profile`}
                                             className="w-8 h-8 rounded-full shadow-md object-cover border border-gray-200"
                                           />
-                                          {item.sender?.online && (
+                                          {/* {item.sender?.online && (
                                             <div className="absolute bottom-0 right-0 w-2 h-2 bg-green-500 rounded-full border border-white"></div>
-                                          )}
+                                          )} */}
                                         </div>
                                         {!isConsecutive && (
                                           <span className="text-xs text-gray-600 mt-1 font-medium">
@@ -547,8 +568,8 @@ export default function ChatUI() {
                   <footer className="p-4 h-20 bg-white border-t flex">
                     {community.members.find(
                       (member) =>
-                        member.memberId == activeCompany?._id ||
-                        member.memberId === activeuser?._id
+                        member.memberId._id == activeCompany?._id ||
+                        member.memberId._id === activeuser?._id
                     ) ? (
                       <>
                         <input
@@ -591,7 +612,9 @@ export default function ChatUI() {
               ) : (
                 <div className="flex">
                   <div className="block sm:hidden">
-                    <Sidebar props={{ setCommunity, community }} />
+                  <Sidebar setCommunity={setCommunity} community={community} isopen={isopen} 
+  setIsopen={setIsopen}/>
+
                   </div>
                   <div className="flex-1 flex items-center justify-center text-gray-600">
                     Select a community to start chatting!
@@ -601,10 +624,14 @@ export default function ChatUI() {
             </main>
           </>
         ) : (
-          <CommunityDetails
-            id={community._id}
-            onClose={() => setSelectedCommunity(null)}
-          />
+          <>
+           {community && (
+      <CommunityDetails
+        id={community._id}
+        onClose={() => setSelectedCommunity(null)}
+      />
+    )}
+          </>
         )}
 
         {showFileModal && (

@@ -6,7 +6,7 @@ import { useAppDispatch, useAppSelector } from "@/lib/store/hooks";
 import { setjobLocations, setjobTitles } from "@/lib/store/features/registerSlice";
 import { registerUser } from "@/lib/store/features/actions/userActions";
 import { toast } from "react-toastify";
-import { JobLocationType } from "@/lib/store/features/registerSlice";
+import { JobLocationType } from "@/types/Types";
 import { Country, State, City } from "country-state-city";
 import api from "@/utils/api";
 import { TitleType } from "@/lib/store/features/adminSlice";

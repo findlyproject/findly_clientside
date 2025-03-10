@@ -1,8 +1,8 @@
-import {  Ieducation, setEducation, setRemoveEducation } from '@/lib/store/features/userSlice';
+import {  setEducation, setRemoveEducation } from '@/lib/store/features/userSlice';
 import { useAppDispatch, useAppSelector } from '@/lib/store/hooks';
 import React, { useState } from 'react'
 import { RxCross2 } from 'react-icons/rx'
-
+import { Ieducation } from '@/types/Types';
 function Education() {
   const user = useAppSelector((state)=>state.user.activeuser)
   const dispatch= useAppDispatch()

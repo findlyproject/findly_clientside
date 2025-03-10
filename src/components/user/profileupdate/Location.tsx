@@ -2,15 +2,15 @@ import React, { useState } from "react";
 import { Country, State, City } from "country-state-city";
 import { useAppDispatch, useAppSelector } from "@/lib/store/hooks";
 import {
-  IlocationType,
-  setLocation,
-  UserProfile,
+  
+  setLocation
 } from "@/lib/store/features/userSlice";
-
+import { IlocationType } from "@/types/Types";
+import { User } from "@/types/Types";
 function Location() {
   const dispatch = useAppDispatch();
   const user = useAppSelector(
-    (state) => state.user.activeuser as UserProfile | null
+    (state) => state.user.activeuser as User | null
   );
   const [newLocation, setNewLocation] = useState<IlocationType>({
     country: "",
