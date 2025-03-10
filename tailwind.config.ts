@@ -58,19 +58,30 @@ export default {
   			lg: 'var(--radius)',
   			md: 'calc(var(--radius) - 2px)',
   			sm: 'calc(var(--radius) - 4px)'
-  		}
+  		},
+		  keyframes: {
+			zoomOut: {
+			  '0%': { transform: 'scale(1)' },
+			  '100%': { transform: 'scale(0.5)', opacity: '0' },
+			},
+		  },
+		  animation: {
+			zoomOut: 'zoomOut 0.5s ease-out',
+		  },
   	}
   },
+
+
   plugins: [
     require("tailwindcss-animate"),
     function ({ addUtilities }) {
       addUtilities({
         ".scrollbar-hidden": {
-          "-ms-overflow-style": "none" /* Hide scrollbar for IE/Edge */,
-          "scrollbar-width": "none" /* Hide scrollbar for Firefox */,
+          "-ms-overflow-style": "none" ,
+          "scrollbar-width": "none" 
         },
         ".scrollbar-hidden::-webkit-scrollbar": {
-          display: "none" /* Hide scrollbar for Chrome/Safari */,
+          display: "none" ,
         },
       });
     },

@@ -3,9 +3,6 @@ import api from "@/utils/api";
 import handleAsync from "@/utils/handleAsync";
 import { createAsyncThunk } from "@reduxjs/toolkit";
 import { AxiosResponse } from "axios";
-
-
-
 import { setActiveCompany, setAppliedUsers, setCompanyLogOut } from "../companyslice";
 import { setforgotPassword } from "../companyslice";
 import { resetPostState } from "../postSlice";

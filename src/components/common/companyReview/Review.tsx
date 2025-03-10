@@ -56,7 +56,7 @@ export const ReviewSection=()=> {
           <p className="text-yellow-500">⭐⭐⭐⭐⭐</p>
           <p className="text-sm text-gray-600">20 days ago</p>
           <p className="mt-2 text-gray-800">
-            I recently had the opportunity to explore Pagedone's UI design system, and it left a lasting impression on my workflow.
+            I recently had the opportunity to explore Pagedone`s UI design system, and it left a lasting impression on my workflow.
           </p>
         </div>
       </div>

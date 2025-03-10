@@ -45,7 +45,7 @@ console.log(resultcometsreplay);
 
   }
 
-  const { activeuser } = useAppSelector((state) => state.login);
+  const { activeuser } = useAppSelector((state) => state.user);
   const { activeCompany } = useAppSelector((state) => state.companyLogin);
 
 const routes=activeuser?"user":"company"
@@ -288,9 +288,9 @@ const routes=activeuser?"user":"company"
                 new Date(b.createdAt).getTime() -
                 new Date(a.createdAt).getTime()
             )
-            .map((comment) => (
+            .map((comment,index) => (
               <div
-                key={comment?._id}
+              key={`${comment._id}-${index}`}
                 className="p-3 border rounded-lg shadow-sm bg-white"
               >
                 {edit && editingCommentId === comment?._id ? (
@@ -418,6 +418,7 @@ const routes=activeuser?"user":"company"
                             <FontAwesomeIcon icon={faEllipsis} />
 
                             {isShowMenu && openCommentId == comment._id && (
+                              <OutsideClickHandler onOutsideClick={() => setIsShowMenu(false)}>
                               <div className="absolute  bg-white border border-gray-200 rounded-lg shadow-lg z-50">
                                 <div className="border-t border-gray-200">
                                   <button
@@ -434,6 +435,7 @@ const routes=activeuser?"user":"company"
                                   </button>
                                 </div>
                               </div>
+                              </OutsideClickHandler>
                             )}
                           </button>
                         )}
@@ -500,8 +502,8 @@ const routes=activeuser?"user":"company"
 
                     {replay && replay.length > 0 && (
                       <div className="mt-4 pl-6 border-l-2 border-gray-300">
-                        {replay.map((r) => (
-                          <div key={r._id} className="flex flex-col space-y-2">
+                        {replay.map((r,index) => (
+                          <div  key={`${r._id}-${index}`} className="flex flex-col space-y-2">
                             {editReplyId === r._id ? (
                               <div className="flex items-center space-x-2 pl-8">
                                 <div className="relative flex border rounded-lg px-4 py-2">

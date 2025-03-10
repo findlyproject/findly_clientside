@@ -7,87 +7,155 @@ import api from "@/utils/api";
 import { useEffect, useRef, useState } from "react";
 import { formatDistanceToNow } from "date-fns";
 import { MdDelete } from "react-icons/md";
-// import { Button } from "@/components/ui/button"
 import { FaStar, FaEnvelope, FaPhone, FaGlobe, FaBookmark, FaFacebook, FaInstagram, FaLinkedin, FaTwitter } from "react-icons/fa";
 import Modal, { modalProps } from "./JobPostModal";
 import PostModal from "./PostModal";
 import { MdVerified } from "react-icons/md";
+import { FaRegImage } from "react-icons/fa6";
+import { ImProfile } from "react-icons/im";
+import { Spinner } from "@material-tailwind/react";
+
 
 const CompanyProfile = () => {
   const [isOpen, setIsOpen] = useState(false);
   const [isOpenPosts, setIsOpenPosts] = useState(false);
-  const [reviews,setReviews]=useState<companyData[]>([])
-  const [jobs,setJobs]=useState<modalProps[]>([])
-  const [posts,setPosts]=useState([])
+  const [reviews, setReviews] = useState<companyData[]>([])
+  const [jobs, setJobs] = useState<modalProps[]>([])
+  const [posts, setPosts] = useState([])
+  const [page, setPage] = useState(1)
   const [currentPage, setCurrentPage] = useState<number>(1);
   const [totalPages, setTotalPages] = useState(1);
-  
+  const [hasMore, setHasMore] = useState(true);
+  const [loading, setLoading] = useState(false)
+  const limit = 4
+
   const itemsPerPage = 6;
   const activeCompany = useAppSelector((state) => state.companyLogin.activeCompany)
   const lastFetchedPage = useRef<number>(null);
 
-console.log("posts",posts);
 
-  
 
-  useEffect(()=>{
-    findAllReviews()
+  console.log("hasMore", hasMore);
+
+
+  useEffect(() => {
+    fetchReviews(page);
     findJobPsts(currentPage)
     findposts()
-  },[])
+  }, [])
 
-  const findposts=async()=>{
+  const findposts = async () => {
     try {
-      const response=await api.get("/company/findposts")
-    if(response.status===200){
-
-      console.log("ddddaa",response);
-      
-      const data=response.data.posts
-      setPosts(data)
-    }
+      const response = await api.get("/company/findposts")
+      if (response.status === 200) {
+        const data = response.data.posts
+        setPosts(data)
+      }
     } catch (error) {
-      console.log("error",error);
-      
+      console.log("error", error);
     }
   }
-  const findJobPsts=async(page=1)=>{
+  const findJobPsts = async (page = 1) => {
     try {
-      if (lastFetchedPage.current === page) return; 
+
       lastFetchedPage.current = page;
-    
-      const response=await api.get(`/company/getjobs?page=${page}&limit=${itemsPerPage}`)
-    console.log("success",response);
-          if(response.status===200){
-            const data=response.data.postedJobs
-            setTotalPages(response.data.totalPages || 1);
-            // setJobs(data)
-          setJobs((prevJobs)=>[...prevJobs, ...data])
-            // setTotalPages(totalPages)
-          }
-    
+
+
+
+
+      const response = await api.get(`/company/getjobs?page=${page}&limit=${itemsPerPage}`);
+
+      if (response.status === 200) {
+
+
+        const data: modalProps[] = response.data.postedJobs || [];
+        setTotalPages(response.data.totalPages || 1);
+
+        setJobs((prevJobs) => {
+
+          const updatedJobs: modalProps[] = [...prevJobs];
+          data.forEach((job) => {
+            if (!job.isDelete) {
+              const index = updatedJobs.findIndex((j) => j?._id === job?._id);
+              if (index !== -1) {
+                updatedJobs[index] = job;
+              } else {
+                updatedJobs.push(job);
+              }
+            }
+          });
+          return updatedJobs;
+        });
+      }
     } catch (error) {
-      console.log("dddd",error);
-      
+      console.log("Error fetching jobs:", error);
+    }
+  };
+
+
+
+  const fetchReviews = async (page = 1) => {
+    try {
+      console.log("page", page);
+      setLoading(true);
+
+
+      const delay = new Promise((resolve) => setTimeout(resolve, 2000));
+
+      const response = await api.get(`/rating/findreviews?page=${page}&limit=${limit}`);
+      console.log("res", response);
+
+      const data = response.data.reviews;
+      const more = response.data.hasMore;
+      console.log("more", more);
+
+      if (response.status === 200) {
+        await delay;
+        setReviews((prevReviews) => {
+
+          const existingIds = new Set(prevReviews.map((r) => r._id));
+
+          const updatedReviews = [...prevReviews];
+
+          data.forEach((review) => {
+            if (!review.isDelete) {
+              const index = updatedReviews.findIndex((r) => r._id === review._id);
+
+              if (index !== -1) {
+                updatedReviews[index] = review;
+              } else if (!existingIds.has(review._id)) {
+                updatedReviews.push(review);
+                existingIds.add(review._id);
+              }
+            }
+          });
+
+
+          return updatedReviews;
+
+        });
+
+        setHasMore(more);
+      }
+
+
+      setLoading(false);
+    } catch (error) {
+      console.error("Error fetching reviews:", error);
+      setLoading(false);
+    }
+  };
+
+
+
+  const handleDelete = async (id: string) => {
+    const response = await api.delete(`/company/deletereview/${id}`)
+    if (response.status === 200) {
+      fetchReviews()
     }
   }
-  const findAllReviews=async()=>{
-    const response=await api.get("/rating/findreviews")
-    const data=response.data.reviews
-    setReviews(data)
-  }
-  
-
-  
-
-const handleDelete=async(id:string)=>{
-  const response=await api.delete(`/company/deletereview/${id}`)
-  if(response.status===200){
-    findAllReviews()
-  }
-}
   return (
-    <div className="min-h-screen py-10 bg-gray-200 flex justify-center items-center">
+    <div className="min-h-screen py-10 bg-gray-200 flex justify-center items-center pt-28">
       <div className="bg-white p-8 rounded-lg shadow-lg w-full max-w-3xl ">
         <div className="flex items-start justify-between  gap-6">
           <img
@@ -97,12 +165,12 @@ const handleDelete=async(id:string)=>{
           />
           <div className="">
             <h2 className="text-2xl font-bold">{activeCompany?.name}</h2>
-        
+
             <div className="mt-6 border-t pt-4">
               <h3 className="text-xl font-semibold">Contact Information</h3>
-              <p className="flex items-center gap-2 text-blue-500 mt-2"><FaPhone /> {activeCompany?.contact}</p>
-              <p className="flex items-center gap-2 text-blue-500 mt-2"><FaEnvelope /> {activeCompany?.email}</p>
-              <p className="flex items-center gap-2 text-blue-500 mt-2"><FaGlobe /> current work</p>
+              <p className="flex items-center gap-2 text-primary mt-2"><FaPhone /> {activeCompany?.contact}</p>
+              <p className="flex items-center gap-2 text-primary mt-2"><FaEnvelope /> {activeCompany?.email}</p>
+              <p className="flex items-center gap-2 text-primary mt-2"><FaGlobe /> current work</p>
             </div>
             <div className="mt-4 flex gap-4">
               <a href={activeCompany?.socialMedia?.facebook} target="_blank" rel="noopener noreferrer" className="text-blue-700 text-xl">
@@ -119,13 +187,13 @@ const handleDelete=async(id:string)=>{
               </a>
             </div>
           </div>
-        {activeCompany?.role === "premium" &&(
-          <div className="">
-            <MdVerified className="ml-auto text-primary text-2xl cursor-pointer" />
-          </div>
-        )
-            
-        }
+          {activeCompany?.role === "premium" && (
+            <div className="">
+              <MdVerified className="ml-auto text-primary text-2xl cursor-pointer" />
+            </div>
+          )
+
+          }
         </div>
 
 
@@ -139,13 +207,13 @@ const handleDelete=async(id:string)=>{
 
           <span>Founded -</span><span className="text-primary"> {activeCompany?.foundedAt}</span> <br />
           <span>Headquarters - </span><span className="text-primary">{activeCompany?.headquarters}</span><br />
-          {activeCompany?.workHours?.start && <span>Working Time :</span>} <span className="text-primary">{activeCompany?.workHours?.start} - {activeCompany?.workHours?.end}</span><br/>
+          {activeCompany?.workHours?.start && <span>Working Time :</span>} <span className="text-primary">{activeCompany?.workHours?.start} - {activeCompany?.workHours?.end}</span><br />
           <span>country :</span> <span className="text-primary">{activeCompany?.address?.country}</span><br />
           <span>Location :</span> <span className="text-primary">{activeCompany?.address?.landmark} {activeCompany?.address?.city},{activeCompany?.address?.state}</span>
 
 
         </div>
-        
+
         <div >
           <h2 className="text-xl font-semibold">Team & Key People</h2>
           <span className="mb-3 ">Founder/CEO :</span>
@@ -156,10 +224,10 @@ const handleDelete=async(id:string)=>{
           <ul className="mb-5">
             {activeCompany?.employees && activeCompany.employees.length > 0 ? (
               activeCompany.employees.map((user, index) => {
-                console.log("user",user);
-                
-             return  <li className="text-primary" key={index}>{user?.employee?.firstName} - {user.position}</li>
-            })
+                console.log("user", user);
+
+                return <li className="text-primary" key={index}>{user?.employee?.firstName} - {user.position}</li>
+              })
             ) : (
               <li>Write employees of your company...</li>
             )}
@@ -183,58 +251,80 @@ const handleDelete=async(id:string)=>{
 
         <div className="mt-6 border-t pt-4">
           <h3 className="text-lg font-semibold">Posts</h3>
-          <p className="mb-5">Manage your company's job listings and posts here. Keep your updates organized and relevant.  
-  You can add new job openings, share company news, or remove outdated posts anytime.  
-  Keeping this section updated ensures your team has the latest information.</p>
- 
+          <p className="mb-5">Manage your company's job listings and posts here. Keep your updates organized and relevant.
+            You can add new job openings, share company news, or remove outdated posts anytime.
+            Keeping this section updated ensures your team has the latest information.</p>
 
-  <button 
-       onClick={() => setIsOpenPosts(true)}
-     className="px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition">
-  Posts
-</button>
-<button
-   onClick={() => setIsOpen(true)}
-className="px-4 py-2 bg-green-600 text-white  rounded-lg hover:bg-green-700 transition ml-2">
-  Job Posts
-</button>
 
-    <Modal isOpen={isOpen} setIsOpen={setIsOpen} jobs={jobs} findJobPsts={findJobPsts} currentPage={currentPage} totalPages={totalPages}/>
-    <PostModal isOpenPosts={isOpenPosts} setIsOpenPosts={setIsOpenPosts} />
-         
+          <button
+            onClick={() => setIsOpenPosts(true)}
+            className="px-4 py-2 bg-primary text-white rounded-lg hover:bg-white hover:text-primary hover:border border-black transition">
+            <FaRegImage />
+          </button>
+          <button
+            onClick={() => setIsOpen(true)}
+            className="px-4 py-2 bg-primary text-white  rounded-lg hover:bg-white hover:text-primary hover:border border-black transition ml-2">
+            <ImProfile />
+          </button>
+
+          <Modal isOpen={isOpen} setIsOpen={setIsOpen} jobs={jobs} setJobs={setJobs} findJobPsts={findJobPsts} currentPage={currentPage} totalPages={totalPages} />
+          <PostModal isOpenPosts={isOpenPosts} setIsOpenPosts={setIsOpenPosts} />
+
         </div>
         <hr className="mt-5" />
 
 
         <div className="mt-6">
-          
-        <h3 className="text-lg font-semibold">Customer Feedbacks</h3>
-        {
-           reviews?.map((rev)=>(
-            <div 
-            key={rev?._id}
-            className="mt-3 p-4 bg-gray-100 rounded-lg">
-           <div className="flex justify-end ">
-           <MdDelete onClick={()=>handleDelete(rev._id)}/>
-           </div>
-      
-            <p className="font-semibold"> {rev?.name || rev?.companyId?.name || rev?.userId?.firstName}</p>
-            
-            <div className="flex items-center text-yellow-500">
-        {Array.from({ length: 5 }, (_, index) => (
-          <FaStar key={index} className={index < rev?.starsRating ? "text-yellow-400" : "text-gray-300"} />
-        ))}
-        </div>
 
-            <p className="text-sm text-gray-600">  {formatDistanceToNow(new Date(rev?.createdAt), { addSuffix: true })}</p>
-            <p className="mt-2 text-gray-800">
-              {rev.review}
-            </p>
-          </div>
+          <h3 className="text-lg font-semibold">Customer Feedbacks</h3>
+          {
+            reviews?.map((rev) => (
+              <div
+                key={rev?._id}
+                className="mt-3 p-4 bg-gray-100 rounded-lg">
+                <div className="flex justify-end ">
+                  <MdDelete onClick={() => handleDelete(rev._id)} />
+                </div>
+
+                <p className="font-semibold"> {rev?.name || rev?.companyId?.name || rev?.userId?.firstName}</p>
+
+                <div className="flex items-center text-yellow-500">
+                  {Array.from({ length: 5 }, (_, index) => (
+                    <FaStar key={index} className={index < rev?.starsRating ? "text-yellow-400" : "text-gray-300"} />
+                  ))}
+                </div>
+
+                <p className="text-sm text-gray-600">  {formatDistanceToNow(new Date(rev?.createdAt), { addSuffix: true })}</p>
+                <p className="mt-2 text-gray-800">
+                  {rev.review}
+                </p>
+              </div>
             ))
           }
-        
-      </div>
+
+
+
+          {loading && (
+            <div className="flex justify-center mt-5 text-2xl">
+              <span className=" bg-white text-center  ">
+                <Spinner className="text-2xl" />
+              </span>
+            </div>
+          )}
+
+          {(hasMore && !loading) && (
+            <div className="flex justify-center">
+              <button
+                onClick={() => fetchReviews(page + 1)}
+                className="mt-4 px-4 py-2 bg-blue-500 text-white rounded-lg"
+              >
+                View Moress
+              </button>
+            </div>
+          )}
+
+
+        </div>
 
       </div>
     </div>

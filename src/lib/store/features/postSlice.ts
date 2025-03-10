@@ -54,7 +54,7 @@ export interface IPost {
 }
 
 
-interface PostState {
+export interface PostState {
   posts: IPost[] | null;
   postsAdmin:IPost[]|null
   comments:IComment[] | null;

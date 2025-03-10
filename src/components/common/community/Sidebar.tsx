@@ -1,6 +1,8 @@
+import { useAppSelector } from "@/lib/store/hooks";
 import api from "@/utils/api";
 import { Modal } from "@mui/material";
 import Image from "next/image";
+import { useRouter } from "next/navigation";
 import React, { useEffect, useState } from "react";
 import { FaEllipsisV, FaSearch } from "react-icons/fa";
 
@@ -27,6 +29,7 @@ const Sidebar: React.FC = ({ props }) => {
     description: "",
     profile: "",
   });
+  const router = useRouter();
 
   const [image, setImage] = useState<File | null>(null);
   const [searchQuery, setSearchQuery] = useState("");
@@ -149,8 +152,12 @@ const Sidebar: React.FC = ({ props }) => {
     getcommunity();
   }, [props.community]);
 
+  const activeCompany = useAppSelector(
+    (state) => state.companyLogin.activeCompany
+  );
+  const route = activeCompany ? "company" : "user";
   return (
-    <aside className="w-1/4 bg-white border-r p-4 overflow-y-auto hidden md:block">
+    <aside className="w-full h-screen bg-white border-r p-4 ">
       <div className="flex justify-between">
         <h2 className="text-xl font-semibold">Messages</h2>
         <div className="relative inline-block">
@@ -164,12 +171,14 @@ const Sidebar: React.FC = ({ props }) => {
           {isMenuOpen && (
             <div className="absolute right-0 mt-2 w-48 bg-white border rounded-lg shadow-lg z-50">
               <div className="py-2 text-sm text-gray-700">
-                <button
-                  className="px-4 py-2 hover:bg-gray-100 cursor-pointer"
-                  onClick={() => setIsModal(!isModal)}
-                >
-                  New Community
-                </button>
+                {activeCompany && (
+                  <button
+                    className="px-4 py-2 hover:bg-gray-100 cursor-pointer"
+                    onClick={() => setIsModal(!isModal)}
+                  >
+                    New Community
+                  </button>
+                )}
 
                 {isModal && (
                   <div
@@ -243,7 +252,10 @@ const Sidebar: React.FC = ({ props }) => {
 
                 <button
                   className="px-4 py-2 hover:bg-gray-100 cursor-pointer"
-                  onClick={() => setIsMenuOpen(false)}
+                  onClick={() => {
+                    setIsMenuOpen(false);
+                    router.push(`/${route}/home`);
+                  }}
                 >
                   Back
                 </button>
@@ -292,10 +304,14 @@ const Sidebar: React.FC = ({ props }) => {
           <div
             key={item._id}
             className="flex items-center justify-between p-2 bg-white rounded-lg shadow-sm"
+            onClick={props?.isopen ? () => props?.setIsopen(false) : undefined}
           >
             <div
               className="flex items-center space-x-3 cursor-pointer"
-              onClick={() => props.setCommunity(item)}
+              onClick={() => {
+                props.setCommunity(item);
+                console.log("vvvv", item);
+              }}
             >
               <Image
                 width={40}

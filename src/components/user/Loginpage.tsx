@@ -1,16 +1,13 @@
 "use client";
 import React, { useEffect, useState } from "react";
 import { signIn, useSession } from "next-auth/react";
-
 import { FcGoogle } from "react-icons/fc";
 import { useAppDispatch, useAppSelector } from "@/lib/store/hooks";
 import { useRouter } from "next/navigation";
-
 import Image from "next/image";
 import { forgotPassword, googlloginUser, loginUser } from "@/lib/store/features/actions/userActions";
 import { toast } from "react-toastify";
 import { setGooglelogin } from "@/lib/store/features/userSlice";
-import Logo from "@/utils/Logo";
 
 
 interface Istate {
@@ -25,7 +22,7 @@ function Loginpage() {
     password: ""
   })
 const [ispassword,setPassword] = useState(false)
-  const {googlestate} = useAppSelector((state)=>state.login)
+  const {googlestate} = useAppSelector((state)=>state.user)
 console.log("googlestate",googlestate);
  
 

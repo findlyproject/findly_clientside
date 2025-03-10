@@ -10,7 +10,7 @@ import { FLUSH, REHYDRATE, PAUSE, PERSIST, PURGE, REGISTER } from "redux-persist
 import themeReducer from "./features/them";
 import registerReducer from "./features/registerSlice";
 import paymentReducer from "./features/paymentSlice";
-import loginReducer from "./features/userSlice";
+// import loginReducer from "./features/userSlice";
 import userReducer from "./features/userSlice";
 import ratingReducer from "./features/ratingSlice"
 import postReducer, { resetPostState } from "./features/postSlice"  
@@ -21,7 +21,7 @@ import communityReducer from "./features/communitySlice"
 
 // Create persist configs for specific reducers
 const userPersistConfig = { key: "user", storage };
-const loginPersistConfig = { key: "login", storage };
+// const loginPersistConfig = { key: "login", storage };
 const ratingPersistConfig={key:"login",storage};
 const registerPersistConfig={key:"register",storage};
 const communityPersistConfig={key:"community",storage}
@@ -37,7 +37,7 @@ if (typeof window !== "undefined") {
 // Wrap reducers with persistReducer
 const persistedUserReducer = persistReducer(userPersistConfig, userReducer);
 const persistedRegisterReducer = persistReducer(registerPersistConfig, registerReducer);
-const persistedLoginReducer = persistReducer(loginPersistConfig, loginReducer);
+// const persistedLoginReducer = persistReducer(loginPersistConfig, loginReducer);
 const persistedRatingReducer=persistReducer(ratingPersistConfig,ratingReducer)
 const persistedpostReducer=persistReducer(postPersistConfig,postReducer)
 const persistedadminReducer=persistReducer(adminPersistConfig,adminReducer)
@@ -50,7 +50,7 @@ export const makeStore = () =>
       theme: themeReducer,
       register: persistedRegisterReducer,
       payment: paymentReducer,
-      login: persistedLoginReducer, 
+      // login: persistedLoginReducer, 
       user: persistedUserReducer, 
       rating:persistedRatingReducer , 
       post:persistedpostReducer  , 

@@ -17,27 +17,27 @@ const HomePage = () => {
   const [page, setPage] = useState<number>(1); 
   const [loading, setLoading] = useState(false);
   const dispatch = useAppDispatch(); 
-const {activeuser}=useAppSelector(state=>state.login)
+const {activeuser}=useAppSelector(state=>state.user)
 const [isLeftSticky, setIsLeftSticky] = useState(false);
   const leftSidebarRef = useRef(null);
 
-  useEffect(() => {
-    const handleScroll = () => {
-      if (!leftSidebarRef.current) return;
+  // useEffect(() => {
+  //   const handleScroll = () => {
+  //     if (!leftSidebarRef.current) return;
       
-      const sidebarBottom = leftSidebarRef.current.getBoundingClientRect().bottom;
-      const windowHeight = window.innerHeight;
+  //     const sidebarBottom = leftSidebarRef.current.getBoundingClientRect().bottom;
+  //     const windowHeight = window.innerHeight;
       
-      if (sidebarBottom <= windowHeight) {
-        setIsLeftSticky(true);  // Make it sticky when it reaches the end
-      } else {
-        setIsLeftSticky(false); // Allow normal scrolling
-      }
-    };
+  //     if (sidebarBottom <= windowHeight) {
+  //       setIsLeftSticky(true);  // Make it sticky when it reaches the end
+  //     } else {
+  //       setIsLeftSticky(false); // Allow normal scrolling
+  //     }
+  //   };
 
-    window.addEventListener("scroll", handleScroll);
-    return () => window.removeEventListener("scroll", handleScroll);
-  }, []);
+  //   window.addEventListener("scroll", handleScroll);
+  //   return () => window.removeEventListener("scroll", handleScroll);
+  // }, []);
 
   
   useEffect(() => {
@@ -62,8 +62,6 @@ const [isLeftSticky, setIsLeftSticky] = useState(false);
   const loadMorePosts = async () => {
     console.log('he');
     
-    // if (lastFetchedPage.current === page) return; 
-    // lastFetchedPage.current = page;
     console.log('ho');
     setLoading(true);
     await dispatch(fetchAllPosts(page + 1));
@@ -76,7 +74,7 @@ const [isLeftSticky, setIsLeftSticky] = useState(false);
   return (
   <section
   className={`grid bg-gray-100 pt-16 px-10 -z-10 transition-all duration-300 ${
-    showMessage && activeuser? "grid-cols-[20%_40%_40%]" : "grid-cols-[20%_40%] justify-center"
+    showMessage && activeuser? "lg:grid-cols-[20%_40%_40%]" : "grid-cols-1 lg:grid-cols-[20%_40%] justify-center"
   }`}
 >
 <div
@@ -107,13 +105,12 @@ const [isLeftSticky, setIsLeftSticky] = useState(false);
   </button>
   { showMessage &&
     <motion.div 
-    className=" w-[580px] sticky pt-7   right-10"
+    className="lg:sticky pt-7 right-0" 
     initial={{ opacity: 0, x: 50 }}
     animate={{ opacity: 1, x: 0 }}   
     exit={{ opacity: 0, x: 50, scale: 0.9 }}  
     transition={{ duration: 0.3, ease: "easeInOut" }}
   >
-  
   <RightSide/>
   </motion.div>}
   </>}

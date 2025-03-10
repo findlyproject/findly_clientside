@@ -13,6 +13,7 @@ import { useEffect, useState } from "react";
 import api from "@/utils/api";
 import CountUp from "react-countup";
 import { toast } from "react-toastify";
+import { formChangeEvent } from "@/types/Types";
 
 function LandingPage() {
   const [users, setUsers] = useState([]);
@@ -107,6 +108,12 @@ function LandingPage() {
     }
   };
 
+
+  const handleSubmit = (e:formChangeEvent) => {
+    e.preventDefault();
+    toast.error("please login");
+  };
+  
   return (
     <div className="w-full h-full bg-primary">
       <>
@@ -131,7 +138,7 @@ function LandingPage() {
                             </div>
                         </div>
                         <div className="sm:absolute flex sm:right-1.5 sm:inset-y-1.5 mt-4 sm:mt-0">
-                            <button type="submit" className="inline-flex items-center justify-center w-full px-5 py-5 text-sm font-semibold tracking-widest text-primary uppercase transition-all duration-200 bg-white rounded-full sm:w-auto sm:py-3 hover:opacity-90" onClick={()=>toast.error("please login")}>Find A Job</button>
+                            <button type="submit" className="inline-flex items-center justify-center w-full px-5 py-5 text-sm font-semibold tracking-widest text-primary uppercase transition-all duration-200 bg-white rounded-full sm:w-auto sm:py-3 hover:opacity-90" onClick={handleSubmit}>Find A Job</button>
                         </div>
                     </form>
 
