@@ -1,5 +1,6 @@
 
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
+import { companyData } from "./companyslice";
 
 export interface SkillType{
   _id:string
@@ -26,11 +27,13 @@ export interface AdminProfile {
 admin:AdminProfile|null
 skills:SkillType[]
 titles:TitleType[]
+companies:companyData[]
  }
 const initialState: AdminState = {
   admin:null,
   skills:[],
-  titles:[]
+  titles:[],
+  companies:[]
 };
 
 const adminSlice = createSlice({
@@ -47,9 +50,13 @@ const adminSlice = createSlice({
     },
     setJOBTitles:(state,action:PayloadAction<TitleType[]>)=>{
       state.titles=action.payload
-    }
+    },
+    setCompanies:(state,action:PayloadAction<companyData[]>)=>{
+      state.companies=action.payload
+    },
+  
   }, 
 });
 
-export const { setAdmin,setSkills,setJOBTitles } = adminSlice.actions;
+export const { setAdmin,setSkills,setJOBTitles,setCompanies } = adminSlice.actions;
 export default adminSlice.reducer;
