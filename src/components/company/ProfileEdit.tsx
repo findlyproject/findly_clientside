@@ -17,19 +17,20 @@ import "react-phone-input-2/lib/style.css";
 import api from "@/utils/api";
 import { setActiveCompany } from "@/lib/store/features/companyslice";
 import { UserProfile } from "@/lib/store/features/userSlice";
-export default function  ProfileEdit() {
+export default function ProfileEdit() {
   const activecompany = useAppSelector(
     (state) => state.companyLogin.activeCompany
   );
 
-  const [selectedFile, setSelectedFile] = useState<File|null>(null);
+  const [selectedFile, setSelectedFile] = useState<File | null>(null);
   const [preview, setPreview] = useState(
     activecompany?.logo || "/default-profile.png"
   );
 
-
-  const[selectedBanner,setSelectedBanner]=useState<File|null>(null)
-  const[bannerPreview,setbannerPreview]=useState( activecompany?.banner|| "/default-profile.png")
+  const [selectedBanner, setSelectedBanner] = useState<File | null>(null);
+  const [bannerPreview, setbannerPreview] = useState(
+    activecompany?.banner || "/default-profile.png"
+  );
 
   const dispatch = useAppDispatch();
   const [searchQuery, setSearchQuery] = useState("");
@@ -148,27 +149,24 @@ export default function  ProfileEdit() {
     dispatch(setActiveCompany(response.data.company));
   };
 
-
-
-  const handleFileChange = (e:React.ChangeEvent<HTMLInputElement>) => {
+  const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
     if (file) {
-      setSelectedFile(file); // Update selected file state
-      setPreview(URL.createObjectURL(file)); // Update preview
-      console.log("File selected:", file); // Debugging log
+      setSelectedFile(file);
+      setPreview(URL.createObjectURL(file));
+      console.log("File selected:", file);
     }
   };
-console.log("selectedFile...",selectedFile);
+  console.log("selectedFile...", selectedFile);
 
-  const handleBannerChange=(e:React.ChangeEvent<HTMLInputElement>)=>{
-    const file=e.target.files?.[0]
+  const handleBannerChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0];
     if (file) {
-      setSelectedBanner(file); // Update selected file state
-      setbannerPreview(URL.createObjectURL(file)); // Update preview
-      console.log("File selected:", file); // Debugging log
+      setSelectedBanner(file);
+      setbannerPreview(URL.createObjectURL(file));
+      console.log("File selected:", file);
     }
-
-  }
+  };
 
   console.log("selectedBanner", selectedBanner);
 
@@ -187,15 +185,12 @@ console.log("selectedFile...",selectedFile);
         }
       );
       console.log("response of logo upload", response);
-  setSelectedFile(null)
+      setSelectedFile(null);
       dispatch(setActiveCompany(response.data.company));
     } catch (error) {
       console.error("Error uploading logo:", error);
     }
   };
-  
-
-
 
   const handlebannerUpload = async () => {
     if (!selectedBanner) return;
@@ -212,7 +207,7 @@ console.log("selectedFile...",selectedFile);
         }
       );
       console.log("response of banner upload", response);
-  setSelectedBanner(null)
+      setSelectedBanner(null);
       dispatch(setActiveCompany(response.data.company));
     } catch (error) {
       console.error("Error uploading logo:", error);
@@ -224,81 +219,72 @@ console.log("selectedFile...",selectedFile);
       <div className="flex flex-col lg:flex-row min-h-screen p-6 bg-gray-100">
         <aside className="  w-full lg:w-1/4 bg-white p-6 rounded-lg shadow-md">
           <div className="flex flex-col items-center">
-          <div className="relative w-full h-40 bg-gray-300 flex items-center justify-center">
-      {/* Background Banner */}
-      <Image
-        src={bannerPreview} // Replace with actual banner image
-        alt="Banner"
-        layout="fill"
-        objectFit="cover"
-        className="absolute"
-      />
-      
-{/* Hidden file input */}
-<input
-          type="file"
-          accept="image/*"
-          id="bannerUpload"
-          className="hidden"
-          onChange={handleBannerChange}
-        />
-{selectedBanner ? (
-          <button
-            onClick={handlebannerUpload}
-            className="absolute bottom-[-30px] left-1/2 transform -translate-x-1/2 bg-primary text-white py-1 px-3 rounded"
-          >
-            Upload
-          </button>
-        ) : (
-          <label
-            htmlFor="bannerUpload"
-            className="absolute bottom-2 right-2 bg-gray-200 p-2 rounded-full shadow-md hover:bg-gray-300 transition"
-          >
-            <FaPencilAlt className="text-gray-600 text-sm" />
-          </label>
-        )}
+            <div className="relative w-full h-40 bg-gray-300 flex items-center justify-center">
+              <Image
+                src={bannerPreview}
+                alt="Banner"
+                layout="fill"
+                objectFit="cover"
+                className="absolute"
+              />
 
+              <input
+                type="file"
+                accept="image/*"
+                id="bannerUpload"
+                className="hidden"
+                onChange={handleBannerChange}
+              />
+              {selectedBanner ? (
+                <button
+                  onClick={handlebannerUpload}
+                  className="absolute bottom-[-30px] left-1/2 transform -translate-x-1/2 bg-primary text-white py-1 px-3 rounded"
+                >
+                  Upload
+                </button>
+              ) : (
+                <label
+                  htmlFor="bannerUpload"
+                  className="absolute bottom-2 right-2 bg-gray-200 p-2 rounded-full shadow-md hover:bg-gray-300 transition"
+                >
+                  <FaPencilAlt className="text-gray-600 text-sm" />
+                </label>
+              )}
 
+              <div className="relative w-24 h-24 rounded-full overflow-hidden border-4 border-white shadow-lg">
+                <Image
+                  src={preview}
+                  alt="Profile"
+                  width={96}
+                  height={96}
+                  className="object-cover w-full h-full"
+                />
 
+                <input
+                  type="file"
+                  accept="image/*"
+                  id="logoUpload"
+                  className="hidden"
+                  onChange={handleFileChange}
+                />
 
-      {/* Logo */}
-      <div className="relative w-24 h-24 rounded-full overflow-hidden border-4 border-white shadow-lg">
-        <Image
-          src={preview}
-          alt="Profile"
-          width={96}
-          height={96}
-          className="object-cover w-full h-full"
-        />
-
-       
-        <input
-          type="file"
-          accept="image/*"
-          id="logoUpload"
-          className="hidden"
-          onChange={handleFileChange}
-        />
-
-       
-        {selectedFile!==null ? (
-          <button
-            onClick={handleUpload}
-            className="absolute inset-0 flex items-center justify-center bg-primary text-white p-1 rounded"
-
-          >
-            Upload
-          </button>
-        ) : (
-          <label
-            htmlFor="logoUpload"
-            className="absolute bottom-2 right-2 bg-gray-200 p-2 rounded-full shadow-md hover:bg-gray-300 transition"
-          >
-            <FaPencilAlt className="text-gray-600 text-sm" />
-          </label>
-        )}
-      </div>
-    </div>
+                {selectedFile !== null ? (
+                  <button
+                    onClick={handleUpload}
+                    className="absolute inset-0 flex items-center justify-center bg-primary text-white p-1 rounded"
+                  >
+                    Upload
+                  </button>
+                ) : (
+                  <label
+                    htmlFor="logoUpload"
+                    className="absolute bottom-2 right-2 bg-gray-200 p-2 rounded-full shadow-md hover:bg-gray-300 transition"
+                  >
+                    <FaPencilAlt className="text-gray-600 text-sm" />
+                  </label>
+                )}
+              </div>
+            </div>
             <h2 className="mt-4 font-semibold">{activecompany?.name}</h2>
             <p className="text-gray-600 flex items-center space-x-2">
               <MdOutlineEmail className="text-xl" />
@@ -314,25 +300,36 @@ console.log("selectedFile...",selectedFile);
           <h1 className="text-sm font-semibold mt-10">Social Media Profiles</h1>
 
           <div className="flex items-center space-x-4">
-            <Link href={activecompany?.socialMedia?.facebook||""} target="_blank">
+            <Link
+              href={activecompany?.socialMedia?.facebook || ""}
+              target="_blank"
+            >
               <FaFacebook className="text-blue-600 text-3xl cursor-pointer hover:text-blue-800 transition" />
             </Link>
 
-            <Link href={activecompany?.socialMedia?.instagram || ""} target="_blank">
+            <Link
+              href={activecompany?.socialMedia?.instagram || ""}
+              target="_blank"
+            >
               <FaInstagram className="text-pink-600 text-3xl cursor-pointer hover:text-blue-800 transition" />
             </Link>
 
-            <Link href={activecompany?.socialMedia?.twitter || ""} target="_blank">
+            <Link
+              href={activecompany?.socialMedia?.twitter || ""}
+              target="_blank"
+            >
               <FaTwitter className="text-blue-600 text-3xl cursor-pointer hover:text-blue-800 transition" />
             </Link>
 
-            <Link href={activecompany?.socialMedia?.linkedin || ""} target="_blank">
+            <Link
+              href={activecompany?.socialMedia?.linkedin || ""}
+              target="_blank"
+            >
               <FaLinkedin className="text-blue-600 text-3xl cursor-pointer hover:text-blue-800 transition" />
             </Link>
           </div>
         </aside>
 
-        {/* Main Content */}
         <section className="flex-1 bg-white p-6 rounded-lg shadow-md mt-6 lg:mt-0 lg:ml-6">
           <h1 className="text-2xl font-bold">Edit profile</h1>
           <Formik
@@ -391,14 +388,15 @@ console.log("selectedFile...",selectedFile);
                         {" "}
                         Mobile Number *
                       </label>
-                    
+
                       <PhoneInput
                         country={"in"}
                         value={values.contact || ""}
                         onChange={(phone) => {
-                          console.log("phone",phone);
-                          
-                          setFieldValue("contact", phone)} }
+                          console.log("phone", phone);
+
+                          setFieldValue("contact", phone);
+                        }}
                         inputProps={{
                           name: "contact",
                           required: true,
@@ -549,13 +547,13 @@ console.log("selectedFile...",selectedFile);
                             <div
                               key={emp?._id}
                               onClick={() => {
-                                setSelectedEmployee(emp?.firstName); 
+                                setSelectedEmployee(emp?.firstName);
                                 setPosition((prev) => ({
                                   ...prev,
                                   employee: emp?.firstName,
                                 }));
                                 setSearchQuery("");
-                                setEmployees([]); 
+                                setEmployees([]);
                               }}
                               className="p-2 hover:bg-gray-100 cursor-pointer flex justify-between"
                             >
@@ -574,7 +572,9 @@ console.log("selectedFile...",selectedFile);
                             type="text"
                             value={selectedEmployee}
                             name="employees.employee"
-                            onChange={(e:React.ChangeEvent<HTMLSelectElement>) =>
+                            onChange={(
+                              e: React.ChangeEvent<HTMLSelectElement>
+                            ) =>
                               setPosition({
                                 ...positions,
                                 employee: e.target.value,
@@ -596,9 +596,10 @@ console.log("selectedFile...",selectedFile);
                             type="text"
                             name="employees.position"
                             className="w-full border p-2 rounded-md pr-8"
-                          
                             value={positions.position || ""}
-                            onChange={(e:React.ChangeEvent<HTMLSelectElement>) =>
+                            onChange={(
+                              e: React.ChangeEvent<HTMLSelectElement>
+                            ) =>
                               setPosition({
                                 ...positions,
                                 position: e.target.value,
@@ -629,7 +630,6 @@ console.log("selectedFile...",selectedFile);
                                 return;
                               }
 
-                             
                               setFieldValue("employees", [
                                 ...values.employees,
                                 {
@@ -638,7 +638,6 @@ console.log("selectedFile...",selectedFile);
                                 },
                               ]);
 
-                             
                               setSelectedEmployee("");
                               setPosition({ employee: "", position: "" });
                             }}
@@ -676,7 +675,9 @@ console.log("selectedFile...",selectedFile);
                           name="address.city"
                           className="w-full border p-2 rounded-md"
                           value={values.address.city || ""}
-                          onChange={(e:React.ChangeEvent<HTMLSelectElement>) => {
+                          onChange={(
+                            e: React.ChangeEvent<HTMLSelectElement>
+                          ) => {
                             setFieldValue("address.city", e.target.value);
                           }}
                         >
@@ -706,7 +707,9 @@ console.log("selectedFile...",selectedFile);
                           name="address.state"
                           className="w-full border p-2 rounded-md"
                           value={values.address.state || ""}
-                          onChange={(e:React.ChangeEvent<HTMLSelectElement>) => {
+                          onChange={(
+                            e: React.ChangeEvent<HTMLSelectElement>
+                          ) => {
                             setFieldValue("address.state", e.target.value);
                           }}
                         >
@@ -735,7 +738,9 @@ console.log("selectedFile...",selectedFile);
                           name="address.country"
                           className="w-full border p-2 rounded-md"
                           value={values.address.country || ""}
-                          onChange={(e:React.ChangeEvent<HTMLSelectElement>) => {
+                          onChange={(
+                            e: React.ChangeEvent<HTMLSelectElement>
+                          ) => {
                             setFieldValue("address.country", e.target.value);
                           }}
                         >
@@ -801,14 +806,20 @@ console.log("selectedFile...",selectedFile);
                           </label>
                           <Field
                             type="text"
-                            name={`socialMedia.${platform}`} 
-                            value={values.socialMedia[platform as keyof typeof values.socialMedia]}
-                            onChange={(e:React.ChangeEvent<HTMLSelectElement>) =>
+                            name={`socialMedia.${platform}`}
+                            value={
+                              values.socialMedia[
+                                platform as keyof typeof values.socialMedia
+                              ]
+                            }
+                            onChange={(
+                              e: React.ChangeEvent<HTMLSelectElement>
+                            ) =>
                               setFieldValue(
                                 `socialMedia.${platform}`,
                                 e.target.value
                               )
-                            } // ✅ Manually update Formik state
+                            }
                             className="w-full border p-2 rounded-md h-10"
                           />
                           <ErrorMessage
@@ -821,7 +832,7 @@ console.log("selectedFile...",selectedFile);
                     )}
                   </div>
                 </div>
-                
+
                 <div className="w-1/4">
                   <button
                     type="submit"

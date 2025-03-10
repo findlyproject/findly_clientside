@@ -4,7 +4,7 @@ import { useAppDispatch, useAppSelector } from "@/lib/store/hooks";
 import api from "@/utils/api";
 import React, { useState, useEffect } from "react";
 
-export const Posts() {
+export const  Posts=()=> {
   const [activeTab, setActiveTab] = useState("saved");
   const [posts, setPosts] = useState([]);
   const [userPosts, setUserposts] = useState([]);
