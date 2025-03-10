@@ -10,6 +10,8 @@ import { CiBookmarkRemove } from "react-icons/ci";
 import { VscVerifiedFilled } from "react-icons/vsc";
 import { VscVerified } from "react-icons/vsc";
 import { MdEdit } from "react-icons/md";
+import { useAppDispatch, useAppSelector } from "@/lib/store/hooks";
+import { editSkill, editTitle, handleBlock, postSkill, postTitle, showSkills, showSTitles } from "@/lib/store/features/actions/adminActions";
 
 const Create = () => {
   const [skill, setSkill] = useState("");
@@ -19,62 +21,54 @@ const Create = () => {
   const [titles, setTitles] = useState("");
   const [alltitles, setallTitles] = useState<TitleType[]>([]);
   const [titleEditing, setTitleEditing] = useState<string | null>(null);
-
+const dispatch= useAppDispatch()
+const skills=useAppSelector((state)=>state.admin.skills)
+const jobtitles=useAppSelector((state)=>state.admin.titles)
   const [activeTab, setActiveTab] = useState("skills");
   const formattedSkill =
     skill.charAt(0).toUpperCase() + skill.slice(1).toLowerCase();
   const formattedTitles =
     titles.charAt(0).toUpperCase() + titles.slice(1).toLowerCase();
 
-  useEffect(() => {
-    const fetch = async () => {
-      const response = await api.get(`/admin/allskills`);
+console.log("skills",skills);
 
-      setallSkills(response.data.skills);
 
-      const responseofTitle = await api.get("/admin/alladmin");
+  useEffect(()=>{
+      fetchSkills()
+      fetchTitle()
 
-      setallTitles(responseofTitle.data.titles);
-    };
-    fetch();
-  }, []);
+  },[])
+
+      const fetchSkills=()=>{
+        dispatch(showSkills())
+      }
+      const fetchTitle=()=>{
+        dispatch(showSTitles())
+      }
+
 
   const handleSkill = async () => {
     if (!skill.trim()) {
       toast.warn("Please enter a skill name");
       return;
     }
-
     try {
       if (editingSkill) {
-        const response = await api.patch(`/admin/editskill/${editingSkill}`, {
-          newskill: skill,
-        });
-        console.log(" skill edit response", response);
 
-        setallSkills((prevSkills) => {
-          console.log("Previous Skills:", prevSkills);
+        const result= await dispatch(editSkill({skill,editingSkill}))
 
-          const updatedSkills = prevSkills.map((s) =>
-            s._id == editingSkill ? { ...s, name: skill } : s
-          );
-
-          console.log("Updated Skills:", updatedSkills);
-          return updatedSkills;
-        });
-
-        setEditingSkill(null);
+        console.log("resultedit",result);
+        if(result.type==='edit/skills/fulfilled'){
+          dispatch(showSkills())
+        }
       } else {
-        const response = await api.post(`/admin/addskill`, {
-          name: formattedSkill,
-        });
-
-        setallSkills((prevSkills) => [
-          ...prevSkills,
-          { _id: response.data.skill._id, name: formattedSkill, status: true },
-        ]);
-      }
-      setSkill("");
+    const result=await dispatch(postSkill(formattedSkill))
+console.log("result",result);
+if(result.type==="post/skills/fulfilled"){
+  dispatch(showSkills())
+}
+ }
+   
     } catch (error) {
       console.error("Error adding skill:", error);
     }
@@ -88,38 +82,23 @@ const Create = () => {
 
     try {
       if (titleEditing) {
-
-        const response = await api.patch(`/admin/edittitle/${titleEditing}`, {
-          newTitle: titles,
-        });
-
-        setallTitles((prevTitles) => {
-          const updatedTitle = prevTitles.map((s) =>
-            s._id == titleEditing ? { ...s, name: titles } : s
-          );
-
-          return updatedTitle;
-        });
-
-        setTitleEditing(null);
+       const result=await dispatch(editTitle({titles,titleEditing}))
+           
+     if(result.type==="edit/Title/fulfilled"){
+      dispatch(showSTitles())
+     }
+       setTitleEditing(null);
       } else {
-        const response = await api.post(`/admin/addtitle`, {
-          name: formattedTitles,
-        });
 
-       
+       const result=await dispatch(postTitle(formattedTitles))
+console.log("resultpodtgfftf",result);
 
-
-
-        setallTitles((prevTitles) => [
-          ...prevTitles,
-          { _id: response.data.title._id, name: formattedTitles, status: true },
-        ]);
+       if(result.type==="post/Title/fulfilled"){
+        dispatch(showSTitles())
+       }
       }
       setTitles("");
-      }
-
-      
+      } 
      catch (error) {
       console.error("Error adding titles:", error);
     }
@@ -236,7 +215,7 @@ const Create = () => {
                 Skills List
               </h3>
               <ul>
-                {allskills.map((skillItem, index) => (
+                {skills.map((skillItem, index) => (
                   <li key={index} className="p-2 rounded-md bg-gray-100 my-2">
                     <div className="flex  justify-between">
                       {skillItem.name}
@@ -299,7 +278,7 @@ const Create = () => {
                 Titles List
               </h3>
               <ul>
-                {alltitles.map((Item, index) => (
+                {jobtitles.map((Item, index) => (
                   <li key={index} className="p-2 rounded-md bg-gray-100 my-2">
                     <div className="flex  justify-between">
                       {Item.name}
