@@ -18,9 +18,9 @@ function ResetPassword() {
   const [timer, setTimer] = useState(192); // 3:12 in seconds
   const [showPassword, setShowPassword] = useState(true);
   const [showConfirmPassword, setShowConfirmPassword] = useState(true);
-  const data = useAppSelector((state)=>state.user.forgotPassword)
-  const dispatch = useAppDispatch()
-  const route = useRouter()
+  const data = useAppSelector((state) => state.user.forgotPassword);
+  const dispatch = useAppDispatch();
+  const route = useRouter();
   useEffect(() => {
     if (timer > 0) {
       const interval = setInterval(() => setTimer((prev) => prev - 1), 1000);
@@ -36,22 +36,25 @@ function ResetPassword() {
       setOtp(newOtp);
     }
   };
-  
+
   const verifyotp = () => {
-    const verify = data.otp == otp.join("")
-    if(verify){
+    const verify = data.otp == otp.join("");
+    if (verify) {
       toast.success("OTP verified successfully");
       setStep(2);
-    }else{
+    } else {
       toast.error("OTP is incorrect");
-    }    
-  }
-
-  const formattedTime = `${Math.floor(timer / 60)}:${String(timer % 60).padStart(2, "0")}`;
-  const validatePassword = (password: string) => {
-    return /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$/.test(password);
+    }
   };
-  
+
+  const formattedTime = `${Math.floor(timer / 60)}:${String(
+    timer % 60
+  ).padStart(2, "0")}`;
+  const validatePassword = (password: string) => {
+    return /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$/.test(
+      password
+    );
+  };
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -59,33 +62,31 @@ function ResetPassword() {
       toast.error("Passwords do not match");
       return;
     }
-    if(!validatePassword(password)){
+    if (!validatePassword(password)) {
       toast.error("It is not a strong password");
       return;
     }
     try {
-      const response = await api.post(`/user/resetpasword/${data.email}/${password}`)
-      console.log("response",response);
-      toast.success("Password reset successfully")
-      dispatch(setforgotPassword({email:"",otp:""}))
-      route.push("/login")
+      const response = await api.post(
+        `/user/resetpasword/${data.email}/${password}`
+      );
+      console.log("response", response);
+      toast.success("Password reset successfully");
+      dispatch(setforgotPassword({ email: "", otp: "" }));
+      route.push("/login");
     } catch (error) {
-console.log(error);
-      
-      
+      console.log(error);
     }
-    }
+  };
 
-    const resendOtp = ()=>{
-      if(data.email){
-      dispatch(forgotPassword({email:data.email}))
-      toast.success("OTP sent to your email")
-    }else{
-      toast.error("Email not found")
+  const resendOtp = () => {
+    if (data.email) {
+      dispatch(forgotPassword({ email: data.email }));
+      toast.success("OTP sent to your email");
+    } else {
+      toast.error("Email not found");
     }
-    }
-  
-    
+  };
 
   return (
     <div className="min-h-screen flex justify-center items-center bg-slate-200">
@@ -94,9 +95,12 @@ console.log(error);
           <>
             <div className="flex justify-center items-center px-4">
               <div className="bg-white p-6 rounded-lg shadow-lg w-full max-w-sm">
-                <h2 className="text-xl font-semibold text-center">Check your email</h2>
+                <h2 className="text-xl font-semibold text-center">
+                  Check your email
+                </h2>
                 <p className="text-gray-500 text-center mb-4">
-                We&apos;ve sent the code to your email{""}{data.email}
+                  We&apos;ve sent the code to your email{""}
+                  {data.email}
                 </p>
 
                 <div className="flex justify-center space-x-2 mb-3">
@@ -114,7 +118,9 @@ console.log(error);
 
                 <p className="text-center text-sm text-gray-500">
                   Code expires in:{" "}
-                  <span className="text-yellow-500 font-semibold">{formattedTime}</span>
+                  <span className="text-yellow-500 font-semibold">
+                    {formattedTime}
+                  </span>
                 </p>
 
                 <button
@@ -124,9 +130,10 @@ console.log(error);
                   Verify
                 </button>
 
-                <button 
-                onClick={resendOtp}
-                className="mt-2 w-full py-2 rounded-lg bg-gray-200 text-gray-600">
+                <button
+                  onClick={resendOtp}
+                  className="mt-2 w-full py-2 rounded-lg bg-gray-200 text-gray-600"
+                >
                   Send again
                 </button>
               </div>
@@ -134,60 +141,69 @@ console.log(error);
           </>
         ) : (
           <>
-           <div className="flex justify-center items-center px-4">
-      <div className="bg-white p-6 rounded-lg shadow-lg w-full max-w-sm">
-        <h2 className="text-xl font-semibold text-center">Reset your password</h2>
-        <p className="text-gray-500 text-center mb-4">
-          Please enter your new password
-        </p>
+            <div className="flex justify-center items-center px-4">
+              <div className="bg-white p-6 rounded-lg shadow-lg w-full max-w-sm">
+                <h2 className="text-xl font-semibold text-center">
+                  Reset your password
+                </h2>
+                <p className="text-gray-500 text-center mb-4">
+                  Please enter your new password
+                </p>
 
-        {/* Password Input */}
-        <div className="relative flex items-center border rounded-lg px-3 py-2">
-          <FaLock className="text-gray-400 mr-2" />
-          <input
-            type={!showPassword ? "text" : "password"}
-            placeholder="Enter new password"
-            className="w-full focus:outline-none"
-            value={password}
-            onChange={(e) => setPassword(e.target.value)}
-          />
-          <button
-            type="button"
-            className="absolute right-3"
-            onClick={() => setShowPassword(!showPassword)}
-          >
-            {showPassword ? <AiOutlineEyeInvisible /> : <AiOutlineEye />}
-          </button>
-        </div>
+                <div className="relative flex items-center border rounded-lg px-3 py-2">
+                  <FaLock className="text-gray-400 mr-2" />
+                  <input
+                    type={!showPassword ? "text" : "password"}
+                    placeholder="Enter new password"
+                    className="w-full focus:outline-none"
+                    value={password}
+                    onChange={(e) => setPassword(e.target.value)}
+                  />
+                  <button
+                    type="button"
+                    className="absolute right-3"
+                    onClick={() => setShowPassword(!showPassword)}
+                  >
+                    {showPassword ? (
+                      <AiOutlineEyeInvisible />
+                    ) : (
+                      <AiOutlineEye />
+                    )}
+                  </button>
+                </div>
 
-        <br />
+                <br />
 
-        {/* Confirm Password Input */}
-        <div className="relative flex items-center border rounded-lg px-3 py-2">
-          <FaLock className="text-gray-400 mr-2" />
-          <input
-            type={!showConfirmPassword ? "text" : "password"}
-            placeholder="Confirm new password"
-            className="w-full focus:outline-none"
-            value={confirmPassword}
-            onChange={(e) => setConfirmPassword(e.target.value)}
-          />
-          <button
-            type="button"
-            className="absolute right-3"
-            onClick={() => setShowConfirmPassword(!showConfirmPassword)}
-          >
-            {showConfirmPassword ? <AiOutlineEyeInvisible /> : <AiOutlineEye />}
-          </button>
-        </div>
+                <div className="relative flex items-center border rounded-lg px-3 py-2">
+                  <FaLock className="text-gray-400 mr-2" />
+                  <input
+                    type={!showConfirmPassword ? "text" : "password"}
+                    placeholder="Confirm new password"
+                    className="w-full focus:outline-none"
+                    value={confirmPassword}
+                    onChange={(e) => setConfirmPassword(e.target.value)}
+                  />
+                  <button
+                    type="button"
+                    className="absolute right-3"
+                    onClick={() => setShowConfirmPassword(!showConfirmPassword)}
+                  >
+                    {showConfirmPassword ? (
+                      <AiOutlineEyeInvisible />
+                    ) : (
+                      <AiOutlineEye />
+                    )}
+                  </button>
+                </div>
 
-        <button
-        onClick={handleSubmit}
-        className="mt-4 w-full py-2 rounded-lg text-white font-semibold bg-primary">
-          Done
-        </button>
-      </div>
-    </div>
+                <button
+                  onClick={handleSubmit}
+                  className="mt-4 w-full py-2 rounded-lg text-white font-semibold bg-primary"
+                >
+                  Done
+                </button>
+              </div>
+            </div>
           </>
         )}
       </div>

@@ -1,11 +1,11 @@
 "use client";
 
-import { fetchAllPosts, fetchAllPostsAdmin } from "@/lib/store/features/actions/postActions";
+import {  fetchAllPostsAdmin } from "@/lib/store/features/actions/postActions";
 import { useAppDispatch, useAppSelector } from "@/lib/store/hooks";
 import handleAsync from "@/utils/handleAsync";
 import Image from "next/image";
 import { useRouter } from "next/navigation";
-import { useEffect, useRef, useState } from "react";
+import { useEffect } from "react";
 
 const Posts = () => {
 
@@ -117,7 +117,7 @@ const router =useRouter()
                   </td>
                   <td className="p-3 flex gap-2">
                     
-                    <button className="p-2 bg-red-600 text-white rounded text-xs sm:text-sm" onClick={handleAsync}>
+                    <button className="p-2 bg-red-600 text-white rounded text-xs sm:text-sm">
                       Delete
                     </button>
                     <button className="p-2 bg-gray-800 text-white rounded text-xs sm:text-sm">

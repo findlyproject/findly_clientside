@@ -1,12 +1,12 @@
 "use client";
 import { AdminProfile } from "@/lib/store/features/adminSlice";
-import { UserProfile } from "@/lib/store/features/userSlice";
+import { User } from "@/types/Types";
 import { useAppSelector } from "@/lib/store/hooks";
 import api from "@/utils/api";
 import { useState } from "react";
 
 export default function ContactUsPage() {
-  const user = useAppSelector((state) => state.user.activeuser as UserProfile);
+  const user = useAppSelector((state) => state.user.activeuser as User);
   const admin=useAppSelector((state)=>state.admin.admin as AdminProfile)
 
   const [email, setEmail] = useState({

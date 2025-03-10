@@ -1,25 +1,22 @@
 import { useAppSelector } from "@/lib/store/hooks";
 import api from "@/utils/api";
-import { Modal } from "@mui/material";
 import Image from "next/image";
 import { useRouter } from "next/navigation";
 import React, { useEffect, useState } from "react";
 import { FaEllipsisV, FaSearch } from "react-icons/fa";
-
-interface Community {
-  _id: string;
-  name: string;
-  description: string;
-  profile: string;
-  members: string[];
+import { Community } from "@/lib/store/features/communitySlice";
+interface SidebarProps {
+  setCommunity: React.Dispatch<React.SetStateAction<Community | null>>;
+  community: Community | null;
+  isopen: boolean;
+  setIsopen: React.Dispatch<React.SetStateAction<boolean>>;
 }
-
-const Sidebar: React.FC = ({ props }) => {
-  console.log("props", props);
+const Sidebar: React.FC<SidebarProps> = ({ setCommunity, community, isopen, setIsopen }) => {
+  // console.log("props", props);
 
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [isModal, setIsModal] = useState(false);
-  const [community, setCommunity] = useState<Community[]>([]);
+  const [communities, setCommunities] = useState<Community[]>([]);
   const [selectedCommunity, setSelectedCommunity] = useState<Community | null>(
     null
   );
@@ -33,7 +30,7 @@ const Sidebar: React.FC = ({ props }) => {
 
   const [image, setImage] = useState<File | null>(null);
   const [searchQuery, setSearchQuery] = useState("");
-  const [searchResults, setSearchResults] = useState([]);
+  const [searchResults, setSearchResults] = useState<Community[]>([]);
   useEffect(() => {
     if (searchQuery.length > 0) {
       const fetchCommunity = async () => {
@@ -72,7 +69,7 @@ const Sidebar: React.FC = ({ props }) => {
   const getcommunity = async () => {
     const response = await api.get("/message/all");
     console.log("respons all comunity", response);
-    setCommunity(response.data.communities);
+    setCommunities(response.data.communities);
   };
 
   const handleImageChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -150,7 +147,7 @@ const Sidebar: React.FC = ({ props }) => {
 
   useEffect(() => {
     getcommunity();
-  }, [props.community]);
+  }, [community]);
 
   const activeCompany = useAppSelector(
     (state) => state.companyLogin.activeCompany
@@ -278,19 +275,19 @@ const Sidebar: React.FC = ({ props }) => {
             <ul className="mt-2 space-y-2 ">
               {searchResults.map((community) => (
                 <li
-                  key={community._id}
+                  key={community?._id}
                   className="cursor-pointer flex items-center gap-2 pl-4 hover:bg-primary hover:bg-opacity-20 rounded-full"
-                  onClick={() => props.setCommunity(community)}
+                  onClick={() => setCommunity(community)}
                 >
                   <Image
                     width={100}
                     height={100}
-                    src={community.profile || "/default-profile.png"}
-                    alt={`${community.name}`}
+                    src={community?.profile || "/default-profile.png"}
+                    alt={`${community?.name}`}
                     className="w-7 h-7 rounded-full"
                   />
                   <div>
-                    <p className="tex-sm font-semibold">{community.name}</p>
+                    <p className="tex-sm font-semibold">{community?.name}</p>
                   </div>
                 </li>
               ))}
@@ -300,16 +297,16 @@ const Sidebar: React.FC = ({ props }) => {
       </div>
 
       <div className="space-y-4">
-        {community.map((item) => (
+        {communities.map((item) => (
           <div
             key={item._id}
             className="flex items-center justify-between p-2 bg-white rounded-lg shadow-sm"
-            onClick={props?.isopen ? () => props?.setIsopen(false) : undefined}
+            onClick={isopen ? () => setIsopen(false) : undefined}
           >
             <div
               className="flex items-center space-x-3 cursor-pointer"
               onClick={() => {
-                props.setCommunity(item);
+                setCommunity(item);
                 console.log("vvvv", item);
               }}
             >

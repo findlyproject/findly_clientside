@@ -3,8 +3,11 @@
 import { useState } from "react";
 import api from "@/utils/api";
 
-
-export const ReportUserModal = ({ repoteduserid, onClose }) => {
+interface ReportType{
+  repoteduserid:string;
+  onClose:()=>void;
+}
+export const ReportUserModal = ({ repoteduserid, onClose }:ReportType) => {
   console.log("postId", repoteduserid);
   const [reason, setReason] = useState("");
 

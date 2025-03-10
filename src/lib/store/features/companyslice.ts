@@ -1,79 +1,70 @@
 import { createSlice } from "@reduxjs/toolkit"
 
-import { UserProfile } from "./userSlice";
+
+import { User,Company, applicationData } from "@/types/Types";
 
 
-export interface companyData{
-    email:string,
-    password:string,
-    about:string
-    name: string;
-    age: number;
-    contact: string;
-    logo: string;
-    banner:string
-    IndustryType:string
-    startingDate:Date
-    address: {
-        city: string;
-        landmark:string
-        country: string;
-        pincode: string;
-        state: string;
-    };
-    role: string;
-    createdAt: string;
-    updatedAt: string;
-    isDeleted: boolean;
-    subscriptionStartDate: string | null;
-    subscriptionEndDate: string | null;
-    employees:[
-        {
-            employee:string,
-            position:string
-        }
-    ] 
-    _id: string;
-    services:string[]
-    socialMedia:{
-        facebook:string
-        instagram:string
-        linkedin:string
-        twitter:string
-      }
-      workHours:{
-        start:string,
-        end:string
-      }
-      founder:string
-      foundedAt:string;
-      headquarters:string
-      applications:applicationData[]
-      isBlocked:boolean
+// export interface companyData{
+//     email:string,
+//     password:string,
+//     about:string
+//     name: string;
+//     age: number;
+//     contact: string;
+//     logo: string;
+//     banner:string
+//     IndustryType:string
+//     startingDate:Date
+//     address: {
+//         city: string;
+//         landmark:string
+//         country: string;
+//         pincode: string;
+//         state: string;
+//     };
+//     role: string;
+//     createdAt: string;
+//     updatedAt: string;
+//     isDeleted: boolean;
+//     subscriptionStartDate: string | null;
+//     subscriptionEndDate: string | null;
+//     employees:[
+//         {
+//             employee:string,
+//             position:string
+//         }
+//     ] 
+//     _id: string;
+//     services:string[]
+//     socialMedia:{
+//         facebook:string
+//         instagram:string
+//         linkedin:string
+//         twitter:string
+//       }
+//       workHours:{
+//         start:string,
+//         end:string
+//       }
+//       founder:string
+//       foundedAt:string;
+//       headquarters:string
+//       applications:applicationData[]
+//       isBlocked:boolean
+// }
+
+
+
+interface loginState{
+    activeCompany:Company|null
 }
+
+
 
 
 
 interface loginState{
-    activeCompany:companyData|null
-}
-
-
-export interface applicationData{
-    companyId: string;
-    coverLetter: string;
-    createdAt: string;
-    introVideo: string;
-    jobId: string;
-    resume: string;
-    status: string;
-    updatedAt: string;
-    userId: UserProfile;
-}
-
-
-interface loginState{
-    activeCompany:companyData|null
+    activeCompany:Company|null
     application:applicationData[]
     
     forgotPassword:{

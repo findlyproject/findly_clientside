@@ -6,7 +6,9 @@ import { IoCallOutline } from "react-icons/io5";
 export default function HelpandSupport() {
   return (
     <div className="min-h-screen bg-gray-100 flex flex-col items-start py-8 px-4 space-y-8">
-      <h1 className="text-2xl md:text-3xl font-semibold mb-4 text-center">Help & Support</h1>
+      <h1 className="text-2xl md:text-3xl font-semibold mb-4 text-center">
+        Help & Support
+      </h1>
 
       <div className="bg-white rounded-2xl shadow-lg p-6 w-full max-w-2xl">
         <div className="flex flex-col md:flex-row items-center md:items-start md:space-x-6 space-y-4 md:space-y-0">

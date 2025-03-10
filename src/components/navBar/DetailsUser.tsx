@@ -1,75 +1,18 @@
 "use client";
 
-
-
 import React, { useEffect, useState, useRef } from "react";
 import api from "@/utils/api";
-import {setDetailes} from "@/lib/store/features/userSlice";
+import { setDetailes } from "@/lib/store/features/userSlice";
 import { useAppDispatch, useAppSelector } from "@/lib/store/hooks";
 import Image from "next/image";
 import verification from "../../../public/assets/verify.jpg";
 import { useRouter } from "next/navigation";
-import { RiDeleteBack2Line } from "react-icons/ri";
 import { MdOutlineReport } from "react-icons/md";
 import { CiCircleInfo } from "react-icons/ci";
 import Link from "next/link";
 import { CiCircleRemove } from "react-icons/ci";
 import { ReportUserModal } from "./ReportUserModal";
-interface Connection {
-  connectionID: {
-    connecting: string[];
-    _id: string;
-    profileImage: string;
-    firstName: string;
-    jobTitle: string[];
-  };
-  status: boolean;
-}
-interface Education {
-  college: string;
-  qualification?: string;
-  startYear: number;
-  endYear: number;
-}
-interface Experience {
-  companyName: string;
-  jobRole: string;
-  startYear: number;
-  endYear: number;
-}
-
-interface Projects{
-  title:string;
-  description:string;
-  link:string;
-}
-
-interface UserProfile {
-  connecting: Connection[];
-  skills?: string[];
-  education?: Education[];
-  about: string;
-  banner: string;
-  profileImage: string;
-  jobTitle: string[];
-  role: string;
-  firstName: string;
-  lastName: string;
-
-  location:{
-    city:string
-    country:string,
-    state:string
-  }
-
-
-
-  experience: Experience[];
-  email: string;
-  createdAt: string;
-  updatedAt: string;
-  projects:Projects[]
-}
+import { User } from "@/types/Types";
 
 const DetailsUser = ({ id }: { id: string }) => {
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
@@ -104,9 +47,9 @@ const DetailsUser = ({ id }: { id: string }) => {
     };
   }, []);
 
-  const Requested = useAppSelector((state) => state.user.connectionRequest);
+  // const Requested = useAppSelector((state) => state.user.connectionRequest);
 
-  const connections = useAppSelector((state) => state.user.connections);
+  // const connections = useAppSelector((state) => state.user.connections);
 
   console.log("id", id);
   const router = useRouter();
@@ -116,9 +59,8 @@ const DetailsUser = ({ id }: { id: string }) => {
 
   const user = useAppSelector(
     (state) => state.user.userdetails
-  ) as UserProfile | null;
-console.log("usereeee",user);
-
+  ) as User | null;
+  console.log("usereeee", user);
 
   useEffect(() => {
     const fetch = async () => {
@@ -175,9 +117,7 @@ console.log("usereeee",user);
                   )}
                 </span>
               </div>
-              <p className="text-gray-900">
-                {user?.jobTitle[0]}
-              </p>
+              <p className="text-gray-900">{user?.jobTitle?.[0]}</p>
               <p className="text-gray-900 text-sm">
                 {user?.location?.city}•{" "}
                 {user?.connecting?.filter((item) => item.status === true)
@@ -188,7 +128,7 @@ console.log("usereeee",user);
               <div className="relative flex gap-4 mt-5">
                 {user?.connecting?.some(
                   (conn) =>
-                    conn.connectionID._id === activeuserid?._id &&
+                    conn.connectionID?._id === activeuserid?._id &&
                     conn.status === false
                 ) ? (
                   <button
@@ -214,7 +154,10 @@ console.log("usereeee",user);
                     conn.connectionID?._id === activeuserid?._id &&
                     conn.status === true
                 ) ? (
-                  <button className="text-primary border border-primary font-semibold bg-white py-1 px-2 rounded-full" onClick={()=>router.push}>
+                  <button
+                    className="text-primary border border-primary font-semibold bg-white py-1 px-2 rounded-full"
+                    onClick={() => router.push}
+                  >
                     Message
                   </button>
                 ) : (
@@ -233,42 +176,36 @@ console.log("usereeee",user);
 
                   {isDropdownOpen && (
                     <div
-                    ref={dropdownRef}
-                    className="absolute top-full right-0 mt-1 w-48 bg-white border border-gray-200 rounded-lg shadow-lg z-50"
-                  >
-                    <div className="text-gray-700">
-                      <div className="flex items-center space-x-2 px-4 py-2 hover:bg-gray-100 cursor-pointer">
-                      <CiCircleRemove />
-                      <button className="text-left">
-                        Remove Connection
-                      </button>
-                      </div>
-                    
-                  
-                      <div 
-                      
-                      className="flex items-center space-x-2 px-4 py-2 hover:bg-gray-100 cursor-pointer">
-                        <MdOutlineReport />
-                        <button className="text-left"
-                          >Report</button>
-                      </div>
-                      {isreportModalOpen && <ReportUserModal repoteduserid={id} onClose={() => setIsreportModalOpen(false)} />}
+                      ref={dropdownRef}
+                      className="absolute top-full right-0 mt-1 w-48 bg-white border border-gray-200 rounded-lg shadow-lg z-50"
+                    >
+                      <div className="text-gray-700">
+                        <div className="flex items-center space-x-2 px-4 py-2 hover:bg-gray-100 cursor-pointer">
+                          <CiCircleRemove />
+                          <button className="text-left">
+                            Remove Connection
+                          </button>
+                        </div>
 
-                      <div className="flex items-center space-x-2 px-4 py-2 hover:bg-gray-100 cursor-pointer">
-                      <CiCircleInfo 
-                      
-                      />
-                      <button
-                        className="text-left"
-                        onClick={openModal}
-                      >
-                        About This Profile
-                      </button>
+                        <div className="flex items-center space-x-2 px-4 py-2 hover:bg-gray-100 cursor-pointer">
+                          <MdOutlineReport />
+                          <button className="text-left">Report</button>
+                        </div>
+                        {isreportModalOpen && (
+                          <ReportUserModal
+                            repoteduserid={id}
+                            onClose={() => setIsreportModalOpen(false)}
+                          />
+                        )}
+
+                        <div className="flex items-center space-x-2 px-4 py-2 hover:bg-gray-100 cursor-pointer">
+                          <CiCircleInfo />
+                          <button className="text-left" onClick={openModal}>
+                            About This Profile
+                          </button>
+                        </div>
                       </div>
-                      
                     </div>
-                  </div>
-                  
                   )}
                   {/* Modal */}
                   {isModalOpen && (
@@ -291,11 +228,8 @@ console.log("usereeee",user);
                           <span className="text-black font-semibold">
                             Location:
                           </span>{" "}
-
-                          {user?.location?.country} {user?.location?.state}  {user?.location?.city}
-
-                          
-
+                          {user?.location?.country} {user?.location?.state}{" "}
+                          {user?.location?.city}
                         </p>
                         <p className="text-gray-700">
                           <span className="text-black font-semibold">
@@ -377,7 +311,7 @@ console.log("usereeee",user);
       {user?.experience && user.experience.length > 0 ? (
         <div className="p-6 border-t">
           <h3 className="text-lg font-semibold">Experience</h3>
-          {user.experience?.map((item,index) => (
+          {user.experience?.map((item, index) => (
             <div className="mt-2  flex" key={index}>
               <div>
                 <Image
@@ -424,26 +358,23 @@ console.log("usereeee",user);
         </div>
       )}
 
-
-
-
-
-{user?.projects && user.projects.length > 0 ? (
+      {user?.projects && user.projects.length > 0 ? (
         <div className="p-6 border-t">
           <h3 className="text-lg font-semibold">Projects</h3>
           <div className="mt-2">
             {user.projects.map((item, index) => (
               <div key={index} className="mb-4">
                 <p className="font-bold">{item.title}</p>
-                <p className="text-gray-600">
-                  {item.description}
-                  
-                </p>
-                
-                <Link className="text-blue-500 underline" href={item.link ?? "/"} target="_blank" rel="noopener noreferrer">
-  Project Link
-</Link>
+                <p className="text-gray-600">{item.description}</p>
 
+                <Link
+                  className="text-blue-500 underline"
+                  href={item.link ?? "/"}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                >
+                  Project Link
+                </Link>
               </div>
             ))}
           </div>
@@ -453,8 +384,6 @@ console.log("usereeee",user);
           <h3 className="text-lg font-semibold">Project</h3>
         </div>
       )}
-
-
 
       {user?.skills && user.skills.length > 0 ? (
         <div className="p-6 border-t">
@@ -478,19 +407,23 @@ console.log("usereeee",user);
             ?.filter((person) => person.status === true)
             .map((person) => (
               <div
-                key={person.connectionID._id}
+                key={person.connectionID?._id}
                 className="flex items-center space-x-3 p-3 border rounded-lg shadow-sm w-64 mb-4 sm:w-80 md:w-96"
               >
-                <div onClick={()=>router.push(`/userdetails/${person?.connectionID?._id}`)}>
-                <Image
-                  className="w-12 h-12 rounded-full"
-                  src={person.connectionID.profileImage}
-                  alt={person.connectionID.firstName}
-                  width={100}
-                  height={100}
-                />
+                <div
+                  onClick={() =>
+                    router.push(`/userdetails/${person?.connectionID?._id}`)
+                  }
+                >
+                  <Image
+                    className="w-12 h-12 rounded-full"
+                    src={person.connectionID?.profileImage}
+                    alt={person.connectionID?.firstName}
+                    width={100}
+                    height={100}
+                  />
                 </div>
-                
+
                 <div>
                   <p className="font-semibold">
                     {person.connectionID.firstName}

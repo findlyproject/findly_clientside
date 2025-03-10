@@ -2,12 +2,12 @@
 
 "use client";
 
-import { UserProfile } from "@/lib/store/features/userSlice";
+import { User } from "@/types/Types";
 import api from "@/utils/api";
 import { useEffect, useState } from "react";
 
 const Users = () => {
-  const [data, setData] = useState<UserProfile[]>([]);
+  const [data, setData] = useState<User[]>([]);
   const [currentPage, setCurrentPage] = useState(1);
   const usersPerPage = 10;  
 

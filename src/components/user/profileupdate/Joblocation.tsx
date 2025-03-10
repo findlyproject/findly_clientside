@@ -3,12 +3,12 @@ import { RxCross2 } from 'react-icons/rx';
 import { Country, State, City } from "country-state-city";
 import { useAppDispatch, useAppSelector } from '@/lib/store/hooks';
 import { setjobLocations, setRemovejoblocation } from '@/lib/store/features/userSlice';
-
+import { ChangeEventType, JobLocationType, User } from '@/types/Types';
 function JobLocation() {
     const dispatch =useAppDispatch()
-    const user = useAppSelector((state)=>state.user.activeuser)
-    const [locations, setLocations] = useState([]);
-    const [newLocation, setNewLocation] = useState({
+    const user = useAppSelector((state)=>state.user.activeuser as User)
+    const [locations, setLocations] = useState<JobLocationType[]>([]);
+    const [newLocation, setNewLocation] = useState <JobLocationType>({
         country: "",
         countryName: "",
         state: "",
@@ -20,7 +20,7 @@ function JobLocation() {
     const states = newLocation.country ? State.getStatesOfCountry(newLocation.country) : [];
     const cities = newLocation.state ? City.getCitiesOfState(newLocation.country, newLocation.state) : [];
 
-    const handleChange = (e) => {
+    const handleChange = (e:ChangeEventType) => {
         const { name, value } = e.target;
 
         if (name === "country") {
@@ -59,7 +59,7 @@ function JobLocation() {
         }
     };
 
-    const handleRemoveLocation = (index) => {
+    const handleRemoveLocation = (index:number) => {
         dispatch(setRemovejoblocation(index))
     };
 
@@ -119,11 +119,11 @@ function JobLocation() {
                 </button>
 
                 {/* Display Added Locations */}
-                {user.jobLocation.length > 0 && (
+                {user.jobLocation&&user.jobLocation?.length > 0 && (
                     <div className="mt-4">
                         <h3 className="text-xl font-semibold">Added Locations</h3>
                         <ul className="mt-2">
-                            {user.jobLocation.map((loc, index) => (
+                            {user.jobLocation?.map((loc, index) => (
                                 <li key={index} className="bg-gray-200 p-3 rounded-md mb-2 flex justify-between items-center">
                                     <div>
                                         <p className="font-semibold">{loc.countryName} - {loc.stateName} - {loc.city}</p>

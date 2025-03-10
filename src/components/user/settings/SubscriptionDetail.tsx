@@ -5,10 +5,11 @@ import { BsStars } from "react-icons/bs";
 import { useRouter } from "next/navigation";
 import api from "@/utils/api";
 import { FaCheckCircle } from "react-icons/fa";
+import { Subscription } from "@/types/Types";
 
 export default function SubscriptionDetail(){
   const router = useRouter();
-  const [details, setDetails] = useState([]);
+  const [details, setDetails] = useState<Subscription[]>([]);
   useEffect(() => {
     const details = async () => {
       const response = await api.get(`/payment/subscriptiondetails`);

@@ -13,6 +13,7 @@ export const fetchAllPostsAdmin = createAsyncThunk(
       const response: AxiosResponse<{ posts: IPost[] }> = await api.get(
         `/admin/findallposts`
       );
+console.log("response of admin posts",response);
 
       if (!response.data || !response.data.posts) {
         return rejectWithValue("No posts found.");
@@ -28,7 +29,7 @@ export const fetchAllPostsAdmin = createAsyncThunk(
 );
 export const fetchAllPosts = createAsyncThunk(
   "post/fetchAllPosts",
-  async (page = 1, { dispatch, rejectWithValue, getState }) => {
+  async (page:number = 1, { dispatch, rejectWithValue, getState }) => {
     try {
       const response: AxiosResponse<{ posts: IPost[] }> = await api.get(
         `/post/allposts?page=${page}&limit=5`

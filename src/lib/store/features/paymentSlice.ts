@@ -1,9 +1,9 @@
 
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 
-interface SubscriptionData {
+export interface SubscriptionData {
   clientSecret: string;
-  features: string;
+  features: string[];
   plan: string;
   price: number;
   paymentStatus: string;
@@ -12,6 +12,7 @@ interface SubscriptionData {
   userId: string;
   sessionId: string;
   companyId:string
+  active:boolean;
 }
 
 interface PaymentState {

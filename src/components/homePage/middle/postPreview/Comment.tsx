@@ -5,7 +5,7 @@ import { useState, useRef, useEffect } from "react";
 import { useAppDispatch, useAppSelector } from "@/lib/store/hooks";
 import dayjs from "dayjs";
 import relativeTime from "dayjs/plugin/relativeTime";
-import { IComment } from "@/lib/store/features/postSlice";
+import { IComment, IReply } from "@/lib/store/features/postSlice";
 import {
   deleteAComment,
   deleteReplay,
@@ -40,15 +40,14 @@ export const Comments = ({ postId, comments }: CommentsProps) => {
   }, []);
 
   const display = async () => {
-    const resultcometsreplay = await dispatch(getcommentswithreplies(routes))
-console.log(resultcometsreplay);
-
-  }
+    const resultcometsreplay = await dispatch(getcommentswithreplies(routes));
+    console.log(resultcometsreplay);
+  };
 
   const { activeuser } = useAppSelector((state) => state.user);
   const { activeCompany } = useAppSelector((state) => state.companyLogin);
 
-const routes=activeuser?"user":"company"
+  const routes = activeuser ? "user" : "company";
 
   const [isShowMenu, setIsShowMenu] = useState(false);
   const [commentData, setCommentData] = useState("");
@@ -62,7 +61,9 @@ const routes=activeuser?"user":"company"
   const [isShowReplyList, setIsShowReplyList] = useState(false);
   const [replyText, setReplyText] = useState("");
   const [commentID, setCommentID] = useState<string | null>(null);
-  const [isOptionsMenuOpen, setIsOptionsMenuOpen] = useState<string | null>(null);
+  const [isOptionsMenuOpen, setIsOptionsMenuOpen] = useState<string | null>(
+    null
+  );
 
   const [editReplyId, setEditReplyId] = useState<string | null>(null);
   const [editReplyText, setEditReplyText] = useState("");
@@ -74,9 +75,8 @@ const routes=activeuser?"user":"company"
   if (!comments) return <div className="text-center p-4">Loading...</div>;
 
   const handleListCommentReplays = async (commentId: string) => {
-  
-    const result = await dispatch(findReplies({commentId,routes}));
-    
+    const result = await dispatch(findReplies({ commentId, routes }));
+
     if (result.type === "get/findReplies/fulfilled") {
       setIsShowReplyList((prev) => !prev);
       setCommentID(commentId);
@@ -91,7 +91,7 @@ const routes=activeuser?"user":"company"
     if (!newCommentData.trim()) {
       return;
     }
-    dispatch(addCommentonPost({ postId, comment: newCommentData,routes }));
+    dispatch(addCommentonPost({ postId, comment: newCommentData, routes }));
     setnewCommentData("");
   };
 
@@ -124,13 +124,18 @@ const routes=activeuser?"user":"company"
   };
   const handleUpdateReply = async (replayedId: string, commentId: string) => {
     const resultUpdate = await dispatch(
-      updateReplay({ replayedId, commentId, newReplyText: editReplyText,routes })
+      updateReplay({
+        replayedId,
+        commentId,
+        newReplyText: editReplyText,
+        routes,
+      })
     );
     console.log("ress update", resultUpdate);
     if (resultUpdate.type === "updateReplay/fulfilled") {
       setIsOptionsMenuOpen(null);
-      await dispatch(findReplies({commentId,routes}));
-      
+      await dispatch(findReplies({ commentId, routes }));
+
       setEdit(false);
     }
 
@@ -139,7 +144,7 @@ const routes=activeuser?"user":"company"
 
   //getting the specific comment by id
   const getCommentById = (id: string) => {
-    dispatch(fetchCommentById({id,routes}))
+    dispatch(fetchCommentById({ id, routes }))
       .unwrap()
       .then((fetchedComment) => {
         setCommentData(fetchedComment);
@@ -159,15 +164,19 @@ const routes=activeuser?"user":"company"
   const handleSaveEdit = () => {
     if (!commentData.trim()) return;
     dispatch(
-      updateAComment({ commentId: editingCommentId, newComment: commentData,routes })
+      updateAComment({
+        commentId: editingCommentId,
+        newComment: commentData,
+        routes,
+      })
     );
     setEdit(false);
-    dispatch(fetchAllPosts());
+    dispatch(fetchAllPosts(0));
   };
   //delete comment
   const deleteComment = async (commentid: string) => {
-    dispatch(deleteAComment({ commentId: commentid ,routes}));
-    dispatch(fetchAllPosts());
+    dispatch(deleteAComment({ commentId: commentid, routes }));
+    dispatch(fetchAllPosts(0));
   };
 
   const addReply = async (commentId: string) => {
@@ -179,16 +188,14 @@ const routes=activeuser?"user":"company"
 
     try {
       const resultPostReplies = await dispatch(
-        postReplay({ postId, commentId, replyText,routes })
+        postReplay({ postId, commentId, replyText, routes })
       );
-
- 
 
       if (resultPostReplies.type === "post/replay/fulfilled") {
         setReplyText("");
 
-        await dispatch(findReplies({commentId,routes}));
-  
+        await dispatch(findReplies({ commentId, routes }));
+
         getCommentById(commentId);
       } else {
         console.log("error");
@@ -205,21 +212,17 @@ const routes=activeuser?"user":"company"
     );
   };
   const handleDeleteReply = async (replayId: string, commentId: string) => {
-   
-
-    const resultDelete = await dispatch(deleteReplay({ commentId, replayId,routes }));
+    const resultDelete = await dispatch(
+      deleteReplay({ commentId, replayId, routes })
+    );
     console.log("result delete", resultDelete);
     if (resultDelete.type === "delete/replay/fulfilled") {
-    
-
-     await dispatch(findReplies({commentId,routes}));
-      
+      await dispatch(findReplies({ commentId, routes }));
     }
   };
   return (
     <>
       <section className="mt-2">
-     
         <form
           className="flex flex-col space-y-2 p-3 border rounded-lg shadow-sm bg-white"
           onSubmit={(event) => handleSubmit(postId, event)}
@@ -253,17 +256,19 @@ const routes=activeuser?"user":"company"
                 <span className="text-gray-500 cursor-pointer hover:text-gray-700">
                   <FontAwesomeIcon icon={faSmile} />
                 </span>
-                
               </button>
               {newCommentData.trim() && (
-                    <button
-                      className="bg-primary  ml-2 rounded-full"
-                    >
-                      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="white" className="size-6 p-1">
-                        <path d="M3.478 2.404a.75.75 0 0 0-.926.941l2.432 7.905H13.5a.75.75 0 0 1 0 1.5H4.984l-2.432 7.905a.75.75 0 0 0 .926.94 60.519 60.519 0 0 0 18.445-8.986.75.75 0 0 0 0-1.218A60.517 60.517 0 0 0 3.478 2.404Z" />
-                      </svg>
-                    </button>
-                  )}
+                <button className="bg-primary  ml-2 rounded-full">
+                  <svg
+                    xmlns="http://www.w3.org/2000/svg"
+                    viewBox="0 0 24 24"
+                    fill="white"
+                    className="size-6 p-1"
+                  >
+                    <path d="M3.478 2.404a.75.75 0 0 0-.926.941l2.432 7.905H13.5a.75.75 0 0 1 0 1.5H4.984l-2.432 7.905a.75.75 0 0 0 .926.94 60.519 60.519 0 0 0 18.445-8.986.75.75 0 0 0 0-1.218A60.517 60.517 0 0 0 3.478 2.404Z" />
+                  </svg>
+                </button>
+              )}
               {showPicker && (
                 <OutsideClickHandler
                   onOutsideClick={() => setShowPicker(false)}
@@ -275,373 +280,396 @@ const routes=activeuser?"user":"company"
               )}
             </div>
           </div>
-
-         
         </form>
 
-   
         <section className="mt-3 space-y-4">
-          {comments&&comments 
-            .slice()
-            .sort(
-              (a, b) =>
-                new Date(b.createdAt).getTime() -
-                new Date(a.createdAt).getTime()
-            )
-            .map((comment,index) => (
-              <div
-              key={`${comment._id}-${index}`}
-                className="p-3 border rounded-lg shadow-sm bg-white"
-              >
-                {edit && editingCommentId === comment?._id ? (
-                  
-                  <div>
-                    <div className="relative flex border rounded-lg px-4 py-2">
-                      <input
-                        type="text"
-                        name="comment"
-                        value={commentData}
-                        onChange={(e) => setCommentData(e.target.value)}
-                        className="w-full border-none focus:outline-none"
-                      />
-                      <button
-                        type="button"
-                        className="p-2  rounded-full"
-                        onClick={() => setShowPicker((prev) => !prev)}
-                      >
-                        <svg
-                          xmlns="http://www.w3.org/2000/svg"
-                          viewBox="0 0 24 24"
-                          fill="currentColor"
-                          className="size-6"
+          {comments &&
+            comments
+              .slice()
+              .sort(
+                (a, b) =>
+                  new Date(b.createdAt).getTime() -
+                  new Date(a.createdAt).getTime()
+              )
+              .map((comment, index) => (
+                <div
+                  key={`${comment._id}-${index}`}
+                  className="p-3 border rounded-lg shadow-sm bg-white"
+                >
+                  {edit && editingCommentId === comment?._id ? (
+                    <div>
+                      <div className="relative flex border rounded-lg px-4 py-2">
+                        <input
+                          type="text"
+                          name="comment"
+                          value={commentData}
+                          onChange={(e) => setCommentData(e.target.value)}
+                          className="w-full border-none focus:outline-none"
+                        />
+                        <button
+                          type="button"
+                          className="p-2  rounded-full"
+                          onClick={() => setShowPicker((prev) => !prev)}
                         >
-                          <path
-                            fillRule="evenodd"
-                            d="M12 2.25c-5.385 0-9.75 4.365-9.75 9.75s4.365 9.75 9.75 9.75 9.75-4.365 9.75-9.75S17.385 2.25 12 2.25Zm-2.625 6c-.54 0-.828.419-.936.634a1.96 1.96 0 0 0-.189.866c0 .298.059.605.189.866.108.215.395.634.936.634.54 0 .828-.419.936-.634.13-.26.189-.568.189-.866 0-.298-.059-.605-.189-.866-.108-.215-.395-.634-.936-.634Zm4.314.634c.108-.215.395-.634.936-.634.54 0 .828.419.936.634.13.26.189.568.189.866 0 .298-.059.605-.189.866-.108.215-.395.634-.936.634-.54 0-.828-.419-.936-.634a1.96 1.96 0 0 1-.189-.866c0-.298.059-.605.189-.866Zm2.023 6.828a.75.75 0 1 0-1.06-1.06 3.75 3.75 0 0 1-5.304 0 .75.75 0 0 0-1.06 1.06 5.25 5.25 0 0 0 7.424 0Z"
-                            clipRule="evenodd"
-                          />
-                        </svg>
-                      </button>
+                          <svg
+                            xmlns="http://www.w3.org/2000/svg"
+                            viewBox="0 0 24 24"
+                            fill="currentColor"
+                            className="size-6"
+                          >
+                            <path
+                              fillRule="evenodd"
+                              d="M12 2.25c-5.385 0-9.75 4.365-9.75 9.75s4.365 9.75 9.75 9.75 9.75-4.365 9.75-9.75S17.385 2.25 12 2.25Zm-2.625 6c-.54 0-.828.419-.936.634a1.96 1.96 0 0 0-.189.866c0 .298.059.605.189.866.108.215.395.634.936.634.54 0 .828-.419.936-.634.13-.26.189-.568.189-.866 0-.298-.059-.605-.189-.866-.108-.215-.395-.634-.936-.634Zm4.314.634c.108-.215.395-.634.936-.634.54 0 .828.419.936.634.13.26.189.568.189.866 0 .298-.059.605-.189.866-.108.215-.395.634-.936.634-.54 0-.828-.419-.936-.634a1.96 1.96 0 0 1-.189-.866c0-.298.059-.605.189-.866Zm2.023 6.828a.75.75 0 1 0-1.06-1.06 3.75 3.75 0 0 1-5.304 0 .75.75 0 0 0-1.06 1.06 5.25 5.25 0 0 0 7.424 0Z"
+                              clipRule="evenodd"
+                            />
+                          </svg>
+                        </button>
+                      </div>
+                      <div className="mt-2 flex gap-2">
+                        <button
+                          className="bg-green-500 text-white px-4 py-1 rounded-md"
+                          onClick={handleSaveEdit}
+                        >
+                          Save
+                        </button>
+                        <button
+                          className="bg-gray-500 text-white px-4 py-1 rounded-md"
+                          onClick={() => {
+                            setEdit(false);
+                            setEditingCommentId("");
+                          }}
+                        >
+                          Cancel
+                        </button>
+                      </div>
                     </div>
-                    <div className="mt-2 flex gap-2">
-                      <button
-                        className="bg-green-500 text-white px-4 py-1 rounded-md"
-                        onClick={handleSaveEdit}
-                      >
-                        Save
-                      </button>
-                      <button
-                        className="bg-gray-500 text-white px-4 py-1 rounded-md"
-                        onClick={() => {
-                          setEdit(false);
-                          setEditingCommentId("");
-                        }}
-                      >
-                        Cancel
-                      </button>
-                    </div>
-                  </div>
-                ) : (
-                  <div className="flex items-start space-x-3">
-                   
-                    <div className="w-8 h-8">
-                    <Image
-  src={
-    comment.user
-      ? "profileImage" in comment.user && comment.user.profileImage
-        ? comment.user.profileImage
-        : comment.user.logo || "https://res.cloudinary.com/dq1auwpkm/image/upload/v1738735360/profile_jtwxaj.png"
-      : "https://res.cloudinary.com/dq1auwpkm/image/upload/v1738735360/profile_jtwxaj.png"
-  }
-  alt="User Profile"
-  width={30}
-  height={30}
-  className="w-full h-full rounded-full object-cover"
-/>
+                  ) : (
+                    <div className="flex items-start space-x-3">
+                      <div className="w-8 h-8">
+                        <Image
+                          src={
+                            comment.user
+                              ? "profileImage" in comment.user &&
+                                comment.user.profileImage
+                                ? comment.user.profileImage
+                                : comment.user.logo ||
+                                  "https://res.cloudinary.com/dq1auwpkm/image/upload/v1738735360/profile_jtwxaj.png"
+                              : "https://res.cloudinary.com/dq1auwpkm/image/upload/v1738735360/profile_jtwxaj.png"
+                          }
+                          alt="User Profile"
+                          width={30}
+                          height={30}
+                          className="w-full h-full rounded-full object-cover"
+                        />
+                      </div>
 
-
-
-                    
-                     
-                    </div>
-
-                 
-                    <div className="flex-grow">
-                      <div className="flex justify-between">
-                        <div>
-                          
-                        <h3 className="font-semibold text-sm">
-  {comment.user && typeof comment.user === "object"
-    ? "firstName" in comment.user
-      ? `${comment.user.firstName} ${comment.user.lastName || ""}`
-      : comment.user.name || "Unknown User"
-    : "Unknown User"}
-</h3>               
-{/* <h3 className="font-semibold text-sm">
+                      <div className="flex-grow">
+                        <div className="flex justify-between">
+                          <div>
+                            <h3 className="font-semibold text-sm">
+                              {comment.user && typeof comment.user === "object"
+                                ? "firstName" in comment.user
+                                  ? `${comment.user.firstName} ${
+                                      comment.user.lastName || ""
+                                    }`
+                                  : comment.user.name || "Unknown User"
+                                : "Unknown User"}
+                            </h3>
+                            {/* <h3 className="font-semibold text-sm">
   {comment.user
     ? "firstName" in comment.user
       ? `${comment?.user?.firstName} ${comment?.user?.lastName}`
       : comment.user?.name
     : "Unknown User"} 
 </h3> */}
-                        </div>
-                        <div className="text-gray-500 text-xs">
-                          {dayjs(comment.updatedAt).fromNow()}
-                        </div>
-                      </div>
-
-                      <p className="text-gray-700 mt-1">{comment.comment}</p>
-
-                 
-                      <div className="flex space-x-2 mt-2 text-gray-500 ">
-                      <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth="1.5" stroke="currentColor" className="size-4">
-  <path strokeLinecap="round" strokeLinejoin="round" d="M21 8.25c0-2.485-2.099-4.5-4.688-4.5-1.935 0-3.597 1.126-4.312 2.733-.715-1.607-2.377-2.733-4.313-2.733C5.1 3.75 3 5.765 3 8.25c0 7.22 9 12 9 12s9-4.78 9-12Z" />
-</svg>
-
-                        <button
-                          onClick={() => handleListCommentReplays(comment._id)}
-                          className="hover:underline text-xs"
-                        >
-                          {myComments.find((c) => c._id === comment._id)
-                            ?.replies?.length
-                            ? `View Replies [${
-                                myComments.find((c) => c._id === comment._id)
-                                  ?.replies.length
-                              }]`
-                            : "Reply"}
-                        </button>
-                        {comment?.user?._id === activeuser?._id && (
-                          <button
-                            onClick={() => toggleMenu(comment._id)}
-                            className="hover:underline"
-                          >
-                            <FontAwesomeIcon icon={faEllipsis} />
-
-                            {isShowMenu && openCommentId == comment._id && (
-                              <OutsideClickHandler onOutsideClick={() => setIsShowMenu(false)}>
-                              <div className="absolute  bg-white border border-gray-200 rounded-lg shadow-lg z-50">
-                                <div className="border-t border-gray-200">
-                                  <button
-                                    className="w-full text-left px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"
-                                    onClick={() => editComment(comment?._id)}
-                                  >
-                                    Edit
-                                  </button>
-                                  <button
-                                    className="w-full text-left px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"
-                                    onClick={() => deleteComment(comment?._id)}
-                                  >
-                                    Delete
-                                  </button>
-                                </div>
-                              </div>
-                              </OutsideClickHandler>
-                            )}
-                          </button>
-                        )}
-                      </div>
-                    </div>
-                  </div>
-                )}
-
-                {isShowReplyList && commentID === comment._id && (
-                  <div className="mt-2 pl-10">
-                    <div className="flex items-center space-x-2">
-                    <Image
-                src={
-                  (activeuser?.profileImage || activeCompany?.logo) ??
-                  "https://res.cloudinary.com/dq1auwpkm/image/upload/v1738735360/profile_jtwxaj.png"
-                }
-                alt="Profile"
-                width={30}
-                height={30}
-                className="w-8 h-8 rounded-full object-cover"
-              />
-                      
-                       <div className="flex-grow flex items-center border rounded-lg px-3  space-x-2 bg-gray-100">
-              <input
-               ref={inputRef}
-                type="text"
-                placeholder="Add a reply..."
-                className="flex-grow bg-transparent focus:outline-none"
-                onChange={handleReplyChange}
-                value={replyText}
-              />
-              <button
-                type="button"
-                className="p-2  rounded-full"
-                onClick={() => setShowPickerImogi((prev) => !prev)}
-              >
-                <span className="text-gray-500 cursor-pointer hover:text-gray-700">
-                  <FontAwesomeIcon icon={faSmile} />
-                </span>
-                
-              </button>
-              {replyText.trim() && (
-                    <button
-                      className="bg-primary  ml-2 rounded-full"
-                      onClick={() => addReply(comment._id)}
-                    >
-                      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="white" className="size-6 p-1">
-                        <path d="M3.478 2.404a.75.75 0 0 0-.926.941l2.432 7.905H13.5a.75.75 0 0 1 0 1.5H4.984l-2.432 7.905a.75.75 0 0 0 .926.94 60.519 60.519 0 0 0 18.445-8.986.75.75 0 0 0 0-1.218A60.517 60.517 0 0 0 3.478 2.404Z" />
-                      </svg>
-                    </button>
-                  )}
-               {showPickerImogi && commentID === comment._id && (
-                <OutsideClickHandler
-                onOutsideClick={() => setShowPickerImogi(false)}
-                >
-                  <div className="absolute z-10 w-[300px] sm:w-[250px] md:w-[350px] lg:w-[400px]  transform -translate-x-1/2">
-                    <EmojiPicker  onEmojiClick={handleEmojiClickReplay} />
-                  </div>
-                </OutsideClickHandler>
-              )}
-            </div>
-                      
-                    </div>
-
-                    {replay && replay.length > 0 && (
-                      <div className="mt-4 pl-6 border-l-2 border-gray-300">
-                        {replay.map((r,index) => (
-                          <div  key={`${r._id}-${index}`} className="flex flex-col space-y-2">
-                            {editReplyId === r._id ? (
-                              <div className="flex items-center space-x-2 pl-8">
-                                <div className="relative flex border rounded-lg px-4 py-2">
-                                  <input
-                                    type="text"
-                                    value={editReplyText}
-                                    onChange={(e) =>
-                                      setEditReplyText(e.target.value)
-                                    }
-                                    className=" px-2 py-1 rounded-lg w-full"
-                                  />
-                                  <button
-                                    type="button"
-                                    className="p-2  rounded-full"
-                                    onClick={() =>
-                                      setShowPickerImogi((prev) => !prev)
-                                    }
-                                  >
-                                    <svg
-                                      xmlns="http://www.w3.org/2000/svg"
-                                      viewBox="0 0 24 24"
-                                      fill="currentColor"
-                                      className="size-6"
-                                    >
-                                      <path
-                                        fillRule="evenodd"
-                                        d="M12 2.25c-5.385 0-9.75 4.365-9.75 9.75s4.365 9.75 9.75 9.75 9.75-4.365 9.75-9.75S17.385 2.25 12 2.25Zm-2.625 6c-.54 0-.828.419-.936.634a1.96 1.96 0 0 0-.189.866c0 .298.059.605.189.866.108.215.395.634.936.634.54 0 .828-.419.936-.634.13-.26.189-.568.189-.866 0-.298-.059-.605-.189-.866-.108-.215-.395-.634-.936-.634Zm4.314.634c.108-.215.395-.634.936-.634.54 0 .828.419.936.634.13.26.189.568.189.866 0 .298-.059.605-.189.866-.108.215-.395.634-.936.634-.54 0-.828-.419-.936-.634a1.96 1.96 0 0 1-.189-.866c0-.298.059-.605.189-.866Zm2.023 6.828a.75.75 0 1 0-1.06-1.06 3.75 3.75 0 0 1-5.304 0 .75.75 0 0 0-1.06 1.06 5.25 5.25 0 0 0 7.424 0Z"
-                                        clipRule="evenodd"
-                                      />
-                                    </svg>
-                                  </button>
-                                </div>
-                                <button
-                                  onClick={() =>
-                                    handleUpdateReply(r._id, comment._id)
-                                  }
-                                  className="bg-green-500 text-white px-3 py-1 rounded-lg text-sm hover:bg-green-600"
-                                >
-                                  Save
-                                </button>
-                                <button
-                                  onClick={() => {
-                                    setEditReplyId(null);
-                                    setIsOptionsMenuOpen(null);
-                                  }}
-                                  className="bg-gray-400 text-white px-3 py-1 rounded-lg text-sm hover:bg-gray-500"
-                                >
-                                  Cancel
-                                </button>
-                              </div>
-                            ) : (
-                                <div className="flex items-start justify-center p-1 ">
-                   
-                   <div className="w-8 h-8">
-                   <Image
-  src={
-    r.user
-      ? "profileImage" in r.user && r.user.profileImage
-        ? r.user.profileImage
-        : r.user.logo || "https://res.cloudinary.com/dq1auwpkm/image/upload/v1738735360/profile_jtwxaj.png"
-      : "https://res.cloudinary.com/dq1auwpkm/image/upload/v1738735360/profile_jtwxaj.png"
-  }
-  alt=" Profile"
-  width={30}
-  height={30}
-  className="w-full h-full rounded-full object-cover"
-/>
-                   </div>
-
-                
-                   <div className="flex-grow">
-                     <div className="flex justify-between">
-                       <div className="px-2">
-                       <h3 className="font-semibold text-sm">
-  {r.user && typeof r.user === "object"
-    ? "firstName" in r.user
-      ? `${r.user.firstName} ${r.user.lastName || ""}`
-      : r.user.name || "Unknown User"
-    : "Unknown User"}
-</h3>   
-                     <p className="text-gray-700">{r.reply}</p>
-
-                       </div>
-                       <div className="text-gray-500 text-xs">
-                         {dayjs(r.updatedAt).fromNow()}
-                       </div>                 
-</div>
-
-                     </div>
-                                <div className="flex flex-col items-end ">
-                                  <div className=" flex justify-between ">
-                                    <button
-                                      className="text-gray-500 hover:text-gray-700   text-xl"
-                                      onClick={() => toggleOptionsMenu(r._id)}
-                                    >
-                                      <BsThreeDots />
-                                    </button>
-
-                                    {isOptionsMenuOpen === r._id && (
-                                     <OutsideClickHandler onOutsideClick={()=>setIsOptionsMenuOpen(null)}>
-                                       <div className="absolute right-0 mt-2 w-32 bg-white border border-gray-300 rounded-lg shadow-md">
-                                        <button
-                                          onClick={() =>
-                                            handleEditReply(r._id, r.reply)
-                                          }
-                                          className="block w-full text-gray-700 text-sm py-2 px-4 hover:bg-gray-100"
-                                        >
-                                          Edit
-                                        </button>
-                                        <button
-                                          onClick={() =>
-                                            handleDeleteReply(
-                                              r._id,
-                                              comment._id
-                                            )
-                                          }
-                                          className="block w-full text-red-500 text-sm py-2 px-4 hover:bg-gray-100"
-                                        >
-                                          Delete
-                                        </button>
-                                      </div>
-                                     </OutsideClickHandler>
-                                    )}
-                                  </div>
-                                  <div>
-                                   
-                                  </div>
-                                </div>
-                              </div>
-                            )}
                           </div>
-                        ))}
+                          <div className="text-gray-500 text-xs">
+                            {dayjs(comment.updatedAt).fromNow()}
+                          </div>
+                        </div>
+
+                        <p className="text-gray-700 mt-1">{comment.comment}</p>
+
+                        <div className="flex space-x-2 mt-2 text-gray-500 ">
+                          <svg
+                            xmlns="http://www.w3.org/2000/svg"
+                            fill="none"
+                            viewBox="0 0 24 24"
+                            strokeWidth="1.5"
+                            stroke="currentColor"
+                            className="size-4"
+                          >
+                            <path
+                              strokeLinecap="round"
+                              strokeLinejoin="round"
+                              d="M21 8.25c0-2.485-2.099-4.5-4.688-4.5-1.935 0-3.597 1.126-4.312 2.733-.715-1.607-2.377-2.733-4.313-2.733C5.1 3.75 3 5.765 3 8.25c0 7.22 9 12 9 12s9-4.78 9-12Z"
+                            />
+                          </svg>
+
+                          <button
+                            onClick={() =>
+                              handleListCommentReplays(comment._id)
+                            }
+                            className="hover:underline text-xs"
+                          >
+                            {myComments.find((c) => c._id === comment._id)
+                              ?.replies?.length
+                              ? `View Replies [${
+                                  myComments.find((c) => c._id === comment._id)
+                                    ?.replies.length
+                                }]`
+                              : "Reply"}
+                          </button>
+                          {comment?.user?._id === activeuser?._id && (
+                            <button
+                              onClick={() => toggleMenu(comment._id)}
+                              className="hover:underline"
+                            >
+                              <FontAwesomeIcon icon={faEllipsis} />
+
+                              {isShowMenu && openCommentId == comment._id && (
+                                <OutsideClickHandler
+                                  onOutsideClick={() => setIsShowMenu(false)}
+                                >
+                                  <div className="absolute  bg-white border border-gray-200 rounded-lg shadow-lg z-50">
+                                    <div className="border-t border-gray-200">
+                                      <button
+                                        className="w-full text-left px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"
+                                        onClick={() =>
+                                          editComment(comment?._id)
+                                        }
+                                      >
+                                        Edit
+                                      </button>
+                                      <button
+                                        className="w-full text-left px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"
+                                        onClick={() =>
+                                          deleteComment(comment?._id)
+                                        }
+                                      >
+                                        Delete
+                                      </button>
+                                    </div>
+                                  </div>
+                                </OutsideClickHandler>
+                              )}
+                            </button>
+                          )}
+                        </div>
                       </div>
-                    )}
-                  </div>
-                )}
-              </div>
-            ))}
+                    </div>
+                  )}
+
+                  {isShowReplyList && commentID === comment._id && (
+                    <div className="mt-2 pl-10">
+                      <div className="flex items-center space-x-2">
+                        <Image
+                          src={
+                            (activeuser?.profileImage || activeCompany?.logo) ??
+                            "https://res.cloudinary.com/dq1auwpkm/image/upload/v1738735360/profile_jtwxaj.png"
+                          }
+                          alt="Profile"
+                          width={30}
+                          height={30}
+                          className="w-8 h-8 rounded-full object-cover"
+                        />
+
+                        <div className="flex-grow flex items-center border rounded-lg px-3  space-x-2 bg-gray-100">
+                          <input
+                            ref={inputRef}
+                            type="text"
+                            placeholder="Add a reply..."
+                            className="flex-grow bg-transparent focus:outline-none"
+                            onChange={handleReplyChange}
+                            value={replyText}
+                          />
+                          <button
+                            type="button"
+                            className="p-2  rounded-full"
+                            onClick={() => setShowPickerImogi((prev) => !prev)}
+                          >
+                            <span className="text-gray-500 cursor-pointer hover:text-gray-700">
+                              <FontAwesomeIcon icon={faSmile} />
+                            </span>
+                          </button>
+                          {replyText.trim() && (
+                            <button
+                              className="bg-primary  ml-2 rounded-full"
+                              onClick={() => addReply(comment._id)}
+                            >
+                              <svg
+                                xmlns="http://www.w3.org/2000/svg"
+                                viewBox="0 0 24 24"
+                                fill="white"
+                                className="size-6 p-1"
+                              >
+                                <path d="M3.478 2.404a.75.75 0 0 0-.926.941l2.432 7.905H13.5a.75.75 0 0 1 0 1.5H4.984l-2.432 7.905a.75.75 0 0 0 .926.94 60.519 60.519 0 0 0 18.445-8.986.75.75 0 0 0 0-1.218A60.517 60.517 0 0 0 3.478 2.404Z" />
+                              </svg>
+                            </button>
+                          )}
+                          {showPickerImogi && commentID === comment._id && (
+                            <OutsideClickHandler
+                              onOutsideClick={() => setShowPickerImogi(false)}
+                            >
+                              <div className="absolute z-10 w-[300px] sm:w-[250px] md:w-[350px] lg:w-[400px]  transform -translate-x-1/2">
+                                <EmojiPicker
+                                  onEmojiClick={handleEmojiClickReplay}
+                                />
+                              </div>
+                            </OutsideClickHandler>
+                          )}
+                        </div>
+                      </div>
+
+                      {replay && replay.length > 0 && (
+                        <div className="mt-4 pl-6 border-l-2 border-gray-300">
+                          {replay.map((r, index) => (
+                            <div
+                              key={`${r._id}-${index}`}
+                              className="flex flex-col space-y-2"
+                            >
+                              {editReplyId === r._id ? (
+                                <div className="flex items-center space-x-2 pl-8">
+                                  <div className="relative flex border rounded-lg px-4 py-2">
+                                    <input
+                                      type="text"
+                                      value={editReplyText}
+                                      onChange={(e) =>
+                                        setEditReplyText(e.target.value)
+                                      }
+                                      className=" px-2 py-1 rounded-lg w-full"
+                                    />
+                                    <button
+                                      type="button"
+                                      className="p-2  rounded-full"
+                                      onClick={() =>
+                                        setShowPickerImogi((prev) => !prev)
+                                      }
+                                    >
+                                      <svg
+                                        xmlns="http://www.w3.org/2000/svg"
+                                        viewBox="0 0 24 24"
+                                        fill="currentColor"
+                                        className="size-6"
+                                      >
+                                        <path
+                                          fillRule="evenodd"
+                                          d="M12 2.25c-5.385 0-9.75 4.365-9.75 9.75s4.365 9.75 9.75 9.75 9.75-4.365 9.75-9.75S17.385 2.25 12 2.25Zm-2.625 6c-.54 0-.828.419-.936.634a1.96 1.96 0 0 0-.189.866c0 .298.059.605.189.866.108.215.395.634.936.634.54 0 .828-.419.936-.634.13-.26.189-.568.189-.866 0-.298-.059-.605-.189-.866-.108-.215-.395-.634-.936-.634Zm4.314.634c.108-.215.395-.634.936-.634.54 0 .828.419.936.634.13.26.189.568.189.866 0 .298-.059.605-.189.866-.108.215-.395.634-.936.634-.54 0-.828-.419-.936-.634a1.96 1.96 0 0 1-.189-.866c0-.298.059-.605.189-.866Zm2.023 6.828a.75.75 0 1 0-1.06-1.06 3.75 3.75 0 0 1-5.304 0 .75.75 0 0 0-1.06 1.06 5.25 5.25 0 0 0 7.424 0Z"
+                                          clipRule="evenodd"
+                                        />
+                                      </svg>
+                                    </button>
+                                  </div>
+                                  <button
+                                    onClick={() =>
+                                      handleUpdateReply(r._id, comment._id)
+                                    }
+                                    className="bg-green-500 text-white px-3 py-1 rounded-lg text-sm hover:bg-green-600"
+                                  >
+                                    Save
+                                  </button>
+                                  <button
+                                    onClick={() => {
+                                      setEditReplyId(null);
+                                      setIsOptionsMenuOpen(null);
+                                    }}
+                                    className="bg-gray-400 text-white px-3 py-1 rounded-lg text-sm hover:bg-gray-500"
+                                  >
+                                    Cancel
+                                  </button>
+                                </div>
+                              ) : (
+                                <div className="flex items-start justify-center p-1 ">
+                                  <div className="w-8 h-8">
+                                    <Image
+                                      src={
+                                        r.user
+                                          ? "profileImage" in r.user &&
+                                            r.user.profileImage
+                                            ? r.user.profileImage
+                                            : r.user.logo ||
+                                              "https://res.cloudinary.com/dq1auwpkm/image/upload/v1738735360/profile_jtwxaj.png"
+                                          : "https://res.cloudinary.com/dq1auwpkm/image/upload/v1738735360/profile_jtwxaj.png"
+                                      }
+                                      alt=" Profile"
+                                      width={30}
+                                      height={30}
+                                      className="w-full h-full rounded-full object-cover"
+                                    />
+                                  </div>
+
+                                  <div className="flex-grow">
+                                    <div className="flex justify-between">
+                                      <div className="px-2">
+                                        <h3 className="font-semibold text-sm">
+                                          {r.user && typeof r.user === "object"
+                                            ? "firstName" in r.user
+                                              ? `${r.user.firstName} ${
+                                                  r.user.lastName || ""
+                                                }`
+                                              : r.user.name|| "Unknown User"
+                                            : "Unknown User"}
+                                        </h3>
+                                        <p className="text-gray-700">
+                                          {r.reply}
+                                        </p>
+                                      </div>
+                                      <div className="text-gray-500 text-xs">
+                                        {dayjs(r.updatedAt).fromNow()}
+                                      </div>
+                                    </div>
+                                  </div>
+                                  <div className="flex flex-col items-end ">
+                                    <div className=" flex justify-between ">
+                                      <button
+                                        className="text-gray-500 hover:text-gray-700   text-xl"
+                                        onClick={() => toggleOptionsMenu(r._id)}
+                                      >
+                                        <BsThreeDots />
+                                      </button>
+
+                                      {isOptionsMenuOpen === r._id && (
+                                        <OutsideClickHandler
+                                          onOutsideClick={() =>
+                                            setIsOptionsMenuOpen(null)
+                                          }
+                                        >
+                                          <div className="absolute right-0 mt-2 w-32 bg-white border border-gray-300 rounded-lg shadow-md">
+                                            <button
+                                              onClick={() =>
+                                                handleEditReply(r._id, r.reply)
+                                              }
+                                              className="block w-full text-gray-700 text-sm py-2 px-4 hover:bg-gray-100"
+                                            >
+                                              Edit
+                                            </button>
+                                            <button
+                                              onClick={() =>
+                                                handleDeleteReply(
+                                                  r._id,
+                                                  comment._id
+                                                )
+                                              }
+                                              className="block w-full text-red-500 text-sm py-2 px-4 hover:bg-gray-100"
+                                            >
+                                              Delete
+                                            </button>
+                                          </div>
+                                        </OutsideClickHandler>
+                                      )}
+                                    </div>
+                                    <div></div>
+                                  </div>
+                                </div>
+                              )}
+                            </div>
+                          ))}
+                        </div>
+                      )}
+                    </div>
+                  )}
+                </div>
+              ))}
         </section>
       </section>
     </>

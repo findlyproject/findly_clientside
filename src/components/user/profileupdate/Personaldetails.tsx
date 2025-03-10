@@ -5,11 +5,11 @@ import { useAppDispatch, useAppSelector } from "@/lib/store/hooks";
 import {
   setImages,
   setPersonalDetails,
-  UserProfile,
+  
 } from "@/lib/store/features/userSlice";
 import api from "@/utils/api";
 import { toast } from "react-toastify";
-
+import { User } from "@/types/Types";
 interface PersonaldetailsProps {
     loading: (isLoading: boolean) => void;
   }
@@ -31,7 +31,7 @@ interface input {
 function Personaldetails({ loading }: PersonaldetailsProps) {
     console.log("props =",loading);
     
-  const user = useAppSelector((state) => state.user.activeuser as UserProfile);
+  const user = useAppSelector((state) => state.user.activeuser as User);
   console.log("activuser", user);
 
   const [input, setInput] = useState<input>({
