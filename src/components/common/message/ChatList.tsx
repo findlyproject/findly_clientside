@@ -92,9 +92,9 @@ export const ChatList=()=> {
 console.log("selectedUser",selectedUser);
 
   return (
-    <div className="flex h-screen">
+    <div className="flex h-screen ">
       {/* Sidebar - List of Users */}
-      <aside className="w-1/4 bg-gray-100 border-r overflow-y-auto">
+      <aside className="w-1/4 bg-gray-100 border-r overflow-y-auto ">
         <div className="p-4">
           <h2 className="text-lg font-semibold">Users</h2>
           <div className="space-y-4 mt-4">
