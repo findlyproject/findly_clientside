@@ -8,34 +8,32 @@ import { useAppDispatch, useAppSelector } from "@/lib/store/hooks";
 
 import React, { useState, ChangeEvent, useEffect } from "react";
 import { toast } from "react-toastify";
-import { FilesState } from "@/types/Types";
+
+interface FilesState {
+  resume?: File | null;
+  introductionVideo?: File | null;
+}
+
+const MAX_RESUME_SIZE = 5 * 1024 * 1024; // 5MB
+const MAX_VIDEO_SIZE = 50 * 1024 * 1024; // 50MB
 
 const FileUpload = () => {
-  const dispatch = useAppDispatch();
   const resumePdf = useAppSelector((state) => state.user.activeuser?.resumePDF);
-  const resumevideo = useAppSelector(
-    (state) => state.user.activeuser?.resumeVideo
-  );
+  const resumevideo = useAppSelector((state) => state.user.activeuser?.resumeVideo);
 
-  const [files, setFiles] = useState<FilesState>({
-    resume: null,
-    introductionVideo: null,
-  });
+  const dispatch = useAppDispatch();
 
-  const [loading, setLoading] = useState<boolean>(false);
+  const [files, setFiles] = useState<FilesState>({});
   const [errorMessage, setErrorMessage] = useState<string>("");
-  const [modalContent, setModalContent] = useState<string | null>(null);
-  const [isModalOpen, setIsModalOpen] = useState<boolean>(false);
+  const [previewUrl, setPreviewUrl] = useState<string | null>(null);
+  const [activeTab, setActiveTab] = useState("resume");
 
   useEffect(() => {
-    setFiles({
-      resume: resumePdf?.[0]
-        ? new File([""], "Existing Resume.pdf", { type: "application/pdf" })
-        : null,
-      introductionVideo: resumevideo?.[0]
-        ? new File([""], "Existing Video.mp4", { type: "video/mp4" })
-        : null,
-    });
+    if (resumePdf?.[0]) {
+      setPreviewUrl(resumePdf.fileUrl);
+    } else if (resumevideo?.[0]) {
+      setPreviewUrl(resumevideo.fileUrl);
+    }
   }, [resumePdf, resumevideo]);
 
   const handleFileUpload = (
@@ -43,154 +41,244 @@ const FileUpload = () => {
     type: keyof FilesState
   ) => {
     const selectedFile = event.target.files ? event.target.files[0] : null;
-    if (selectedFile) {
-      setFiles((prevFiles) => ({ ...prevFiles, [type]: selectedFile }));
-    }
+    if (!selectedFile) return;
+
+    const isValid = validateFile(selectedFile, type);
+    if (!isValid) return;
+
+    setFiles((prevFiles) => ({ ...prevFiles, [type]: selectedFile }));
+    setPreviewUrl(URL.createObjectURL(selectedFile));
   };
 
-  const handleUpload = async () => {
-    const formData = new FormData();
+  const validateFile = (file: File, type: keyof FilesState) => {
+    const allowedExtensions =
+      type === "resume" ? [".pdf"] : [".mp4", ".mov", ".avi"];
+    const maxSize = type === "resume" ? MAX_RESUME_SIZE : MAX_VIDEO_SIZE;
 
-    const { resume, introductionVideo } = files;
-    if (!resume && !introductionVideo) {
+    const fileExtension = file.name
+      .slice(file.name.lastIndexOf("."))
+      .toLowerCase();
+    if (!allowedExtensions.includes(fileExtension)) {
+      setErrorMessage(
+        `Invalid file type. Allowed: ${allowedExtensions.join(", ")}`
+      );
+      return false;
+    }
+
+    if (file.size > maxSize) {
+      setErrorMessage(
+        `File size exceeds limit. Max: ${maxSize / 1024 / 1024}MB`
+      );
+      return false;
+    }
+
+    setErrorMessage("");
+    return true;
+  };
+
+  const handleUpload = async (e: React.FormEvent) => {
+    e.preventDefault();
+    if (!files.resume && !files.introductionVideo) {
       setErrorMessage("Please select a file to upload");
       return;
     }
 
-    if (resume) formData.append("resume", resume);
-    if (introductionVideo) formData.append("video", introductionVideo);
+    const formData = new FormData();
+    if (files.resume) formData.append("resume", files.resume);
+    if (files.introductionVideo)
+      formData.append("video", files.introductionVideo);
 
     try {
-      setLoading(true);
       setErrorMessage("");
       const result = await dispatch(postresume(formData));
 
-      setFiles({ resume: null, introductionVideo: null });
       if (result.type === "post/resume/fulfilled") {
-        toast.success("resume uploaded");
+        toast.success("File uploaded successfully");
+        setFiles({ resume: null, introductionVideo: null });
+        setPreviewUrl(null);
       }
     } catch (error) {
       setErrorMessage("An error occurred during the upload.");
       console.error("Upload Error:", error);
     } finally {
-      setLoading(false);
     }
-  };
-
-  const openModal = (type: "resume" | "introductionVideo") => {
-    if (type === "resume" && resumePdf?.[0]) {
-      setModalContent(resumePdf[0].fileUrl);
-    } else if (type === "introductionVideo" && resumevideo?.[0]) {
-      setModalContent(resumevideo[0].fileUrl);
-    }
-    setIsModalOpen(true);
-  };
-
-  const closeModal = () => {
-    setIsModalOpen(false);
-    setModalContent(null);
   };
 
   const handleRemoveResume = async (type: string) => {
     const removeResult = await dispatch(removeResume(type));
     if (removeResult.type === "remove/resume/fulfilled") {
       setFiles({ resume: null, introductionVideo: null });
+      setPreviewUrl(null);
     }
   };
 
   return (
-    <div className="flex flex-col items-center justify-center h-screen p-10 bg-gray-100">
-      <div className="flex flex-col gap-6 w-full max-w-lg p-6 bg-white shadow-lg rounded-lg">
-        <h2 className="text-xl font-bold text-center">Upload Your Files</h2>
-
-        {(["resume", "introductionVideo"] as (keyof FilesState)[]).map(
-          (type) => (
-            <div
-              key={type}
-              className="p-6 border rounded-lg shadow-md text-center"
+      <div className="mx-auto w-full rounded-md bg-white">
+        <form className="py-6 px-9" onSubmit={handleUpload}>
+          {/* Tabs */}
+          <div className="mb-5 flex justify-around">
+            <p
+              onClick={() => setActiveTab("resume")}
+              className={`cursor-pointer ${
+                activeTab === "resume"
+                  ? "text-primary font-bold"
+                  : "text-gray-500"
+              }`}
             >
-              {files[type] ||
-              (type === "resume" && resumePdf?.length) ||
-              (type === "introductionVideo" && resumevideo?.length) ? (
-                <div>
-                  <p className="text-sm font-semibold">
-                    {files[type]?.name || "Uploaded File"}
-                  </p>
-                  <div className="flex justify-center gap-4 mt-2">
-                    <button
-                      className="px-4 py-2 bg-blue-500 text-white rounded hover:bg-blue-600"
-                      onClick={() => openModal(type)}
-                    >
-                      View {type}
-                    </button>
-                    <button
-                      className="px-4 py-2 bg-red-500 text-white rounded hover:bg-red-600"
-                      onClick={() => handleRemoveResume(type)}
-                    >
-                      Remove {type}
-                    </button>
-                  </div>
-                </div>
-              ) : (
-                <label className="cursor-pointer flex flex-col items-center p-6 border-2 border-dashed rounded-lg hover:bg-gray-100">
-                  <span className="text-sm font-semibold">
-                    Upload{" "}
-                    {type === "resume" ? "Resume (PDF)" : "Introduction Video"}
-                  </span>
-                  <input
-                    type="file"
-                    accept={type === "resume" ? ".pdf" : "video/*"}
-                    className="hidden"
-                    onChange={(e) => handleFileUpload(e, type)}
-                    disabled={loading}
-                  />
-                </label>
-              )}
-            </div>
-          )
-        )}
-
-        {errorMessage && (
-          <p className="text-red-500 text-center mt-4">{errorMessage}</p>
-        )}
-
-        <button
-          className="mt-6 px-6 py-2 bg-blue-500 text-white rounded-lg hover:bg-blue-600"
-          onClick={handleUpload}
-          disabled={loading}
-        >
-          {loading ? "Uploading..." : "Upload Files"}
-        </button>
-      </div>
-
-      {isModalOpen && modalContent && (
-        <div className="fixed inset-0 bg-black bg-opacity-50 flex justify-center items-center z-50">
-          <div className="bg-white p-6 rounded-lg w-3/4 max-w-2xl">
-            <button
-              className="absolute top-2 right-2 text-lg font-bold"
-              onClick={closeModal}
+              Resume
+            </p>
+            <p
+              onClick={() => setActiveTab("video")}
+              className={`cursor-pointer ${
+                activeTab === "video"
+                  ? "text-primary font-bold"
+                  : "text-gray-500"
+              }`}
             >
-              X
-            </button>
-            {modalContent.includes(".pdf") ? (
-              <iframe
-                className="text-black"
-                src={`https://docs.google.com/gview?url=${modalContent}&embedded=true`}
-                width="100%"
-                height="500px"
-                style={{ border: "none" }}
-              />
+              Video
+            </p>
+          </div>
+
+          {/* File Upload Section */}
+          <div className="mb-6 pt-4">
+            {activeTab === "resume" ? (
+              <>
+                <>
+                  {files.resume || (resumePdf && resumePdf.length > 0) ? (
+                    <div>
+                      <p className="text-sm font-semibold">
+                        {files.resume?.name || resumePdf[0]?.fileName}
+                      </p>
+                      <iframe
+                        src={files.resume ? previewUrl : resumePdf[0]?.fileUrl}
+                        title="Resume Preview"
+                        width="400px"
+                        height="400px"
+                        className="border border-gray-300 bg-gray-100"
+                      />
+                      <div className="flex justify-between items-center mt-3">
+                        <button
+                          type="button"
+                          className="bg-red-500 text-white py-2 px-6 rounded-md hover:bg-red-600 transition"
+                          onClick={() => handleRemoveResume("resume")}
+                        >
+                          Remove
+                        </button>
+                        <button
+                          type="submit"
+                          className="bg-primary py-2 px-6 text-white font-semibold rounded-md hover:bg-blue-600 transition"
+                        >
+                          Upload File
+                        </button>
+                      </div>
+                    </div>
+                  ) : (
+                    <FileInput
+                      accept=".pdf"
+                      onChange={(e) => handleFileUpload(e, "resume")}
+                    />
+                  )}
+                </>
+              </>
             ) : (
-              <video controls width="100%" height="500px">
-                <source src={modalContent} type="video/mp4" />
-                Your browser does not support the video tag.
-              </video>
+              <>
+                {files.introductionVideo ||
+                (resumevideo && resumevideo.length > 0) ? (
+                  <>
+                  <div>
+                    <p className="text-sm font-semibold">
+                      {files.introductionVideo?.name ||
+                        resumevideo[0]?.fileName}
+                    </p>
+                    <video
+                      controls
+                      width="400px"
+                      height="100%"
+                      className="border border-gray-300 bg-gray-100"
+                    >
+                      <source
+                        src={
+                          files.introductionVideo
+                            ? previewUrl
+                            : resumevideo[0]?.fileUrl
+                        }
+                        type="video/mp4"
+                      />
+                    </video>
+                    </div>
+                    
+                    <div className="flex justify-between items-center mt-3">
+                        <button
+                          type="button"
+                          className="bg-red-500 text-white py-2 px-6 rounded-md hover:bg-red-600 transition"
+                          onClick={() => handleRemoveResume("introductionVideo")}
+                        >
+                          Remove
+                        </button>
+                        <button
+                          type="submit"
+                          className="bg-primary py-2 px-6 text-white font-semibold rounded-md hover:bg-blue-600 transition"
+                        >
+                          Upload File
+                        </button>
+                      </div>
+                    
+                    </>
+                  
+                ) : (
+                  <FileInput
+                    accept="video/*"
+                    onChange={(e) => handleFileUpload(e, "introductionVideo")}
+                  />
+                )}
+              </>
             )}
           </div>
-        </div>
-      )}
-    </div>
+
+          {/* Submit Button */}
+
+          {/* Error Message */}
+          {errorMessage && (
+            <p className="text-red-500 text-center mt-4">{errorMessage}</p>
+          )}
+        </form>
+      </div>
   );
 };
+
+const FileInput = ({
+  accept,
+  onChange,
+}: {
+  accept: string;
+  onChange: (e: ChangeEvent<HTMLInputElement>) => void;
+}) => (
+  <div>
+    <label className="mb-5 block text-xl font-semibold text-[#07074D]">
+      Upload File
+    </label>
+    <div className="mb-8">
+      <label className="relative flex h-[400px] w-[400px] items-center justify-center rounded-md border border-dashed border-[#e0e0e0] p-12 text-center">
+        <input
+          type="file"
+          accept={accept}
+          onChange={onChange}
+          className="sr-only"
+        />
+        <div>
+          <span className="mb-2 block text-xl font-semibold text-[#07074D]">
+            Drop files here
+          </span>
+          <span className="mb-2 block text-base font-medium text-[#6B7280]">
+            Or
+          </span>
+          <span className="inline-flex rounded border border-[#e0e0e0] py-2 px-7 text-base font-medium text-[#07074D]">
+            Browse
+          </span>
+        </div>
+      </label>
+    </div>
+  </div>
+);
 
 export default FileUpload;

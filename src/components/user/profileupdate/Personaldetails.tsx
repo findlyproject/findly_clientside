@@ -1,6 +1,5 @@
 import React, { useState } from "react";
 import Image from "next/image";
-import { FaRegEdit } from "react-icons/fa";
 import { useAppDispatch, useAppSelector } from "@/lib/store/hooks";
 import {
   setImages,
@@ -10,30 +9,37 @@ import {
 import api from "@/utils/api";
 import { toast } from "react-toastify";
 import { User } from "@/types/Types";
-import { PersonaldetailsProps,ImageType } from "@/types/Types";
-// interface input {
-//     firstName: string | undefined;
-//     lastName: string | undefined;
-//     email: string | undefined;
-//     phoneNumber: string | undefined | number;
-//     dateOfBirth: Date | undefined |number ;
-//     about: string | undefined;
-// }
+interface PersonaldetailsProps {
+    loading: (isLoading: boolean) => void;
+  }
+interface ImageType {
+    profileImage: string | File | undefined;
+    banner: string | File | undefined;
+}
+
+interface input {
+    firstName: string | undefined;
+    lastName: string | undefined;
+    email: string | undefined;
+    phoneNumber: string | undefined | number;
+    dateOfBirth: Date | undefined |number ;
+    about: string | undefined;
+    gender:string |undefined
+}
 
 
 function Personaldetails({ loading }: PersonaldetailsProps) {
-    console.log("props =",loading);
     
   const user = useAppSelector((state) => state.user.activeuser as User);
-  console.log("activuser", user);
 
-  const [input, setInput] = useState<Partial<User>>({
+  const [input, setInput] = useState<input>({
     firstName: user.firstName,
     lastName: user.lastName,
     email: user.email,
     phoneNumber: user.phoneNumber,
     dateOfBirth: user.dateOfBirth,
     about: user.about,
+    gender:user.gender
   });
 
   const [image, setImage] = useState<ImageType>({
@@ -150,7 +156,10 @@ function Personaldetails({ loading }: PersonaldetailsProps) {
           onChange={handilImage}
         />
         <button onClick={() => document.getElementById("bannerUpload")?.click()}>
-          <FaRegEdit className="absolute top-5 right-5 text-white bg-gray-800 p-2 rounded-full cursor-pointer text-4xl" />
+          <div className="absolute top-5 right-5 text-back bg-gray-100 p-1 rounded-full cursor-pointer text-4xl"><svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" className="size-5">
+  <path stroke-linecap="round" stroke-linejoin="round" d="M6.827 6.175A2.31 2.31 0 0 1 5.186 7.23c-.38.054-.757.112-1.134.175C2.999 7.58 2.25 8.507 2.25 9.574V18a2.25 2.25 0 0 0 2.25 2.25h15A2.25 2.25 0 0 0 21.75 18V9.574c0-1.067-.75-1.994-1.802-2.169a47.865 47.865 0 0 0-1.134-.175 2.31 2.31 0 0 1-1.64-1.055l-.822-1.316a2.192 2.192 0 0 0-1.736-1.039 48.774 48.774 0 0 0-5.232 0 2.192 2.192 0 0 0-1.736 1.039l-.821 1.316Z" />
+  <path stroke-linecap="round" stroke-linejoin="round" d="M16.5 12.75a4.5 4.5 0 1 1-9 0 4.5 4.5 0 0 1 9 0ZM18.75 10.5h.008v.008h-.008V10.5Z" />
+</svg></div>
         </button>
 
         <div className="absolute top-24 left-5 flex flex-col items-center">
@@ -179,7 +188,12 @@ function Personaldetails({ loading }: PersonaldetailsProps) {
           <button
             onClick={() => document.getElementById("profileUpload")?.click()}
           >
-            <FaRegEdit className="absolute top-20 left-24 text-white bg-gray-800 p-2 rounded-full cursor-pointer text-3xl" />
+            
+            <div className="absolute top-24 left-24 text-black bg-gray-100 p-1 rounded-full cursor-pointer text-3xl"><svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" className="size-5">
+  <path stroke-linecap="round" stroke-linejoin="round" d="M6.827 6.175A2.31 2.31 0 0 1 5.186 7.23c-.38.054-.757.112-1.134.175C2.999 7.58 2.25 8.507 2.25 9.574V18a2.25 2.25 0 0 0 2.25 2.25h15A2.25 2.25 0 0 0 21.75 18V9.574c0-1.067-.75-1.994-1.802-2.169a47.865 47.865 0 0 0-1.134-.175 2.31 2.31 0 0 1-1.64-1.055l-.822-1.316a2.192 2.192 0 0 0-1.736-1.039 48.774 48.774 0 0 0-5.232 0 2.192 2.192 0 0 0-1.736 1.039l-.821 1.316Z" />
+  <path stroke-linecap="round" stroke-linejoin="round" d="M16.5 12.75a4.5 4.5 0 1 1-9 0 4.5 4.5 0 0 1 9 0ZM18.75 10.5h.008v.008h-.008V10.5Z" />
+</svg></div>
+
           </button>
         </div>
       </div>
@@ -247,6 +261,21 @@ function Personaldetails({ loading }: PersonaldetailsProps) {
               className="p-2 border rounded-md"
             />
           </div>
+          <div className="grid gap-3">
+            <label>Gender</label>
+            <select
+              type="name"
+              name="gender"
+              value={input.gender}
+              onChange={handilchange}
+              className="p-2 border rounded-md"
+            >
+              <option>Choose your Gender</option> 
+              <option name="male">Male</option> 
+              <option name="female">Female</option> 
+              <option name="other">Other</option> 
+
+              </select>         </div>
         </div>
         <div className="grid gap-3">
           <label>About</label>
