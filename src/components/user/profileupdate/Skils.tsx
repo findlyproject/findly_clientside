@@ -1,5 +1,6 @@
 import { setRemovskils, setskils } from '@/lib/store/features/userSlice';
 import { useAppDispatch, useAppSelector } from '@/lib/store/hooks';
+import { User } from '@/types/Types';
 import React, { useState } from 'react'
 import { RxCross2 } from 'react-icons/rx';
 
@@ -18,17 +19,17 @@ const skillsList = [
 ];
 function Skils() {
   const dispatch = useAppDispatch()
-  const user = useAppSelector((state)=>state.user.activeuser)
+  const user = useAppSelector((state)=>state.user.activeuser as User)
      const [selectedSkill, setSelectedSkill] = useState("");
     
       const handleAddSkill = () => {
-        if (selectedSkill && !user.skills.includes(selectedSkill)) {
+        if (selectedSkill && !user.skills?.includes(selectedSkill)) {
           dispatch(setskils(selectedSkill))
           setSelectedSkill(""); 
         }
       };
     
-      const handleRemoveSkill = (index) => {
+      const handleRemoveSkill = (index:number) => {
         dispatch(setRemovskils(index))
       };
     
@@ -62,11 +63,11 @@ function Skils() {
       </div>
 
       {/* Display Added Skills */}
-      {user.skills.length > 0 && (
+      {user.skills&&user.skills.length > 0 && (
         <div className="mt-4">
           <h3 className="text-lg font-medium text-gray-700 mb-2">Added Skills:</h3>
           <ul className="flex flex-wrap gap-2">
-            {user.skills.map((skill, index) => (
+            {user.skills?.map((skill, index) => (
               <li
                 key={index}
                 className="bg-blue-100 text-blue-800 px-3 py-1 rounded-full flex items-center gap-2 font-medium"

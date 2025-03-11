@@ -1,10 +1,8 @@
 import React from "react";
 import { AddPost } from "./AddPost";
 import { PostsList } from "./PostsList";
-export interface propspsts{
-  loadMorePosts:()=>void,
-  loading:boolean
-}
+import { propspsts } from "@/types/Types";
+
 export const Posts:React.FC<propspsts> = ({loadMorePosts,loading}) => {
   console.log("loadMorePosts",loadMorePosts);
   

@@ -6,7 +6,7 @@ import { Url } from "url";
 export type SelectChangeEvent = React.ChangeEvent<HTMLSelectElement>;
 export type InputChangeEvent = React.ChangeEvent<HTMLInputElement>;
 export type formChangeEvent=React.FormEvent<HTMLFormElement>
-export type ChangeEventType = React.ChangeEvent<HTMLInputElement | HTMLSelectElement>;
+export type ChangeEventType = React.ChangeEvent<HTMLInputElement | HTMLSelectElement|HTMLTextAreaElement>;
 
 export interface EducationType {  
   college: string;  
@@ -110,7 +110,8 @@ export interface User{
   projects?: {
     title: string;
     description: string;
-    link?: string | Url | undefined;
+    // link?: string | Url | undefined;
+    link?: string 
   }[];
 
   connecting: Connection[]
@@ -136,6 +137,20 @@ export interface User{
   isBlocked?: boolean;
   _id: string;
 }
+
+
+ export interface PersonaldetailsProps {
+  loading: (isLoading: boolean) => void;
+}
+export interface ImageType {
+  profileImage: string | File | undefined;
+  banner: string | File | undefined;
+}
+export interface FilesState {
+  resume: File | null;
+  introductionVideo: File | null;
+}
+
 
 export interface Company {
   _id: string;
@@ -215,6 +230,7 @@ export interface DeleteAccountProps {
 
 }
 
+//subscription
 export interface Subscription {
   clientSecret: string;
   features: string[];
@@ -229,6 +245,16 @@ export interface Subscription {
   active:boolean;
 }
 
+
+export interface Plan {
+  id: number;
+  name: string;
+  price: number;
+  features: string[];
+  popular?: boolean;
+  bgColor: string;
+}
+
 export interface Rating {
   _id: string;
   review: string;
@@ -241,4 +267,210 @@ export interface Rating {
     profileImage?: string; 
     jobTitle?: string; 
   };
+}
+
+
+//admin
+
+export interface SkillType{
+  _id:string
+  name:string
+  status:boolean
+}
+
+export interface TitleType{
+  _id:string
+  name:string
+  status:boolean
+}
+
+export interface Admin {
+  email:string
+  firstName:string
+  lastName:string
+  phoneNumber:string
+  profileImage:string
+  bio:string
+ 
+}
+
+
+//community
+
+
+export interface MessageType{
+  _id:string;
+  sender:string;
+  receiver:string;
+  seen:boolean;
+  isDeleted:boolean;
+  message:string;
+  timestamp:Date;
+
+}
+
+export interface MemberType{
+  _id:string;
+  memberId:{
+      _id:string;
+      firstName:string;
+      lastName:string;
+      profileImage:string;
+      logo:string;
+      name:string
+  }
+  memberModel:string;
+}
+export interface CommunityMessage{
+  _id:string;
+  communityId:string;
+  sender:{
+      _id:string;
+      profileImage:string;
+      logo:string;
+      firstName:string;
+      lastName:string;
+      name:string;
+  }
+  senderModel:string;
+  message:string;
+  isDelete:boolean;
+  type:string;
+  timestamp:Date
+}
+export interface Community {
+_id: string;
+name: string;
+description: string;
+profile: string;
+members: MemberType[];
+createdBy:{
+  _id:string;
+  name:string
+};
+isDeleted:boolean;
+createdAt:string;
+updatedAt:string;
+
+}
+
+
+//post
+
+export interface IReport {
+  _id: string; 
+  reportedBy:User;
+  reason:string;
+  isDeleted:boolean;  
+  createdAt:Date;
+  updatedAt:Date;
+  
+  }
+  
+  export interface IReply {
+    _id: string;
+    user: User|Company | null;
+    reply: string;
+    repliedAt?: Date;
+    isDeleted: boolean;
+    updatedAt:Date
+   
+  }
+  
+  export interface IComment {
+    _id: string;
+    user: User | Company  | null;
+    comment: string;
+    replies: IReply[];  
+    isDeleted: boolean;
+    createdAt:Date;
+    updatedAt:Date
+  
+  }
+
+   export interface CommentsProps {
+    postId: string;
+    comments: IComment[];
+  }
+  export interface PostPreviewProps {
+    post: IPost;
+  }
+  export interface ISavePost{
+    _id:string
+    description:string
+    images?:string[]
+    video?:string
+    postId:string
+  }
+  
+  export interface IPost {
+    _id: string;
+    description?: string;
+    images?:string [];
+    video?:string;
+    owner: User |null
+    likedBy?: User[];
+    reports?:  IReport[]| null|undefined;
+    comments?:  IComment[] ;
+    isDeleted?: boolean;
+    createdAt?: string;
+    updatedAt?: string;
+  }
+  export interface UpdatePostProps {
+    post: IPost;
+    setIsUpdateOpen: React.Dispatch<React.SetStateAction<boolean>>;
+  }
+
+  export interface propspsts{
+    loadMorePosts:()=>void,
+    loading:boolean
+  }
+  export interface SavePost{
+  _id:string;
+  images:string[];
+  video:string;
+  description:string
+  postId:{
+     _id:string
+     images:string[];
+     video:string;
+     description:string
+
+  }
+  userId:{
+    _id:string
+    firstName:string;
+    profileImage:string
+
+  }
+  timestamp:Date
+}
+
+export interface ReportPostModalType{
+  postId:string;
+  onClose:()=>void
+}
+
+//notification
+export interface Notifications {
+  id: number;
+  type: string;
+  user: {
+    name: string;
+    avatar?: string;
+    initials?: string;
+    color?: string;
+  };
+  action: string;
+  target?: string;
+  time: string;
+  category?: string;
+  unread: boolean;
+  requiresAction?: boolean;
+  file?: {
+    name: string;
+    size: string;
+  };
+  followUp?: string;
+  secretKey?: string;
 }

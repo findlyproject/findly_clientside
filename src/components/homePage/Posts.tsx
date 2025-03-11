@@ -1,14 +1,14 @@
 "use client";
-import { IPost, ISavePost, setSaved } from "@/lib/store/features/postSlice";
+import { setSaved } from "@/lib/store/features/postSlice";
 import { useAppDispatch, useAppSelector } from "@/lib/store/hooks";
 import api from "@/utils/api";
 import React, { useState, useEffect } from "react";
-
+import { IPost, SavePost } from "@/types/Types";
 export const  Posts=()=> {
   const [activeTab, setActiveTab] = useState("saved");
-  const [posts, setPosts] = useState([]);
-  const [userPosts, setUserposts] = useState([]);
-  const [savedPosts, setsavedPosts] = useState([]);
+  const [posts, setPosts] = useState<SavePost[]>([]);
+  const [userPosts, setUserposts] = useState<SavePost[]>([]);
+  const [savedPosts, setsavedPosts] = useState<SavePost[]>([]);
   const save=useAppSelector(state=>state.post.saved)
 const dispatch=useAppDispatch()
 

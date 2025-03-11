@@ -62,7 +62,7 @@ const CreatePost = () => {
     event.preventDefault();
 
     dispatch(addPostByUser({ description, mediaFiles: selectedFiles }));
-    dispatch(fetchAllPosts());
+    dispatch(fetchAllPosts(1));
     setDescription("");
     setSelectedFiles([]);
     setPreviewImages([]);

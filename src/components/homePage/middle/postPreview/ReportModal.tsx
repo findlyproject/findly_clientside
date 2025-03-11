@@ -2,8 +2,10 @@
 
 import { useState } from "react";
 import api from "@/utils/api";
+import { ReportPostModalType } from "@/types/Types";
 
-export const ReportPostModal = ({ postId, onClose }) => {
+
+export const ReportPostModal: React.FC<ReportPostModalType> = ({ postId, onClose })=> {
   const [reason, setReason] = useState("");
 
   const handleSubmit = async () => {

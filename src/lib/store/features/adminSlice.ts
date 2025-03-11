@@ -1,36 +1,20 @@
-
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
-import { companyData } from "./companyslice";
-import { Rating } from "./ratingSlice";
-import { UserProfile } from "./userSlice";
+import { Company, SkillType, TitleType, Admin, User, Rating } from "@/types/Types";
 
-export interface SkillType{
-  _id:string
-  name:string
-  status:boolean
+interface AdminState {
+  admin: Admin | null;
+  skills: SkillType[];
+  titles: TitleType[];
+  companies: Company[];
 }
 
-export interface TitleType{
-  _id:string
-  name:string
-  status:boolean
-}
 
-export interface AdminProfile {
-  email:string
-  firstName:string
-  lastName:string
-  phoneNumber:string
-  profileImage:string
-  bio:string
- 
-}
  interface AdminState{
-admin:AdminProfile|null
+admin:Admin|null
 skills:SkillType[]
 titles:TitleType[]
-companies:companyData[]
-users:UserProfile[]
+companies:Company[]
+users:User[]
 reviews:Rating[]
  }
 const initialState: AdminState = {
@@ -49,16 +33,16 @@ const adminSlice = createSlice({
     setAdmin: (state,action) => {
       state.admin = action.payload
     },
-    setSkills:(state,action:PayloadAction<SkillType[]>)=>{
-      state.skills=action.payload
+    setSkills: (state, action: PayloadAction<SkillType[]>) => {
+      state.skills = action.payload;
     },
-    setJOBTitles:(state,action:PayloadAction<TitleType[]>)=>{
-      state.titles=action.payload
+    setJOBTitles: (state, action: PayloadAction<TitleType[]>) => {
+      state.titles = action.payload;
     },
-    setCompanies:(state,action:PayloadAction<companyData[]>)=>{
-      state.companies=action.payload
+    setCompanies: (state, action: PayloadAction<Company[]>) => {
+      state.companies = action.payload;
     },
-    setUsers:(state,action:PayloadAction<UserProfile[]>)=>{
+    setUsers:(state,action:PayloadAction<User[]>)=>{
           state.users=action.payload
     },
     setReviews:(state,action)=>{

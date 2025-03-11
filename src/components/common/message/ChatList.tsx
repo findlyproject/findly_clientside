@@ -7,13 +7,13 @@ import api, { socket } from "@/utils/api";
 import { useAppDispatch, useAppSelector } from "@/lib/store/hooks";
 import { FaEllipsisV } from "react-icons/fa";
 import { findnMembers } from "@/lib/store/features/actions/communityActions";
-
+import { Connection, MessageType } from "@/types/Types";
 export const ChatList=()=> {
   const dispatch=useAppDispatch()
-  const [selectedUser, setSelectedUser] = useState(null);
+  const [selectedUser, setSelectedUser] = useState<Connection|null>(null);
   const [message, setMessage] = useState("");
-  const [messages, setMessages] = useState([]);
-  const [members, setMembers] = useState([]);
+  const [messages, setMessages] = useState<MessageType[]>([]);
+  const [members, setMembers] = useState<Connection[]>([]);
   
   const activeuser = useAppSelector((state) => state.user.activeuser);
 
@@ -48,7 +48,7 @@ export const ChatList=()=> {
     fetchMessages();
   }, [selectedUser, activeuser?._id]);
   
-  const handleUserSelect = (user) => {
+  const handleUserSelect = (user:Connection) => {
     console.log("user....",user)
     setSelectedUser(user);
     setMessages([]); 
@@ -58,7 +58,7 @@ export const ChatList=()=> {
   // Send Message
   const handleSendMessage = async () => {
     const response = await api.post(
-      `/message/send/${activeuser._id}/${selectedUser.connectionID._id}`,
+      `/message/send/${activeuser?._id}/${selectedUser?.connectionID._id}`,
       { message: message }
     );
     console.log("responseresponse", response);
@@ -109,13 +109,13 @@ console.log("selectedUser",selectedUser);
                 onClick={() => handleUserSelect(chat)}
               >
                 <img
-                  src={chat.connectionID.profileImage}
+                  src={chat.connectionID?.profileImage}
                   alt="User"
                   className="w-10 h-10 rounded-full"
                 />
                 <div className="ml-3">
                   <h2 className="text-sm font-semibold">
-                    {chat.connectionID.firstName}
+                    {chat.connectionID?.firstName}
                   </h2>
                 </div>
               </div>
@@ -145,7 +145,7 @@ console.log("selectedUser",selectedUser);
                <div className="relative">
                           <div
                             className="flex space-x-4 cursor-pointer"
-                            onClick={() => setIsOpen(!isOpen)}
+                            // onClick={() => setIsOpen(!isOpen)}
                           >
                             <FaEllipsisV className="text-gray-600" />
                           </div>
@@ -158,14 +158,14 @@ console.log("selectedUser",selectedUser);
     <div
       key={index}
       className={`flex mb-2 ${
-        msg.sender === activeuser._id
+        msg.sender === activeuser?._id
           ? "justify-end"   
           : "justify-start" 
       }`}
     >
       <span
         className={`inline-block p-2 rounded-lg max-w-xs break-words ${
-          msg.sender === activeuser._id
+          msg.sender === activeuser?._id
             ? "bg-blue-500 text-white"  
             : "bg-gray-200 text-black" 
         }`}

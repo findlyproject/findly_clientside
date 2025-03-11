@@ -4,7 +4,8 @@ import Image from "next/image";
 import { useRouter } from "next/navigation";
 import React, { useEffect, useState } from "react";
 import { FaEllipsisV, FaSearch } from "react-icons/fa";
-import { Community } from "@/lib/store/features/communitySlice";
+
+import { Community } from "@/types/Types";
 interface SidebarProps {
   setCommunity: React.Dispatch<React.SetStateAction<Community | null>>;
   community: Community | null;
