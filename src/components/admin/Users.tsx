@@ -3,7 +3,6 @@
 "use client";
 
 import { blockUser, fetchUsers } from "@/lib/store/features/actions/adminActions";
-import { UserProfile } from "@/lib/store/features/userSlice";
 import { useAppDispatch, useAppSelector } from "@/lib/store/hooks";
 import api from "@/utils/api";
 import { useEffect, useState } from "react";

@@ -1,14 +1,14 @@
 "use client";
 import { adminDeletePost, removeReports } from "@/lib/store/features/actions/adminActions";
 import { fetchAllPosts } from "@/lib/store/features/actions/postActions";
-import { IPost, updatePost } from "@/lib/store/features/postSlice";
+import { updatePost } from "@/lib/store/features/postSlice";
 import { useAppDispatch, useAppSelector } from "@/lib/store/hooks";
 import api from "@/utils/api";
 import Image from "next/image";
 import { useRouter } from "next/navigation";
 import React, { useEffect, useState } from "react";
 import OutsideClickHandler from "react-outside-click-handler";
-
+import { IPost } from "@/types/Types";
 const ReportedPosts = () => {
   const [openReportId, setOpenReportId] = useState<string | null>(null);
   const [filter, setFilter] = useState("all");
@@ -58,7 +58,7 @@ const router =useRouter()
 
       const result=await dispatch(adminDeletePost(postId))
       if(result.type==="delete/post/fulfilled"){
-        dispatch(fetchAllPosts())
+        dispatch(fetchAllPosts(1))
       }
     } catch (error) {
       console.error("Error deleting post:", error);
@@ -73,7 +73,7 @@ const router =useRouter()
 
       const result= await dispatch(removeReports(postId))
       if(result.type==="remove/reports/fulfilled"){
-        dispatch(fetchAllPosts())
+        dispatch(fetchAllPosts(1))
       }
     } catch (error) {
       console.error("Error dismissing report:", error);

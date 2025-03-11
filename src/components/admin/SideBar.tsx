@@ -9,10 +9,11 @@ import { MdOutlineReviews } from "react-icons/md";
 import { toast } from "react-toastify";
 import { logOutAdmin } from "@/lib/store/features/actions/adminActions";
 import { useAppDispatch } from "@/lib/store/hooks";
+import { MouseEventType } from "@/types/Types";
 const Sidebar = () => {
   const router = useRouter();
   const dispatch=useAppDispatch()
-  const handleAdminLogout = async (e: React.MouseEvent<HTMLButtonElement>) => {
+  const handleAdminLogout = async (e:MouseEventType) => {
     e.preventDefault();
 
     const result=await dispatch(logOutAdmin())

@@ -1,12 +1,10 @@
 "use client";
+import { FilterOption, InputType, JobFiltersSidebarProps } from "@/types/Types";
 import React, { useState } from "react";
 
-interface FilterOption {
-  id: string;
-  label: string;
-}
 
-const JobFiltersSidebar: React.FC = (props) => {
+
+const JobFiltersSidebar: React.FC<JobFiltersSidebarProps> = ({setInput}) => {
 
   const [selectedFilters, setSelectedFilters] = useState<Record<string, string>>({});
 
@@ -45,7 +43,7 @@ const JobFiltersSidebar: React.FC = (props) => {
   const handleCheckboxChange = (category: string, value: string) => {
     setSelectedFilters((prevFilters) => {
       const updatedFilters = { ...prevFilters, [category]: value };
-      props?.setInput((prevInput) => ({
+      setInput((prevInput) => ({
         ...prevInput,
         [category]: value,
       }));
@@ -54,8 +52,14 @@ const JobFiltersSidebar: React.FC = (props) => {
     });
   };
   const clearfilter = () => {
+    const clearedFilters: InputType = {
+      title: '',
+      experienceLevel: '',
+      industry: '',
+      jobType: '',
+    };
     setSelectedFilters({});
-    props?.setInput({});
+    setInput(clearedFilters);
   }
 
   return (

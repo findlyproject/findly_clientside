@@ -206,7 +206,7 @@ export const fetchPeopleKnow = createAsyncThunk(
 // get saved jobs//
 
 
-export const fetchSavedJobs = createAsyncThunk(
+export const fetchSavedJobs = createAsyncThunk<UserProfile[],number,{rejectWithValue:string}>(
   "/user/getsavedjobs",
   async (page, { dispatch, rejectWithValue }) => {
     try {
@@ -229,8 +229,11 @@ export const fetchSavedJobs = createAsyncThunk(
 
 // save jobs 
 
+interface SaveJobsResponse {
+  message: string;
+}
 
-export const saveJobs = createAsyncThunk(
+export const saveJobs = createAsyncThunk<SaveJobsResponse,string, { rejectValue: string }>(
   "/user/savejobs",
   async (id, { dispatch,rejectWithValue }) => {
     try {

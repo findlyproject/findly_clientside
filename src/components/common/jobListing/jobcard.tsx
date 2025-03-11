@@ -7,17 +7,13 @@ import { useRouter } from "next/navigation";
 import { LuBookmark, LuBookmarkCheck } from "react-icons/lu";
 import { useAppDispatch, useAppSelector } from "@/lib/store/hooks";
 import { saveJobs } from "@/lib/store/features/actions/userActions";
-
+import { Salary, SavedType } from "@/types/Types";
 interface JobCardProps {
   date: string;
   company: string;
   role: string;
   tags: string;
-  salary: {
-    min:string;
-    max:string;
-    rate:string;
-  }
+  salary: Salary
   location: string;
   logo: string;
   bgColor: string;
@@ -37,7 +33,7 @@ export const JobCard: React.FC<JobCardProps> = ({
 }) => {
   const [mounted, setMounted] = useState(false);
   const route = useRouter();
-const savedjobs = useAppSelector((state)=>state.user.savedJobs)
+const savedjobs:SavedType[] = useAppSelector((state)=>state.user.savedJobs)
 const dispatch = useAppDispatch()
   useEffect(() => {
     setMounted(true);
@@ -55,6 +51,7 @@ const dispatch = useAppDispatch()
         <span className="flex items-center gap-1">
           <Calendar size={16} /> {new Date(date).toLocaleDateString("en-US")}
         </span>
+        
         <button className="text-lg"
         onClick={()=>dispatch(saveJobs(_id))}
         >{savedjobs.find((item)=>item.jobId._id.includes(_id)) ? <LuBookmarkCheck />:<LuBookmark />
