@@ -10,22 +10,15 @@ import {
 import api from "@/utils/api";
 import { toast } from "react-toastify";
 import { User } from "@/types/Types";
-interface PersonaldetailsProps {
-    loading: (isLoading: boolean) => void;
-  }
-interface ImageType {
-    profileImage: string | File | undefined;
-    banner: string | File | undefined;
-}
-
-interface input {
-    firstName: string | undefined;
-    lastName: string | undefined;
-    email: string | undefined;
-    phoneNumber: string | undefined | number;
-    dateOfBirth: Date | undefined |number ;
-    about: string | undefined;
-}
+import { PersonaldetailsProps,ImageType } from "@/types/Types";
+// interface input {
+//     firstName: string | undefined;
+//     lastName: string | undefined;
+//     email: string | undefined;
+//     phoneNumber: string | undefined | number;
+//     dateOfBirth: Date | undefined |number ;
+//     about: string | undefined;
+// }
 
 
 function Personaldetails({ loading }: PersonaldetailsProps) {
@@ -34,7 +27,7 @@ function Personaldetails({ loading }: PersonaldetailsProps) {
   const user = useAppSelector((state) => state.user.activeuser as User);
   console.log("activuser", user);
 
-  const [input, setInput] = useState<input>({
+  const [input, setInput] = useState<Partial<User>>({
     firstName: user.firstName,
     lastName: user.lastName,
     email: user.email,

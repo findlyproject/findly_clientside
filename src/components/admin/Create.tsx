@@ -1,6 +1,6 @@
 "use client";
-import { SkillType, TitleType } from "@/lib/store/features/adminSlice";
 
+import { TitleType,SkillType } from "@/types/Types";
 import api from "@/utils/api";
 
 import { useEffect, useState } from "react";

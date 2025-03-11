@@ -10,7 +10,8 @@ import {
 import { useRouter } from "next/navigation";
 import Image from "next/image";
 import Link from "next/link";
-import { IPost, setLikes } from "@/lib/store/features/postSlice";
+import {  setLikes } from "@/lib/store/features/postSlice";
+import { IPost } from "@/types/Types";
 import "swiper/css";
 import "swiper/css/navigation";
 import { useAppDispatch, useAppSelector } from "@/lib/store/hooks";
@@ -31,10 +32,6 @@ import { Navigation, Pagination } from "swiper/modules";
 interface PostPreviewProps {
   post: IPost;
 }
-// type Post = {
-//   _id: string;
-//   likedBy: { _id: string }[]; // Ensure it's an array of objects, not strings
-// };
 
 interface LikedUser {
   _id: string;
@@ -57,7 +54,7 @@ export const PostPreview = ({ post }: PostPreviewProps) => {
   const toggleLikes = () => setIsShowLikes((prev) => !prev);
   const [isShowComments, setIsShowComments] = useState(false);
 
-  
+
   const currentUser = useAppSelector((state) => state.user.activeuser);
   const route=currentUser?"user":"company"
   const  activeCompany=useAppSelector((state)=>state.companyLogin.activeCompany)
@@ -104,7 +101,7 @@ export const PostPreview = ({ post }: PostPreviewProps) => {
               </h3>
             </Link>
             <div className="text-[10px] text-gray-500">
-               <p className="text-xs text-gray-500">{post.owner?.IndustryType||post.owner?.jobTitle?.[0]} • {dayjs(post.createdAt).fromNow()} </p>
+               <p className="text-xs text-gray-500">{post.owner?._id===currentUser?._id ?.IndustryType||post.owner?.jobTitle?.[0]} • {dayjs(post.createdAt).fromNow()} </p>
               
             </div>
           </div>

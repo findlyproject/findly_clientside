@@ -1,7 +1,7 @@
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 
 
-import { User,Company } from "@/types/Types";
+import { User,Company, IPost, IComment, IReply, ISavePost} from "@/types/Types";
 
 
 // export interface SavePost{
@@ -18,56 +18,56 @@ import { User,Company } from "@/types/Types";
 //   }
 //   timestamp:Date
 // }
-export interface IReport {
-_id: string; 
-reportedBy:User;
-reason:string;
-isDeleted:boolean;  
-createdAt:Date;
-updatedAt:Date;
+// export interface IReport {
+// _id: string; 
+// reportedBy:User;
+// reason:string;
+// isDeleted:boolean;  
+// createdAt:Date;
+// updatedAt:Date;
 
-}
+// }
 
-export interface IReply {
-  _id: string;
-  user: User|Company | null;
-  reply: string;
-  repliedAt?: Date;
-  isDeleted: boolean;
-  updatedAt:Date
+// export interface IReply {
+//   _id: string;
+//   user: User|Company | null;
+//   reply: string;
+//   repliedAt?: Date;
+//   isDeleted: boolean;
+//   updatedAt:Date
  
-}
+// }
 
-export interface IComment {
-  _id: string;
-  user: User | Company  | null;
-  comment: string;
-  replies: IReply[];  
-  isDeleted: boolean;
-  createdAt:Date;
-  updatedAt:Date
+// export interface IComment {
+//   _id: string;
+//   user: User | Company  | null;
+//   comment: string;
+//   replies: IReply[];  
+//   isDeleted: boolean;
+//   createdAt:Date;
+//   updatedAt:Date
 
-}
+// }
 
-export interface ISavePost{
-  _id:string
-  description:string
-  images?:string[]
-  video?:string
-}
-export interface IPost {
-  _id: string;
-  description?: string;
-  images?:string [];
-  video?:string;
-  owner: User | null;
-  likedBy?: User[];
-  reports?:  IReport[]| null|undefined;
-  comments?:  IComment[] ;
-  isDeleted?: boolean;
-  createdAt?: string;
-  updatedAt?: string;
-}
+// export interface ISavePost{
+//   _id:string
+//   description:string
+//   images?:string[]
+//   video?:string
+// }
+// export interface IPost {
+//   _id: string;
+//   description?: string;
+//   images?:string [];
+//   video?:string;
+//   owner: User | null;
+//   likedBy?: User[];
+//   reports?:  IReport[]| null|undefined;
+//   comments?:  IComment[] ;
+//   isDeleted?: boolean;
+//   createdAt?: string;
+//   updatedAt?: string;
+// }
 
 
 export interface PostState {
@@ -78,7 +78,7 @@ export interface PostState {
   commentReplay?:IReply[]
   commentsReplay?:IComment[] | null;
   likes: string[]; 
-  saved:ISavePost[]
+  saved:ISavePost []
 }
 
 const initialState: PostState = {
@@ -90,12 +90,7 @@ const initialState: PostState = {
   saved:[]
 };
 
-export interface ISavePost{
-  _id:string
-  description:string
-  images?:string[]
-  video?:string
-}
+
 const postSlice = createSlice({
   name: "post",
   initialState,

@@ -1,16 +1,20 @@
-
 "use client";
 
 import React, { useEffect } from "react";
 import { useSearchParams } from "next/navigation";
 import { useAppDispatch, useAppSelector } from "@/lib/store/hooks";
-import { features, verification } from "@/lib/store/features/actions/subscriptionActions";
+import {
+  features,
+  verification,
+} from "@/lib/store/features/actions/subscriptionActions";
 import { useRouter } from "next/navigation";
 
 const SubscribedPlanDetails: React.FC = () => {
-  const  activeCompany=useAppSelector((state)=>state.companyLogin.activeCompany)
-  const route=activeCompany?"company":"user"
-    const router=useRouter()
+  const activeCompany = useAppSelector(
+    (state) => state.companyLogin.activeCompany
+  );
+  const route = activeCompany ? "company" : "user";
+  const router = useRouter();
   const searchParams = useSearchParams();
   const sessionId = searchParams.get("session_id");
   const dispatch = useAppDispatch();
@@ -21,26 +25,23 @@ const SubscribedPlanDetails: React.FC = () => {
 
   useEffect(() => {
     if (sessionId) {
-      dispatch(features({sessionId,route}));
-    }  
+      dispatch(features({ sessionId, route }));
+    }
   }, [dispatch, sessionId]);
 
-  const handleContinue = async() => {
-    if(sessionId){
-       const result= await dispatch(verification({sessionId,route}))
-       console.log("a",result);
-       if(result.type==="verification/fulfilled"){
-        console.log("resultproiiii",result);
-        if(allFeatures?.userId){
-          router.push("/user/profile")
-        }else if(allFeatures?.companyId){
-          router.push("/company/profile")
+  const handleContinue = async () => {
+    if (sessionId) {
+      const result = await dispatch(verification({ sessionId, route }));
+      console.log("a", result);
+      if (result.type === "verification/fulfilled") {
+        console.log("resultproiiii", result);
+        if (allFeatures?.userId) {
+          router.push("/user/profile");
+        } else if (allFeatures?.companyId) {
+          router.push("/company/profile");
         }
-       
-       }
-       
-    } 
-    
+      }
+    }
   };
 
   return (
@@ -57,11 +58,14 @@ const SubscribedPlanDetails: React.FC = () => {
           </p>
           <h4 className="font-medium text-lg mb-2">Features Included:</h4>
           <ul className="list-disc pl-6 text-gray-600">
-            {Array.isArray(allFeatures.features) && allFeatures.features.length > 0 ? (
+            {Array.isArray(allFeatures.features) &&
+            allFeatures.features.length > 0 ? (
               allFeatures.features[0]
-                .split(",") 
+                .split(",")
                 .map((feature: string, index: number) => (
-                  <li key={index} className="mb-1">{feature.trim()}</li> 
+                  <li key={index} className="mb-1">
+                    {feature.trim()}
+                  </li>
                 ))
             ) : (
               <li>No features available</li>

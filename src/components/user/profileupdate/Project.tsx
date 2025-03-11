@@ -1,14 +1,15 @@
 import { setProject, setremovproject } from '@/lib/store/features/userSlice';
 import { useAppDispatch, useAppSelector } from '@/lib/store/hooks';
+import { ChangeEventType, User } from '@/types/Types';
 import React, { useState } from 'react'
 import { RxCross2 } from 'react-icons/rx'
 
 function Project() {
     const dispatch = useAppDispatch()
-    const user = useAppSelector((state)=>state.user.activeuser)
+    const user = useAppSelector((state)=>state.user.activeuser as User)
   const [newProject, setNewProject] = useState({ title: "", description: "", link: "" });
 
-  const handleChangeD = (e) => {
+  const handleChangeD = (e:ChangeEventType) => {
     setNewProject({ ...newProject, [e.target.name]: e.target.value });
   };
 
@@ -19,7 +20,7 @@ function Project() {
     }
   };
 
-  const handleRemoveProject = (index) => {
+  const handleRemoveProject = (index:number) => {
     dispatch(setremovproject(index))
 
   };
@@ -68,11 +69,11 @@ function Project() {
             </button>
       
             {/* Display Added Projects */}
-            {user.projects.length > 0 && (
+            {user.projects&&user.projects.length > 0 && (
               <div className="mt-4">
                 <h3 className="text-xl font-semibold">Added Projects</h3>
                 <ul className="mt-2">
-                  {user.projects.map((project, index) => (
+                  {user.projects?.map((project, index) => (
                     <li key={index} className="bg-gray-200 p-3 rounded-md mb-2 flex justify-between items-center">
                       <div>
                         <p className="font-semibold">{project.title}</p>

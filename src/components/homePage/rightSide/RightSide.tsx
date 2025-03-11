@@ -18,7 +18,8 @@ import { faSmile } from "@fortawesome/free-solid-svg-icons";
 import OutsideClickHandler from "react-outside-click-handler";
 import { BsThreeDots } from "react-icons/bs";
 import { Connection } from "@/types/Types";
-import { MessageType } from "@/lib/store/features/communitySlice";
+
+import { MessageType } from "@/types/Types";
 export default function RightSide() {
   const dispatch = useAppDispatch();
 
