@@ -5,7 +5,7 @@ import { useState, useRef, useEffect } from "react";
 import { useAppDispatch, useAppSelector } from "@/lib/store/hooks";
 import dayjs from "dayjs";
 import relativeTime from "dayjs/plugin/relativeTime";
-import { IComment, IReply } from "@/lib/store/features/postSlice";
+import { CommentsProps } from "@/types/Types";
 import {
   deleteAComment,
   deleteReplay,
@@ -27,10 +27,7 @@ import { fetchAllPosts } from "@/lib/store/features/actions/postActions";
 import OutsideClickHandler from "react-outside-click-handler";
 dayjs.extend(relativeTime);
 
-interface CommentsProps {
-  postId: string;
-  comments: IComment[];
-}
+
 
 export const Comments = ({ postId, comments }: CommentsProps) => {
   const myComments = useAppSelector((state) => state.post.commentsReplay) || [];

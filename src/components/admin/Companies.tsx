@@ -2,40 +2,41 @@
 
 "use client";
 
+import { fetchCompanies, handleBlock } from "@/lib/store/features/actions/adminActions";
 import { companyData } from "@/lib/store/features/companyslice";
+import { useAppDispatch, useAppSelector } from "@/lib/store/hooks";
 import api from "@/utils/api";
 import { useEffect, useState } from "react";
 
 const Companies = () => {
-  const [data, setData] = useState<companyData[]>([]);
+  const dispatch=useAppDispatch()
+  const companies=useAppSelector((state)=>state.admin.companies)
+  
   const [currentPage, setCurrentPage] = useState(1);
   const companiesPerPage = 10;
+useEffect(()=>{
+       listCompanies()
+},[])
 
-  useEffect(() => {
-    const fetchCompanies = async () => {
-      const response = await api.get("admin/companies");
-      setData(response.data.companies);
-    };
-    fetchCompanies();
-  }, []);
+console.log("companies",companies);
 
-  const handleBlock = async (id: string) => {
-    const response = await api.patch(`/admin/blockandunblock/${id}`);
-    const updatedUser = response.data.data;
-    setData((prevData) =>
-      prevData.map((user) =>
-        user._id === updatedUser._id
-          ? { ...user, isBlocked: updatedUser.isBlocked }
-          : user
-      )
-    );
-  };
+const listCompanies=()=>{
+  dispatch(fetchCompanies())
+}
+
+  const unblockAndBlock=(id:string)=>{
+    const result=dispatch(handleBlock(id))
+
+    console.log("result",result);
+  }
+
+
 
   // Pagination Logic
   const indexOfLastCompany = currentPage * companiesPerPage;
   const indexOfFirstCompany = indexOfLastCompany - companiesPerPage;
-  const currentCompanies = data.slice(indexOfFirstCompany, indexOfLastCompany);
-  const totalPages = Math.ceil(data.length / companiesPerPage);
+  const currentCompanies = companies.slice(indexOfFirstCompany, indexOfLastCompany);
+  const totalPages = Math.ceil(companies.length / companiesPerPage);
 
   // Handlers for Pagination
   const handleNextPage = () => {
@@ -61,7 +62,7 @@ const Companies = () => {
                 </tr>
               </thead>
               <tbody className="divide-y divide-gray-300">
-                {data.map((user,index) => (
+                {companies.map((user,index) => (
                   <tr key={`${user._id}-${index}`} className="bg-white hover:bg-gray-50">
                     <td className="p-5 text-sm text-gray-900">{user._id}</td>
                     <td className="p-5 text-sm text-gray-900">
@@ -86,7 +87,7 @@ const Companies = () => {
                         className={`text-xs sm:text-sm px-2 sm:px-4 py-1 sm:py-2 rounded-md text-white transition ${
                           user.isBlocked ? "bg-yellow-500 hover:bg-yellow-400" : "bg-red-600 hover:bg-red-700"
                         }`}
-                        onClick={() => handleBlock(user._id)}
+                        onClick={() => unblockAndBlock(user._id)}
                       >
                         {user.isBlocked ? "Unblock" : "Block"}
                       </button>

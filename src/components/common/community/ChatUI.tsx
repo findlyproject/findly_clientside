@@ -13,7 +13,9 @@ import { useRouter } from "next/navigation";
 import { IoReorderThreeOutline } from "react-icons/io5";
 import { RxCross2 } from "react-icons/rx";
 import CommunityDetails from "./CommunityDetails";
-import { Community, CommunityMessage } from "@/lib/store/features/communitySlice";
+
+
+import { Community,CommunityMessage } from "@/types/Types";
 interface FilePreview {
   type: "image" | "video";
   url: string;

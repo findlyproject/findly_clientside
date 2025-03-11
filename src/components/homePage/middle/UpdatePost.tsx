@@ -2,11 +2,11 @@ import { fetchAllPosts, updatePostByUser } from "@/lib/store/features/actions/po
 import { useAppDispatch } from "@/lib/store/hooks";
 import { useEffect, useState } from "react";
 import { FiImage } from "react-icons/fi";
-import { IPost } from "@/lib/store/features/postSlice";
 import Image from "next/image";
 import { toast } from "react-toastify";
+import { IPost, UpdatePostProps } from "@/types/Types";
 
-export const UpdatePost = ({ post }: { post: IPost }) => {
+export const UpdatePost: React.FC<UpdatePostProps> = ({ post, setIsUpdateOpen }) => {
   const dispatch = useAppDispatch();
   const [description, setDescription] = useState(post?.description ?? "");
   const [previewImages, setPreviewImages] = useState<string[]>([]);

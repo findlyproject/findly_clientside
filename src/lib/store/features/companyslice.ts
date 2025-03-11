@@ -1,109 +1,54 @@
-import { createSlice } from "@reduxjs/toolkit"
+import { createSlice } from "@reduxjs/toolkit";
 
+import { Company, applicationData } from "@/types/Types";
 
-import { User,Company, applicationData } from "@/types/Types";
-
-
-// export interface companyData{
-//     email:string,
-//     password:string,
-//     about:string
-//     name: string;
-//     age: number;
-//     contact: string;
-//     logo: string;
-//     banner:string
-//     IndustryType:string
-//     startingDate:Date
-//     address: {
-//         city: string;
-//         landmark:string
-//         country: string;
-//         pincode: string;
-//         state: string;
-//     };
-//     role: string;
-//     createdAt: string;
-//     updatedAt: string;
-//     isDeleted: boolean;
-//     subscriptionStartDate: string | null;
-//     subscriptionEndDate: string | null;
-//     employees:[
-//         {
-//             employee:string,
-//             position:string
-//         }
-//     ] 
-//     _id: string;
-//     services:string[]
-//     socialMedia:{
-//         facebook:string
-//         instagram:string
-//         linkedin:string
-//         twitter:string
-//       }
-//       workHours:{
-//         start:string,
-//         end:string
-//       }
-//       founder:string
-//       foundedAt:string;
-//       headquarters:string
-//       applications:applicationData[]
-//       isBlocked:boolean
-// }
-
-
-
-interface loginState{
-    activeCompany:Company|null
+interface loginState {
+  activeCompany: Company | null;
 }
 
+interface loginState {
+  activeCompany: Company | null;
+  application: applicationData[];
 
-
-
-
-interface loginState{
-    activeCompany:Company|null
-    application:applicationData[]
-    
-    forgotPassword:{
-        email:string,
-        otp:string,
-      }
+  forgotPassword: {
+    email: string;
+    otp: string;
+  };
 }
 
-const initialState:loginState={
-    activeCompany:null,
-    application:[],
-    forgotPassword:{
-        email:"",
-        otp:"",
-      }
-}
+const initialState: loginState = {
+  activeCompany: null,
+  application: [],
+  forgotPassword: {
+    email: "",
+    otp: "",
+  },
+};
 
-export const loginSlice= createSlice({
-   name:"company",
-   initialState,
-   reducers:{
-    setActiveCompany:(state,action)=>{
-        state.activeCompany=action.payload 
+export const loginSlice = createSlice({
+  name: "company",
+  initialState,
+  reducers: {
+    setActiveCompany: (state, action) => {
+      state.activeCompany = action.payload;
     },
-    setCompanyLogOut:(state)=>{
-        state.activeCompany=null
-        
+    setCompanyLogOut: (state) => {
+      state.activeCompany = null;
     },
-    setAppliedUsers:(state,action)=>{
-       state.application=action.payload
+    setAppliedUsers: (state, action) => {
+      state.application = action.payload;
     },
-    setforgotPassword:(state,action)=>{
-        state.forgotPassword.email = action.payload.email;
-        state.forgotPassword.otp = action.payload.otp;
-       },
-    
+    setforgotPassword: (state, action) => {
+      state.forgotPassword.email = action.payload.email;
+      state.forgotPassword.otp = action.payload.otp;
+    },
+  },
+});
 
-   }
-})
-
-export const {setActiveCompany,setCompanyLogOut,setAppliedUsers,setforgotPassword}=loginSlice.actions
-export default loginSlice.reducer 
+export const {
+  setActiveCompany,
+  setCompanyLogOut,
+  setAppliedUsers,
+  setforgotPassword,
+} = loginSlice.actions;
+export default loginSlice.reducer;

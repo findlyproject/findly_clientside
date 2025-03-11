@@ -1,7 +1,8 @@
 "use client";
 import { useEffect, useState } from "react";
 import { useAppDispatch, useAppSelector } from "@/lib/store/hooks";
-import { IPost, setSaved } from "@/lib/store/features/postSlice";
+import {  setSaved } from "@/lib/store/features/postSlice";
+import {  PostPreviewProps } from "@/types/Types";
 import { ReportPostModal } from "@/components/homePage/middle/postPreview/ReportModal";
 import { UpdatePost } from "../UpdatePost";
 import OutsideClickHandler from "react-outside-click-handler";
@@ -10,21 +11,19 @@ import {
   fetchAllPosts,
 } from "@/lib/store/features/actions/postActions";
 import api from "@/utils/api";
-interface PostPreviewProps {
-  post: IPost;
-}
+
 export const PostMenu = ({ post }: PostPreviewProps) => {
   const { activeuser } = useAppSelector((state) => state.user);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [UpdateOpen, setIsUpdateOpen] = useState(false); // post update
-  const saved=useAppSelector((state)=>state.post.saved )
+  const saved=useAppSelector((state)=>state.post.saved  )
   
   const dispatch = useAppDispatch();
  
   //delete post
   const deletePost = async (id: string) => {
     dispatch(DeletePost({ postId: id }));
-    dispatch(fetchAllPosts());
+    dispatch(fetchAllPosts(0));
   };
   //save post
   const handleSave=async(postId:string)=>{
@@ -36,6 +35,7 @@ dispatch(setSaved(res.data.saved))
 
   }
 
+console.log("saved",saved);
 
 const isSaved = Array.isArray(saved) && saved.some((item) => item.postId==post._id);
   return (

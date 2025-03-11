@@ -1,6 +1,7 @@
 'use client';
 
-import { AdminProfile, setAdmin } from '@/lib/store/features/adminSlice';
+import {  setAdmin } from '@/lib/store/features/adminSlice';
+import { Admin } from '@/types/Types';
 import { useAppDispatch, useAppSelector } from '@/lib/store/hooks';
 import api from '@/utils/api';
 import Image from 'next/image';
@@ -10,7 +11,7 @@ import { Formik, Field, Form, ErrorMessage } from 'formik';
 import * as Yup from 'yup';
 
 export const Profile=()=> {
-  const admin = useAppSelector((state) => state.admin.admin as AdminProfile);
+  const admin = useAppSelector((state) => state.admin.admin as Admin);
   const dispatch = useAppDispatch();
 
   const [selectedFile, setSelectedFile] = useState<File | null>(null);
@@ -35,7 +36,7 @@ export const Profile=()=> {
   });
 
   
-  const handleUpdate = async (values: AdminProfile) => {
+  const handleUpdate = async (values: Admin) => {
     const formDataToSend = new FormData();
     formDataToSend.append('firstName', values.firstName);
     formDataToSend.append('lastName', values.lastName);

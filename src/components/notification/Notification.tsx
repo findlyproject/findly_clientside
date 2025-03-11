@@ -1,6 +1,6 @@
 "use client"
 import { useState } from 'react';
-
+import { Notifications } from '@/types/Types';
 const Notification = () => {
   const [isOpen, setIsOpen] = useState(false);
   const [activeTab, setActiveTab] = useState('All');
@@ -187,11 +187,11 @@ const Notification = () => {
     console.log('Marked all as read');
   };
 
-  const handleAccept = (id) => {
+  const handleAccept = (id:number) => {
     console.log('Accepted request', id);
   };
   
-  const handleDecline = (id) => {
+  const handleDecline = (id:number) => {
     console.log('Declined request', id);
   };
 
@@ -199,7 +199,7 @@ const Notification = () => {
     return notifications;
   };
 
-  const renderNotification = (notification) => {
+  const renderNotification = (notification:Notifications) => {
     return (
       <div key={notification.id} className={`py-3 px-4 hover:bg-gray-50 ${notification.unread ? 'bg-blue-50/30' : ''}`}>
         <div className="flex items-start gap-3">

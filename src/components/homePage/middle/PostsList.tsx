@@ -1,9 +1,7 @@
 import {  useAppSelector } from "@/lib/store/hooks";
 import { PostPreview } from "./postPreview/PostPreview";
 import React from "react";
-
-import { propspsts } from "./Posts";
-
+import { propspsts } from "@/types/Types";
 export const PostsList:React.FC<propspsts> = ({loadMorePosts,loading}) => {
 
   const { posts } = useAppSelector((state) => state.post);

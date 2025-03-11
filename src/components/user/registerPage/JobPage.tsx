@@ -9,7 +9,7 @@ import { toast } from "react-toastify";
 import { JobLocationType } from "@/types/Types";
 import { Country, State, City } from "country-state-city";
 import api from "@/utils/api";
-import { TitleType } from "@/lib/store/features/adminSlice";
+import { TitleType } from "@/types/Types";
 
 export default function JobPage() {
   const formData=useAppSelector((state)=>state.register)

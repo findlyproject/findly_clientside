@@ -8,11 +8,8 @@ import { toast } from "react-toastify";
 import { useAppSelector } from "@/lib/store/hooks";
 import { MdModeEditOutline } from "react-icons/md";
 import { FaPencilAlt } from "react-icons/fa";
-import {
-  Community,
-  CommunityMessage,
-} from "@/lib/store/features/communitySlice";
 
+import { Community,CommunityMessage } from "@/types/Types";
 interface CommunityDetailsProps {
   id: string;
   onClose: () => void;

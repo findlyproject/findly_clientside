@@ -8,11 +8,7 @@ import { useAppDispatch, useAppSelector } from "@/lib/store/hooks";
 
 import React, { useState, ChangeEvent, useEffect } from "react";
 import { toast } from "react-toastify";
-
-interface FilesState {
-  resume: File | null;
-  introductionVideo: File | null;
-}
+import { FilesState } from "@/types/Types";
 
 const FileUpload = () => {
   const dispatch = useAppDispatch();

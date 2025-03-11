@@ -1,23 +1,23 @@
 
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
-
-export interface SubscriptionData {
-  clientSecret: string;
-  features: string[];
-  plan: string;
-  price: number;
-  paymentStatus: string;
-  startDate: string;
-  endDate: string;
-  userId: string;
-  sessionId: string;
-  companyId:string
-  active:boolean;
-}
+import { Subscription } from "@/types/Types";
+// export interface SubscriptionData {
+//   clientSecret: string;
+//   features: string[];
+//   plan: string;
+//   price: number;
+//   paymentStatus: string;
+//   startDate: string;
+//   endDate: string;
+//   userId: string;
+//   sessionId: string;
+//   companyId:string
+//   active:boolean;
+// }
 
 interface PaymentState {
   clientsecret: string;
-  subscription: SubscriptionData | null;
+  subscription: Subscription | null;
 }
 
 const initialState: PaymentState = {
@@ -33,7 +33,7 @@ const paymentSlice = createSlice({
       state.clientsecret = action.payload;
      
     },
-    setSubscription: (state, action: PayloadAction<SubscriptionData>) => {
+    setSubscription: (state, action: PayloadAction<Subscription>) => {
       state.subscription = action.payload;
   
     },

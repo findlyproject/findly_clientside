@@ -23,7 +23,7 @@ export  function CommunityPanel(){
               onClick={() => router.push(`/user/${user._id}/User`)}
             >
               <div className="w-14 p-3 h-14 rounded-full overflow-hidden">
-                <Image src={user.profileImage} className="w-8 h-8 object-cover" width={20} height={20} alt={user.firstName} />
+                <Image src={user.profileImage||""} className="w-8 h-8 object-cover" width={20} height={20} alt={user.firstName} />
               </div>
               <div className="ml-2">
                 <div className="text-base font-medium text-gray-800">{user.firstName}</div>

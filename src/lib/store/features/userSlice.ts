@@ -225,7 +225,7 @@ const loginSlice = createSlice({
         state.activeuser.location = action.payload;
       }
     },
-    setPersonalDetails: (state, action: PayloadAction<User>) => {
+    setPersonalDetails: (state, action: PayloadAction<Partial<User>>) => {
       if (state.activeuser) {
         state.activeuser.firstName =
           action.payload.firstName ?? state.activeuser.firstName;
