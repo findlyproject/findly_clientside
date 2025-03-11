@@ -11,12 +11,15 @@ import {
   fetchAllPosts,
 } from "@/lib/store/features/actions/postActions";
 import api from "@/utils/api";
+import { saveJobs, savePosts } from "@/lib/store/features/actions/userActions";
 
 export const PostMenu = ({ post }: PostPreviewProps) => {
   const { activeuser } = useAppSelector((state) => state.user);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [UpdateOpen, setIsUpdateOpen] = useState(false); // post update
   const saved=useAppSelector((state)=>state.post.saved  )
+  const route=activeuser?"user":"company"
+  console.log("ddddddddddd",route);
   
   const dispatch = useAppDispatch();
  
@@ -27,12 +30,14 @@ export const PostMenu = ({ post }: PostPreviewProps) => {
   };
   //save post
   const handleSave=async(postId:string)=>{
-    
-    const response=await api.post(`/post/user/save/${postId}`)
-console.log("response of saving a post",response);
-const res=await api.get("/post/user/all")
-dispatch(setSaved(res.data.saved))
 
+    const result=await dispatch(savePosts({postId,route}))
+    if(result.type==="save/posts/fulfilled"){
+      console.log("result",result);
+      
+      const res=await api.get(`/${route}/all`)
+dispatch(setSaved(res.data.saved))
+    }
   }
 
 console.log("saved",saved);

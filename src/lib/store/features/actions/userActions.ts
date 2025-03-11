@@ -7,7 +7,7 @@ import { AxiosResponse } from "axios";
 import {setAllRatings,Rating} from '../ratingSlice'
 import { toast } from "react-toastify";
 import { setAlljobs } from "../jobSlice";
-import { resetPostState } from "../postSlice";
+import { resetPostState, setLikes } from "../postSlice";
 
 //register
 interface RegisterResponse {
@@ -288,3 +288,40 @@ export const deleteAccountVerification = createAsyncThunk(
 
   }
 );
+
+export const savePosts = createAsyncThunk(
+  "save/posts",
+  async ({postId,route}:{postId:string,route:string}, { rejectWithValue }) => {
+   
+      const response = await handleAsync<AxiosResponse>(() =>api.post(`/${route}/save/${postId}`));
+
+      if (!response) {
+        return rejectWithValue(" save post failed. Please try again.");
+      }
+
+
+      return response.data;
+
+  }
+);
+
+
+export const reportPost = createAsyncThunk(
+  "report/posts",
+  async ({reason,postId,route}:{reason:string,postId:string,route:string}, { rejectWithValue }) => {
+   
+      const response = await handleAsync<AxiosResponse>(() =>api.post(`/post/${route}/reportpost`, {
+        reason: reason,
+        postId,
+      }));
+
+      if (!response) {
+        return rejectWithValue(" report failed. Please try again.");
+      }
+  
+      return response.data;
+
+  }
+);
+
+
