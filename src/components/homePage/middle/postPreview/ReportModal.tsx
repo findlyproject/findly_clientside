@@ -3,18 +3,21 @@
 import { useState } from "react";
 import api from "@/utils/api";
 import { ReportPostModalType } from "@/types/Types";
+import { useAppDispatch, useAppSelector } from "@/lib/store/hooks";
+import { reportPost } from "@/lib/store/features/actions/userActions";
 
 
 export const ReportPostModal: React.FC<ReportPostModalType> = ({ postId, onClose })=> {
+  const activeCompany=useAppSelector((state)=>state.companyLogin.activeCompany)
+  const route=activeCompany?"company":"user"
   const [reason, setReason] = useState("");
-
+const dispatch=useAppDispatch()
   const handleSubmit = async () => {
-    const response = await api.post(`/post/user/reportpost`, {
-      reason: reason,
-      postId,
-    });
-    console.log("response of report", response);
-    onClose();
+    const result=await dispatch(reportPost({reason,postId,route}))
+    if(result.type==="report/posts/fulfilled"){
+      onClose();
+    }
+
   };
 
   return (

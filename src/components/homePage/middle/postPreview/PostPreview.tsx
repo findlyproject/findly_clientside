@@ -61,6 +61,7 @@ export const PostPreview = ({ post }: PostPreviewProps) => {
   const [isExpanded, setIsExpanded] = useState(false);
   const MAX_LENGTH = 50;
   const handleLike = async (postId: string) => {
+    
     const response = await api.post(`/${route}/likepost/${postId}`);
 
     dispatch(setLikes(response.data.post));
