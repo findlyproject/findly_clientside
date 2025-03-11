@@ -15,11 +15,11 @@ import { editSkill, editTitle, handleApproveSkill, handleApproveTitle, handleBlo
 
 const Create = () => {
   const [skill, setSkill] = useState("");
-  const [allskills, setallSkills] = useState<SkillType[]>([]);
+
   const [editingSkill, setEditingSkill] = useState<string | null>(null);
 
   const [titles, setTitles] = useState("");
-  const [alltitles, setallTitles] = useState<TitleType[]>([]);
+
   const [titleEditing, setTitleEditing] = useState<string | null>(null);
   const dispatch = useAppDispatch();
   const skills = useAppSelector((state) => state.admin.skills);

@@ -4,7 +4,7 @@
 
 import { blockUser, fetchUsers } from "@/lib/store/features/actions/adminActions";
 import { useAppDispatch, useAppSelector } from "@/lib/store/hooks";
-import api from "@/utils/api";
+
 import { useEffect, useState } from "react";
 
 const Users = () => {

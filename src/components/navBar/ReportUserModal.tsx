@@ -2,16 +2,25 @@
 
 import { useState } from "react";
 import api from "@/utils/api";
+import { useDispatch } from "react-redux";
+import { reportUser } from "@/lib/store/features/actions/userActions";
+import { useAppDispatch } from "@/lib/store/hooks";
 
 interface ReportType{
   repoteduserid:string;
   onClose:()=>void;
 }
 export const ReportUserModal = ({ repoteduserid, onClose }:ReportType) => {
+const dispatch=useAppDispatch()
   console.log("postId", repoteduserid);
   const [reason, setReason] = useState("");
 
   const handleSubmit = async () => {
+
+    const result=await dispatch(reportUser({reason,repoteduserid}))
+    if(result.type==="report/posts/fulfilled"){
+      onClose();
+    }
     const response = await api.post(`/user/reportuser`, {
       reason: reason,
       repoteduserid,

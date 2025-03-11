@@ -2,11 +2,9 @@
 import Image from "next/image";
 import user from "../../../public/assets/user-06.webp";
 import Link from "next/link";
-import api from "@/utils/api";
 import { useRouter } from "next/navigation";
 import { FaPlus } from "react-icons/fa6";
 import { MdOutlineReviews } from "react-icons/md";
-import { toast } from "react-toastify";
 import { logOutAdmin } from "@/lib/store/features/actions/adminActions";
 import { useAppDispatch } from "@/lib/store/hooks";
 import { MouseEventType } from "@/types/Types";

@@ -13,7 +13,7 @@ const RateUs: React.FC = () => {
   const router = useRouter();
   const [rating, setRating] = useState<number | null>(0);
   const [message, setMessage] = useState("");
-  
+  const [selectedStars, setSelectedStars] = useState<number[]>([]); 
 const activeuser=useAppSelector((state)=>state.user.activeuser)
    const route=activeuser?"user":"company"
 const activeCompany = useAppSelector((state) => state.companyLogin.activeCompany)
@@ -51,7 +51,7 @@ if (!activeCompany && !activeuser) return null;
       toast.warn("Failed to submit review.");
     }
   };
-  const [selectedStars, setSelectedStars] = useState<number[]>([]); 
+  
 
   const handleStarClick = (star: number) => {
     setRating(star === rating ? null : star);

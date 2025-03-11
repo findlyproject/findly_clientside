@@ -2,11 +2,14 @@
 
 import { Admin } from "@/types/Types";
 import { User } from "@/types/Types";
-import { useAppSelector } from "@/lib/store/hooks";
+import { useAppDispatch, useAppSelector } from "@/lib/store/hooks";
 import api from "@/utils/api";
 import { useState } from "react";
+import { helpeAndContact } from "@/lib/store/features/actions/contactActions";
+import { toast } from "react-toastify";
 
 export default function ContactUsPage() {
+  const dispatch=useAppDispatch()
   const user = useAppSelector((state) => state.user.activeuser as User);
   const admin=useAppSelector((state)=>state.admin.admin as Admin)
 
@@ -50,15 +53,18 @@ export default function ContactUsPage() {
     e.preventDefault();
     if (validateForm()) {
       try {
-        const response = await api.post(`/user/emailus`, {
-          email: email.email,
-          message,
-        });
+   
 
-        if (response.status === 200) {
+        const result=await dispatch(helpeAndContact({email:email.email,message}))
+
+       
+
+        if(result.type==="contact/client/fulfilled"){
           setEmail({ email: "" });
           setMessage("");
+          toast.success("your message recived")
         }
+        
       } catch (error) {
         console.log(error);
       }
