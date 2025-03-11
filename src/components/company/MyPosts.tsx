@@ -46,7 +46,7 @@ const [UpdateOpen, setIsUpdateOpen] = useState(false);
     //delete post
     const deletePost = async (id: string) => {
       dispatch(DeletePost({ postId: id }));
-      dispatch(fetchAllPosts());
+      dispatch(fetchAllPosts(1));
     };
   return (
     <div className="min-h-screen bg-gray-100">

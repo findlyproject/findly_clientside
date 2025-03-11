@@ -1,4 +1,5 @@
 "use client";
+import { adminDeletePost, removeReports } from "@/lib/store/features/actions/adminActions";
 import { fetchAllPosts } from "@/lib/store/features/actions/postActions";
 import { updatePost } from "@/lib/store/features/postSlice";
 import { useAppDispatch, useAppSelector } from "@/lib/store/hooks";
@@ -51,24 +52,29 @@ const router =useRouter()
     setOpenReportId((prevId) => (prevId === id ? null : id));
   };
 
-  // Delete a post
+ 
   const deletePost = async (postId: string) => {
     try {
-      await api.patch(`admin/deletepost/${postId}`, {
-        isDeleted: true,
-      });
-      dispatch(updatePost({ postId, updatedData: { isDeleted: true } }));
+
+      const result=await dispatch(adminDeletePost(postId))
+      if(result.type==="delete/post/fulfilled"){
+        dispatch(fetchAllPosts(1))
+      }
     } catch (error) {
       console.error("Error deleting post:", error);
     }
   };
 
+
+
   // Dismiss a report
   const handleDismissReport = async (postId: string) => {
     try {
-      await api.post(`/admin/dismissreports/${postId}`);
-      dispatch(updatePost({ postId, updatedData: { reports: [] } }));
-      alert("Report dismissed successfully!");
+
+      const result= await dispatch(removeReports(postId))
+      if(result.type==="remove/reports/fulfilled"){
+        dispatch(fetchAllPosts(1))
+      }
     } catch (error) {
       console.error("Error dismissing report:", error);
     }

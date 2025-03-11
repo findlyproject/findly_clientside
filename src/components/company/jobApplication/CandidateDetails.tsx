@@ -6,7 +6,9 @@ import Image from "next/image";
 import { toast } from "react-toastify";
 import { applicationData } from "../../../types/Types";
 import handleAsync from "@/utils/handleAsync";
-import { useAppSelector } from "@/lib/store/hooks";
+import { useAppDispatch, useAppSelector } from "@/lib/store/hooks";
+import { useDispatch } from "react-redux";
+import { applicatioAproving, applicatioRejecting } from "@/lib/store/features/actions/companyActions";
 
 export  default function CandidateDetails() {
   const [activeTab, setActiveTab] = useState("CoverLetter");
@@ -14,6 +16,7 @@ export  default function CandidateDetails() {
   const [offerLetter, setOfferLetter] = useState("");
   const router = useRouter();
   const {activeCompany} =useAppSelector((state)=>state.companyLogin)
+  const dispatch=useAppDispatch()
 const route=activeCompany?"company":"user"
   const { userId, jobId } = useParams();
 
@@ -32,32 +35,30 @@ useEffect(() => {
     fetchData();
   }
 }, [userId,jobId]);
-console.log(user)
 
-// Reject job application
 const rejectJobApplication = async () => {
-  const response = await handleAsync(() =>
-    api.put(`/company/reject-application/${userId}/${jobId}`)
-  );
-  if (response?.data?.success) {
-    toast.success("Job application rejected successfully!");
+
+  const result=await dispatch(applicatioRejecting({
+    userId: userId as string,
+    jobId: jobId as string,
+  }))
+
+  if(result.type==="application/rejecting/fulfilled"){
     fetchData();
-  } else {
-    toast.error("Failed to reject application.");
   }
+  
 };
 
 
 const approveApplication = async () => {
-  const response = await handleAsync(() =>
-    api.put(`/company/approve/${userId}/${jobId}`, { offerLetter })
-  );
-  if (response) {
-    toast.success(response.data.message);
-    fetchData();
-  } else {
-    toast.error("Failed to approve the application");
-  }
+  
+  const result=await dispatch(applicatioAproving({
+    userId: userId as string,
+    jobId: jobId as string,
+    offerLetter
+  }));
+console.log("Thunk Result:", result);
+
 };
   return (
     <div className=" min-h-screen font-sans pt-24">

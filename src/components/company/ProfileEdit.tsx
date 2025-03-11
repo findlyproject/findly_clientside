@@ -17,6 +17,7 @@ import "react-phone-input-2/lib/style.css";
 import api from "@/utils/api";
 import { setActiveCompany } from "@/lib/store/features/companyslice";
 import { User } from "@/types/Types";
+import { editProfile, uploadBanner, uploadLogo } from "@/lib/store/features/actions/companyActions";
 export default function ProfileEdit() {
   const activecompany = useAppSelector(
     (state) => state.companyLogin.activeCompany
@@ -140,13 +141,12 @@ export default function ProfileEdit() {
 
   const handleSubmit = async (values: any) => {
     console.log("vallueee", values);
-
-    const response = await api.patch(
-      `/company/edit/${activecompany?._id}`,
-      values
-    );
-    console.log("responseresponse", response);
-    dispatch(setActiveCompany(response.data.company));
+    const companyId=activecompany?._id
+   const result=await dispatch(editProfile({companyId,values}))
+   if(result.type==="edit/profile/fulfilled"){
+    console.log("edited");
+    
+   }
   };
 
   const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -177,16 +177,12 @@ export default function ProfileEdit() {
     formData.append("logo", selectedFile);
 
     try {
-      const response = await api.patch(
-        `/company/edit/logo/${activecompany?._id}`,
-        formData,
-        {
-          headers: { "Content-Type": "multipart/form-data" },
-        }
-      );
-      console.log("response of logo upload", response);
-      setSelectedFile(null);
-      dispatch(setActiveCompany(response.data.company));
+    const companyId=activecompany?._id
+      const result =await dispatch(uploadLogo({companyId,formData}))
+      if(result.type==="upload/profile/logo/fulfilled"){
+        setSelectedFile(null);
+      }
+
     } catch (error) {
       console.error("Error uploading logo:", error);
     }
@@ -199,16 +195,12 @@ export default function ProfileEdit() {
     formData.append("banner", selectedBanner);
 
     try {
-      const response = await api.patch(
-        `/company/edit/banner/${activecompany?._id}`,
-        formData,
-        {
-          headers: { "Content-Type": "multipart/form-data" },
-        }
-      );
-      console.log("response of banner upload", response);
-      setSelectedBanner(null);
-      dispatch(setActiveCompany(response.data.company));
+      const companyId=activecompany?._id
+      const result =await dispatch(uploadBanner({companyId,formData}))
+      if(result.type==="upload/profile/banner/fulfilled"){
+        setSelectedBanner(null);
+      }
+   
     } catch (error) {
       console.error("Error uploading logo:", error);
     }

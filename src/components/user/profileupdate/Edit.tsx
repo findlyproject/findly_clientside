@@ -35,7 +35,7 @@ const handilclik =async ()=>{
 
   
   return (
-        <div className="w-full h-auto flex justify-center py-4">
+        <div className="w-full h-auto flex justify-center py-4 pt-24">
            {
             isloading?(
                 <div className='h-screen w-full flex justify-center items-center'>

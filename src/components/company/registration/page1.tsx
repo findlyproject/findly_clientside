@@ -10,6 +10,7 @@ import { useAppDispatch } from "@/lib/store/hooks";
 import { setActiveCompany } from "@/lib/store/features/companyslice";
 import OtpInput from "react-otp-input";
 import handleAsync from "@/utils/handleAsync";
+import { registerSendOtp, verifyOtp } from "@/lib/store/features/actions/companyActions";
 const Page1: React.FC = () => {
   const dispatch = useAppDispatch();
 
@@ -27,10 +28,8 @@ const Page1: React.FC = () => {
 
   // Handle OTP sending
   const HandleOtpSend = async (values: { name: string; email: string }) => {
-    const response = await handleAsync(() =>
-      api.post("company/send-otp", values)
-    );
-    if (response && response.status >= 200 && response.status < 300) {
+    const result=await dispatch(registerSendOtp(values))
+    if(result.type==="company/otp/register/fulfilled"){
       setOtpSent(true);
     }
   };
@@ -41,18 +40,15 @@ const Page1: React.FC = () => {
     email: string;
     name: string;
   }) => {
-    const response = await handleAsync(() =>
-      api.post("company/verify-otp", values)
-    );
-    if (response && response.status >= 200 && response.status < 300) {
-      const data = response.data.company;
-      dispatch(setActiveCompany(data));
+    const result =await dispatch(verifyOtp(values))
+    if(result.type==="company/otp/verification/fulfilled"){
       router.push(
         `/company/register/form?email=${encodeURIComponent(
           values.email
         )}&name=${encodeURIComponent(values.name)}`
       );
     }
+
   };
 
   return (

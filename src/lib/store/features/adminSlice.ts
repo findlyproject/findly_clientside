@@ -1,5 +1,5 @@
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
-import { Company, SkillType, TitleType, Admin } from "@/types/Types";
+import { Company, SkillType, TitleType, Admin, User, Rating } from "@/types/Types";
 
 interface AdminState {
   admin: Admin | null;
@@ -7,19 +7,31 @@ interface AdminState {
   titles: TitleType[];
   companies: Company[];
 }
+
+
+ interface AdminState{
+admin:Admin|null
+skills:SkillType[]
+titles:TitleType[]
+companies:Company[]
+users:User[]
+reviews:Rating[]
+ }
 const initialState: AdminState = {
-  admin: null,
-  skills: [],
-  titles: [],
-  companies: [],
+  admin:null,
+  skills:[],
+  titles:[],
+  companies:[],
+  users:[],
+  reviews:[]
 };
 
 const adminSlice = createSlice({
   name: "admin",
   initialState,
   reducers: {
-    setAdmin: (state, action) => {
-      state.admin = action.payload;
+    setAdmin: (state,action) => {
+      state.admin = action.payload
     },
     setSkills: (state, action: PayloadAction<SkillType[]>) => {
       state.skills = action.payload;
@@ -30,9 +42,15 @@ const adminSlice = createSlice({
     setCompanies: (state, action: PayloadAction<Company[]>) => {
       state.companies = action.payload;
     },
-  },
+    setUsers:(state,action:PayloadAction<User[]>)=>{
+          state.users=action.payload
+    },
+    setReviews:(state,action)=>{
+      state.reviews=action.payload
+    }
+  
+  }, 
 });
 
-export const { setAdmin, setSkills, setJOBTitles, setCompanies } =
-  adminSlice.actions;
+export const { setAdmin,setSkills,setJOBTitles,setUsers,setCompanies,setReviews } = adminSlice.actions;
 export default adminSlice.reducer;

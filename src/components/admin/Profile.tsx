@@ -1,14 +1,15 @@
 "use client";
 
-import { setAdmin } from "@/lib/store/features/adminSlice";
-import { Admin } from "@/types/Types";
-import { useAppDispatch, useAppSelector } from "@/lib/store/hooks";
-import api from "@/utils/api";
-import Image from "next/image";
-import { useState } from "react";
-import { FaUser, FaEnvelope, FaCamera } from "react-icons/fa";
-import { Formik, Field, Form, ErrorMessage } from "formik";
-import * as Yup from "yup";
+import {  setAdmin } from '@/lib/store/features/adminSlice';
+import { Admin } from '@/types/Types';
+import { useAppDispatch, useAppSelector } from '@/lib/store/hooks';
+import api from '@/utils/api';
+import Image from 'next/image';
+import { useState } from 'react';
+import { FaUser, FaEnvelope, FaCamera } from 'react-icons/fa';
+import { Formik, Field, Form, ErrorMessage } from 'formik';
+import * as Yup from 'yup';
+import { editAdminProfile } from '@/lib/store/features/actions/adminActions';
 
 export const Profile = () => {
   const admin = useAppSelector((state) => state.admin.admin as Admin);
@@ -51,11 +52,12 @@ export const Profile = () => {
     }
 
     try {
-      const response = await api.patch(`/admin/editprofile`, formDataToSend, {
-        headers: { "Content-Type": "multipart/form-data" },
-      });
-      console.log("response of admin profile edit", response);
-      dispatch(setAdmin(response.data.admin));
+     const result=await dispatch(editAdminProfile(formDataToSend))
+     if(result.type==="edit/admin/fulfilled"){
+console.log("done");
+
+     }
+   
     } catch (error) {
       console.error("Error updating profile:", error);
     }

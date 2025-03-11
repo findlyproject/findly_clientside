@@ -19,7 +19,8 @@ import { useRouter } from "next/navigation";
 import DeleteAccount from "./DeleteAccount";
 import { SetLogout } from "@/lib/store/features/userSlice";
 import { setCompanyLogOut } from "@/lib/store/features/companyslice";
-import { Company, User } from "@/types/Types";
+import { deleteAccount, deleteAccountVerification } from "@/lib/store/features/actions/userActions";
+
 
 export default function ManageAccount() {
   const router = useRouter();
@@ -91,10 +92,8 @@ export default function ManageAccount() {
 
   const onDelete = async () => {
     try {
-      console.log("jeieidkf");
-      const response = await api.post(`/${route}/accountdeletionreqst`);
-      console.log("e", response);
-      if (response.status === 200) {
+      const result =await dispatch(deleteAccount(route))
+      if(result.type==="delete/account/fulfilled"){
         setOtpModal(true);
         setShowModal(false);
       }
@@ -107,22 +106,18 @@ export default function ManageAccount() {
       const reasonStrings: string[] = selectedReasons.map(
         (item) => reasons[item]
       );
-      const response = await api.post(`/${route}/verifyOtp`, {
-        otp,
-        reasons: reasonStrings,
-      });
-
-      if (response.status === 200) {
+      const result =await dispatch(deleteAccountVerification({otp,reasonStrings,route}))
+      if(result.type==="delete/account/verification/fulfilled"){
         setOtpModal(false);
-        toast.success("account deleted successfully");
         if (user) {
           dispatch(SetLogout());
         } else {
           dispatch(setCompanyLogOut());
         }
-
         router.push("/");
       }
+
+    
     } catch (error) {
       console.log("error", error);
     }

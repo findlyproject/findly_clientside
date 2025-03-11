@@ -10,42 +10,48 @@ import {
   setAllRatings,
 } from "@/lib/store/features/ratingSlice";
 import { TiTickOutline } from "react-icons/ti";
-import { Rating } from "@/types/Types";
-export const Ratings = () => {
-  const [ratings, setRatings] = useState<Rating[]>([]);
-  const dispatch = useAppDispatch();
-  // const ratings=useAppSelector((state)=>state.rating.ratings)
-  console.log("ratings", ratings);
+import { adminApproveReviews, adminRemoveRating, findlyReviews } from '@/lib/store/features/actions/adminActions';
+export const Ratings=()=> {
+  const[ratings,setRatings]=useState([])
+    const dispatch=useAppDispatch()
+    const reviews=useAppSelector((state)=>state.admin.reviews)
 
-  useEffect(() => {
-    const fetch = async () => {
-      const response = await api.get(`/admin/ratings`);
-      console.log("response", response);
-      setRatings(response.data.ratings);
-    };
-    fetch();
-  }, []);
-  const handleRemove = async (ratingID: string) => {
-    const response = await api.patch(`/admin/remove/${ratingID}`);
-    console.log("response of rating remove", response);
-    setRatings((prev) => prev.filter((item) => item._id !== ratingID));
-    // dispatch(removeRating(ratingID))
-  };
+    console.log("ratings",ratings);
+    console.log("reviews",reviews);
 
-  const handleAccept = async (id: string) => {
-    console.log("iddd", id);
+  
 
-    const response = await api.patch(`/admin/approve/${id}`);
-    console.log("response of rating approve", response);
-    setRatings((prev) =>
-      prev.map((item) => (item._id === id ? { ...item, status: true } : item))
-    );
-    // dispatch(approveRating(id))
-  };
+const findReviews=async()=>{
+  const result=await dispatch(findlyReviews())
+console.log("result",result);
+
+}
+    useEffect(()=>{
+         findReviews()
+    },[])
+    const handleRemove=async(ratingID:string)=>{
+
+      const result=await dispatch(adminRemoveRating(ratingID))
+      console.log("result",result);
+      if(result.type==="remove/reviews/fulfilled"){
+        findReviews()
+      }
+
+
+    }
+
+    const handleAccept=async(id:string)=>{
+     
+      const result=await dispatch(adminApproveReviews(id))
+      if(result.type==="approve/reviews/fulfilled"){
+        findReviews()
+      }
+
+    }
   return (
-    <div>
-      {ratings.map((item, index) => {
-        const rating = item.starsRating;
+     <div>
+      {reviews.map((item) => {
+         const rating = item.starsRating;
         const fullStars = Math.floor(rating);
         const halfStars = rating % 1 !== 0 ? 1 : 0;
         const emptyStars = 5 - fullStars - halfStars;
