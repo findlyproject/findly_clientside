@@ -1,41 +1,43 @@
-
-
 "use client";
 
-import { fetchCompanies, handleBlock } from "@/lib/store/features/actions/adminActions";
-import { companyData } from "@/lib/store/features/companyslice";
+import {
+  fetchCompanies,
+  handleBlock,
+} from "@/lib/store/features/actions/adminActions";
+
 import { useAppDispatch, useAppSelector } from "@/lib/store/hooks";
-import api from "@/utils/api";
+
 import { useEffect, useState } from "react";
 
 const Companies = () => {
-  const dispatch=useAppDispatch()
-  const companies=useAppSelector((state)=>state.admin.companies)
-  
+  const dispatch = useAppDispatch();
+  const companies = useAppSelector((state) => state.admin.companies);
+
   const [currentPage, setCurrentPage] = useState(1);
   const companiesPerPage = 10;
-useEffect(()=>{
-       listCompanies()
-},[])
+  useEffect(() => {
+    listCompanies();
+  }, []);
 
-console.log("companies",companies);
+  console.log("companies", companies);
 
-const listCompanies=()=>{
-  dispatch(fetchCompanies())
-}
+  const listCompanies = () => {
+    dispatch(fetchCompanies());
+  };
 
-  const unblockAndBlock=(id:string)=>{
-    const result=dispatch(handleBlock(id))
+  const unblockAndBlock = (id: string) => {
+    const result = dispatch(handleBlock(id));
 
-    console.log("result",result);
-  }
-
-
+    console.log("result", result);
+  };
 
   // Pagination Logic
   const indexOfLastCompany = currentPage * companiesPerPage;
   const indexOfFirstCompany = indexOfLastCompany - companiesPerPage;
-  const currentCompanies = companies.slice(indexOfFirstCompany, indexOfLastCompany);
+  const currentCompanies = companies.slice(
+    indexOfFirstCompany,
+    indexOfLastCompany
+  );
   const totalPages = Math.ceil(companies.length / companiesPerPage);
 
   // Handlers for Pagination
@@ -55,15 +57,26 @@ const listCompanies=()=>{
             <table className="table-auto min-w-full rounded-xl">
               <thead>
                 <tr className="bg-gray-50">
-                  <th className="p-5 text-left font-semibold text-gray-900">User ID</th>
-                  <th className="p-5 text-left font-semibold text-gray-900">Full Name & Email</th>
-                  <th className="p-5 text-left font-semibold text-gray-900">Role</th>
-                  <th className="p-5 text-left font-semibold text-gray-900">Actions</th>
+                  <th className="p-5 text-left font-semibold text-gray-900">
+                    User ID
+                  </th>
+                  <th className="p-5 text-left font-semibold text-gray-900">
+                    Full Name & Email
+                  </th>
+                  <th className="p-5 text-left font-semibold text-gray-900">
+                    Role
+                  </th>
+                  <th className="p-5 text-left font-semibold text-gray-900">
+                    Actions
+                  </th>
                 </tr>
               </thead>
               <tbody className="divide-y divide-gray-300">
-                {companies.map((user,index) => (
-                  <tr key={`${user._id}-${index}`} className="bg-white hover:bg-gray-50">
+                {companies.map((user, index) => (
+                  <tr
+                    key={`${user._id}-${index}`}
+                    className="bg-white hover:bg-gray-50"
+                  >
                     <td className="p-5 text-sm text-gray-900">{user._id}</td>
                     <td className="p-5 text-sm text-gray-900">
                       <div className="flex items-center gap-3">
@@ -80,12 +93,18 @@ const listCompanies=()=>{
                         </div>
                       </div>
                     </td>
-                    <td className="p-5 text-sm text-gray-900">{user.role || "N/A"}</td>
+                    <td className="p-5 text-sm text-gray-900">
+                      {user.role || "N/A"}
+                    </td>
                     <td className="p-5 flex gap-2">
-                      <button className="p-2 bg-indigo-600 text-white rounded">View</button>
+                      <button className="p-2 bg-indigo-600 text-white rounded">
+                        View
+                      </button>
                       <button
                         className={`text-xs sm:text-sm px-2 sm:px-4 py-1 sm:py-2 rounded-md text-white transition ${
-                          user.isBlocked ? "bg-yellow-500 hover:bg-yellow-400" : "bg-red-600 hover:bg-red-700"
+                          user.isBlocked
+                            ? "bg-yellow-500 hover:bg-yellow-400"
+                            : "bg-red-600 hover:bg-red-700"
                         }`}
                         onClick={() => unblockAndBlock(user._id)}
                       >
@@ -111,7 +130,9 @@ const listCompanies=()=>{
                 <button
                   key={i}
                   className={`px-3 py-1 border rounded-md ${
-                    currentPage === i + 1 ? "bg-blue-600 text-white" : "bg-gray-200"
+                    currentPage === i + 1
+                      ? "bg-blue-600 text-white"
+                      : "bg-gray-200"
                   }`}
                   onClick={() => setCurrentPage(i + 1)}
                 >

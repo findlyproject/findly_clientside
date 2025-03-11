@@ -1,13 +1,13 @@
 "use client";
 import { fetchAllPosts } from "@/lib/store/features/actions/postActions";
-import { IPost, updatePost } from "@/lib/store/features/postSlice";
+import { updatePost } from "@/lib/store/features/postSlice";
 import { useAppDispatch, useAppSelector } from "@/lib/store/hooks";
 import api from "@/utils/api";
 import Image from "next/image";
 import { useRouter } from "next/navigation";
 import React, { useEffect, useState } from "react";
 import OutsideClickHandler from "react-outside-click-handler";
-
+import { IPost } from "@/types/Types";
 const ReportedPosts = () => {
   const [openReportId, setOpenReportId] = useState<string | null>(null);
   const [filter, setFilter] = useState("all");

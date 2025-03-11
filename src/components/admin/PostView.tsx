@@ -1,10 +1,9 @@
-"use client"; // Only needed if this file is inside `app/` directory
+"use client"; 
 import { useEffect, useState } from "react";
 import { useParams, useRouter } from "next/navigation";
 import api from "@/utils/api";
-import { IPost } from "@/lib/store/features/postSlice";
 import Image from "next/image";
-
+import { IPost } from "@/types/Types";
 const PostView = () => {
   const { id } = useParams();
   console.log(id)

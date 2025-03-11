@@ -2,8 +2,12 @@ import React, { useEffect, useState } from "react";
 import { JobCard, JobSkeleton } from "./jobcard";
 import api from "@/utils/api";
 import { LuRotateCw } from "react-icons/lu";
-import { Job } from "./AllJobs";
-export default function RecommendedJobs(props) {
+
+import { InputType, Job } from "@/types/Types";
+export interface Input{
+  input:InputType
+}
+export default function RecommendedJobs({input}:Input) {
   const [jobs, setJobs] = useState<Job[]>([]);
   const [page, setPage] = useState(1);
   const [loading, setLoading] = useState(false);
@@ -11,15 +15,15 @@ export default function RecommendedJobs(props) {
   const [isLoading, setIsLoading] = useState(true);
 
   // Debounce input changes
-  const [debouncedInput, setDebouncedInput] = useState(props.input);
+  const [debouncedInput, setDebouncedInput] = useState(input);
 
   useEffect(() => {
     const handler = setTimeout(() => {
-      setDebouncedInput(props.input);
+      setDebouncedInput(input);
     }, 500);
 
     return () => clearTimeout(handler);
-  }, [props.input]);
+  }, [input]);
 
   useEffect(() => {
     setPage(1);
@@ -85,7 +89,7 @@ export default function RecommendedJobs(props) {
                 tags={job.jobType}
                 salary={job.salary}
                 location={job.location}
-                logo={job.company.logo}
+                logo={job.company.logo||""}
                 bgColor="#ffff"
                 _id={job._id}
               />

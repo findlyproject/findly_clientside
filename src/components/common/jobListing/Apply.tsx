@@ -3,6 +3,7 @@
 import Navbar from '@/components/navBar/Navbar';
 import { useAppSelector } from '@/lib/store/hooks';
 import api from '@/utils/api';
+import { AxiosError } from 'axios';
 import Link from 'next/link';
 import { useParams, useRouter } from 'next/navigation';
 import React, { useState } from 'react';
@@ -137,7 +138,8 @@ const Apply = () => {
       toast.success("Apply successfully!");
       router.push("/user/jobs")
     } catch (error) {
-      toast.warning(error.response?.data?.message || "Error applying to job.");
+      const err = error as AxiosError<{ message: string }>;
+  toast.warning(err.response?.data?.message || "Error applying to job.");
     } finally {
       setIsLoading(true)
 

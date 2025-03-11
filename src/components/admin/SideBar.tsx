@@ -7,9 +7,10 @@ import { useRouter } from "next/navigation";
 import { FaPlus } from "react-icons/fa6";
 import { MdOutlineReviews } from "react-icons/md";
 import { toast } from "react-toastify";
+import { MouseEventType } from "@/types/Types";
 const Sidebar = () => {
   const router = useRouter();
-  const handleAdminLogout = async (e: React.MouseEvent<HTMLButtonElement>) => {
+  const handleAdminLogout = async (e:MouseEventType) => {
     e.preventDefault();
 
     const response = await api.post("/admin/logout");

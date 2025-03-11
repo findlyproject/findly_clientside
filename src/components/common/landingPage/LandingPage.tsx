@@ -11,7 +11,7 @@ import { useEffect, useState } from "react";
 import api from "@/utils/api";
 import CountUp from "react-countup";
 import { toast } from "react-toastify";
-import { formChangeEvent } from "@/types/Types";
+import { formChangeEvent, Job, MouseEventType } from "@/types/Types";
 
 function LandingPage() {
   const [users, setUsers] = useState([]);
@@ -45,13 +45,7 @@ function LandingPage() {
   const router = useRouter();
   
   
-  interface Job {
-    _id: string;
-    title: string;
-    location: string;
-    company: string;
-    salary: { rate: string; min: number; max: number };
-  }
+ 
   const [nameQuery, setNameQuery] = useState("");
   const [locationQuery, setLocationQuery] = useState("");
   const [results, setResults] = useState<Job[]>([]);
@@ -86,7 +80,7 @@ function LandingPage() {
   };
 
 
-  const handleSubmit = (e:formChangeEvent) => {
+  const handleSubmit = (e:MouseEventType) => {
     e.preventDefault();
     toast.error("please login");
   };

@@ -1,5 +1,3 @@
-
-
 "use client";
 
 import { loginAdmin } from "@/lib/store/features/actions/adminActions";
@@ -72,7 +70,6 @@ export default function LoginPage() {
 
   return (
     <div className="relative flex items-center justify-center min-h-screen">
-     
       <div
         className="absolute inset-0 bg-cover bg-center bg-no-repeat opacity-60"
         style={{

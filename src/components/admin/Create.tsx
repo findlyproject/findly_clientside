@@ -1,6 +1,6 @@
 "use client";
 
-import { TitleType,SkillType } from "@/types/Types";
+import { TitleType, SkillType } from "@/types/Types";
 import api from "@/utils/api";
 
 import { useEffect, useState } from "react";
@@ -11,7 +11,15 @@ import { VscVerifiedFilled } from "react-icons/vsc";
 import { VscVerified } from "react-icons/vsc";
 import { MdEdit } from "react-icons/md";
 import { useAppDispatch, useAppSelector } from "@/lib/store/hooks";
-import { editSkill, editTitle, handleBlock, postSkill, postTitle, showSkills, showSTitles } from "@/lib/store/features/actions/adminActions";
+import {
+  editSkill,
+  editTitle,
+  handleBlock,
+  postSkill,
+  postTitle,
+  showSkills,
+  showSTitles,
+} from "@/lib/store/features/actions/adminActions";
 
 const Create = () => {
   const [skill, setSkill] = useState("");
@@ -21,31 +29,28 @@ const Create = () => {
   const [titles, setTitles] = useState("");
   const [alltitles, setallTitles] = useState<TitleType[]>([]);
   const [titleEditing, setTitleEditing] = useState<string | null>(null);
-const dispatch= useAppDispatch()
-const skills=useAppSelector((state)=>state.admin.skills)
-const jobtitles=useAppSelector((state)=>state.admin.titles)
+  const dispatch = useAppDispatch();
+  const skills = useAppSelector((state) => state.admin.skills);
+  const jobtitles = useAppSelector((state) => state.admin.titles);
   const [activeTab, setActiveTab] = useState("skills");
   const formattedSkill =
     skill.charAt(0).toUpperCase() + skill.slice(1).toLowerCase();
   const formattedTitles =
     titles.charAt(0).toUpperCase() + titles.slice(1).toLowerCase();
 
-console.log("skills",skills);
+  console.log("skills", skills);
 
+  useEffect(() => {
+    fetchSkills();
+    fetchTitle();
+  }, []);
 
-  useEffect(()=>{
-      fetchSkills()
-      fetchTitle()
-
-  },[])
-
-      const fetchSkills=()=>{
-        dispatch(showSkills())
-      }
-      const fetchTitle=()=>{
-        dispatch(showSTitles())
-      }
-
+  const fetchSkills = () => {
+    dispatch(showSkills());
+  };
+  const fetchTitle = () => {
+    dispatch(showSTitles());
+  };
 
   const handleSkill = async () => {
     if (!skill.trim()) {
@@ -54,21 +59,19 @@ console.log("skills",skills);
     }
     try {
       if (editingSkill) {
+        const result = await dispatch(editSkill({ skill, editingSkill }));
 
-        const result= await dispatch(editSkill({skill,editingSkill}))
-
-        console.log("resultedit",result);
-        if(result.type==='edit/skills/fulfilled'){
-          dispatch(showSkills())
+        console.log("resultedit", result);
+        if (result.type === "edit/skills/fulfilled") {
+          dispatch(showSkills());
         }
       } else {
-    const result=await dispatch(postSkill(formattedSkill))
-console.log("result",result);
-if(result.type==="post/skills/fulfilled"){
-  dispatch(showSkills())
-}
- }
-   
+        const result = await dispatch(postSkill(formattedSkill));
+        console.log("result", result);
+        if (result.type === "post/skills/fulfilled") {
+          dispatch(showSkills());
+        }
+      }
     } catch (error) {
       console.error("Error adding skill:", error);
     }
@@ -82,24 +85,22 @@ if(result.type==="post/skills/fulfilled"){
 
     try {
       if (titleEditing) {
-       const result=await dispatch(editTitle({titles,titleEditing}))
-           
-     if(result.type==="edit/Title/fulfilled"){
-      dispatch(showSTitles())
-     }
-       setTitleEditing(null);
+        const result = await dispatch(editTitle({ titles, titleEditing }));
+
+        if (result.type === "edit/Title/fulfilled") {
+          dispatch(showSTitles());
+        }
+        setTitleEditing(null);
       } else {
+        const result = await dispatch(postTitle(formattedTitles));
+        console.log("resultpodtgfftf", result);
 
-       const result=await dispatch(postTitle(formattedTitles))
-console.log("resultpodtgfftf",result);
-
-       if(result.type==="post/Title/fulfilled"){
-        dispatch(showSTitles())
-       }
+        if (result.type === "post/Title/fulfilled") {
+          dispatch(showSTitles());
+        }
       }
       setTitles("");
-      } 
-     catch (error) {
+    } catch (error) {
       console.error("Error adding titles:", error);
     }
   };
@@ -131,8 +132,6 @@ console.log("resultpodtgfftf",result);
   const handleTitleEdit = async (Item: TitleType) => {
     setTitles(Item.name);
     setTitleEditing(Item._id);
-    
-    
   };
 
   const handleEdit = async (skillItem: SkillType) => {

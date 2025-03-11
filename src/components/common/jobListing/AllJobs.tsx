@@ -5,67 +5,13 @@ import React, { useEffect, useState } from "react";
 import { JobCard, JobSkeleton } from "./jobcard";
 import api from "@/utils/api";
 import { LuRotateCw } from "react-icons/lu";
+import { InputType, Job } from "@/types/Types";
 
-export interface Job {
-  _id: string;
-  title: string;
-  company: Company;
-  location: string;
-  jobType: string;
-  experienceLevel: string;
-  industry: string;
-  description: string;
-  requirements: string[];
-  jobResponsibilities: string[];
-  applicationDeadline: string;
-  benefits: string[];
-  contactEmail: string;
-  contactPhone: string;
-  likes: string[];
-  salary?: Salary[] | undefined;
-  comments: string[];
-  reports: string[];
-  status: string;
-  isDeleted: boolean;
-  createdAt: string;
-  updatedAt: string;
-  __v: number;
+export interface Input{
+  input:InputType
 }
 
-export interface Salary {
-  min: number;
-  max: number;
-  rate: string;
-}
-
-export interface Company {
-  address: Address;
-  _id: string;
-  name: string;
-  logo: string;
-  email: string;
-  password: string;
-  contact: number;
-  role: string;
-  age: number;
-  IndustryType: string;
-  subscriptionEndDate: string;
-  subscriptionStartDate: string;
-  isDeleted: boolean;
-  employees: string[];
-  createdAt: string;
-  updatedAt: string;
-  __v: number;
-}
-
-export interface Address {
-  pincode: string;
-  city: string;
-  state: string;
-  country: string;
-}
-
-function AllJobs(props) {
+function AllJobs({input}:Input) {
   const [jobs, setJobs] = useState<Job[]>([]);
   const [page, setPage] = useState(1);
   const [loading, setLoading] = useState(false);
@@ -73,15 +19,15 @@ function AllJobs(props) {
   const [isLoading, setIsLoading] = useState(true);
 
   // Debounce input changes
-  const [debouncedInput, setDebouncedInput] = useState(props.input);
+  const [debouncedInput, setDebouncedInput] = useState(input);
 
   useEffect(() => {
     const handler = setTimeout(() => {
-      setDebouncedInput(props.input);
+      setDebouncedInput(input);
     }, 500);
 
     return () => clearTimeout(handler);
-  }, [props.input]);
+  }, [input]);
 
   useEffect(() => {
     setPage(1);
@@ -123,6 +69,8 @@ function AllJobs(props) {
     }
   };
 
+  console.log("job",jobs);
+  
   return (
     <div className="p-4 h-full overflow-y-auto bg-slate-100">
       {isLoading ? (
@@ -143,7 +91,7 @@ function AllJobs(props) {
                 tags={job.jobType}
                 salary={job.salary}
                 location={job.location}
-                logo={job.company.logo}
+                logo={job.company.logo||""}
                 bgColor="#ffff"
                 _id={job._id}
               />

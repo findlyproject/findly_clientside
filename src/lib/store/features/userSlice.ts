@@ -1,6 +1,6 @@
 
 
-import { Ieducation, IlocationType, JobLocationType, User } from "@/types/Types";
+import { Ieducation, IlocationType, JobLocationType, SavedType, User } from "@/types/Types";
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 import { Url } from "url";
 
@@ -114,7 +114,7 @@ interface LoginState {
     email: string;
     otp: string;
   };
-  savedJobs: string[];
+  savedJobs: SavedType[];
   jobfilter: {
     title: string;
     experienceLevel: string;
