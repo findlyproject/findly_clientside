@@ -259,6 +259,8 @@ export interface Rating {
   _id: string;
   review: string;
   starsRating: number;
+  name:string;
+  email:string
   userId: {
     firstName: string;
     lastName: string;

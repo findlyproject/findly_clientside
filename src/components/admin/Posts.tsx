@@ -2,7 +2,7 @@
 
 import {  fetchAllPostsAdmin } from "@/lib/store/features/actions/postActions";
 import { useAppDispatch, useAppSelector } from "@/lib/store/hooks";
-import handleAsync from "@/utils/handleAsync";
+
 import Image from "next/image";
 import { useRouter } from "next/navigation";
 import { useEffect } from "react";

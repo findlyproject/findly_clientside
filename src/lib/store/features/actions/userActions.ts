@@ -246,3 +246,42 @@ export const saveJobs = createAsyncThunk(
     }
   }
 );
+
+
+export const deleteAccount = createAsyncThunk(
+  "delete/account",
+  async (route:string, { rejectWithValue }) => {
+    try {
+      const response = await handleAsync<AxiosResponse<RatingResponse>>(() =>api.post(`/${route}/accountdeletionreqst`));
+
+      if (!response) {
+        return rejectWithValue("delete account failed. Please try again.");
+      }
+
+
+      return response.data;
+    } catch {
+      return rejectWithValue("An error occurred while submitting the rating.");
+    }
+  }
+);
+
+
+export const deleteAccountVerification = createAsyncThunk(
+  "delete/account/verification",
+  async ({otp,reasonStrings,route}:{otp:string,reasonStrings:string[],route:string}, { rejectWithValue }) => {
+   
+      const response = await handleAsync<AxiosResponse<RatingResponse>>(() =>api.post(`/${route}/verifyOtp`, {
+        otp,
+        reasons: reasonStrings,
+      }));
+
+      if (!response) {
+        return rejectWithValue(" account verification failed. Please try again.");
+      }
+
+
+      return response.data;
+
+  }
+);

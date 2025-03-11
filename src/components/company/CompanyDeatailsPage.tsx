@@ -2,7 +2,7 @@
 "use client"
 
 import { companyData } from "@/lib/store/features/companyslice";
-import { useAppSelector } from "@/lib/store/hooks";
+import { useAppDispatch, useAppSelector } from "@/lib/store/hooks";
 import { FcRating } from "react-icons/fc";
 import { Star } from "lucide-react";
 import api from "@/utils/api";
@@ -12,7 +12,13 @@ import React, { useEffect, useState } from "react";
 import { FaStar, FaEnvelope, FaPhone, FaGlobe, FaFacebook, FaInstagram, FaLinkedin, FaTwitter } from "react-icons/fa";
 import OutsideClickHandler from "react-outside-click-handler";
 import { MdDelete } from "react-icons/md";
-
+import { Rating } from "@/types/Types";
+import { addReview, deleteReview } from "@/lib/store/features/actions/companyActions";
+  export interface ReviewInput {
+  review: string;
+  name: string;
+  email: string;
+}
 
 const CompanyProfile = ({ id }: { id: string }) => {
   const activeuser=useAppSelector((state)=>state.user.activeuser)
@@ -23,19 +29,19 @@ const CompanyProfile = ({ id }: { id: string }) => {
     const activeUser=useAppSelector((state)=>state.user.activeuser)
 const active=activeCompany||activeUser
 
-
+const dispatch=useAppDispatch()
     const route=activeCompany?"company":"user"
   const companyId=id
   const targetedId=id
  
   
     
-    const [rating, setRating] = useState(0);
-    const [rewies,setReviwes]=useState({
-        review:"",
-        name:"",
-        email:""
-    })
+    const [rating, setRating] = useState<number>(0);
+      const [rewies,setReviwes]=useState({
+          review:"",
+          name:"",
+          email:"",
+      })
     const [average,setAverage]=useState(0)
 
 const findAverageRating=()=>{
@@ -77,11 +83,16 @@ setAverage(Number(averageRating))
       }
       console.log("review",review)
       const handleDelete=async(id:string)=>{
-        const response=await api.delete(`/${route}/deletereview/${id}`)
-        if(response.status===200){
+        const result=await dispatch(deleteReview({route,id}))
+        if(result.type==="review/delete/fulfilled"){
           findAllReviews()
           findAverageRating()
         }
+        // const response=await api.delete(`/${route}/deletereview/${id}`)
+        // if(response.status===200){
+        //   findAllReviews()
+        //   findAverageRating()
+        // }
       }
 const handleChange=(e:React.ChangeEvent<HTMLInputElement|HTMLTextAreaElement>)=>{
     const {name,value}=e.target
@@ -110,18 +121,25 @@ console.log("rewies",rewies);
   const handleSubmit=async()=>{
    try {
 
-    
-    const response=await api.post(`${route}/companyrating/${targetedId}`,{
-        review:rewies.review,
-        email:rewies.email,
-        name:rewies.name,
-        starsRating:rating
-    })
-    if(response.status===201){
-        setShowModal(false)
+    const result=await dispatch(addReview({route,rewies,rating,targetedId}))
+
+    if(result.type==="review/add/fulfilled"){
+      setShowModal(false)
         setRating(0)
         findAllReviews()
     }
+
+    // const response=await api.post(`${route}/companyrating/${targetedId}`,{
+    //     review:rewies.review,
+    //     email:rewies.email,
+    //     name:rewies.name,
+    //     starsRating:rating
+    // })
+    // if(response.status===201){
+    //     setShowModal(false)
+    //     setRating(0)
+    //     findAllReviews()
+    // }
 
     
    } catch (error) {

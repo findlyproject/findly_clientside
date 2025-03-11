@@ -2,7 +2,7 @@ import Navbar from "@/components/navBar/Navbar";
 import Edit from "@/components/user/profileupdate/Edit";
 import React from "react";
 
-export function page() {
+export default function page() {
   return (
     <div>
       <Navbar />

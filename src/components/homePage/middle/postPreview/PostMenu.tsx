@@ -1,5 +1,5 @@
 "use client";
-import { useEffect, useState } from "react";
+import {  useState } from "react";
 import { useAppDispatch, useAppSelector } from "@/lib/store/hooks";
 import {  setSaved } from "@/lib/store/features/postSlice";
 import {  PostPreviewProps } from "@/types/Types";

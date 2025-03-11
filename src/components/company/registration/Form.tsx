@@ -14,6 +14,7 @@ import { Company, SelectChangeEvent } from "../../../types/Types";
 import handleAsync from "@/utils/handleAsync";
 import PhoneInput from "react-phone-input-2";
 import "react-phone-input-2/lib/style.css"; // Import default styles
+import { companyRegistration } from "@/lib/store/features/actions/companyActions";
 const RegistrationForm = () => {
   const searchParams = useSearchParams();
   const dispatch = useAppDispatch();
@@ -108,15 +109,11 @@ const RegistrationForm = () => {
     if (previewImage && previewImage.file instanceof File) {
       formData.append("logo", previewImage.file);
     }
-
-    const response = await handleAsync(() =>
-      api.post("/company/final-register", formData)
-    );
-    if (response && response.status >= 200 && response.status < 300) {
-    const data = response?.data.company;
-    dispatch(setActiveCompany(data));
-    router.push("/company/home");
+    const result =await dispatch(companyRegistration(formData))
+    if(result.type==="company/registration/fulfilled"){
+      router.push("/company/home");
     }
+
   };
 
   return (
