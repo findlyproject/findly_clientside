@@ -1,36 +1,5 @@
 import { createSlice ,PayloadAction} from "@reduxjs/toolkit";
-interface EducationType {  
-  college: string;  
-  startYear: string;  
-  endYear: string;  
-}  
- export interface JobLocationType {
-  country: string;
-  countryName: string;
-  state: string;
-  stateName: string;
-  city: string;
-}
-
-interface RegisterType {
-    email: string
-    password:string
-    firstName:string
-    lastName:string
-    location:{
-    country: string;
-    countryName: string;
-    state: string;
-    stateName: string;
-    city: string;
-  }
-  gender:string
-
-  education:EducationType[]
-  jobTitles:string[],
-  jobLocations:JobLocationType[]
-}
-
+import { EducationType, JobLocationType, RegisterType } from "@/types/Types";
 const initialState: RegisterType = {
   email: "",
   password:"",

@@ -4,6 +4,7 @@ import { useAppDispatch, useAppSelector } from "@/lib/store/hooks";
 import React, { useState, useEffect } from "react";
 import { formatDistanceToNowStrict } from "date-fns";
 import api from "@/utils/api";
+import { handleUnsavePosts } from "@/lib/store/features/actions/companyActions";
 
 export default function SavedPosts() {
   const [activeTab, setActiveTab] = useState("saved");
@@ -37,11 +38,16 @@ export default function SavedPosts() {
 
   const handleUnsave = async (postid: string) => {
     try {
-      await api.post(`/company/save/${postid}`);
-      setsavedPosts((prev) => prev.filter((item) => item.postId?._id !== postid));
 
-      const response = await api.get("/post/user/all");
-      dispatch(setSaved(response.data.saved || []));
+      const result=await dispatch(handleUnsavePosts(postid))
+            if(result.type==="unsave/posts/fulfilled"){
+              await api.post(`/company/save/${postid}`);
+              setsavedPosts((prev) => prev.filter((item) => item.postId?._id !== postid));
+        
+              const response = await api.get("/post/user/all");
+              dispatch(setSaved(response.data.saved || []));
+            }
+
     } catch (error) {
       console.error("Error unsaving post:", error);
     }

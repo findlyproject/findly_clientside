@@ -5,11 +5,10 @@ import { usePathname, useRouter } from "next/navigation";
 import React, { useEffect, useState } from "react";
 import { motion } from "framer-motion";
 import api from "@/utils/api";
-import { UserProfile } from "@/lib/store/features/userSlice";
+import { User } from "@/types/Types";
 import { logOutCompany } from "@/lib/store/features/actions/companyActions";
 import { logoutUser } from "@/lib/store/features/actions/userActions";
 import Image from "next/image";
-import Notification from "../notification/Notification";
 import { InputChangeEvent } from "@/types/Types";
 
 
@@ -25,7 +24,7 @@ function Navbar() {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
   const [searchQuery, setSearchQuery] = useState("");
-  const [searchResults, setSearchResults] = useState<UserProfile[]>([]);
+  const [searchResults, setSearchResults] = useState<User[]>([]);
   
  console.log("isMenuOpen",isMenuOpen);
  console.log("activeuser",activeuser);

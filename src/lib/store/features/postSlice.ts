@@ -1,10 +1,26 @@
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
-import { UserProfile } from "./userSlice";
-import { companyData } from "./companyslice";
 
+
+import { User,Company } from "@/types/Types";
+
+
+// export interface SavePost{
+//   _id:string;
+//   postId:{
+//      _id:string
+
+//   }
+//   userId:{
+//     _id:string
+//     firstName:string;
+//     profileImage:string
+
+//   }
+//   timestamp:Date
+// }
 export interface IReport {
 _id: string; 
-reportedBy:UserProfile;
+reportedBy:User;
 reason:string;
 isDeleted:boolean;  
 createdAt:Date;
@@ -14,7 +30,7 @@ updatedAt:Date;
 
 export interface IReply {
   _id: string;
-  user: UserProfile | null;
+  user: User|Company | null;
   reply: string;
   repliedAt?: Date;
   isDeleted: boolean;
@@ -24,7 +40,7 @@ export interface IReply {
 
 export interface IComment {
   _id: string;
-  user: UserProfile | companyData  | null;
+  user: User | Company  | null;
   comment: string;
   replies: IReply[];  
   isDeleted: boolean;
@@ -44,8 +60,8 @@ export interface IPost {
   description?: string;
   images?:string [];
   video?:string;
-  owner: UserProfile | null;
-  likedBy?: UserProfile[];
+  owner: User | null;
+  likedBy?: User[];
   reports?:  IReport[]| null|undefined;
   comments?:  IComment[] ;
   isDeleted?: boolean;
@@ -130,7 +146,7 @@ const postSlice = createSlice({
       const deletedReplyId = action.payload; 
       
 
-      state.commentReplay = state.commentReplay.filter(reply => reply._id !== deletedReplyId);
+      state.commentReplay = state.commentReplay?.filter(reply => reply._id !== deletedReplyId);
      
 
     },

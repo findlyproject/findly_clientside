@@ -73,7 +73,7 @@ console.log("jiii")
       .unwrap()
       .then(() => {
         toast.success("Post updated successfully!");
-        dispatch(fetchAllPosts())
+        dispatch(fetchAllPosts(1))
       })
       .catch((error) => console.error("Error updating post:", error));
   };

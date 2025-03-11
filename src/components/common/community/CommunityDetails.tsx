@@ -8,6 +8,10 @@ import { toast } from "react-toastify";
 import { useAppSelector } from "@/lib/store/hooks";
 import { MdModeEditOutline } from "react-icons/md";
 import { FaPencilAlt } from "react-icons/fa";
+import {
+  Community,
+  CommunityMessage,
+} from "@/lib/store/features/communitySlice";
 
 interface CommunityDetailsProps {
   id: string;
@@ -19,11 +23,11 @@ export default function CommunityDetails({
 }: CommunityDetailsProps) {
   const [activeTab, setActiveTab] = useState("images");
   const activeuser = useAppSelector((state) => state.user.activeuser);
-  const [message, setMessage] = useState([]);
+  const [message, setMessage] = useState<CommunityMessage[]>([]);
   const router = useRouter();
-  const [details, setDetails] = useState({});
+  const [details, setDetails] = useState<Community | null>(null);
   const [dropdown, setDropdown] = useState(false);
-  const dropdownRef = useRef(null);
+  const dropdownRef = useRef<HTMLDivElement | null>(null);
 
   const fetchCommunity = async () => {
     const response = await api.get(`/message/details/${id}`);
@@ -42,7 +46,7 @@ export default function CommunityDetails({
   console.log("mmmm", message);
 
   const isMember = details?.members?.some(
-    (item) => item.memberId === activeuser?._id
+    (item) => item.memberId._id === activeuser?._id
   );
   console.log("isMember", isMember);
 
@@ -50,8 +54,11 @@ export default function CommunityDetails({
     setDropdown((prev) => !prev);
   };
   useEffect(() => {
-    const handleClickOutside = (event) => {
-      if (dropdownRef.current && !dropdownRef.current.contains(event.target)) {
+    const handleClickOutside = (event: MouseEvent) => {
+      if (
+        dropdownRef.current &&
+        !dropdownRef.current.contains(event.target as Node)
+      ) {
         setDropdown(false);
       }
     };
@@ -91,17 +98,17 @@ export default function CommunityDetails({
   useEffect(() => {
     console.log("ffff", details);
 
-    const leav = details.members;
+    const leav = details?.members;
     console.log("leav", leav);
   }, []);
 
   console.log("details", details);
 
   const [isEditing, setIsEditing] = useState(false);
-  const [description, setDescription] = useState(details?.description || ""); 
+  const [description, setDescription] = useState(details?.description || "");
   const handleEditClick = () => setIsEditing(true);
 
-  const handleSaveClick = async (communityid) => {
+  const handleSaveClick = async (communityid: string) => {
     console.log("commuuuu", communityid);
 
     try {
@@ -126,7 +133,7 @@ export default function CommunityDetails({
   const [name, setName] = useState(details?.name || "");
   const handleEditNameClick = () => setIsnameEdit(true);
 
-  const handleSaveName = async (communityid) => {
+  const handleSaveName = async (communityid: string) => {
     try {
       if (!name.trim()) {
         toast.warn("name cannot be empty!");
@@ -145,7 +152,7 @@ export default function CommunityDetails({
     }
   };
 
-  const handleDeleteCommunity = async (communityid) => {
+  const handleDeleteCommunity = async (communityid: string) => {
     const response = await api.patch(`/message/delete/${communityid}`);
     console.log("community removal:", response);
     onClose();
@@ -162,7 +169,7 @@ export default function CommunityDetails({
     }
   };
 
-  const handleUpload = async (communityid) => {
+  const handleUpload = async (communityid: string) => {
     if (!selectedFile) return;
 
     const formData = new FormData();
@@ -211,7 +218,7 @@ export default function CommunityDetails({
 
           {selectedFile !== null ? (
             <button
-              onClick={() => handleUpload(details._id)}
+              onClick={() => details?._id && handleUpload(details?._id)}
               className="absolute inset-0 flex items-center justify-center bg-primary text-white p-1 rounded"
             >
               Upload
@@ -231,7 +238,7 @@ export default function CommunityDetails({
           <span className="ml-2">
             {isnameEdit ? (
               <FaSave
-                onClick={() => handleSaveName(details._id)}
+                onClick={() => details?._id && handleSaveName(details?._id)}
                 className="text-green-500 text-lg cursor-pointer"
               />
             ) : (
@@ -247,7 +254,7 @@ export default function CommunityDetails({
           <input
             type="text"
             value={name || ""}
-            onChange={(e) => setName(e.target.value)} 
+            onChange={(e) => setName(e.target.value)}
             className="border border-gray-300 rounded-md mt-2 px-2 py-1 w-full"
             autoFocus
           />
@@ -263,7 +270,7 @@ export default function CommunityDetails({
             <span className="ml-2">
               {isEditing ? (
                 <FaSave
-                  onClick={() => handleSaveClick(details._id)}
+                  onClick={() => details?._id && handleSaveClick(details?._id)}
                   className="text-green-500 text-lg cursor-pointer"
                 />
               ) : (
@@ -302,14 +309,18 @@ export default function CommunityDetails({
             <div className="absolute right-0 mt-2 w-40 bg-white border border-gray-200 rounded-lg shadow-lg z-10">
               {activeuser ? (
                 <button
-                  onClick={() => handleLeaveCommunity(details?._id)}
+                  onClick={() =>
+                    details?._id && handleLeaveCommunity(details?._id)
+                  }
                   className="w-full text-left px-4 py-2 text-gray-800 hover:bg-gray-100 rounded-lg transition duration-150"
                 >
                   Leave Community
                 </button>
               ) : (
                 <button
-                  onClick={() => handleDeleteCommunity(details?._id)}
+                  onClick={() =>
+                    details?._id && handleDeleteCommunity(details?._id)
+                  }
                   className="w-full text-left px-4 py-2 text-gray-800 hover:bg-gray-100 rounded-lg transition duration-150"
                 >
                   Delete Community
@@ -381,9 +392,9 @@ export default function CommunityDetails({
           ) : (
             <ul className="space-y-2">
               <h1 className="text-xl font-semibold">
-                {details.members?.length || 0} Members
+                {details?.members?.length || 0} Members
               </h1>
-              {details.members.map((member, index) => (
+              {details?.members.map((member, index) => (
                 <li
                   key={index}
                   className="py-2 flex items-center border-b pb-2"
@@ -404,15 +415,15 @@ export default function CommunityDetails({
                   <span className="ml-3">
                     {member.memberModel === "User"
                       ? member.memberId.firstName
-                      : member.memberId.name}
+                      : ""}
                   </span>
 
                   <p>
-                    {member === details.createdBy
+                    {member.memberId._id === details.createdBy?._id
                       ? details.createdBy?.name
                       : ""}
                   </p>
-                  {details.createdBy._id === member._id && (
+                  {details.createdBy._id === member.memberId._id && (
                     <span className="text-primary ml-auto bg-gray-100 border border-primary rounded-full text-sm px-2 py-1">
                       Admin
                     </span>

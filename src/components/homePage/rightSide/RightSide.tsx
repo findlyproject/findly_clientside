@@ -1,8 +1,8 @@
 import { findnMembers } from "@/lib/store/features/actions/communityActions";
 import { useAppDispatch, useAppSelector } from "@/lib/store/hooks";
-import { LuSend } from "react-icons/lu";
+
 import { useEffect, useState } from "react";
-import { HiPaperClip } from "react-icons/hi2";
+
 import React from "react";
 import api, { socket } from "@/utils/api";
 import { FaEllipsisV } from "react-icons/fa";
@@ -17,40 +17,32 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faSmile } from "@fortawesome/free-solid-svg-icons";
 import OutsideClickHandler from "react-outside-click-handler";
 import { BsThreeDots } from "react-icons/bs";
+import { Connection } from "@/types/Types";
+import { MessageType } from "@/lib/store/features/communitySlice";
 export default function RightSide() {
   const dispatch = useAppDispatch();
 
-  //   useEffect(()=>{
-  //     fetchMembers()
-  //   },[])
-  //   const messageLists=useAppSelector((state)=>state.community.members)
-
-  //   const fetchMembers=async()=>{
-  //     const result = await dispatch(findnMembers())
-  //     console.log("result",result);
-
-  // }
-
-  const [selectedUser, setSelectedUser] = useState(null);
+  const [selectedUser, setSelectedUser] = useState<Connection | null>(null);
   const [message, setMessage] = useState("");
-  const [messages, setMessages] = useState([]);
+  const [messages, setMessages] = useState<MessageType[]>([]);
   const [members, setMembers] = useState([]);
   const [activeTab, setActiveTab] = useState("focused");
-  const [focused, setFocused] = useState([]);
+  const [focused, setFocused] = useState<Connection[]>([]);
+
   const [other, setOther] = useState([]);
   const activeuser = useAppSelector((state) => state.user.activeuser);
   const [showPicker, setShowPicker] = useState(false);
   const [showPickerImogi, setShowPickerImogi] = useState(false);
 
   const [filterDropdown, setfilterDropdown] = useState(false);
-  const [Dropdown, setDropdown] = useState(false);
+  const [Dropdown, setDropdown] = useState<string | null>(null);
 
   const handleFilterDropdown = () => {
     setfilterDropdown((prev) => !prev);
   };
-  const handleDropdown = (event, userId) => {
+  const handleDropdown = (event: React.MouseEvent, userId: string) => {
     event.stopPropagation();
-    setDropdown((prev) => (prev === userId ? null : userId));
+    setDropdown(Dropdown === userId ? null : userId);
   };
   // Fetch Chat Members
   useEffect(() => {
@@ -91,7 +83,7 @@ export default function RightSide() {
     fetchMessages();
   }, [selectedUser, activeuser?._id]);
 
-  const handleUserSelect = (user) => {
+  const handleUserSelect = (user:Connection) => {
     console.log("user....", user);
     setSelectedUser(user);
     setMessages([]);
@@ -273,7 +265,6 @@ bg-white border-s border-gray-200 dark:bg-neutral-800 dark:border-neutral-700 w-
                             <BsThreeDots className="text-gray-500 hover:text-gray-700 cursor-pointer" />
                           </button>
 
-                          {/* Dropdown below the icon */}
                           {Dropdown === chat.connectionID._id && (
                             <div className="absolute top-full right-0 mt-1 w-40 bg-white shadow-lg rounded-lg border z-50">
                               <ul className="flex flex-col">
@@ -306,7 +297,6 @@ bg-white border-s border-gray-200 dark:bg-neutral-800 dark:border-neutral-700 w-
             </aside>
           )}
 
-          {/* Right Chat Window */}
           {selectedUser && (
             <main className="w-full flex flex-col h-full bg-white">
               {selectedUser ? (
@@ -330,10 +320,7 @@ bg-white border-s border-gray-200 dark:bg-neutral-800 dark:border-neutral-700 w-
                     </div>
 
                     <div className="relative">
-                      <div
-                        className="flex space-x-4 cursor-pointer"
-                        // onClick={() => setIsOpen(!isOpen)}
-                      >
+                      <div className="flex space-x-4 cursor-pointer">
                         <FaEllipsisV className="text-gray-600" />
                       </div>
                     </div>
@@ -374,7 +361,7 @@ bg-white border-s border-gray-200 dark:bg-neutral-800 dark:border-neutral-700 w-
                         <div
                           key={index}
                           className={`w-max grid ${
-                            msg.sender === activeuser._id ? "ml-auto" : ""
+                            msg.sender === activeuser?._id ? "ml-auto" : ""
                           }`}
                         >
                           {/* Show name and profile only if it's the first message of a sequence */}
@@ -382,14 +369,14 @@ bg-white border-s border-gray-200 dark:bg-neutral-800 dark:border-neutral-700 w-
                             <div className="flex items-center space-x-1">
                               <img
                                 src={`${
-                                  msg.sender === activeuser._id
+                                  msg.sender === activeuser?._id
                                     ? activeuser?.profileImage
                                     : selectedUser?.connectionID.profileImage
                                 }`}
                                 className="w-8 h-8 rounded-full"
                               />
                               <p className="text-sm font-semibold">
-                                {msg.sender === activeuser._id
+                                {msg.sender === activeuser?._id
                                   ? "You"
                                   : selectedUser?.connectionID.firstName}
                               </p>
@@ -399,7 +386,7 @@ bg-white border-s border-gray-200 dark:bg-neutral-800 dark:border-neutral-700 w-
                           {/* Message Bubble */}
                           <div
                             className={`px-3.5 py-1 rounded-md mb-2 flex flex-col ${
-                              msg.sender === activeuser._id
+                              msg.sender === activeuser?._id
                                 ? "bg-primary text-white"
                                 : "bg-gray-100 text-gray-900"
                             }`}
@@ -422,156 +409,96 @@ bg-white border-s border-gray-200 dark:bg-neutral-800 dark:border-neutral-700 w-
                     })}
                   </div>
 
-                  {/* <footer className="p-4 bg-gray-200 border-t flex items-center">
+                  <footer className="p-4   flex items-center">
+                    <div className="w-full pl-3 pr-1 py-1 flex items-center gap-2 justify-between">
+                      {/* Input & Emoji Section */}
+                      <div className="relative flex flex-col w-full">
+                        {/* Input Field & Icons */}
+                        <div className="relative flex items-center bg-white px-3 py-2 rounded-full border border-gray-300 w-full gap-2">
+                          {/* Emoji Button */}
+                          <button
+                            type="button"
+                            className="p-2 rounded-full"
+                            onClick={() => setShowPicker((prev) => !prev)}
+                          >
+                            <span className="text-gray-500 cursor-pointer hover:text-gray-700">
+                              <FontAwesomeIcon icon={faSmile} />
+                            </span>
+                          </button>
 
-                  <div className="w-full pl-3 pr-1 py-1 rounded-3xl border border-gray-200 items-center gap-2 inline-flex justify-between">
-                  <div className="relative flex items-center gap-2">
-  
-  <button
-    type="button"
-    className="p-2 rounded-full"
-    onClick={() => setShowPicker((prev) => !prev)}
-  >
-    <span className="text-gray-500 cursor-pointer hover:text-gray-700">
-      <FontAwesomeIcon icon={faSmile} />
-    </span>
-  </button>
+                          {/* Input Field */}
+                          <div className="flex-grow">
+                            <input
+                              className="w-full text-black text-xs font-medium leading-4 focus:outline-none px-2"
+                              placeholder="Type here..."
+                              value={message}
+                              onChange={(e) => setMessage(e.target.value)}
+                            />
+                          </div>
 
-  
-  {showPicker && (
-  <OutsideClickHandler onOutsideClick={() => setShowPicker(false)}>
-    <div
-      className="absolute bottom-12 left-0 bg-white shadow-lg rounded-lg p-2 z-50"
-      style={{ width: "250px", height: "300px" }} // Set custom width & height
-    >
-      <EmojiPicker
-        onEmojiClick={handleEmojiClick}
-        height={280} 
-        width={240} 
-      />
-    </div>
-  </OutsideClickHandler>
-)}
+                          {/* Attach (Clip) Icon and Send Button */}
+                          <div className="flex items-center ">
+                            <button>
+                              <svg
+                                className="cursor-pointer"
+                                xmlns="http://www.w3.org/2000/svg"
+                                width="22"
+                                height="22"
+                                viewBox="0 0 22 22"
+                                fill="none"
+                              >
+                                <g id="Attach 01">
+                                  <path
+                                    d="M14.9332 7.79175L8.77551 14.323C8.23854 14.8925 7.36794 14.8926 6.83097 14.323C6.294 13.7535 6.294 12.83 6.83097 12.2605L12.9887 5.72925"
+                                    stroke="#9CA3AF"
+                                    strokeWidth="1.6"
+                                    strokeLinecap="round"
+                                    strokeLinejoin="round"
+                                  />
+                                </g>
+                              </svg>
+                            </button>
 
- 
-  <input
-    className="grow shrink basis-0 text-black text-xs font-medium leading-4 focus:outline-none"
-    placeholder="Type here..."
-    value={message}
-    onChange={(e) => setMessage(e.target.value)}
-  />
-</div>
+                            {/* Send Button */}
+                            <button
+                              className="flex items-center px-2 py-2 bg-primary rounded-full shadow text-white text-xs font-semibold"
+                              onClick={handleSendMessage}
+                            >
+                              <svg
+                                xmlns="http://www.w3.org/2000/svg"
+                                width="16"
+                                height="16"
+                                viewBox="0 0 16 16"
+                                fill="none"
+                              >
+                                <path
+                                  d="M9.04071 6.959L6.54227 9.45744M6.89902 10.0724L7.03391 10.3054C8.31034 12.5102 8.94855 13.6125 9.80584 13.5252C10.6631 13.4379 11.0659 12.2295 11.8715 9.81261L13.0272 6.34566C13.7631 4.13794 14.1311 3.03408 13.5484 2.45139C12.9657 1.8687 11.8618 2.23666 9.65409 2.97257L6.18714 4.12822C3.77029 4.93383 2.56187 5.33664 2.47454 6.19392C2.38721 7.0512 3.48957 7.68941 5.69431 8.96584L5.92731 9.10074C6.23326 9.27786 6.38623 9.36643 6.50978 9.48998C6.63333 9.61352 6.72189 9.7665 6.89902 10.0724Z"
+                                  stroke="white"
+                                  strokeWidth="1.6"
+                                  strokeLinecap="round"
+                                />
+                              </svg>
+                              <span>Send</span>
+                            </button>
+                          </div>
+                        </div>
 
-<div className="flex items-center gap-2">
-  <svg className="cursor-pointer" xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 22 22" fill="none">
-    <g id="Attach 01">
-      <g id="Vector">
-        <path d="M14.9332 7.79175L8.77551 14.323C8.23854 14.8925 7.36794 14.8926 6.83097 14.323C6.294 13.7535 6.294 12.83 6.83097 12.2605L12.9887 5.72925M12.3423 6.41676L13.6387 5.04176C14.7126 3.90267 16.4538 3.90267 17.5277 5.04176C18.6017 6.18085 18.6017 8.02767 17.5277 9.16676L16.2314 10.5418M16.8778 9.85425L10.72 16.3855C9.10912 18.0941 6.49732 18.0941 4.88641 16.3855C3.27549 14.6769 3.27549 11.9066 4.88641 10.198L11.0441 3.66675" stroke="#9CA3AF" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" />
-        <path d="M14.9332 7.79175L8.77551 14.323C8.23854 14.8925 7.36794 14.8926 6.83097 14.323C6.294 13.7535 6.294 12.83 6.83097 12.2605L12.9887 5.72925M12.3423 6.41676L13.6387 5.04176C14.7126 3.90267 16.4538 3.90267 17.5277 5.04176C18.6017 6.18085 18.6017 8.02767 17.5277 9.16676L16.2314 10.5418M16.8778 9.85425L10.72 16.3855C9.10912 18.0941 6.49732 18.0941 4.88641 16.3855C3.27549 14.6769 3.27549 11.9066 4.88641 10.198L11.0441 3.66675" stroke="black" stroke-opacity="0.2" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" />
-        <path d="M14.9332 7.79175L8.77551 14.323C8.23854 14.8925 7.36794 14.8926 6.83097 14.323C6.294 13.7535 6.294 12.83 6.83097 12.2605L12.9887 5.72925M12.3423 6.41676L13.6387 5.04176C14.7126 3.90267 16.4538 3.90267 17.5277 5.04176C18.6017 6.18085 18.6017 8.02767 17.5277 9.16676L16.2314 10.5418M16.8778 9.85425L10.72 16.3855C9.10912 18.0941 6.49732 18.0941 4.88641 16.3855C3.27549 14.6769 3.27549 11.9066 4.88641 10.198L11.0441 3.66675" stroke="black" stroke-opacity="0.2" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" />
-      </g>
-    </g>
-  </svg>
-  <button className="items-center flex px-3 py-2 bg-primary rounded-full shadow "
-  onClick={handleSendMessage}>
-    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 16 16" fill="none">
-      <g id="Send 01">
-        <path id="icon" d="M9.04071 6.959L6.54227 9.45744M6.89902 10.0724L7.03391 10.3054C8.31034 12.5102 8.94855 13.6125 9.80584 13.5252C10.6631 13.4379 11.0659 12.2295 11.8715 9.81261L13.0272 6.34566C13.7631 4.13794 14.1311 3.03408 13.5484 2.45139C12.9657 1.8687 11.8618 2.23666 9.65409 2.97257L6.18714 4.12822C3.77029 4.93383 2.56187 5.33664 2.47454 6.19392C2.38721 7.0512 3.48957 7.68941 5.69431 8.96584L5.92731 9.10074C6.23326 9.27786 6.38623 9.36643 6.50978 9.48998C6.63333 9.61352 6.72189 9.7665 6.89902 10.0724Z" stroke="white" stroke-width="1.6" stroke-linecap="round" />
-      </g>
-    </svg>
-    <h3 className="text-white text-xs font-semibold leading-4 px-2">Send</h3>
-  </button>
-</div>
-</div>
-                    
-                  </footer> */}
-<footer className="p-4   flex items-center">
-  <div className="w-full pl-3 pr-1 py-1 flex items-center gap-2 justify-between">
-    {/* Input & Emoji Section */}
-    <div className="relative flex flex-col w-full">
-      {/* Input Field & Icons */}
-      <div className="relative flex items-center bg-white px-3 py-2 rounded-full border border-gray-300 w-full gap-2">
-        {/* Emoji Button */}
-        <button
-          type="button"
-          className="p-2 rounded-full"
-          onClick={() => setShowPicker((prev) => !prev)}
-        >
-          <span className="text-gray-500 cursor-pointer hover:text-gray-700">
-            <FontAwesomeIcon icon={faSmile} />
-          </span>
-        </button>
-
-        {/* Input Field */}
-        <div className="flex-grow">
-          <input
-            className="w-full text-black text-xs font-medium leading-4 focus:outline-none px-2"
-            placeholder="Type here..."
-            value={message}
-            onChange={(e) => setMessage(e.target.value)}
-          />
-        </div>
-
-        {/* Attach (Clip) Icon and Send Button */}
-        <div className="flex items-center ">
-        <button> 
-        <svg
-            className="cursor-pointer"
-            xmlns="http://www.w3.org/2000/svg"
-            width="22"
-            height="22"
-            viewBox="0 0 22 22"
-            fill="none"
-          >
-            <g id="Attach 01">
-              <path
-                d="M14.9332 7.79175L8.77551 14.323C8.23854 14.8925 7.36794 14.8926 6.83097 14.323C6.294 13.7535 6.294 12.83 6.83097 12.2605L12.9887 5.72925"
-                stroke="#9CA3AF"
-                strokeWidth="1.6"
-                strokeLinecap="round"
-                strokeLinejoin="round"
-              />
-            </g>
-          </svg>
-        </button>
-
-          {/* Send Button */}
-          <button
-            className="flex items-center px-2 py-2 bg-primary rounded-full shadow text-white text-xs font-semibold"
-            onClick={handleSendMessage}
-          >
-            <svg
-              xmlns="http://www.w3.org/2000/svg"
-              width="16"
-              height="16"
-              viewBox="0 0 16 16"
-              fill="none"
-            >
-              <path
-                d="M9.04071 6.959L6.54227 9.45744M6.89902 10.0724L7.03391 10.3054C8.31034 12.5102 8.94855 13.6125 9.80584 13.5252C10.6631 13.4379 11.0659 12.2295 11.8715 9.81261L13.0272 6.34566C13.7631 4.13794 14.1311 3.03408 13.5484 2.45139C12.9657 1.8687 11.8618 2.23666 9.65409 2.97257L6.18714 4.12822C3.77029 4.93383 2.56187 5.33664 2.47454 6.19392C2.38721 7.0512 3.48957 7.68941 5.69431 8.96584L5.92731 9.10074C6.23326 9.27786 6.38623 9.36643 6.50978 9.48998C6.63333 9.61352 6.72189 9.7665 6.89902 10.0724Z"
-                stroke="white"
-                strokeWidth="1.6"
-                strokeLinecap="round"
-              />
-            </svg>
-            <span >Send</span>
-          </button>
-        </div>
-      </div>
-
-      {/* Emoji Picker */}
-      {showPicker && (
-        <div
-          className="absolute bottom-full  left-0 mb-2 bg-white shadow-lg rounded-lg p-1 z-50 ml-[-15]"
-          style={{ width: "250px", height: "300px" }}
-        >
-          <EmojiPicker onEmojiClick={handleEmojiClick} height={280} width={240} />
-        </div>
-      )}
-    </div>
-  </div>
-</footer>
-
+                        {/* Emoji Picker */}
+                        {showPicker && (
+                          <div
+                            className="absolute bottom-full  left-0 mb-2 bg-white shadow-lg rounded-lg p-1 z-50 ml-[-15]"
+                            style={{ width: "250px", height: "300px" }}
+                          >
+                            <EmojiPicker
+                              onEmojiClick={handleEmojiClick}
+                              height={280}
+                              width={240}
+                            />
+                          </div>
+                        )}
+                      </div>
+                    </div>
+                  </footer>
 
                   {/* <input
                       type="text"
@@ -598,8 +525,6 @@ bg-white border-s border-gray-200 dark:bg-neutral-800 dark:border-neutral-700 w-
             </main>
           )}
         </div>
-
-       
       </div>
     </>
   );
