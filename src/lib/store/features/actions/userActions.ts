@@ -325,3 +325,24 @@ export const reportPost = createAsyncThunk(
 );
 
 
+
+export const reportUser = createAsyncThunk(
+  "report/user",
+  async ({reason,repoteduserid}:{reason:string,repoteduserid:string}, { rejectWithValue }) => {
+   
+      const response = await handleAsync<AxiosResponse>(() =>api.post(`/user/reportuser`, {
+        reason: reason,
+        repoteduserid:repoteduserid,
+      }));
+
+      if (!response) {
+        return rejectWithValue(" report failed. Please try again.");
+      }
+  
+      return response.data;
+
+  }
+);
+
+
+

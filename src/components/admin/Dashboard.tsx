@@ -1,7 +1,7 @@
 "use client";
 import React, { useState, useEffect } from "react";
 import { Chart } from "primereact/chart";
-import { useAppSelector } from "@/lib/store/hooks";
+
 
 import api from "@/utils/api";
 import { Company, DailyRevenueType, User } from "@/types/Types";
@@ -16,8 +16,7 @@ const Dashboard: React.FC = () => {
   const [aboutCompany, setaboutCompany] = useState<Company[]>([]);
   const [dailyRevenue, setDailyRevenue] = useState(0);
   const [totalRevenue, setTotalRevenue] = useState(0);
-  const [userRevenue, setuserRevenue] = useState(0);
-  const [companyRevenue, setcompanyRevenue] = useState(0);
+
   const [daily, setDaily] = useState<DailyRevenueType[]>([]);
   const x1Labels = daily?.map((item) => item.day) || [];
   const dailyData = daily?.map((item) => item.revenue) || [];
@@ -42,14 +41,10 @@ const Dashboard: React.FC = () => {
       const dailyCompanies = await api.get(`/admin/dailycompanies`);
       setDailyCompany(dailyCompanies.data.dailyCompanyCount);
       setaboutCompany(dailyCompanies.data.Todaycompanies);
-      // const userRevenue=await api.get(`/admin/userrevenue`)
-      // setuserRevenue(userRevenue.data.TotaluserRevenue)
 
-      // const companyRevenue=await api.get(`/admin/companyrevenue`)
-      // setcompanyRevenue(companyRevenue.data.TotalcompanyRevenue)
 
       const user = await api.get(`/admin/dailyuser`);
-      console.log("user dailyyyy", user);
+ 
 
       setDaily(user.data.dailyRevenue || []);
 
@@ -147,7 +142,7 @@ const Dashboard: React.FC = () => {
             </div>
             <div className="p-4 text-right">
               <p className="block antialiased font-sans text-sm leading-normal font-normal text-blue-gray-600">
-                Today's Money
+                Today s Money
               </p>
               <h4 className="block antialiased tracking-normal font-sans text-2xl font-semibold leading-snug text-blue-gray-900">
                 ₹{dailyRevenue}
@@ -179,7 +174,7 @@ const Dashboard: React.FC = () => {
             </div>
             <div className="p-4 text-right">
               <p className="block antialiased font-sans text-sm leading-normal font-normal text-blue-gray-600">
-                Today's Users
+                Today s Users
               </p>
               <h4 className="block antialiased tracking-normal font-sans text-2xl font-semibold leading-snug text-blue-gray-900">
                 {dailyUser}
@@ -207,7 +202,7 @@ const Dashboard: React.FC = () => {
             </div>
             <div className="p-4 text-right">
               <p className="block antialiased font-sans text-sm leading-normal font-normal text-blue-gray-600">
-                Today's Companies
+                Today s Companies
               </p>
               <h4 className="block antialiased tracking-normal font-sans text-2xl font-semibold leading-snug text-blue-gray-900">
                 {dailyCompany}
@@ -255,7 +250,7 @@ const Dashboard: React.FC = () => {
               <div className="relative bg-clip-border rounded-xl overflow-hidden bg-transparent text-gray-700 shadow-none m-0 flex items-center justify-between p-6">
                 <div>
                   <h6 className="block antialiased tracking-normal font-sans text-base font-semibold leading-relaxed text-blue-gray-900 mb-1">
-                    Today's Users
+                    Today s Users
                   </h6>
                   <p className="antialiased font-sans text-sm leading-normal flex items-center gap-1 font-normal text-blue-gray-600">
                     <svg
@@ -388,7 +383,7 @@ const Dashboard: React.FC = () => {
               <div className="relative bg-clip-border rounded-xl overflow-hidden bg-transparent text-gray-700 shadow-none m-0 flex items-center justify-between p-6">
                 <div>
                   <h6 className="block antialiased tracking-normal font-sans text-base font-semibold leading-relaxed text-blue-gray-900 mb-1">
-                    Today's Companies
+                    Today s Companies
                   </h6>
                   <p className="antialiased font-sans text-sm leading-normal flex items-center gap-1 font-normal text-blue-gray-600">
                     <svg
