@@ -332,8 +332,8 @@ export default function ProfileEdit() {
               foundedAt: activecompany?.foundedAt || "",
               about: activecompany?.about || "",
               workHours: {
-                start: activecompany?.workHours.start || "",
-                end: activecompany?.workHours.end || "",
+                start: activecompany?.workHours?.start || "",
+                end: activecompany?.workHours?.end || "",
               },
               services: activecompany?.services || [],
               IndustryType: activecompany?.IndustryType || "",
@@ -345,10 +345,10 @@ export default function ProfileEdit() {
                 pincode: activecompany?.address.pincode || "",
               },
               socialMedia: {
-                facebook: activecompany?.socialMedia.facebook || "",
-                instagram: activecompany?.socialMedia.instagram || "",
-                twitter: activecompany?.socialMedia.twitter || "",
-                linkedin: activecompany?.socialMedia.linkedin || "",
+                facebook: activecompany?.socialMedia?.facebook || "",
+                instagram: activecompany?.socialMedia?.instagram || "",
+                twitter: activecompany?.socialMedia?.twitter || "",
+                linkedin: activecompany?.socialMedia?.linkedin || "",
               },
 
               employees: activecompany?.employees || [],

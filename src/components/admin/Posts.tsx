@@ -2,6 +2,7 @@
 
 import { fetchAllPostsAdmin } from "@/lib/store/features/actions/postActions";
 import { useAppDispatch, useAppSelector } from "@/lib/store/hooks";
+import { Company, User } from "@/types/Types";
 
 import Image from "next/image";
 import { useRouter } from "next/navigation";
@@ -19,6 +20,14 @@ const Posts = () => {
   }, []);
 
   const router = useRouter();
+  const isUser = (owner: unknown): owner is User => {
+    return typeof owner === "object" && owner !== null && "firstName" in owner;
+  };
+
+  const isCompany = (owner: unknown): owner is Company => {
+    return typeof owner === "object" && owner !== null && "name" in owner;
+  };
+
   return (
     <div className="flex flex-col p-4">
       <div className="overflow-x-auto pb-4">
@@ -73,22 +82,47 @@ const Posts = () => {
                           <div className="flex items-center gap-2 sm:gap-3">
                             <Image
                               src={
-                                post.owner?.profileImage ||
-                                "https://via.placeholder.com/40"
+                                isUser(post.owner)
+                                  ? post.owner.profileImage ||
+                                    "https://via.placeholder.com/40"
+                                  : isCompany(post.owner)
+                                  ? post.owner.logo ||
+                                    "https://via.placeholder.com/40"
+                                  : "https://via.placeholder.com/40"
                               }
-                              alt={post.owner?.firstName || "Unknown"}
+                              alt={
+                                isUser(post.owner)
+                                  ? post.owner.firstName
+                                  : isCompany(post.owner)
+                                  ? post.owner.name
+                                  : "Unknown"
+                              }
                               className="w-8 h-8 sm:w-10 sm:h-10 rounded-full"
                               width={40}
                               height={40}
                             />
                             <div>
-                              <p className="font-medium text-xs sm:text-sm">
-                                {post.owner?.firstName}{" "}
-                                {post.owner?.lastName || "Unknown"}
-                              </p>
-                              <p className="text-gray-500 text-xs">
-                                {post.owner?.email || "N/A"}
-                              </p>
+                              {isUser(post.owner) ? (
+                                <>
+                                  <p className="font-medium text-xs sm:text-sm">
+                                    {post.owner.firstName} {post.owner.lastName}
+                                  </p>
+                                  <p className="text-gray-500 text-xs">
+                                    {post.owner.email}
+                                  </p>
+                                </>
+                              ) : isCompany(post.owner) ? (
+                                <>
+                                  <p className="font-medium text-xs sm:text-sm">
+                                    {post.owner.name}
+                                  </p>
+                                  <p className="text-gray-500 text-xs">
+                                    {post.owner.email}
+                                  </p>
+                                </>
+                              ) : (
+                                <p>Unknown Owner</p>
+                              )}
                             </div>
                           </div>
                         </td>
