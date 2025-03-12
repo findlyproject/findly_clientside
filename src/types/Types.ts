@@ -393,15 +393,15 @@ export interface IReport {
   
   export interface IPost {
     _id: string;
-    description?: string;
+    description: string;
     images?:string [];
     video?:string;
-    owner: User |null
+    owner: User |Company|string|null
     likedBy?: User[];
     reports?:  IReport[]| null|undefined;
     comments?:  IComment[] ;
     isDeleted?: boolean;
-    createdAt?: string;
+    createdAt: string;
     updatedAt?: string;
   }
   export interface UpdatePostProps {
@@ -587,4 +587,16 @@ export interface SavedType{
   userId:User
   _id:string
   salary:Salary
+
+
+  postId:{
+    _id:string;
+    description:string;
+    owner:User|Company|null
+    createdAt: string;
+    images?: string[];
+    video?: string;
+    likedBy?: any[];
+    comments?: any[];
+  }
 }

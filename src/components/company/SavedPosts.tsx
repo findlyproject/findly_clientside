@@ -5,11 +5,12 @@ import React, { useState, useEffect } from "react";
 import { formatDistanceToNowStrict } from "date-fns";
 import api from "@/utils/api";
 import { handleUnsavePosts } from "@/lib/store/features/actions/companyActions";
+import { Company, SavedType, User } from "@/types/Types";
 
 export default function SavedPosts() {
   const [activeTab, setActiveTab] = useState("saved");
-  const [posts, setPosts] = useState([]);
-  const [savedPosts, setsavedPosts] = useState([]);
+  const [posts, setPosts] = useState<SavedType[]>([]);
+  const [savedPosts, setsavedPosts] = useState<SavedType[]>([]);
   const save = useAppSelector((state) => state.post.saved);
   const dispatch = useAppDispatch();
   const [expandedPosts, setExpandedPosts] = useState<{ [key: string]: boolean }>({});
@@ -36,6 +37,7 @@ export default function SavedPosts() {
     }
   }, [activeTab, savedPosts]);
 
+
   const handleUnsave = async (postid: string) => {
     try {
 
@@ -60,6 +62,13 @@ export default function SavedPosts() {
     }));
   };
 
+   const isUser = (owner: unknown): owner is User => {
+          return typeof owner === "object" && owner !== null && "firstName" in owner;
+        };
+      
+        const isCompany = (owner: unknown): owner is Company => {
+          return typeof owner === "object" && owner !== null && "name" in owner;
+        };
   return (
     <div className="min-h-screen bg-gray-100">
       <div className="max-w-3xl mx-auto mt-6 px-4">
@@ -90,38 +99,50 @@ export default function SavedPosts() {
                   <div key={item.postId._id} className="max-w-md mx-auto bg-white rounded-lg shadow-md p-4">
                     {/* Profile Header */}
                     <div className="relative flex items-center gap-3">
-                      <button
-                        className="absolute top-0 right-4 text-md"
-                        onClick={() => handleUnsave(item.postId._id)}
-                      >
-                        ✕
-                      </button>
-                      <img
-                        src={
-                          item.postId?.owner.type === "Company"
-                            ? item.postId?.owner.logo
-                            : item.postId?.owner.profileImage || "/profile.jpg"
-                        }
-                        alt="Profile"
-                        className="w-12 h-12 rounded-full border"
-                      />
-                      <div>
-                        <h2 className="text-sm font-semibold">
-                          {item.postId.owner.name
-                            ? item.postId.owner.name
-                            : `${item.postId.owner.firstName} ${item.postId.owner.lastName}`}
-                        </h2>
-                        <p className="text-xs text-gray-500">
-                          {item.postId.owner.IndustryType ||
-                            item.postId.owner.jobTitle?.[0]}{" "}
-                          •{" "}
-                          {formatDistanceToNowStrict(
-                            new Date(item.postId.createdAt),
-                            { addSuffix: true }
-                          )}
-                        </p>
-                      </div>
-                    </div>
+  <button
+    className="absolute top-0 right-4 text-md"
+    onClick={() => handleUnsave(item.postId._id)}
+  >
+    ✕
+  </button>
+
+  {/* Profile Image */}
+  <img
+    src={
+      isCompany(item.postId.owner)
+        ? item.postId.owner.logo || "/profile.jpg"
+        : isUser(item.postId.owner)
+        ? item.postId.owner.profileImage || "/profile.jpg"
+        : "/profile.jpg"
+    }
+    alt="Profile"
+    className="w-12 h-12 rounded-full border"
+  />
+
+  {/* Owner Details */}
+  <div>
+    <h2 className="text-sm font-semibold">
+      {isCompany(item.postId.owner)
+        ? item.postId.owner.name
+        : isUser(item.postId.owner)
+        ? `${item.postId.owner.firstName} ${item.postId.owner.lastName}`
+        : "Unknown Owner"}
+    </h2>
+
+    <p className="text-xs text-gray-500">
+      {isCompany(item.postId.owner)
+        ? item.postId.owner.IndustryType
+        : isUser(item.postId.owner)
+        ? item.postId.owner.jobTitle?.[0]
+        : "Unknown"}{" "}
+      •{" "}
+      {formatDistanceToNowStrict(new Date(item.postId.createdAt), {
+        addSuffix: true,
+      })}
+    </p>
+  </div>
+</div>
+
 
                     {/* Post Content */}
                     <p className="mt-2 text-gray-800 text-sm">
@@ -139,7 +160,7 @@ export default function SavedPosts() {
                     </p>
 
                     <div className="mt-3">
-                      {item.postId.images?.length > 0 ? (
+                      {item.postId.images&&item.postId.images?.length > 0 ? (
                         <img
                           src={item.postId.images[0]}
                           className="w-full h-40 object-cover rounded-md"
