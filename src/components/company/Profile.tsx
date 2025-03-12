@@ -1,25 +1,26 @@
 
 "use client"
 
-import { companyData } from "@/lib/store/features/companyslice";
 import { useAppSelector } from "@/lib/store/hooks";
 import api from "@/utils/api";
 import { useEffect, useRef, useState } from "react";
 import { formatDistanceToNow } from "date-fns";
 import { MdDelete } from "react-icons/md";
-import { FaStar, FaEnvelope, FaPhone, FaGlobe, FaBookmark, FaFacebook, FaInstagram, FaLinkedin, FaTwitter } from "react-icons/fa";
+import { FaStar, FaEnvelope, FaPhone, FaGlobe, FaFacebook, FaInstagram, FaLinkedin, FaTwitter } from "react-icons/fa";
 import Modal, { modalProps } from "./JobPostModal";
 import PostModal from "./PostModal";
-import { MdVerified } from "react-icons/md";
+
 import { FaRegImage } from "react-icons/fa6";
 import { ImProfile } from "react-icons/im";
 import { Spinner } from "@material-tailwind/react";
+import Image from "next/image";
+import { Company } from "@/types/Types";
 
 
 const CompanyProfile = () => {
   const [isOpen, setIsOpen] = useState(false);
   const [isOpenPosts, setIsOpenPosts] = useState(false);
-  const [reviews, setReviews] = useState<companyData[]>([])
+  const [reviews, setReviews] = useState<Company[]>([])
   const [jobs, setJobs] = useState<modalProps[]>([])
   const [posts, setPosts] = useState([])
   const [page, setPage] = useState(1)
@@ -157,16 +158,54 @@ const CompanyProfile = () => {
   return (
     <div className="min-h-screen py-10 bg-gray-200 flex justify-center items-center pt-28">
       <div className="bg-white p-8 rounded-lg shadow-lg w-full max-w-3xl ">
-        <div className="flex items-start justify-between  gap-6">
-          <img
-            src={activeCompany?.logo}
-            alt="Profile"
-            className=" w-56 h-56 object-cover"
-          />
-          <div className="">
-            <h2 className="text-2xl font-bold">{activeCompany?.name}</h2>
+      <div className="relative w-full flex flex-col items-center">
+  {/* Banner Section */}
+  <div
+    className="w-full border-4 border-primary h-[200px] bg-cover bg-center rounded-lg"
+    style={{
+      backgroundImage: `url(${activeCompany?.banner || "/default-image.png"})`,
+    }}
+  ></div>
 
-            <div className="mt-6 border-t pt-4">
+  {/* Profile Section (Overlapping) */}
+  <div className="absolute bottom-[-50px] flex justify-start ps-10  w-full">
+  <div className="relative w-[100px] h-[100px]">
+  <Image
+    src={activeCompany?.logo || "/default-image.png"}
+    alt="Profile"
+    width={100} // Equal width and height
+    height={200}
+    // className=" border-4 border-white shadow-lg object-cover"
+    className="w-24 h-24 rounded-full border-4  "
+  />
+</div>
+  </div>
+</div>
+
+
+
+
+        <div className="mt-14">
+          <h2>About</h2>
+          <span>{activeCompany?.about || "write about you"}</span> <br />
+          <span>{status}</span>
+        </div>
+        <div className="flex justify-between items-center mt-6 mb-5 border-t pt-4">
+          <div>
+            <h3 className="text-xl font-semibold">Basic Information</h3>
+
+            <span>Founded -</span><span className="text-primary"> {activeCompany?.foundedAt}</span> <br />
+            <span>Headquarters - </span><span className="text-primary">{activeCompany?.headquarters}</span><br />
+            {activeCompany?.workHours?.start && <span>Working Time :</span>} <span className="text-primary">{activeCompany?.workHours?.start} - {activeCompany?.workHours?.end}</span><br />
+            <span>country :</span> <span className="text-primary">{activeCompany?.address?.country}</span><br />
+            <span>Location :</span> <span className="text-primary">{activeCompany?.address?.landmark} {activeCompany?.address?.city},{activeCompany?.address?.state}</span>
+
+          </div>
+
+          <div className="">
+
+
+            <div className="mt-6 ">
               <h3 className="text-xl font-semibold">Contact Information</h3>
               <p className="flex items-center gap-2 text-primary mt-2"><FaPhone /> {activeCompany?.contact}</p>
               <p className="flex items-center gap-2 text-primary mt-2"><FaEnvelope /> {activeCompany?.email}</p>
@@ -187,30 +226,6 @@ const CompanyProfile = () => {
               </a>
             </div>
           </div>
-          {activeCompany?.role === "premium" && (
-            <div className="">
-              <MdVerified className="ml-auto text-primary text-2xl cursor-pointer" />
-            </div>
-          )
-
-          }
-        </div>
-
-
-        <div>
-          <h2>About</h2>
-          <span>{activeCompany?.about || "write about you"}</span> <br />
-          <span>{status}</span>
-        </div>
-        <div className="mt-6 mb-5 border-t pt-4">
-          <h3 className="text-xl font-semibold">Basic Information</h3>
-
-          <span>Founded -</span><span className="text-primary"> {activeCompany?.foundedAt}</span> <br />
-          <span>Headquarters - </span><span className="text-primary">{activeCompany?.headquarters}</span><br />
-          {activeCompany?.workHours?.start && <span>Working Time :</span>} <span className="text-primary">{activeCompany?.workHours?.start} - {activeCompany?.workHours?.end}</span><br />
-          <span>country :</span> <span className="text-primary">{activeCompany?.address?.country}</span><br />
-          <span>Location :</span> <span className="text-primary">{activeCompany?.address?.landmark} {activeCompany?.address?.city},{activeCompany?.address?.state}</span>
-
 
         </div>
 

@@ -232,7 +232,7 @@ export const loginCompany=createAsyncThunk(
           return rejectWithValue("edit deadline failed.");
         }
 
-          const data = response;
+          const data = response.data;
            
 
         return data;

@@ -1,9 +1,10 @@
 "use client";
 import { createAsyncThunk } from "@reduxjs/toolkit";
 import { AxiosResponse } from "axios";
-import { setPosts, addPost, IPost, setPostsAdmin, PostState } from "../postSlice";
+import { setPosts, addPost, setPostsAdmin, PostState } from "../postSlice";
 import handleAsync from "@/utils/handleAsync";
 import api from "@/utils/api";
+import { IPost } from "@/types/Types";
 
 // fetch all the posts
 export const fetchAllPostsAdmin = createAsyncThunk(
@@ -88,11 +89,13 @@ export const addPostByUser = createAsyncThunk(
     console.log("Media Files to Upload:", mediaFiles);
     formData.append("media", mediaFiles[0]);
 
-    mediaFiles.forEach((file) => {
+    mediaFiles.forEach((file,index) => {
+      console.log("file",file+" index",index);
+      
       formData.append("media", file);
     });
 
-    try {
+ 
       const response = await api.post("/post/upload", formData);
       console.log("jhdsgfhdgsjhfgjs", formData);
 
@@ -115,10 +118,7 @@ export const addPostByUser = createAsyncThunk(
           `Error: ${response.data.message || "Failed to add post"}`
         );
       }
-    } catch (error: any) {
-      console.error("API error:", error);
-      return rejectWithValue("Failed to create or fetch posts.");
-    }
+
   }
 );
 

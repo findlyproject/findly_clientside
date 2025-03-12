@@ -5,7 +5,6 @@ import { useState, useEffect } from "react";
 import api from "@/utils/api";
 import { useRouter } from "next/navigation";
 import Link from "next/link";
-import { MdVerified } from "react-icons/md";
 import { Connection } from "@/types/Types";
 import FileUpload from "../user/ressume/Upload";
 import OutsideClickHandler from "react-outside-click-handler";
