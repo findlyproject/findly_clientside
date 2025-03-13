@@ -1,9 +1,9 @@
 "use client";
 
-import {  setAdmin } from '@/lib/store/features/adminSlice';
+
 import { Admin } from '@/types/Types';
 import { useAppDispatch, useAppSelector } from '@/lib/store/hooks';
-import api from '@/utils/api';
+
 import Image from 'next/image';
 import { useState } from 'react';
 import { FaUser, FaEnvelope, FaCamera } from 'react-icons/fa';

@@ -7,14 +7,14 @@ import api, { socket } from "@/utils/api";
 import { useAppDispatch, useAppSelector } from "@/lib/store/hooks";
 import { FaEllipsisV } from "react-icons/fa";
 import { findnMembers } from "@/lib/store/features/actions/communityActions";
-import { Connection, MessageType } from "@/types/Types";
+import { Connection, MessageType, User } from "@/types/Types";
 export const ChatList=()=> {
   const dispatch=useAppDispatch()
   const [selectedUser, setSelectedUser] = useState<Connection|null>(null);
   const [message, setMessage] = useState("");
   const [messages, setMessages] = useState<MessageType[]>([]);
   const [members, setMembers] = useState<Connection[]>([]);
-  
+  const[Chatlist,setChatlist]=useState([])
   const activeuser = useAppSelector((state) => state.user.activeuser);
 
   // Fetch Chat Members
@@ -90,6 +90,10 @@ export const ChatList=()=> {
 
   console.log("all messages", messages);
 console.log("selectedUser",selectedUser);
+
+
+
+
 
   return (
     <div className="flex h-screen ">
