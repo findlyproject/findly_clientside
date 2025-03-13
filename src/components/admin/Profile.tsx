@@ -1,9 +1,7 @@
 "use client";
 
-
 import { Admin } from '@/types/Types';
 import { useAppDispatch, useAppSelector } from '@/lib/store/hooks';
-
 import Image from 'next/image';
 import { useState } from 'react';
 import { FaUser, FaEnvelope, FaCamera } from 'react-icons/fa';

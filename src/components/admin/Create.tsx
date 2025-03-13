@@ -1,8 +1,6 @@
 "use client";
 
 import { TitleType, SkillType } from "@/types/Types";
-import api from "@/utils/api";
-
 import { useEffect, useState } from "react";
 import { IoMdCreate } from "react-icons/io";
 import { toast } from "react-toastify";
@@ -11,7 +9,7 @@ import { VscVerifiedFilled } from "react-icons/vsc";
 import { VscVerified } from "react-icons/vsc";
 import { MdEdit } from "react-icons/md";
 import { useAppDispatch, useAppSelector } from "@/lib/store/hooks";
-import { editSkill, editTitle, handleApproveSkill, handleApproveTitle, handleBlock, handleRemoveSkill, handleRemoveTitle, postSkill, postTitle, showSkills, showSTitles } from "@/lib/store/features/actions/adminActions";
+import { editSkill, editTitle, handleApproveSkill, handleApproveTitle, handleRemoveSkill, handleRemoveTitle, postSkill, postTitle, showSkills, showSTitles } from "@/lib/store/features/actions/adminActions";
 
 const Create = () => {
   const [skill, setSkill] = useState("");

@@ -14,7 +14,7 @@ import Image from "next/image";
 import Link from "next/link";
 import React, { useEffect, useState } from "react";
 import { IoIosLogOut } from "react-icons/io";
-import { toast } from "react-toastify";
+
 import { useRouter } from "next/navigation";
 import DeleteAccount from "./DeleteAccount";
 import { SetLogout } from "@/lib/store/features/userSlice";
