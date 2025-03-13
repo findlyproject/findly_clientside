@@ -3,55 +3,43 @@ import { useAppDispatch, useAppSelector } from "@/lib/store/hooks";
 import React, { useEffect, useState } from "react";
 import { TiTick } from "react-icons/ti";
 import { IoMdStar, IoMdStarHalf, IoMdStarOutline } from "react-icons/io";
-import api from "@/utils/api";
-import {
-  approveRating,
-  removeRating,
-  setAllRatings,
-} from "@/lib/store/features/ratingSlice";
 import { TiTickOutline } from "react-icons/ti";
-import { adminApproveReviews, adminRemoveRating, findlyReviews } from '@/lib/store/features/actions/adminActions';
-export const Ratings=()=> {
-  const[ratings,setRatings]=useState([])
-    const dispatch=useAppDispatch()
-    const reviews=useAppSelector((state)=>state.admin.reviews)
+import {
+  adminApproveReviews,
+  adminRemoveRating,
+  findlyReviews,
+} from "@/lib/store/features/actions/adminActions";
+export const Ratings = () => {
+  const dispatch = useAppDispatch();
+  const reviews = useAppSelector((state) => state.admin.reviews);
 
-    console.log("ratings",ratings);
-    console.log("reviews",reviews);
+  console.log("reviews", reviews);
 
-  
-
-const findReviews=async()=>{
-  const result=await dispatch(findlyReviews())
-console.log("result",result);
-
-}
-    useEffect(()=>{
-         findReviews()
-    },[])
-    const handleRemove=async(ratingID:string)=>{
-
-      const result=await dispatch(adminRemoveRating(ratingID))
-      console.log("result",result);
-      if(result.type==="remove/reviews/fulfilled"){
-        findReviews()
-      }
-
-
+  const findReviews = async () => {
+    const result = await dispatch(findlyReviews());
+    console.log("result", result);
+  };
+  useEffect(() => {
+    findReviews();
+  }, []);
+  const handleRemove = async (ratingID: string) => {
+    const result = await dispatch(adminRemoveRating(ratingID));
+    console.log("result", result);
+    if (result.type === "remove/reviews/fulfilled") {
+      findReviews();
     }
+  };
 
-    const handleAccept=async(id:string)=>{
-     
-      const result=await dispatch(adminApproveReviews(id))
-      if(result.type==="approve/reviews/fulfilled"){
-        findReviews()
-      }
-
+  const handleAccept = async (id: string) => {
+    const result = await dispatch(adminApproveReviews(id));
+    if (result.type === "approve/reviews/fulfilled") {
+      findReviews();
     }
+  };
   return (
-     <div>
+    <div>
       {reviews.map((item) => {
-         const rating = item.starsRating;
+        const rating = item.starsRating;
         const fullStars = Math.floor(rating);
         const halfStars = rating % 1 !== 0 ? 1 : 0;
         const emptyStars = 5 - fullStars - halfStars;
