@@ -20,14 +20,13 @@ const SubscribedPlanDetails: React.FC = () => {
   const dispatch = useAppDispatch();
   const allFeatures = useAppSelector((state) => state.payment.subscription);
 
-  console.log("Subscription Details:", allFeatures);
-  console.log("sessionId", sessionId);
+  const routes = useRouter();
 
   useEffect(() => {
     if (sessionId) {
       dispatch(features({ sessionId, route }));
     }
-  }, [dispatch, sessionId]);
+  }, [dispatch, sessionId,route]);
 
   const handleContinue = async () => {
     if (sessionId) {
@@ -45,7 +44,7 @@ const SubscribedPlanDetails: React.FC = () => {
   };
 
   return (
-    <div className="p-6 max-w-lg mx-auto bg-white rounded-lg shadow-lg">
+    <div className="pt-80 pb-5 max-w-lg h-8 mx-auto rounded-lg ">
       <h2 className="text-2xl font-semibold mb-6 text-center">
         Your Subscription Plan Details
       </h2>
@@ -71,19 +70,28 @@ const SubscribedPlanDetails: React.FC = () => {
               <li>No features available</li>
             )}
           </ul>
+          <div className="text-center">
+            <button
+              onClick={handleContinue}
+              className="py-2 px-6 bg-indigo-600 text-white font-semibold rounded-full hover:bg-indigo-700 transition duration-300"
+            >
+              Continue
+            </button>
+          </div>
         </div>
       ) : (
-        <p className="text-center text-gray-500">No subscription found.</p>
+        <>
+          <p className="text-center text-gray-500">No subscription found.</p>
+          <div className="text-center">
+            <button
+              onClick={() => routes.push(`/${route}/premium`)}
+              className="py-2 px-6 bg-indigo-600 text-white font-semibold rounded-full hover:bg-indigo-700 transition duration-300"
+            >
+              back
+            </button>
+          </div>
+        </>
       )}
-
-      <div className="text-center">
-        <button
-          onClick={handleContinue}
-          className="py-2 px-6 bg-indigo-600 text-white font-semibold rounded-full hover:bg-indigo-700 transition duration-300"
-        >
-          Continue
-        </button>
-      </div>
     </div>
   );
 };

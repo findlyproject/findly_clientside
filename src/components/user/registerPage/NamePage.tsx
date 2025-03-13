@@ -14,7 +14,7 @@ export  default function NamePage() {
 
   const [Lastname, setLocallastname] = useState("");
   const data = useAppSelector((state) => state.register);
-  console.log("dataaaaaaa", data);
+  console.log("data", data);
   const [firstnameerror, setfirstnameError] = useState("");
   const [lastnameerror, setlastnameError] = useState("");
   const router = useRouter();

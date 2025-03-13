@@ -45,9 +45,9 @@ export interface Ieducation {
   startYear: string;
   endYear: string;
   college: string;
-  Subject: string;
+  subject: string;
 
-}[]
+}
 
 export interface IlocationType {
   country: string;
@@ -105,6 +105,7 @@ export interface User{
   experience: {
     jobRole: string;
     companyName: string;
+    description:string
     startYear: string;
     endYear: string;
   }[];
@@ -119,18 +120,8 @@ export interface User{
   about?: string;
   createdAt:string;
   updatedAt:string;
-  resumePDF?: {
-    fileUrl: string;
-    fileName: string;
-    uploadedAt: Date | null;
-    isDeleted: boolean;
-  }[];
-  resumeVideo?: {
-    fileUrl: string;
-    fileName: string;
-    uploadedAt: Date | null;
-    isDeleted: boolean;
-  }[];
+  resumePDF?: ResumeFile[];
+  resumeVideo?: ResumeFile[];
   role: "user" | "premium";
   subscriptionEndDate: Date | null;
   subscriptionStartDate: Date | null;
@@ -151,6 +142,13 @@ export interface FilesState {
   resume: File | null;
   introductionVideo: File | null;
 }
+export interface ResumeFile {
+  fileUrl: string;
+  fileName: string;
+  uploadedAt: Date | null;
+  isDeleted: boolean;
+}
+
 
 
 export interface Company {

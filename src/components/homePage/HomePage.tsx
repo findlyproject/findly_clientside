@@ -21,6 +21,24 @@ const {activeuser}=useAppSelector(state=>state.user)
 const [isLeftSticky, setIsLeftSticky] = useState(false);
   const leftSidebarRef = useRef(null);
 
+  // useEffect(() => {
+  //   const handleScroll = () => {
+  //     if (!leftSidebarRef.current) return;
+      
+  //     const sidebarBottom = leftSidebarRef.current.getBoundingClientRect().bottom;
+  //     const windowHeight = window.innerHeight;
+      
+  //     if (sidebarBottom <= windowHeight) {
+  //       setIsLeftSticky(true);  // Make it sticky when it reaches the end
+  //     } else {
+  //       setIsLeftSticky(false); // Allow normal scrolling
+  //     }
+  //   };
+
+  //   window.addEventListener("scroll", handleScroll);
+  //   return () => window.removeEventListener("scroll", handleScroll);
+  // }, []);
+
   
   useEffect(() => {
  
@@ -42,21 +60,22 @@ const [isLeftSticky, setIsLeftSticky] = useState(false);
     
   }
   const loadMorePosts = async () => {
-
+    console.log('he');
+    
+    console.log('ho');
     setLoading(true);
     await dispatch(fetchAllPosts(page + 1));
     setPage((prevPage) => prevPage + 1);
     setLoading(false);
   };
 
-  const [showMessage,setShowMessage]=useState(true)
+  const [showMessage,setShowMessage]=useState(false)
 
   return (
   <section
-  className="grid bg-gray-100 pt-16 -z-10 transition-all duration-300 grid-cols-1 lg:grid-cols-[15%_20%_40%_25%] lg:justify-center  "
+  className="grid bg-gray-100 pt-16 -z-10 transition-all duration-300 grid-cols-1 lg:grid-cols-[15%_20%_40%_25%] lg:justify-center "
 >
-
-  <div className="w-full "></div>
+  <div className="w-full"></div>
 <div
         ref={leftSidebarRef}
         className={`overflow-y-auto ${
@@ -71,7 +90,7 @@ const [isLeftSticky, setIsLeftSticky] = useState(false);
   <>
   <button
     type="button"
-    onClick={() => setShowMessage(!showMessage)}
+    onClick={() => setShowMessage((prev) => !prev)}
     className="fixed right-0 py-10 px-2 inline-flex justify-center bg-white items-center text-primary text-sm font-medium rounded-lg shadow-sm align-middle focus:outline-none"
     aria-haspopup="dialog"
     aria-expanded="false"
@@ -85,7 +104,7 @@ const [isLeftSticky, setIsLeftSticky] = useState(false);
   </button>
   { showMessage &&
     <motion.div 
-    className="pr-10  pt-7 " 
+    className="pr-10 z-30 pt-7 " 
     initial={{ opacity: 0, x: 50 }}
     animate={{ opacity: 1, x: 0 }}   
     exit={{ opacity: 0, x: 50, scale: 0.9 }}  

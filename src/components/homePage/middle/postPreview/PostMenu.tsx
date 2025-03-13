@@ -11,15 +11,12 @@ import {
   fetchAllPosts,
 } from "@/lib/store/features/actions/postActions";
 import api from "@/utils/api";
-import { saveJobs, savePosts } from "@/lib/store/features/actions/userActions";
 
 export const PostMenu = ({ post }: PostPreviewProps) => {
   const { activeuser } = useAppSelector((state) => state.user);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [UpdateOpen, setIsUpdateOpen] = useState(false); // post update
-  const saved=useAppSelector((state)=>state.post.saved  )
-  const route=activeuser?"user":"company"
-  console.log("ddddddddddd",route);
+
   
   const dispatch = useAppDispatch();
  
@@ -28,42 +25,10 @@ export const PostMenu = ({ post }: PostPreviewProps) => {
     dispatch(DeletePost({ postId: id }));
     dispatch(fetchAllPosts(0));
   };
-  //save post
-  const handleSave=async(postId:string)=>{
-
-    const result=await dispatch(savePosts({postId,route}))
-    if(result.type==="save/posts/fulfilled"){
-      console.log("result",result);
-      
-      const res=await api.get(`/${route}/all`)
-dispatch(setSaved(res.data.saved))
-    }
-  }
-
-console.log("saved",saved);
-
-const isSaved = Array.isArray(saved) && saved.some((item) => item.postId==post._id);
   return (
     <section className="absolute z-10">
-      <div className=" bg-white text-sm rounded-lg shadow-lg  p-2">
-        <button className="flex items-center w-full text-gray-700 hover:bg-gray-100 p-2 rounded-md transition">
-          <svg
-            xmlns="http://www.w3.org/2000/svg"
-            fill="none"
-            viewBox="0 0 24 24"
-            strokeWidth="1.5"
-            stroke="currentColor"
-            className="size-4"
-          >
-            <path
-              strokeLinecap="round"
-              strokeLinejoin="round"
-              d="M15.75 17.25v3.375c0 .621-.504 1.125-1.125 1.125h-9.75a1.125 1.125 0 0 1-1.125-1.125V7.875c0-.621.504-1.125 1.125-1.125H6.75a9.06 9.06 0 0 1 1.5.124m7.5 10.376h3.375c.621 0 1.125-.504 1.125-1.125V11.25c0-4.46-3.243-8.161-7.5-8.876a9.06 9.06 0 0 0-1.5-.124H9.375c-.621 0-1.125.504-1.125 1.125v3.5m7.5 10.375H9.375a1.125 1.125 0 0 1-1.125-1.125v-9.25m12 6.625v-1.875a3.375 3.375 0 0 0-3.375-3.375h-1.5a1.125 1.125 0 0 1-1.125-1.125v-1.5a3.375 3.375 0 0 0-3.375-3.375H9.75"
-            />
-          </svg>
-
-          <span>CopyLink </span>
-        </button>
+      <div className=" bg-white text-sm rounded-lg shadow-lg  p-1">
+        
         {activeuser?._id == post?.owner?._id ? (
           <>
             <button
@@ -111,44 +76,12 @@ const isSaved = Array.isArray(saved) && saved.some((item) => item.postId==post._
           </>
         ) : (
           <>
+         
           <button
-  className="flex items-center w-full text-gray-700 hover:bg-gray-100 p-2 rounded-md transition mt-2"
-  onClick={() => handleSave(post._id)}
->
-  {isSaved ? (
-    <>
-      <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth="1.5" stroke="currentColor" className="size-4">
-        <path strokeLinecap="round" strokeLinejoin="round" d="m3 3 1.664 1.664M21 21l-1.5-1.5m-5.485-1.242L12 17.25 4.5 21V8.742m.164-4.078a2.15 2.15 0 0 1 1.743-1.342 48.507 48.507 0 0 1 11.186 0c1.1.128 1.907 1.077 1.907 2.185V19.5M4.664 4.664 19.5 19.5" />
-      </svg>
-      <span>Unsave</span>
-    </>
-  ) : (
-    <>
-      <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth="1.5" stroke="currentColor" className="size-4">
-        <path strokeLinecap="round" strokeLinejoin="round" d="M17.593 3.322c1.1.128 1.907 1.077 1.907 2.185V21L12 17.25 4.5 21V5.507c0-1.108.806-2.057 1.907-2.185a48.507 48.507 0 0 1 11.186 0Z" />
-      </svg>
-      <span>Save</span>
-    </>
-  )}
-</button>
-          <button
-            className="flex items-center w-full text-gray-700 hover:bg-gray-100 p-2 rounded-md transition mt-2"
+            className="flex items-center w-full text-gray-700 hover:bg-gray-100 p-2 rounded-md transition mt-1"
             onClick={() => setIsModalOpen(true)}
           >
-            <svg
-              xmlns="http://www.w3.org/2000/svg"
-              fill="none"
-              viewBox="0 0 24 24"
-              strokeWidth="1.5"
-              stroke="currentColor"
-              className="size-4"
-            >
-              <path
-                strokeLinecap="round"
-                strokeLinejoin="round"
-                d="M3 3v1.5M3 21v-6m0 0 2.77-.693a9 9 0 0 1 6.208.682l.108.054a9 9 0 0 0 6.086.71l3.114-.732a48.524 48.524 0 0 1-.005-10.499l-3.11.732a9 9 0 0 1-6.085-.711l-.108-.054a9 9 0 0 0-6.208-.682L3 4.5M3 15V4.5"
-              />
-            </svg>
+            
 
             <span>Report</span>
           </button>
