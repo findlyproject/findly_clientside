@@ -372,13 +372,6 @@ export const Comments = ({ postId, comments }: CommentsProps) => {
                                   : comment.user.name || "Unknown User"
                                 : "Unknown User"}
                             </h3>
-                            {/* <h3 className="font-semibold text-sm">
-  {comment.user
-    ? "firstName" in comment.user
-      ? `${comment?.user?.firstName} ${comment?.user?.lastName}`
-      : comment.user?.name
-    : "Unknown User"} 
-</h3> */}
                           </div>
                           <div className="text-gray-500 text-xs">
                             {dayjs(comment.updatedAt).fromNow()}
