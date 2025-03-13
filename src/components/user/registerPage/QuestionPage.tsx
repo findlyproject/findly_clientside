@@ -27,7 +27,7 @@ export  default function QuestionPage() {
                 className="w-5 h-5 text-primary border-gray-300"
               />
               <label htmlFor="radioOption1" className="text-gray-700 font-medium">
-                Yes, I'm actively looking for a new job
+                Yes, I m actively looking for a new job
               </label>
             </div>
 
@@ -51,7 +51,7 @@ export  default function QuestionPage() {
                 className="w-5 h-5 text-primary border-gray-300"
               />
               <label htmlFor="radioOption3" className="text-gray-700 font-medium">
-                No, I'm not interested in any job opportunity
+                No, I m not interested in any job opportunity
               </label>
             </div>
 

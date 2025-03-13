@@ -15,9 +15,13 @@ import { Country, State, City } from "country-state-city";
 import PhoneInput from "react-phone-input-2";
 import "react-phone-input-2/lib/style.css";
 import api from "@/utils/api";
-import { setActiveCompany } from "@/lib/store/features/companyslice";
+
 import { User } from "@/types/Types";
+import { editProfile, uploadBanner, uploadLogo } from "@/lib/store/features/actions/companyActions";
+import HeaderProfile from "./Header";
 export default function ProfileEdit() {
+
+  const [loading, setLoading] = useState(false)
   const activecompany = useAppSelector(
     (state) => state.companyLogin.activeCompany
   );
@@ -63,6 +67,7 @@ export default function ProfileEdit() {
       .required("Mobile Number is required"),
     about: Yup.string().required("bio is required"),
     founder: Yup.string().required("founder is required"),
+    email: Yup.string().required("email is required"),
     foundedAt: Yup.string().required("founded at is required"),
     services: Yup.string().required("Services are required"),
 
@@ -140,13 +145,12 @@ export default function ProfileEdit() {
 
   const handleSubmit = async (values: any) => {
     console.log("vallueee", values);
+    const companyId = activecompany?._id
+    const result = await dispatch(editProfile({ companyId, values }))
+    if (result.type === "edit/profile/fulfilled") {
+      console.log("edited");
 
-    const response = await api.patch(
-      `/company/edit/${activecompany?._id}`,
-      values
-    );
-    console.log("responseresponse", response);
-    dispatch(setActiveCompany(response.data.company));
+    }
   };
 
   const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -161,6 +165,8 @@ export default function ProfileEdit() {
 
   const handleBannerChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
+    console.log("file", file);
+
     if (file) {
       setSelectedBanner(file);
       setbannerPreview(URL.createObjectURL(file));
@@ -171,22 +177,23 @@ export default function ProfileEdit() {
   console.log("selectedBanner", selectedBanner);
 
   const handleUpload = async () => {
+    console.log("dfsadasd");
     if (!selectedFile) return;
+    setLoading(true)
+
+
 
     const formData = new FormData();
     formData.append("logo", selectedFile);
 
     try {
-      const response = await api.patch(
-        `/company/edit/logo/${activecompany?._id}`,
-        formData,
-        {
-          headers: { "Content-Type": "multipart/form-data" },
-        }
-      );
-      console.log("response of logo upload", response);
-      setSelectedFile(null);
-      dispatch(setActiveCompany(response.data.company));
+      const companyId = activecompany?._id
+      const result = await dispatch(uploadLogo({ companyId, formData }))
+      if (result.type === "upload/profile/logo/fulfilled") {
+        setSelectedFile(null);
+        setLoading(false)
+      }
+
     } catch (error) {
       console.error("Error uploading logo:", error);
     }
@@ -194,21 +201,18 @@ export default function ProfileEdit() {
 
   const handlebannerUpload = async () => {
     if (!selectedBanner) return;
-
+    setLoading(true)
     const formData = new FormData();
     formData.append("banner", selectedBanner);
 
     try {
-      const response = await api.patch(
-        `/company/edit/banner/${activecompany?._id}`,
-        formData,
-        {
-          headers: { "Content-Type": "multipart/form-data" },
-        }
-      );
-      console.log("response of banner upload", response);
-      setSelectedBanner(null);
-      dispatch(setActiveCompany(response.data.company));
+      const companyId = activecompany?._id
+      const result = await dispatch(uploadBanner({ companyId, formData }))
+      if (result.type === "upload/profile/banner/fulfilled") {
+        setSelectedBanner(null);
+        setLoading(false)
+      }
+
     } catch (error) {
       console.error("Error uploading logo:", error);
     }
@@ -216,122 +220,14 @@ export default function ProfileEdit() {
 
   return (
     <>
-      <div className="flex flex-col lg:flex-row min-h-screen p-6 bg-gray-100">
-        <aside className="  w-full lg:w-1/4 bg-white p-6 rounded-lg shadow-md">
-          <div className="flex flex-col items-center">
-            <div className="relative w-full h-40 bg-gray-300 flex items-center justify-center">
-              <Image
-                src={bannerPreview}
-                alt="Banner"
-                layout="fill"
-                objectFit="cover"
-                className="absolute"
-              />
+      <div className="flex flex-col items-center justify-center lg:flex-row min-h-screen p-6  bg-gray-100 pt-36">
+        <section className="flex flex-col  rounded-lg shadow-[1px_0px_10px_4px_rgba(0,0,0,0.8)] mt-6 lg:mt-0 lg:ml-6 w-4/5">
 
-              <input
-                type="file"
-                accept="image/*"
-                id="bannerUpload"
-                className="hidden"
-                onChange={handleBannerChange}
-              />
-              {selectedBanner ? (
-                <button
-                  onClick={handlebannerUpload}
-                  className="absolute bottom-[-30px] left-1/2 transform -translate-x-1/2 bg-primary text-white py-1 px-3 rounded"
-                >
-                  Upload
-                </button>
-              ) : (
-                <label
-                  htmlFor="bannerUpload"
-                  className="absolute bottom-2 right-2 bg-gray-200 p-2 rounded-full shadow-md hover:bg-gray-300 transition"
-                >
-                  <FaPencilAlt className="text-gray-600 text-sm" />
-                </label>
-              )}
 
-              <div className="relative w-24 h-24 rounded-full overflow-hidden border-4 border-white shadow-lg">
-                <Image
-                  src={preview}
-                  alt="Profile"
-                  width={96}
-                  height={96}
-                  className="object-cover w-full h-full"
-                />
+          <HeaderProfile handlebannerUpload={handlebannerUpload} loading={loading} handleUpload={handleUpload} activecompany={activecompany} selectedFile={selectedFile} handleFileChange={handleFileChange} bannerPreview={bannerPreview} handleBannerChange={handleBannerChange} selectedBanner={selectedBanner} preview={preview} />
 
-                <input
-                  type="file"
-                  accept="image/*"
-                  id="logoUpload"
-                  className="hidden"
-                  onChange={handleFileChange}
-                />
 
-                {selectedFile !== null ? (
-                  <button
-                    onClick={handleUpload}
-                    className="absolute inset-0 flex items-center justify-center bg-primary text-white p-1 rounded"
-                  >
-                    Upload
-                  </button>
-                ) : (
-                  <label
-                    htmlFor="logoUpload"
-                    className="absolute bottom-2 right-2 bg-gray-200 p-2 rounded-full shadow-md hover:bg-gray-300 transition"
-                  >
-                    <FaPencilAlt className="text-gray-600 text-sm" />
-                  </label>
-                )}
-              </div>
-            </div>
-            <h2 className="mt-4 font-semibold">{activecompany?.name}</h2>
-            <p className="text-gray-600 flex items-center space-x-2">
-              <MdOutlineEmail className="text-xl" />
-              <span>{activecompany?.email}</span>
-            </p>
 
-            <p className="flex items-center space-x-2">
-              <CiPhone className="text-xl" />
-              <span>{activecompany?.contact}</span>
-            </p>
-          </div>
-
-          <h1 className="text-sm font-semibold mt-10">Social Media Profiles</h1>
-
-          <div className="flex items-center space-x-4">
-            <Link
-              href={activecompany?.socialMedia?.facebook || ""}
-              target="_blank"
-            >
-              <FaFacebook className="text-blue-600 text-3xl cursor-pointer hover:text-blue-800 transition" />
-            </Link>
-
-            <Link
-              href={activecompany?.socialMedia?.instagram || ""}
-              target="_blank"
-            >
-              <FaInstagram className="text-pink-600 text-3xl cursor-pointer hover:text-blue-800 transition" />
-            </Link>
-
-            <Link
-              href={activecompany?.socialMedia?.twitter || ""}
-              target="_blank"
-            >
-              <FaTwitter className="text-blue-600 text-3xl cursor-pointer hover:text-blue-800 transition" />
-            </Link>
-
-            <Link
-              href={activecompany?.socialMedia?.linkedin || ""}
-              target="_blank"
-            >
-              <FaLinkedin className="text-blue-600 text-3xl cursor-pointer hover:text-blue-800 transition" />
-            </Link>
-          </div>
-        </aside>
-
-        <section className="flex-1 bg-white p-6 rounded-lg shadow-md mt-6 lg:mt-0 lg:ml-6">
-          <h1 className="text-2xl font-bold">Edit profile</h1>
           <Formik
             initialValues={{
               name: activecompany?.name || "",
@@ -339,9 +235,11 @@ export default function ProfileEdit() {
               founder: activecompany?.founder || "",
               foundedAt: activecompany?.foundedAt || "",
               about: activecompany?.about || "",
+              email:activecompany?.email||"",
+
               workHours: {
-                start: activecompany?.workHours.start || "",
-                end: activecompany?.workHours.end || "",
+                start: activecompany?.workHours?.start || "",
+                end: activecompany?.workHours?.end || "",
               },
               services: activecompany?.services || [],
               IndustryType: activecompany?.IndustryType || "",
@@ -353,10 +251,10 @@ export default function ProfileEdit() {
                 pincode: activecompany?.address.pincode || "",
               },
               socialMedia: {
-                facebook: activecompany?.socialMedia.facebook || "",
-                instagram: activecompany?.socialMedia.instagram || "",
-                twitter: activecompany?.socialMedia.twitter || "",
-                linkedin: activecompany?.socialMedia.linkedin || "",
+                facebook: activecompany?.socialMedia?.facebook || "",
+                instagram: activecompany?.socialMedia?.instagram || "",
+                twitter: activecompany?.socialMedia?.twitter || "",
+                linkedin: activecompany?.socialMedia?.linkedin || "",
               },
 
               employees: activecompany?.employees || [],
@@ -366,89 +264,134 @@ export default function ProfileEdit() {
           >
             {({ values, handleChange, isSubmitting, setFieldValue }) => (
               <Form className="space-y-6">
-                <div className="mt-6 space-y-4">
-                  <div className="flex flex-col md:flex-row gap-4">
-                    <div className="w-full">
-                      <label className="text-sm font-medium">Name *</label>
-                      <Field
-                        type="text"
-                        name="name"
-                        onChange={handleChange}
-                        className="w-full border p-2 rounded-md"
-                      />
+                <div className="mt-6 space-y-4  ">
 
-                      <ErrorMessage
-                        name="name"
-                        component="div"
-                        className="text-red-500 text-sm"
-                      />
-                    </div>
-                    <div className="w-full">
-                      <label className="text-sm font-medium">
-                        {" "}
-                        Mobile Number *
-                      </label>
 
-                      <PhoneInput
-                        country={"in"}
-                        value={values.contact || ""}
-                        onChange={(phone) => {
-                          console.log("phone", phone);
+                  <div className="flex flex-col items-start justify-center bg-white">
 
-                          setFieldValue("contact", phone);
-                        }}
-                        inputProps={{
-                          name: "contact",
-                          required: true,
-                          className:
-                            "w-full px-12 py-2.5 border rounded-lg focus:ring-2 focus:ring-primary outline-none text-sm md:text-base",
-                        }}
-                      />
-                      <ErrorMessage
-                        name="contact"
-                        component="div"
-                        className="text-red-500 text-sm"
-                      />
-                    </div>
+<div className="flex justify-start w-full p-5 font-bold"><h2 className="text-start text-xl">Personal Informations</h2> </div>
+  <div className="p-5 flex justify-start rounded-lg">
+  <div className=" gap-4 space-y-4 ">
+    <div className="w-full flex items-center">
+      <label className="text-sm font-medium">Name Of Company:</label> 
+      <span className="text-sm font-medium italic">{values.name || "Not update yet"}</span>
+    </div>
+    <div className="w-full">
+      <label className="text-sm font-medium">Contact Number:</label>
+      <span className="text-sm font-medium italic">{values.contact || "Not update yet"}</span>
+    </div>
+    <div className="w-full flex items-center">
+    <label className="text-sm font-medium">Founder Of Company:</label>
+    <span className="text-sm font-medium italic">{values.founder || "N/Not update yet"}</span>
+    </div>
+    <div className="w-full">
+    <label className="text-sm font-medium">Founded At:</label>
+    <span className="text-sm font-medium italic">{values.foundedAt || "Not update yet/A"}</span>
+    </div>
+  </div>
+
+  <div className=" gap-4">
+    <div className="w-full flex items-center">
+    <label className="text-sm font-medium">email:</label>
+    <span className="text-sm font-medium italic">{values.email || "N/Not update yet"}</span>
+    </div>
+    <div className="w-full">
+    <label className="text-sm font-medium">Founded At:</label>
+    <span className="text-sm font-medium italic">{values.foundedAt || "Not update yet/A"}</span>
+    </div>
+  </div>
+
+
+ 
+</div>
+
+                    {/* <div className=" p-5   w-5/6">
+
+                      <div className="flex flex-col md:flex-row gap-4 ">
+                        <div className="w-full">
+                          <label className="text-sm font-medium">Name *</label>
+                          <Field
+                            type="text"
+                            name="name"
+                            onChange={handleChange}
+                            className="w-full border p-2 rounded-md"
+                          />
+
+                          <ErrorMessage
+                            name="name"
+                            component="div"
+                            className="text-red-500 text-sm"
+                          />
+                        </div>
+                        <div className="w-full">
+                          <label className="text-sm font-medium">
+                            {" "}
+                            Mobile Number *
+                          </label>
+
+                          <PhoneInput
+                            country={"in"}
+                            value={values.contact || ""}
+                            onChange={(phone) => {
+                              console.log("phone", phone);
+
+                              setFieldValue("contact", phone);
+                            }}
+                            inputProps={{
+                              name: "contact",
+                              required: true,
+                              className:
+                                "w-full px-12 py-2.5 border rounded-lg focus:ring-2 focus:ring-primary outline-none text-sm md:text-base",
+                            }}
+                          />
+                          <ErrorMessage
+                            name="contact"
+                            component="div"
+                            className="text-red-500 text-sm"
+                          />
+                        </div>
+                      </div>
+
+                      <div className="flex flex-col md:flex-row gap-4">
+                        <div className="w-full relative">
+                          <label className="text-sm font-medium">Founder*</label>
+                          <Field
+                            type="text"
+                            onChange={handleChange}
+                            className="w-full border p-2 rounded-md"
+                            name="founder"
+                          />
+
+                          <ErrorMessage
+                            name="founder"
+                            component="div"
+                            className="text-red-500 text-sm"
+                          />
+                        </div>
+
+                        <div className="w-full relative">
+                          <label className="text-sm font-medium">
+                            Founded At *
+                          </label>
+                          <Field
+                            type="text"
+                            name="foundedAt"
+                            placeholder="dd/mm/yyyy"
+                            onChange={handleChange}
+                            className="w-full border p-2 rounded-md pr-8"
+                          />
+
+                          <ErrorMessage
+                            name="foundedAt"
+                            component="div"
+                            className="text-red-500 text-sm"
+                          />
+                        </div>
+                      </div>
+                    </div> */}
+                    <div className="flex justify-end w-full"> <button>save</button></div>
+
                   </div>
-
-                  <div className="flex flex-col md:flex-row gap-4">
-                    <div className="w-full relative">
-                      <label className="text-sm font-medium">Founder*</label>
-                      <Field
-                        type="text"
-                        onChange={handleChange}
-                        className="w-full border p-2 rounded-md"
-                        name="founder"
-                      />
-
-                      <ErrorMessage
-                        name="founder"
-                        component="div"
-                        className="text-red-500 text-sm"
-                      />
-                    </div>
-
-                    <div className="w-full relative">
-                      <label className="text-sm font-medium">
-                        Founded At *
-                      </label>
-                      <Field
-                        type="text"
-                        name="foundedAt"
-                        placeholder="dd/mm/yyyy"
-                        onChange={handleChange}
-                        className="w-full border p-2 rounded-md pr-8"
-                      />
-
-                      <ErrorMessage
-                        name="foundedAt"
-                        component="div"
-                        className="text-red-500 text-sm"
-                      />
-                    </div>
-                  </div>
-
                   <div className="flex flex-col md:flex-row gap-4">
                     <div className="w-full relative">
                       <label className="text-sm font-medium">
@@ -809,7 +752,7 @@ export default function ProfileEdit() {
                             name={`socialMedia.${platform}`}
                             value={
                               values.socialMedia[
-                                platform as keyof typeof values.socialMedia
+                              platform as keyof typeof values.socialMedia
                               ]
                             }
                             onChange={(

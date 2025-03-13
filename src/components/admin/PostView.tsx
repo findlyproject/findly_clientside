@@ -1,10 +1,9 @@
-"use client"; // Only needed if this file is inside `app/` directory
+"use client"; 
 import { useEffect, useState } from "react";
 import { useParams, useRouter } from "next/navigation";
 import api from "@/utils/api";
-import { IPost } from "@/lib/store/features/postSlice";
 import Image from "next/image";
-
+import { Company, IPost, User } from "@/types/Types";
 const PostView = () => {
   const { id } = useParams();
   console.log(id)
@@ -27,6 +26,13 @@ const PostView = () => {
 
   if (error) return <p className="text-center p-4 text-red-500">{error}</p>;
   if (!post) return <p className="text-center p-4">Post not found</p>;
+  const isUser = (owner: unknown): owner is User => {
+    return typeof owner === "object" && owner !== null && "firstName" in owner;
+  };
+
+  const isCompany = (owner: unknown): owner is Company => {
+    return typeof owner === "object" && owner !== null && "name" in owner;
+  };
 
   return (
     <div className="max-w-3xl mx-auto p-6 bg-white shadow-md rounded-lg">
@@ -67,36 +73,66 @@ const PostView = () => {
       {/* Owner */}
       <h2 className="text-xl font-semibold mt-4">Owner</h2>
       {post.owner ? (
-        <div className="flex items-center gap-3">
-          <Image
-            src={post.owner.profileImage || "https://via.placeholder.com/40"}
-            width={10}
-            height={10}
-            alt="Owner"
-            className="w-10 h-10 rounded-full"
-          />
-          <div>
-            <p className="font-medium">
-              {post.owner.firstName} {post.owner.lastName}
-            </p>
-            <p className="text-gray-500 text-sm">{post.owner.email}</p>
-          </div>
-        </div>
-      ) : (
-        <p>No owner details available.</p>
-      )}
+  <div className="flex items-center gap-3">
+    <Image
+      src={
+        isUser(post.owner)
+          ? post.owner.profileImage || "https://via.placeholder.com/40"
+          : isCompany(post.owner)
+          ? post.owner.logo || "https://via.placeholder.com/40"
+          : "https://via.placeholder.com/40"
+      }
+      width={40}
+      height={40}
+      alt={
+        isUser(post.owner)
+          ? `${post.owner.firstName} ${post.owner.lastName}`
+          : isCompany(post.owner)
+          ? post.owner.name
+          : "Unknown"
+      }
+      className="w-10 h-10 rounded-full"
+    />
+    <div>
+      <p className="font-medium">
+        {isUser(post.owner)
+          ? `${post.owner.firstName} ${post.owner.lastName}`
+          : isCompany(post.owner)
+          ? post.owner.name
+          : "Unknown"}
+      </p>
+      <p className="text-gray-500 text-sm">
+        {isUser(post.owner)
+          ? post.owner.email
+          : isCompany(post.owner)
+          ? post.owner.email
+          : "N/A"}
+      </p>
+    </div>
+  </div>
+) : (
+  <p>No owner details available.</p>
+)}
+
 
       {/* Likes */}
       <h2 className="text-xl font-semibold mt-4">Likes</h2>
       <p>{post.likedBy?.length || 0} people liked this post</p>
 
       {/* Comments */}
-      {/* <h2 className="text-xl font-semibold mt-4">Comments</h2> */}
-      {/* {post.comments?.length ? (
+      <h2 className="text-xl font-semibold mt-4">Comments</h2>
+      {post.comments?.length ? (
         <ul className="mt-2 space-y-2">
           {post?.comments.map((comment, index) => (
             <li key={index} className="p-2 border rounded-lg">
-              <p className="text-sm font-medium">{comment.user?.firstName} {comment.user?.lastName}</p>
+              
+              <p className="text-gray-500 text-sm">
+        {isUser(post.owner)
+          ? post.owner.firstName
+          : isCompany(post.owner)
+          ? post.owner.name
+          : "Unknown"}
+      </p>
               <p className="text-gray-600">{comment?.comment}</p>
               <p className="text-xs text-gray-400">{new Date(comment.createdAt).toLocaleString()}</p>
             </li>
@@ -104,7 +140,7 @@ const PostView = () => {
         </ul>
       ) : (
         <p>No comments yet.</p>
-      )} */}
+      )}
     </div>
   );
 };

@@ -15,6 +15,8 @@ import { GoLink } from "react-icons/go";
 import { FaCalendarAlt } from "react-icons/fa";
 import { Spinner } from "@material-tailwind/react";
 import api from "@/utils/api";
+import { useAppDispatch } from "@/lib/store/hooks";
+import { deleteJob, editJobDeadline } from "@/lib/store/features/actions/companyActions";
 
 export interface modalProps {
   isOpen: boolean;
@@ -42,12 +44,12 @@ export interface modalProps {
 
 
 const Modal: React.FC<modalProps> = ({ isOpen, setIsOpen, jobs, setJobs, findJobPsts, currentPage }) => {
-
+  const dispatch=useAppDispatch()
   const [detailModal, setDetailsModal] = useState(false)
   const [selectedJob, setSelectedJob] = useState<modalProps["jobs"][0] | null>(null);
   const [openMenu, setOpenMenu] = useState<string | null>(null);
   const [isEditing, setIsEditing] = useState(false);
-  const [newDeadline, setNewDeadline] = useState(selectedJob?.applicationDeadline);
+  const [newDeadline, setNewDeadline] = useState(selectedJob?.applicationDeadline as string );
   const [loading, setLoading] = useState(false);
   console.log("selectedJob", selectedJob);
 
@@ -84,14 +86,12 @@ const Modal: React.FC<modalProps> = ({ isOpen, setIsOpen, jobs, setJobs, findJob
     console.log("deadline", newDeadline);
 
     try {
-      const response = await api.post(`/company/editdeadline/${selectedJob?._id}`, {
-        applicationDeadline: newDeadline
-      });
-
-      if (response.status === 200) {
-
+      const jobId=selectedJob?._id
+      const result=await dispatch(editJobDeadline({jobId,newDeadline}))
+      if(result.type==="edit/deadline/fulfilled"){
         await findJobPsts(currentPage);
       }
+ 
     } catch (error) {
       console.error("Error updating deadline:", error);
     } finally {
@@ -112,10 +112,9 @@ const Modal: React.FC<modalProps> = ({ isOpen, setIsOpen, jobs, setJobs, findJob
       alert(`Delete job: ${jobId}`);
       setLoading(true);
       setSelectedJob(job)
-      const respons = await api.delete(`/company/deletejobpost/${jobId}`)
 
-      if (respons.status === 200) {
-
+      const result =await dispatch(deleteJob(jobId))
+      if(result.type==="delete/job/fulfilled"){
         findJobPsts(currentPage);
         setTimeout(() => {
           setJobs((prevJobs) => prevJobs.filter((job) => job._id !== jobId));
@@ -123,6 +122,7 @@ const Modal: React.FC<modalProps> = ({ isOpen, setIsOpen, jobs, setJobs, findJob
           setLoading(false);
         }, 2000)
       }
+  
     } catch (error) {
       console.log("dsad", error)
 
@@ -177,11 +177,11 @@ const Modal: React.FC<modalProps> = ({ isOpen, setIsOpen, jobs, setJobs, findJob
                         </div>
                       ) : (
                         <p
-                          className={`absolute top-2 right-14 text-xs text-white px-3 py-1 rounded-lg font-semibold w-fit ${new Date(job.applicationDeadline) < new Date()
-                            ? "bg-red-500"
+                          className={`absolute top-2 right-8 text-xs text-white px-3 py-1 rounded-lg font-semibold w-fit ${new Date(job.applicationDeadline) < new Date()
+                            ? "text-red-700"
                             : new Date(job.applicationDeadline) <= new Date(new Date().setDate(new Date().getDate() + 15))
-                              ? "bg-yellow-500"
-                              : "bg-green-500"
+                              ? "text-yellow-500"
+                              : "text-green-400"
                             }`}
                         >
                           📅 {new Date(job.applicationDeadline).toDateString()}
@@ -390,10 +390,10 @@ const Modal: React.FC<modalProps> = ({ isOpen, setIsOpen, jobs, setJobs, findJob
 
 
 
-            <div className="flex justify-center mt-6">
+            <div className="flex justify-center mt-6 p-10">
               <button
                 onClick={() => findJobPsts(currentPage + 1)}
-                className="bg-gradient-to-r from-blue-500 to-indigo-600 hover:from-indigo-600 hover:to-blue-500 text-white text-lg font-semibold px-6 py-3 rounded-lg shadow-md transition-all duration-300"
+                className="mt-4 flex items-center justify-center py-2 bg-primary hover:shadow-black text-white font-semibold  px-4 rounded-lg transition-all duration-300"
               >
                 View More
               </button>

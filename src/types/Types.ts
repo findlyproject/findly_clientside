@@ -1,5 +1,5 @@
-import { Job } from "@/components/common/jobListing/AllJobs";
-import { Url } from "url";
+
+// import { Url } from "url";
 
 
 // event
@@ -7,6 +7,7 @@ export type SelectChangeEvent = React.ChangeEvent<HTMLSelectElement>;
 export type InputChangeEvent = React.ChangeEvent<HTMLInputElement>;
 export type formChangeEvent=React.FormEvent<HTMLFormElement>
 export type ChangeEventType = React.ChangeEvent<HTMLInputElement | HTMLSelectElement|HTMLTextAreaElement>;
+export type MouseEventType=React.MouseEvent<HTMLButtonElement>
 
 export interface EducationType {  
   college: string;  
@@ -201,7 +202,13 @@ export interface Company {
     updatedAt: string;
 }
 
-
+//  export interface Job {
+//     _id: string;
+//     title: string;
+//     location: string;
+//     company: string;
+//     salary: { rate: string; min: number; max: number };
+//   }
 export interface applicationData {
     companyId: string;
     coverLetter: string;
@@ -215,6 +222,7 @@ export interface applicationData {
     status: string;
     updatedAt: string;
     userId: User;
+    isSaved:boolean
   }
 
   
@@ -259,38 +267,21 @@ export interface Rating {
   _id: string;
   review: string;
   starsRating: number;
+  name:string;
+  email:string
   userId: {
     firstName: string;
     lastName: string;
     profileImage?: string; 
     jobTitle?: string; 
+    createdAt:string
   };
+  status:boolean;
+  createdAt:string;
+
 }
 
 
-//admin
-
-export interface SkillType{
-  _id:string
-  name:string
-  status:boolean
-}
-
-export interface TitleType{
-  _id:string
-  name:string
-  status:boolean
-}
-
-export interface Admin {
-  email:string
-  firstName:string
-  lastName:string
-  phoneNumber:string
-  profileImage:string
-  bio:string
- 
-}
 
 
 //community
@@ -403,15 +394,15 @@ export interface IReport {
   
   export interface IPost {
     _id: string;
-    description?: string;
+    description: string;
     images?:string [];
     video?:string;
-    owner: User |null
+    owner: User |Company|string|null
     likedBy?: User[];
     reports?:  IReport[]| null|undefined;
     comments?:  IComment[] ;
     isDeleted?: boolean;
-    createdAt?: string;
+    createdAt: string;
     updatedAt?: string;
   }
   export interface UpdatePostProps {
@@ -471,4 +462,142 @@ export interface Notifications {
   };
   followUp?: string;
   secretKey?: string;
+}
+
+
+
+//admin
+
+
+export interface SkillType{
+  _id:string
+  name:string
+  status:boolean
+}
+
+export interface TitleType{
+  _id:string
+  name:string
+  status:boolean
+}
+
+export interface Admin {
+  email:string
+  firstName:string
+  lastName:string
+  phoneNumber:string
+  profileImage:string
+  bio:string
+ 
+}
+
+export interface DailyRevenueType {
+  day: string;
+  revenue: number;
+}
+
+
+
+//job
+export interface Salary {
+  min: number;
+  max: number;
+  rate: string;
+}
+export interface Job {
+  _id: string;
+  title: string;
+  company: Company;
+  location: string;
+  jobType: string;
+  experienceLevel: string;
+  industry: string;
+  description: string;
+  requirements: string[];
+  jobResponsibilities: string[];
+  applicationDeadline: string;
+  benefits: string[];
+  contactEmail: string;
+  contactPhone: string;
+  likes: string[];
+  salary: Salary
+  comments: string[];
+  reports: string[];
+  status: string;
+  isDeleted: boolean;
+  createdAt: string;
+  updatedAt: string;
+  __v: number;
+}
+
+export interface Address {
+  pincode: string;
+  city: string;
+  state: string;
+  country: string;
+}
+
+
+export interface FilterOption {
+  id: string;
+  label: string;
+  
+}
+export interface InputType {
+  title: string;
+  experienceLevel: string;
+  industry: string;
+  jobType: string;
+}
+export interface JobFiltersSidebarProps {
+  setInput: React.Dispatch<React.SetStateAction<InputType>>
+}
+
+
+export interface JobPosting {
+  _id: string;
+  title: string;
+  description: string;
+  location: string;
+  jobType: string;
+  experienceLevel: string;
+  industry: string;
+  salary: Salary 
+  requirements: string[];
+  jobResponsibilities: string[];
+  benefits: string[];
+  applicationDeadline: string;
+  contactEmail: string;
+  contactPhone: string;
+  
+  company:Company
+  createdAt: string;
+  updatedAt: string;
+  status: string;
+  isDeleted: boolean;
+  __v: number;
+  postedBy?: {
+    name: string;
+  };
+};
+
+
+export interface SavedType{
+  jobId:Job
+  timestamp:string
+  userId:User
+  _id:string
+  salary:Salary
+
+
+  postId:{
+    _id:string;
+    description:string;
+    owner:User|Company|null
+    createdAt: string;
+    images?: string[];
+    video?: string;
+    likedBy?: any[];
+    comments?: any[];
+  }
 }

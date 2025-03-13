@@ -1,60 +1,63 @@
-'use client';
+"use client";
 
-import {  setAdmin } from '@/lib/store/features/adminSlice';
 import { Admin } from '@/types/Types';
 import { useAppDispatch, useAppSelector } from '@/lib/store/hooks';
-import api from '@/utils/api';
 import Image from 'next/image';
 import { useState } from 'react';
 import { FaUser, FaEnvelope, FaCamera } from 'react-icons/fa';
 import { Formik, Field, Form, ErrorMessage } from 'formik';
 import * as Yup from 'yup';
+import { editAdminProfile } from '@/lib/store/features/actions/adminActions';
 
-export const Profile=()=> {
+export const Profile = () => {
   const admin = useAppSelector((state) => state.admin.admin as Admin);
   const dispatch = useAppDispatch();
 
   const [selectedFile, setSelectedFile] = useState<File | null>(null);
-  const [preview, setPreview] = useState<string | null>(admin.profileImage || null);
+  const [preview, setPreview] = useState<string | null>(
+    admin.profileImage || null
+  );
 
   const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     if (e.target.files && e.target.files[0]) {
       setSelectedFile(e.target.files[0]);
-      setPreview(URL.createObjectURL(e.target.files[0])); 
+      setPreview(URL.createObjectURL(e.target.files[0]));
     }
   };
 
   //validation schema
   const validationSchema = Yup.object({
-    firstName: Yup.string().required('First name is required'),
-    lastName: Yup.string().required('Last name is required'),
-    email: Yup.string().email('Invalid email format').required('Email is required'),
+    firstName: Yup.string().required("First name is required"),
+    lastName: Yup.string().required("Last name is required"),
+    email: Yup.string()
+      .email("Invalid email format")
+      .required("Email is required"),
     phoneNumber: Yup.string()
-    .matches(/^\d{10}$/, 'Phone number must be exactly 10 digits')
-    .required('Phone number is required'),
-    bio: Yup.string().required('Bio is required'),
+      .matches(/^\d{10}$/, "Phone number must be exactly 10 digits")
+      .required("Phone number is required"),
+    bio: Yup.string().required("Bio is required"),
   });
 
-  
   const handleUpdate = async (values: Admin) => {
     const formDataToSend = new FormData();
-    formDataToSend.append('firstName', values.firstName);
-    formDataToSend.append('lastName', values.lastName);
-    formDataToSend.append('email', values.email);
-    formDataToSend.append('phoneNumber', values.phoneNumber);
-    formDataToSend.append('bio', values.bio);
+    formDataToSend.append("firstName", values.firstName);
+    formDataToSend.append("lastName", values.lastName);
+    formDataToSend.append("email", values.email);
+    formDataToSend.append("phoneNumber", values.phoneNumber);
+    formDataToSend.append("bio", values.bio);
     if (selectedFile) {
-      formDataToSend.append('profileImage', selectedFile);
+      formDataToSend.append("profileImage", selectedFile);
     }
 
     try {
-      const response = await api.patch(`/admin/editprofile`, formDataToSend, {
-        headers: { 'Content-Type': 'multipart/form-data' },
-      });
-      console.log('response of admin profile edit', response);
-      dispatch(setAdmin(response.data.admin));
+     const result=await dispatch(editAdminProfile(formDataToSend))
+     if(result.type==="edit/admin/fulfilled"){
+console.log("done");
+
+     }
+   
     } catch (error) {
-      console.error('Error updating profile:', error);
+      console.error("Error updating profile:", error);
     }
   };
 
@@ -64,7 +67,7 @@ export const Profile=()=> {
         <div className="flex flex-col items-center text-center">
           <label htmlFor="fileInput" className="relative cursor-pointer">
             <Image
-              src={preview || '/default-avatar.png'}
+              src={preview || "/default-avatar.png"}
               alt="Profile"
               className="w-24 h-24 rounded-full border"
               width={100}
@@ -84,24 +87,23 @@ export const Profile=()=> {
           </h2>
           <p className="text-gray-500">{admin.email}</p>
         </div>
-        
       </aside>
 
       <main className="flex-1 bg-white shadow-md rounded-lg p-6 md:ml-6">
         <h2 className="text-2xl font-semibold">Account Setting</h2>
         <Formik
           initialValues={{
-            firstName: admin?.firstName || '',
-            lastName: admin?.lastName || '',
-            email: admin?.email || '',
-            phoneNumber: admin?.phoneNumber || '',
-            bio: admin?.bio || '',
-            profileImage:admin?.profileImage||""
+            firstName: admin?.firstName || "",
+            lastName: admin?.lastName || "",
+            email: admin?.email || "",
+            phoneNumber: admin?.phoneNumber || "",
+            bio: admin?.bio || "",
+            profileImage: admin?.profileImage || "",
           }}
           validationSchema={validationSchema}
           onSubmit={handleUpdate}
         >
-          {({ handleChange, values, errors, touched,resetForm  }) => (
+          {({ handleChange, values, errors, touched, resetForm }) => (
             <Form className="mt-6 space-y-4">
               <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                 <div className="relative">
@@ -114,7 +116,11 @@ export const Profile=()=> {
                     placeholder="First Name"
                     className="w-full pl-10 p-2 border rounded-md"
                   />
-                  <ErrorMessage name="firstName" component="div" className="text-red-500 text-sm" />
+                  <ErrorMessage
+                    name="firstName"
+                    component="div"
+                    className="text-red-500 text-sm"
+                  />
                 </div>
                 <div>
                   <Field
@@ -125,7 +131,11 @@ export const Profile=()=> {
                     placeholder="Last Name"
                     className="w-full p-2 border rounded-md"
                   />
-                  <ErrorMessage name="lastName" component="div" className="text-red-500 text-sm" />
+                  <ErrorMessage
+                    name="lastName"
+                    component="div"
+                    className="text-red-500 text-sm"
+                  />
                 </div>
               </div>
               <div className="relative">
@@ -136,29 +146,33 @@ export const Profile=()=> {
                   value={values.email}
                   onChange={handleChange}
                   placeholder="Email"
-          
                   className="w-full pl-10 p-2 border rounded-md"
                 />
-  
-                <ErrorMessage name="email" component="div" className="text-red-500 text-sm" />
+
+                <ErrorMessage
+                  name="email"
+                  component="div"
+                  className="text-red-500 text-sm"
+                />
               </div>
 
-
-              
               <div>
                 <Field
                   type="text"
                   name="phoneNumber"
                   value={values.phoneNumber}
                   onChange={handleChange}
-                 
                   placeholder="Phone Number"
                   className="w-full p-2 border rounded-md"
                 />
-                 {touched.email && errors.email && (
-    <div className="text-red-500 text-xs">{errors.email}</div>
-  )}
-                <ErrorMessage name="phoneNumber" component="div" className="text-red-500 text-sm" />
+                {touched.email && errors.email && (
+                  <div className="text-red-500 text-xs">{errors.email}</div>
+                )}
+                <ErrorMessage
+                  name="phoneNumber"
+                  component="div"
+                  className="text-red-500 text-sm"
+                />
               </div>
 
               <div>
@@ -171,23 +185,30 @@ export const Profile=()=> {
                   className="w-full p-2 border rounded-md"
                   rows={3}
                 />
-                <ErrorMessage name="bio" component="div" className="text-red-500 text-sm" />
+                <ErrorMessage
+                  name="bio"
+                  component="div"
+                  className="text-red-500 text-sm"
+                />
               </div>
               <div className="flex space-x-4">
-                <button type="submit" className="bg-primary text-white px-4 py-2 rounded-md">
+                <button
+                  type="submit"
+                  className="bg-primary text-white px-4 py-2 rounded-md"
+                >
                   Update
                 </button>
                 <button
-          type="reset"
-          onClick={() => {
-            resetForm(); 
-            setSelectedFile(null); 
-            setPreview(admin.profileImage || null); 
-          }}
-          className="bg-gray-300 px-4 py-2 rounded-md"
-        >
-          Cancel
-        </button>
+                  type="reset"
+                  onClick={() => {
+                    resetForm();
+                    setSelectedFile(null);
+                    setPreview(admin.profileImage || null);
+                  }}
+                  className="bg-gray-300 px-4 py-2 rounded-md"
+                >
+                  Cancel
+                </button>
               </div>
             </Form>
           )}
@@ -195,5 +216,4 @@ export const Profile=()=> {
       </main>
     </div>
   );
-}
-
+};

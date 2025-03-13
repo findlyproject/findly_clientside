@@ -7,7 +7,7 @@ import { AxiosResponse } from "axios";
 import {setAllRatings,Rating} from '../ratingSlice'
 import { toast } from "react-toastify";
 import { setAlljobs } from "../jobSlice";
-import { resetPostState } from "../postSlice";
+import { resetPostState, setLikes } from "../postSlice";
 
 //register
 interface RegisterResponse {
@@ -206,7 +206,7 @@ export const fetchPeopleKnow = createAsyncThunk(
 // get saved jobs//
 
 
-export const fetchSavedJobs = createAsyncThunk(
+export const fetchSavedJobs = createAsyncThunk<UserProfile[],number,{rejectWithValue:string}>(
   "/user/getsavedjobs",
   async (page, { dispatch, rejectWithValue }) => {
     try {
@@ -229,8 +229,11 @@ export const fetchSavedJobs = createAsyncThunk(
 
 // save jobs 
 
+interface SaveJobsResponse {
+  message: string;
+}
 
-export const saveJobs = createAsyncThunk(
+export const saveJobs = createAsyncThunk<SaveJobsResponse,string, { rejectValue: string }>(
   "/user/savejobs",
   async (id, { dispatch,rejectWithValue }) => {
     try {
@@ -246,3 +249,100 @@ export const saveJobs = createAsyncThunk(
     }
   }
 );
+
+
+export const deleteAccount = createAsyncThunk(
+  "delete/account",
+  async (route:string, { rejectWithValue }) => {
+    try {
+      const response = await handleAsync<AxiosResponse<RatingResponse>>(() =>api.post(`/${route}/accountdeletionreqst`));
+
+      if (!response) {
+        return rejectWithValue("delete account failed. Please try again.");
+      }
+
+
+      return response.data;
+    } catch {
+      return rejectWithValue("An error occurred while submitting the rating.");
+    }
+  }
+);
+
+
+export const deleteAccountVerification = createAsyncThunk(
+  "delete/account/verification",
+  async ({otp,reasonStrings,route}:{otp:string,reasonStrings:string[],route:string}, { rejectWithValue }) => {
+   
+      const response = await handleAsync<AxiosResponse<RatingResponse>>(() =>api.post(`/${route}/verifyOtp`, {
+        otp,
+        reasons: reasonStrings,
+      }));
+
+      if (!response) {
+        return rejectWithValue(" account verification failed. Please try again.");
+      }
+
+
+      return response.data;
+
+  }
+);
+
+export const savePosts = createAsyncThunk(
+  "save/posts",
+  async ({postId,route}:{postId:string,route:string}, { rejectWithValue }) => {
+   
+      const response = await handleAsync<AxiosResponse>(() =>api.post(`/${route}/save/${postId}`));
+
+      if (!response) {
+        return rejectWithValue(" save post failed. Please try again.");
+      }
+
+
+      return response.data;
+
+  }
+);
+
+
+export const reportPost = createAsyncThunk(
+  "report/posts",
+  async ({reason,postId,route}:{reason:string,postId:string,route:string}, { rejectWithValue }) => {
+   
+      const response = await handleAsync<AxiosResponse>(() =>api.post(`/post/${route}/reportpost`, {
+        reason: reason,
+        postId,
+      }));
+
+      if (!response) {
+        return rejectWithValue(" report failed. Please try again.");
+      }
+  
+      return response.data;
+
+  }
+);
+
+
+
+export const reportUser = createAsyncThunk(
+  "report/user",
+  async ({reason,repoteduserid}:{reason:string,repoteduserid:string}, { rejectWithValue }) => {
+   
+      const response = await handleAsync<AxiosResponse>(() =>api.post(`/user/reportuser`, {
+        reason: reason,
+        repoteduserid:repoteduserid,
+      }));
+
+      if (!response) {
+        return rejectWithValue(" report failed. Please try again.");
+      }
+  
+      return response.data;
+
+  }
+);
+
+
+

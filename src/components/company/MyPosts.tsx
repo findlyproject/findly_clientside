@@ -8,9 +8,10 @@ import { useAppDispatch } from "@/lib/store/hooks";
 // import { UpdatePost } from "../UpdatePost";
 import OutsideClickHandler from "react-outside-click-handler";
 import { UpdatePost } from "../homePage/middle/UpdatePost";
+import { Company, IPost, User } from "@/types/Types";
 export default function MyPosts() {
   const [activeTab, setActiveTab] = useState("My posts");
-  const [posts, setPosts] = useState([]);
+  const [posts, setPosts] = useState<IPost[]>([]);
   const [userPosts, setUserPosts] = useState([]);
   const [openDropdownId, setOpenDropdownId] = useState<string | null>(null);
  const [isExpanded, setIsExpanded] = useState(false);
@@ -46,8 +47,16 @@ const [UpdateOpen, setIsUpdateOpen] = useState(false);
     //delete post
     const deletePost = async (id: string) => {
       dispatch(DeletePost({ postId: id }));
-      dispatch(fetchAllPosts());
+      dispatch(fetchAllPosts(1));
     };
+      const isUser = (owner: unknown): owner is User => {
+        return typeof owner === "object" && owner !== null && "firstName" in owner;
+      };
+    
+      const isCompany = (owner: unknown): owner is Company => {
+        return typeof owner === "object" && owner !== null && "name" in owner;
+      };
+    
   return (
     <div className="min-h-screen bg-gray-100">
       <div className="max-w-3xl mx-auto mt-6 px-4">
@@ -78,23 +87,40 @@ const [UpdateOpen, setIsUpdateOpen] = useState(false);
         const [isExpanded, setIsExpanded] = useState(false);
 
         return (
-          <div key={item._id} className="max-w-md mx-auto bg-white rounded-lg shadow-md p-4">
+          <div key={item?._id} className="max-w-md mx-auto bg-white rounded-lg shadow-md p-4">
             {/* Profile Header */}
             <div className="relative flex items-center gap-3">
-              <img
-                src={item.owner?.logo || "/profile.jpg"}
-                alt="Profile"
-                className="w-12 h-12 rounded-full border"
-              />
-              <div>
-                <h2 className="text-sm font-semibold">
-                  {item.owner?.name} • <span className="text-xs text-gray-500">You</span>
-                </h2>
-                <p className="text-xs text-gray-500">
-                  {item.owner?.IndustryType} •{" "}
-                  {formatDistanceToNowStrict(new Date(item.createdAt), { addSuffix: true })}
-                </p>
-              </div>
+            {
+  item.owner && (
+    <img
+      src={
+        isCompany(item.owner)
+          ? item.owner.logo || "/profile.jpg"
+          : isUser(item.owner)
+          ? item.owner.profileImage || "/profile.jpg"
+          : "/profile.jpg"
+      }
+      alt="Profile"
+      className="w-12 h-12 rounded-full border"
+    />
+  )
+}
+
+<div>
+  <h2 className="text-sm font-semibold">
+    {isCompany(item.owner)
+      ? item.owner.name
+      : isUser(item.owner)
+      ? `${item.owner.firstName} ${item.owner.lastName}`
+      : "Unknown Owner"}{" "}
+    • <span className="text-xs text-gray-500">You</span>
+  </h2>
+  <p className="text-xs text-gray-500">
+    {isCompany(item.owner)?item.owner.IndustryType:isUser(item.owner) ?item.owner.jobTitle?.[0] : "Unknown"} •{" "}
+    {formatDistanceToNowStrict(new Date(item.createdAt), { addSuffix: true })}
+  </p>
+</div>
+
 
               <BiDotsVerticalRounded
                 onClick={() => toggleDropdown(item._id)}
@@ -149,7 +175,7 @@ const [UpdateOpen, setIsUpdateOpen] = useState(false);
 
             {/* Post Content */}
             <p className="mt-2 text-gray-800 text-sm">
-              {isExpanded ? item.description : `${item.description.slice(0, 150)} `}
+              {isExpanded ? item.description : `${item.description?.slice(0, 150)} `}
               {item.description.length > 150 && (
                 <span
                   className="text-blue-600 font-semibold cursor-pointer"
@@ -161,7 +187,7 @@ const [UpdateOpen, setIsUpdateOpen] = useState(false);
             </p>
 
             <div className="mt-3">
-              {item.images?.length > 0 ? (
+              {item.images&&item.images?.length > 0 ? (
                 <img
                   src={item.images[0]}
                   className="w-full h-40 object-cover rounded-md"

@@ -4,6 +4,7 @@ import React, { useEffect, useState } from "react";
 import { JobCard, JobSkeleton } from "./jobcard";
 import { useAppDispatch, useAppSelector } from "@/lib/store/hooks";
 import { fetchSavedJobs } from "@/lib/store/features/actions/userActions";
+import { SavedType } from "@/types/Types";
 
 const SavedJobs = () => {
   const [loading, setLoading] = useState(true);
@@ -20,7 +21,8 @@ const SavedJobs = () => {
     }, 5000);
     dispatch(fetchSavedJobs(page))
   }, [])
-  const savedjobs = useAppSelector((state) => state.user.savedJobs);
+  const savedjobs:SavedType[] = useAppSelector((state) => state.user.savedJobs);
+console.log(".....",savedjobs);
 
   return (
     <div className="p-4">
@@ -39,10 +41,10 @@ const SavedJobs = () => {
                 date={job.jobId.createdAt}
                 company={job.jobId.company.name}
                 role={job.jobId.title}
-                tags={job.jobId.jobIdType}
+                tags={job.jobId.jobType}
                 salary={job.jobId.salary}
                 location={job.jobId.location}
-                logo={job.jobId.company.logo}
+                logo={job.jobId.company.logo||""}
                 bgColor="#ffff"
                 _id={job.jobId._id}
               />

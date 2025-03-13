@@ -12,65 +12,22 @@ import { FaRegCopy, FaWhatsapp } from 'react-icons/fa';
 import { LuBookmark, LuBookmarkCheck } from 'react-icons/lu';
 import { Jobdetailcard, JobDetailSkeleton } from './jobcard';
 import Navbar from '@/components/navBar/Navbar';
+import { Company, ISavePost, Job, JobPosting, Salary, SavedType } from '@/types/Types';
 
-interface JobPosting {
-  _id: string;
-  title: string;
-  description: string;
-  location: string;
-  jobType: string;
-  experienceLevel: string;
-  industry: string;
-  salary: {
-    max: string;
-    min: string;
-    rate: string;
-  } | undefined;
-  requirements: string[];
-  jobResponsibilities: string[];
-  benefits: string[];
-  applicationDeadline: string;
-  contactEmail: string;
-  contactPhone: string;
-  company: {
-    address: string;
-    _id: string;
-    name: string;
-    logo: string;
-    email: string;
-    password: string;
-    contact: number;
-    role: string;
-    age: number;
-    IndustryType: string;
-    subscriptionEndDate: string;
-    subscriptionStartDate: string;
-    isDeleted: boolean;
-    employees: string[];
-    createdAt: string;
-    updatedAt: string;
-    __v: number;
-  };
-  createdAt: string;
-  updatedAt: string;
-  status: string;
-  isDeleted: boolean;
-  __v: number;
-  postedBy?: {
-    name: string;
-  };
-};
+
+
+
 
 const JobDetails = () => {
   const { id } = useParams();
   const route = useRouter()
   const [detail, setDetails] = useState<JobPosting | null>(null);
-  const [similarjob, setimilarjob] = useState([])
-  const [samecompany, setSamecompany] = useState([])
+  const [similarjob, setimilarjob] = useState<Job[]>([])
+  const [samecompany, setSamecompany] = useState<Job[]>([])
   const [loading, setLoadin] = useState(true)
   const [isLoding, setIsLoding] = useState(true)
 
-  const savedjobs = useAppSelector((state) => state.user.savedJobs)
+  const savedjobs:SavedType[]= useAppSelector((state) => state.user.savedJobs  )
   const jobDetails = async () => {
     try {
       setLoadin(false)
@@ -89,6 +46,7 @@ const JobDetails = () => {
       jobDetails();
     }
   }, [id]);
+console.log("savedjobs",savedjobs);
 
   const [copied, setCopied] = useState(false);
   const currentURL = typeof window !== 'undefined' ? window.location.href : '';
@@ -125,7 +83,8 @@ Don't miss out on this opportunity! ✨`;
 
   ///getsimilarjob
 
-  const getsimilarjob = async (jobType: string, companyName?: string) => {
+  const getsimilarjob = async (jobType?: string, companyName?: string) => {
+    
     try {
       setIsLoding(false)
       const response = await api.get(`/user/similarjobs/${jobType}/${companyName}`);
@@ -139,8 +98,13 @@ Don't miss out on this opportunity! ✨`;
   };
 
   useEffect(() => {
-    getsimilarjob(detail?.jobType, detail?.company.name)
-  }, [detail || detail?.jobType])
+    if (detail?.jobType) {
+      getsimilarjob(detail.jobType, detail.company?.name);
+    }
+  }, [detail]);
+  
+
+console.log("detail",detail);
 
   return (
     <>
@@ -210,12 +174,26 @@ Don't miss out on this opportunity! ✨`;
                     </svg>
                     Apply Now
                   </button>
-                  <button className="p-2.5 border border-gray-200 rounded-lg hover:bg-gray-50 transition text-gray-500"
+                  {/* <button className="p-2.5 border border-gray-200 rounded-lg hover:bg-gray-50 transition text-gray-500"
                     onClick={() => dispatch(saveJobs(id))}
                   >
                     {savedjobs.find((item) => item.jobId._id.includes(id)) ? <LuBookmarkCheck /> : <LuBookmark />
                     }
-                  </button>
+                  </button> */}
+                
+<button
+  className="p-2.5 border border-gray-200 rounded-lg hover:bg-gray-50 transition text-gray-500"
+  onClick={() => {
+    if (typeof id === 'string') {
+      dispatch(saveJobs(id));
+    } else {
+      console.error("Invalid id:", id); // Optional error handling
+    }
+  }}
+>
+  {savedjobs.find((item) => item.jobId._id === id) ? <LuBookmarkCheck /> : <LuBookmark />}
+</button>
+
                   <button className="p-2.5 border border-gray-200 rounded-lg hover:bg-gray-50 transition text-gray-500" onClick={() => setCopied(!copied)}>
                     <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                       <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8.684 13.342C8.886 12.938 9 12.482 9 12c0-.482-.114-.938-.316-1.342m0 2.684a3 3 0 110-2.684m0 2.684l6.632 3.316m-6.632-6l6.632-3.316m0 0a3 3 0 105.367-2.684 3 3 0 00-5.367 2.684zm0 9.316a3 3 0 105.368 2.684 3 3 0 00-5.368-2.684z" />
@@ -400,7 +378,7 @@ Don't miss out on this opportunity! ✨`;
                   <div className="flex items-start justify-between">
                     <Link href={`/user/jobs/details/${job._id}`}>
                       <div className="flex gap-3">
-                        <Image width={48} height={48} src={job?.company.logo} alt={`${job.company?.name} logo`} className="rounded w-5 h-5" />
+                        <Image width={48} height={48} src={job?.company.logo||""} alt={`${job.company?.name} logo`} className="rounded w-5 h-5" />
                         <div>
                           <h3 className="font-medium">{job?.title}</h3>
                           <p className="text-sm text-gray-500">{job?.company?.name} • {job.location}</p>
@@ -443,7 +421,7 @@ Don't miss out on this opportunity! ✨`;
                   <div className="flex items-start justify-between">
                     <Link href={`/user/jobs/details/${job._id}`}>
                       <div className="flex gap-3">
-                        <Image width={48} height={48} src={job?.company.logo} alt={`${job.company?.name} logo`} className="rounded w-5 h-5" />
+                        <Image width={48} height={48} src={job?.company?.logo||""} alt={`${job.company?.name} logo`} className="rounded w-5 h-5" />
                         <div>
                           <h3 className="font-medium">{job?.title}</h3>
                           <p className="text-sm text-gray-500">{job?.company?.name} • {job.location}</p>

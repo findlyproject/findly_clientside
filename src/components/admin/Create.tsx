@@ -1,8 +1,6 @@
 "use client";
 
-import { TitleType,SkillType } from "@/types/Types";
-import api from "@/utils/api";
-
+import { TitleType, SkillType } from "@/types/Types";
 import { useEffect, useState } from "react";
 import { IoMdCreate } from "react-icons/io";
 import { toast } from "react-toastify";
@@ -11,41 +9,38 @@ import { VscVerifiedFilled } from "react-icons/vsc";
 import { VscVerified } from "react-icons/vsc";
 import { MdEdit } from "react-icons/md";
 import { useAppDispatch, useAppSelector } from "@/lib/store/hooks";
-import { editSkill, editTitle, handleBlock, postSkill, postTitle, showSkills, showSTitles } from "@/lib/store/features/actions/adminActions";
+import { editSkill, editTitle, handleApproveSkill, handleApproveTitle, handleRemoveSkill, handleRemoveTitle, postSkill, postTitle, showSkills, showSTitles } from "@/lib/store/features/actions/adminActions";
 
 const Create = () => {
   const [skill, setSkill] = useState("");
-  const [allskills, setallSkills] = useState<SkillType[]>([]);
+
   const [editingSkill, setEditingSkill] = useState<string | null>(null);
 
   const [titles, setTitles] = useState("");
-  const [alltitles, setallTitles] = useState<TitleType[]>([]);
+
   const [titleEditing, setTitleEditing] = useState<string | null>(null);
-const dispatch= useAppDispatch()
-const skills=useAppSelector((state)=>state.admin.skills)
-const jobtitles=useAppSelector((state)=>state.admin.titles)
+  const dispatch = useAppDispatch();
+  const skills = useAppSelector((state) => state.admin.skills);
+  const jobtitles = useAppSelector((state) => state.admin.titles);
   const [activeTab, setActiveTab] = useState("skills");
   const formattedSkill =
     skill.charAt(0).toUpperCase() + skill.slice(1).toLowerCase();
   const formattedTitles =
     titles.charAt(0).toUpperCase() + titles.slice(1).toLowerCase();
 
-console.log("skills",skills);
+  console.log("skills", skills);
 
+  useEffect(() => {
+    fetchSkills();
+    fetchTitle();
+  }, []);
 
-  useEffect(()=>{
-      fetchSkills()
-      fetchTitle()
-
-  },[])
-
-      const fetchSkills=()=>{
-        dispatch(showSkills())
-      }
-      const fetchTitle=()=>{
-        dispatch(showSTitles())
-      }
-
+  const fetchSkills = () => {
+    dispatch(showSkills());
+  };
+  const fetchTitle = () => {
+    dispatch(showSTitles());
+  };
 
   const handleSkill = async () => {
     if (!skill.trim()) {
@@ -54,21 +49,19 @@ console.log("skills",skills);
     }
     try {
       if (editingSkill) {
+        const result = await dispatch(editSkill({ skill, editingSkill }));
 
-        const result= await dispatch(editSkill({skill,editingSkill}))
-
-        console.log("resultedit",result);
-        if(result.type==='edit/skills/fulfilled'){
-          dispatch(showSkills())
+        console.log("resultedit", result);
+        if (result.type === "edit/skills/fulfilled") {
+          dispatch(showSkills());
         }
       } else {
-    const result=await dispatch(postSkill(formattedSkill))
-console.log("result",result);
-if(result.type==="post/skills/fulfilled"){
-  dispatch(showSkills())
-}
- }
-   
+        const result = await dispatch(postSkill(formattedSkill));
+        console.log("result", result);
+        if (result.type === "post/skills/fulfilled") {
+          dispatch(showSkills());
+        }
+      }
     } catch (error) {
       console.error("Error adding skill:", error);
     }
@@ -82,57 +75,58 @@ if(result.type==="post/skills/fulfilled"){
 
     try {
       if (titleEditing) {
-       const result=await dispatch(editTitle({titles,titleEditing}))
-           
-     if(result.type==="edit/Title/fulfilled"){
-      dispatch(showSTitles())
-     }
-       setTitleEditing(null);
+        const result = await dispatch(editTitle({ titles, titleEditing }));
+
+        if (result.type === "edit/Title/fulfilled") {
+          dispatch(showSTitles());
+        }
+        setTitleEditing(null);
       } else {
+        const result = await dispatch(postTitle(formattedTitles));
+        console.log("resultpodtgfftf", result);
 
-       const result=await dispatch(postTitle(formattedTitles))
-console.log("resultpodtgfftf",result);
-
-       if(result.type==="post/Title/fulfilled"){
-        dispatch(showSTitles())
-       }
+        if (result.type === "post/Title/fulfilled") {
+          dispatch(showSTitles());
+        }
       }
       setTitles("");
-      } 
-     catch (error) {
+    } catch (error) {
       console.error("Error adding titles:", error);
     }
   };
 
   const handleRemove = async (skillId: string) => {
-    const response = await api.patch(`/admin/removeskill/${skillId}`);
+    console.log("skillId",skillId);
+    
+   const result=await dispatch(handleRemoveSkill(skillId))
+   console.log("result",result);
+   
+   if(result.type==="remove/skill/fulfilled"){
+         dispatch(showSkills())
+   }
 
-    setallSkills((prevskill) =>
-      prevskill.filter((skill) => skill._id !== skillId)
-    );
   };
 
   const handleTitleRemove = async (titleId: string) => {
-    const response = await api.patch(`/admin/removetitle/${titleId}`);
-
-    setallTitles((prevTitle) =>
-      prevTitle.filter((title) => title._id !== titleId)
-    );
+    const result =await dispatch(handleRemoveTitle(titleId))
+  if(result.type==="remove/title/fulfilled"){
+    dispatch(showSTitles())
+  }
   };
 
   const handleTitleApprove = async (titleid: string) => {
-    const response = await api.patch(`/admin/approvetitle/${titleid}`);
 
-    setallTitles((prevTitles) =>
-      prevTitles.map((s) => (s._id === titleid ? { ...s, status: true } : s))
-    );
+    const result=await dispatch(handleApproveTitle(titleid))
+
+    if(result.type==="approve/title/fulfilled"){
+      dispatch(showSTitles())
+    }
+
   };
 
   const handleTitleEdit = async (Item: TitleType) => {
     setTitles(Item.name);
     setTitleEditing(Item._id);
-    
-    
   };
 
   const handleEdit = async (skillItem: SkillType) => {
@@ -141,11 +135,10 @@ console.log("resultpodtgfftf",result);
   };
 
   const handleApprove = async (skillid: string) => {
-    const response = await api.patch(`/admin/approveskill/${skillid}`);
-
-    setallSkills((prevSkills) =>
-      prevSkills.map((s) => (s._id === skillid ? { ...s, status: true } : s))
-    );
+   const result=await dispatch(handleApproveSkill(skillid))
+                if(result.type==="approve/skills/fulfilled"){
+                 dispatch(showSkills())
+                }
   };
   return (
     <div className="flex flex-col items-start min-h-screen bg-gray-100 p-6">
