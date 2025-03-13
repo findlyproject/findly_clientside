@@ -1,9 +1,7 @@
 "use client";
 import { adminDeletePost, removeReports } from "@/lib/store/features/actions/adminActions";
 import { fetchAllPosts } from "@/lib/store/features/actions/postActions";
-import { updatePost } from "@/lib/store/features/postSlice";
 import { useAppDispatch, useAppSelector } from "@/lib/store/hooks";
-import api from "@/utils/api";
 import Image from "next/image";
 import { useRouter } from "next/navigation";
 import React, { useEffect, useState } from "react";
@@ -47,7 +45,7 @@ const router =useRouter()
     );
   };
 
-  // Toggle report actions dropdown
+ 
   const handleOpen = (id: string) => {
     setOpenReportId((prevId) => (prevId === id ? null : id));
   };

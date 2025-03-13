@@ -222,6 +222,7 @@ export interface applicationData {
     status: string;
     updatedAt: string;
     userId: User;
+    isSaved:boolean
   }
 
   

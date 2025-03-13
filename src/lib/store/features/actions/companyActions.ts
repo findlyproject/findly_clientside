@@ -329,11 +329,56 @@ export const loginCompany=createAsyncThunk(
         if (!response || !response.data) {
           return rejectWithValue("delete job failed.");
         }
-        const data=response.data.company
+        const data=response.data
         dispatch(setActiveCompany(data));
         return data;
       }
     );
+
+    export const handleSaveApplication = createAsyncThunk(
+      "save/application",
+      async (applicationId:string,{ rejectWithValue } ) => {
+
+        const response = await handleAsync(() => api.post(`/company/saveapplication`,{
+          applicationId
+        }));
+    console.log("ree",response);
+    
+        if (!response || !response.data) {
+          return rejectWithValue("delete job failed.");
+        }
+     
+      }
+    );
+
+    export const getSavedApplication = createAsyncThunk(
+      "find/application",
+      async (_,{ rejectWithValue } ) => {
+
+        const response = await handleAsync(() => api.post(`/company/findsavedapplication`));
+    console.log("ree finded",response);
+    
+        if (!response || !response.data) {
+          return rejectWithValue("delete job failed.");
+        }
+     
+      }
+    );
+
+    export const deleteApplcation = createAsyncThunk(
+      "delete/application",
+      async (applicationId:string,{rejectWithValue } ) => {
+
+        const response = await handleAsync(() =>  api.delete(`/company/deleteapplication`, { data: { applicationId } }));
+    console.log("ree finded",response);
+    
+        if (!response || !response.data) {
+          return rejectWithValue("delete job failed.");
+        }
+     
+      }
+    );
+
 
     
     

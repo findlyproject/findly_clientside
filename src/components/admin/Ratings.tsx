@@ -1,25 +1,15 @@
 "use client";
 import { useAppDispatch, useAppSelector } from "@/lib/store/hooks";
-import React, { useEffect, useState } from "react";
+import React, { useEffect } from "react";
 import { TiTick } from "react-icons/ti";
 import { IoMdStar, IoMdStarHalf, IoMdStarOutline } from "react-icons/io";
-import api from "@/utils/api";
-import {
-  approveRating,
-  removeRating,
-  setAllRatings,
-} from "@/lib/store/features/ratingSlice";
+
 import { TiTickOutline } from "react-icons/ti";
 import { adminApproveReviews, adminRemoveRating, findlyReviews } from '@/lib/store/features/actions/adminActions';
 export const Ratings=()=> {
-  const[ratings,setRatings]=useState([])
     const dispatch=useAppDispatch()
     const reviews=useAppSelector((state)=>state.admin.reviews)
 
-    console.log("ratings",ratings);
-    console.log("reviews",reviews);
-
-  
 
 const findReviews=async()=>{
   const result=await dispatch(findlyReviews())

@@ -9,13 +9,14 @@ import { MdDelete } from "react-icons/md";
 import { FaStar, FaEnvelope, FaPhone, FaGlobe, FaFacebook, FaInstagram, FaLinkedin, FaTwitter } from "react-icons/fa";
 import Modal, { modalProps } from "./JobPostModal";
 import PostModal from "./PostModal";
-
+import { MdVerified } from "react-icons/md";
 import { FaRegImage } from "react-icons/fa6";
 import { ImProfile } from "react-icons/im";
 import { Spinner } from "@material-tailwind/react";
 import Image from "next/image";
 import { Company } from "@/types/Types";
-
+import { TiEdit } from "react-icons/ti";
+import { useRouter } from "next/navigation";
 
 const CompanyProfile = () => {
   const [isOpen, setIsOpen] = useState(false);
@@ -34,7 +35,7 @@ const CompanyProfile = () => {
   const activeCompany = useAppSelector((state) => state.companyLogin.activeCompany)
   const lastFetchedPage = useRef<number>(null);
 
-
+const router=useRouter()
 
   console.log("hasMore", hasMore);
 
@@ -155,11 +156,17 @@ const CompanyProfile = () => {
       fetchReviews()
     }
   }
+
+  const handleRouote=()=>{
+    console.log("dsfad");
+    
+    router.push("/company/profile/edit")
+  }
   return (
     <div className="min-h-screen py-10 bg-gray-200 flex justify-center items-center pt-28">
       <div className="bg-white p-8 rounded-lg shadow-lg w-full max-w-3xl ">
-      <div className="relative w-full flex flex-col items-center">
-  {/* Banner Section */}
+      <div className="relative w-full flex flex-col ">
+
   <div
     className="w-full border-4 border-primary h-[200px] bg-cover bg-center rounded-lg"
     style={{
@@ -167,19 +174,33 @@ const CompanyProfile = () => {
     }}
   ></div>
 
-  {/* Profile Section (Overlapping) */}
-  <div className="absolute bottom-[-50px] flex justify-start ps-10  w-full">
+ 
+  <div className="absolute bottom-[-40px] flex justify-start ps-10  w-full">
   <div className="relative w-[100px] h-[100px]">
   <Image
     src={activeCompany?.logo || "/default-image.png"}
     alt="Profile"
     width={100} // Equal width and height
     height={200}
-    // className=" border-4 border-white shadow-lg object-cover"
+    
     className="w-24 h-24 rounded-full border-4  "
   />
 </div>
+
   </div>
+ <div className="flex justify-end items-center">
+ <span className="text-end mr-3 italic text-md">{activeCompany?.name}</span>
+ <span onClick={handleRouote}  className="mr-3 cursor-pointer z-50 relative"><TiEdit  className="text-xl"/></span>
+  {activeCompany?.role === "premium" && (
+            <div className="">
+              <MdVerified className="ml-auto text-primary text-2xl cursor-pointer" />
+            </div>
+          )
+  }
+  
+
+ </div>
+
 </div>
 
 
@@ -266,7 +287,7 @@ const CompanyProfile = () => {
 
         <div className="mt-6 border-t pt-4">
           <h3 className="text-lg font-semibold">Posts</h3>
-          <p className="mb-5">Manage your company's job listings and posts here. Keep your updates organized and relevant.
+          <p className="mb-5">Manage your company s job listings and posts here. Keep your updates organized and relevant.
             You can add new job openings, share company news, or remove outdated posts anytime.
             Keeping this section updated ensures your team has the latest information.</p>
 
@@ -331,7 +352,7 @@ const CompanyProfile = () => {
             <div className="flex justify-center">
               <button
                 onClick={() => fetchReviews(page + 1)}
-                className="mt-4 px-4 py-2 bg-blue-500 text-white rounded-lg"
+                className="mt-4 px-4 py-2 bg-primary text-white rounded-lg"
               >
                 View Moress
               </button>
