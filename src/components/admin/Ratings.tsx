@@ -39,9 +39,9 @@ console.log("result",result);
 
     }
   return (
-     <div>
+    <div>
       {reviews.map((item) => {
-         const rating = item.starsRating;
+        const rating = item.starsRating;
         const fullStars = Math.floor(rating);
         const halfStars = rating % 1 !== 0 ? 1 : 0;
         const emptyStars = 5 - fullStars - halfStars;
