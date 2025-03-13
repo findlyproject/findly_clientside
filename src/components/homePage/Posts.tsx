@@ -3,8 +3,7 @@ import { setSaved } from "@/lib/store/features/postSlice";
 import { useAppDispatch, useAppSelector } from "@/lib/store/hooks";
 import api from "@/utils/api";
 import React, { useState, useEffect } from "react";
-import { IPost, SavePost } from "@/types/Types";
-import { savePosts } from "@/lib/store/features/actions/userActions";
+import { SavePost } from "@/types/Types";
 export const  Posts=()=> {
   const [activeTab, setActiveTab] = useState("saved");
   const [posts, setPosts] = useState<SavePost[]>([]);
@@ -12,8 +11,7 @@ export const  Posts=()=> {
   const [savedPosts, setsavedPosts] = useState<SavePost[]>([]);
   const save=useAppSelector(state=>state.post.saved)
 const dispatch=useAppDispatch()
-const activeCompany=useAppSelector((state)=>state.companyLogin.activeCompany)
-const route=activeCompany?"compan":"user"
+
 useEffect(()=>{
   const fetch=async()=>{
     const saveResponse = await api.get(`/post/user/saveds`);
@@ -49,14 +47,16 @@ useEffect(()=>{
   }, [activeTab,savedPosts,userPosts]);
 console.log("ppoooo",save);
 
-const handleUnsave=async(postId:string)=>{
-  const result=await dispatch(savePosts({postId,route}))
-  if(result.type==="save/posts/fulfilled"){
-    setsavedPosts((pre)=>pre.filter((item)=>item.postId._id!==postid))
-    const response=await api.get("/post/user/all")
-    dispatch(setSaved(response.data.saved))
-  }
+const handleUnsave=async(postid:string)=>{
+const res=await api.post(`/post/user/save/${postid}`)
+console.log("res",res);
+setsavedPosts((pre)=>pre.filter((item)=>item.postId._id!==postid))
+const response=await api.get("/post/user/all")
+dispatch(setSaved(response.data.saved))
 }
+
+console.log("savedPosts",savedPosts);
+
 
   return (
     <div className="min-h-screen bg-gray-100">

@@ -372,6 +372,13 @@ export const Comments = ({ postId, comments }: CommentsProps) => {
                                   : comment.user.name || "Unknown User"
                                 : "Unknown User"}
                             </h3>
+                            {/* <h3 className="font-semibold text-sm">
+  {comment.user
+    ? "firstName" in comment.user
+      ? `${comment?.user?.firstName} ${comment?.user?.lastName}`
+      : comment.user?.name
+    : "Unknown User"} 
+</h3> */}
                           </div>
                           <div className="text-gray-500 text-xs">
                             {dayjs(comment.updatedAt).fromNow()}
@@ -415,13 +422,16 @@ export const Comments = ({ postId, comments }: CommentsProps) => {
                               onClick={() => toggleMenu(comment._id)}
                               className="hover:underline"
                             >
-                              <FontAwesomeIcon icon={faEllipsis} />
+                              <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="size-6">
+  <path stroke-linecap="round" stroke-linejoin="round" d="M6.75 12a.75.75 0 1 1-1.5 0 .75.75 0 0 1 1.5 0ZM12.75 12a.75.75 0 1 1-1.5 0 .75.75 0 0 1 1.5 0ZM18.75 12a.75.75 0 1 1-1.5 0 .75.75 0 0 1 1.5 0Z" />
+</svg>
+
 
                               {isShowMenu && openCommentId == comment._id && (
                                 <OutsideClickHandler
                                   onOutsideClick={() => setIsShowMenu(false)}
                                 >
-                                  <div className="absolute  bg-white border border-gray-200 rounded-lg shadow-lg z-50">
+                                  <div className="absolute  bg-white border border-gray-200 rounded-lg shadow-lg ">
                                     <div className="border-t border-gray-200">
                                       <button
                                         className="w-full text-left px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"
@@ -615,7 +625,10 @@ export const Comments = ({ postId, comments }: CommentsProps) => {
                                         className="text-gray-500 hover:text-gray-700   text-xl"
                                         onClick={() => toggleOptionsMenu(r._id)}
                                       >
-                                        <BsThreeDots />
+                                       <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" className="size-5">
+  <path stroke-linecap="round" stroke-linejoin="round" d="M12 6.75a.75.75 0 1 1 0-1.5.75.75 0 0 1 0 1.5ZM12 12.75a.75.75 0 1 1 0-1.5.75.75 0 0 1 0 1.5ZM12 18.75a.75.75 0 1 1 0-1.5.75.75 0 0 1 0 1.5Z" />
+</svg>
+
                                       </button>
 
                                       {isOptionsMenuOpen === r._id && (

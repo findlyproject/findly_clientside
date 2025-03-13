@@ -18,7 +18,7 @@ const router=useRouter()
         <>
           <button
             title="To create a post"
-            className="fixed bottom-6 z-[9999] right-6 bg-primary text-white p-4 rounded-full shadow-lg hover:bg-violet-900  transition-transform duration-300 ease-in-out transform hover:scale-110 "
+            className="fixed bottom-6 z-50 right-6 bg-primary text-white p-4 rounded-full shadow-lg hover:bg-violet-900  transition-transform duration-300 ease-in-out transform hover:scale-110 "
             onClick={() => setMenu((menu) => !menu)}
           >
             <Plus size={24} />

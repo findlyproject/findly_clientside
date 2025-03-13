@@ -25,9 +25,6 @@ function Navbar() {
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
   const [searchQuery, setSearchQuery] = useState("");
   const [searchResults, setSearchResults] = useState<User[]>([]);
-  
- console.log("isMenuOpen",isMenuOpen);
- console.log("activeuser",activeuser);
  
     const route=activeCompany?"company":"user"
     
@@ -399,9 +396,9 @@ function Navbar() {
       ) : (
         <>
           <nav
-            className={`border-gray-200 ${
-              pathname === "/" ? "bg-primary" : "bg-gray-200"
-            }  py-2.5`}
+            className={`border-gray-100 ${
+              pathname === "/" ? "bg-primary" : "bg-gray-100"
+            }  py-2.5  `}
           >
             <div className="mx-auto flex max-w-screen-xl flex-wrap items-center justify-between px-4">
               <Link
