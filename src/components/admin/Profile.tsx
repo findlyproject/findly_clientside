@@ -1,15 +1,14 @@
 "use client";
 
+import { Admin } from "@/types/Types";
+import { useAppDispatch, useAppSelector } from "@/lib/store/hooks";
 
-import { Admin } from '@/types/Types';
-import { useAppDispatch, useAppSelector } from '@/lib/store/hooks';
-
-import Image from 'next/image';
-import { useState } from 'react';
-import { FaUser, FaEnvelope, FaCamera } from 'react-icons/fa';
-import { Formik, Field, Form, ErrorMessage } from 'formik';
-import * as Yup from 'yup';
-import { editAdminProfile } from '@/lib/store/features/actions/adminActions';
+import Image from "next/image";
+import { useState } from "react";
+import { FaUser, FaEnvelope, FaCamera } from "react-icons/fa";
+import { Formik, Field, Form, ErrorMessage } from "formik";
+import * as Yup from "yup";
+import { editAdminProfile } from "@/lib/store/features/actions/adminActions";
 
 export const Profile = () => {
   const admin = useAppSelector((state) => state.admin.admin as Admin);
@@ -52,12 +51,10 @@ export const Profile = () => {
     }
 
     try {
-     const result=await dispatch(editAdminProfile(formDataToSend))
-     if(result.type==="edit/admin/fulfilled"){
-console.log("done");
-
-     }
-   
+      const result = await dispatch(editAdminProfile(formDataToSend));
+      if (result.type === "edit/admin/fulfilled") {
+        console.log("done");
+      }
     } catch (error) {
       console.error("Error updating profile:", error);
     }

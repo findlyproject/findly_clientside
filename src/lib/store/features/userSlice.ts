@@ -1,6 +1,6 @@
 
 
-import { Ieducation, IlocationType, JobLocationType, SavedType, User } from "@/types/Types";
+import { Ieducation, IlocationType, IReport, JobLocationType, SavedType, User } from "@/types/Types";
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 import { Url } from "url";
 
@@ -122,6 +122,7 @@ interface LoginState {
     jobType: string;
   };
   allJobs: string[];
+  
 }
 
 
@@ -148,7 +149,9 @@ const initialState: LoginState = {
     industry: "",
     jobType: ""
   },
-  allJobs:[]
+  allJobs:[],
+
+ 
 };
 
 // interface EditState {

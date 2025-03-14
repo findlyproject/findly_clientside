@@ -45,7 +45,8 @@ export interface Ieducation {
   startYear: string;
   endYear: string;
   college: string;
-  Subject: string;
+  subject: string;
+  _id:string;
 
 }[]
 
@@ -107,6 +108,7 @@ export interface User{
     companyName: string;
     startYear: string;
     endYear: string;
+    _id:string;
   }[];
   projects?: {
     title: string;
@@ -165,7 +167,8 @@ export interface Company {
   followers?:User[]
   banner?: string;
   foundedAt: Date;
-  employees?: {
+  employees: {
+    _id:string;
     employee: string;  
     position: string; 
   }[];
@@ -192,7 +195,7 @@ export interface Company {
     start:string,
     end:string
   }
-  services?:string[]
+  services:string[]
   subscriptionEndDate?: Date | null;
   subscriptionStartDate?: Date | null;
   isBlocked?: boolean;
@@ -352,6 +355,8 @@ export interface IReport {
   isDeleted:boolean;  
   createdAt:Date;
   updatedAt:Date;
+  postId:IPost
+  userId:User
   
   }
   
@@ -394,11 +399,11 @@ export interface IReport {
   export interface IPost {
     _id: string;
     description: string;
-    images?:string [];
-    video?:string;
+    images:string [];
+    video:string;
     owner: User |Company|string|null
-    likedBy?: User[];
-    reports?:  IReport[]| null|undefined;
+    likedBy: User[];
+    reports:  IReport[];
     comments?:  IComment[] ;
     isDeleted?: boolean;
     createdAt: string;
@@ -493,8 +498,12 @@ export interface Admin {
 export interface DailyRevenueType {
   day: string;
   revenue: number;
+  
 }
 
+export interface ItemDashboard{
+  item:DailyRevenueType
+}
 
 
 //job

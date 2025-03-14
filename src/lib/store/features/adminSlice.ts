@@ -1,5 +1,5 @@
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
-import { Company, SkillType, TitleType, Admin, User, Rating } from "@/types/Types";
+import { Company, SkillType, TitleType, Admin, User, Rating, IReport } from "@/types/Types";
 
 interface AdminState {
   admin: Admin | null;
@@ -16,6 +16,7 @@ titles:TitleType[]
 companies:Company[]
 users:User[]
 reviews:Rating[]
+reports:number
  }
 const initialState: AdminState = {
   admin:null,
@@ -23,7 +24,8 @@ const initialState: AdminState = {
   titles:[],
   companies:[],
   users:[],
-  reviews:[]
+  reviews:[],
+    reports:0
 };
 
 const adminSlice = createSlice({
@@ -47,10 +49,13 @@ const adminSlice = createSlice({
     },
     setReviews:(state,action)=>{
       state.reviews=action.payload
+    },
+    setReports:(state,action)=>{
+      state.reports=action.payload
     }
   
   }, 
 });
 
-export const { setAdmin,setSkills,setJOBTitles,setUsers,setCompanies,setReviews } = adminSlice.actions;
+export const { setAdmin,setSkills,setJOBTitles,setUsers,setCompanies,setReviews ,setReports} = adminSlice.actions;
 export default adminSlice.reducer;

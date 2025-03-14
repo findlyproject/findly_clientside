@@ -187,9 +187,13 @@ const DetailsUser = ({ id }: { id: string }) => {
                           </button>
                         </div>
 
-                        <div className="flex items-center space-x-2 px-4 py-2 hover:bg-gray-100 cursor-pointer">
+                        <div
+                        onClick={() => setIsreportModalOpen(true)}  
+                        className="flex items-center space-x-2 px-4 py-2 hover:bg-gray-100 cursor-pointer">
                           <MdOutlineReport />
-                          <button className="text-left">Report</button>
+                          <button className="text-left"
+                           
+                         >Report</button>
                         </div>
                         {isreportModalOpen && (
                           <ReportUserModal

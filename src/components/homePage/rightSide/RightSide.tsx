@@ -315,7 +315,7 @@ bg-white border-s border-gray-200 dark:bg-neutral-800 dark:border-neutral-700 w-
                   {activeTab === "other" ? (
                     other.map((chat, index) => (
                       <div
-                        key={index}
+                        key={chat._id}
                         className={`flex items-center justify-between p-2 rounded-lg cursor-pointer transition ${
                           selectedUser === chat
                             ? "bg-blue-100"
@@ -326,13 +326,13 @@ bg-white border-s border-gray-200 dark:bg-neutral-800 dark:border-neutral-700 w-
                         {/* User Info - Aligned to the left */}
                         <div className="flex items-center">
                           <img
-                            src={chat.connectionID.profileImage}
+                            src={chat.connectionID?.profileImage}
                             alt="User"
                             className="w-10 h-10 rounded-full"
                           />
                           <div className="ml-3">
                             <h2 className="text-sm font-semibold">
-                              {chat.connectionID.firstName}
+                              {chat.connectionID?.firstName}
                             </h2>
                           </div>
                         </div>

@@ -1,6 +1,6 @@
 "use client";
 import { useAppDispatch, useAppSelector } from "@/lib/store/hooks";
-import React, { useEffect, useState } from "react";
+import React, { useEffect } from "react";
 import { TiTick } from "react-icons/ti";
 import { IoMdStar, IoMdStarHalf, IoMdStarOutline } from "react-icons/io";
 import { TiTickOutline } from "react-icons/ti";
@@ -59,7 +59,8 @@ export const Ratings = () => {
 
                 <div className="font-medium">
                   <p>
-                    username
+                    {item.userId?.firstName}{" "}
+                    {item.userId?.lastName || "unknown"}
                     <time
                       dateTime="2014-08-16 19:00"
                       className="block text-sm text-gray-500 dark:text-gray-400"
