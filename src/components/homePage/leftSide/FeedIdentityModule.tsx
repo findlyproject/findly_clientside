@@ -50,7 +50,7 @@ export  function FeedIdentityModule  (){
           <p className="text-gray-500 text-sm">Connections</p>
         </div>
         <div className="text-center">
-          <p className="font-bold text-lg">{activeuser?.following.length}</p>
+          <p className="font-bold text-lg">{activeuser?.following?.length}</p>
           <p className="text-gray-500 text-sm">Following</p>
         </div>
       </div>

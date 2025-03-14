@@ -93,7 +93,7 @@ export const JobPost = () => {
     // }
   };
   return (
-    <div className="max-w-screen-2x1 container mx-auto xl">
+    <div className="max-w-screen-2x1 container pt-48 mx-auto xl">
       {/* form */}
       <div className=" bg-[#FAFAFA] py-10 px-4 lg:px-16">
         <Formik
@@ -452,8 +452,6 @@ export const JobPost = () => {
                     )}
                   </div>
                 </div>
-
-                {/* Job Description Section */}
                 <div className="lg:w-1/2 w-full">
                   <label className="block mb-2 text-lg">Job Description</label>
                   <Field

@@ -1,30 +1,29 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import { FaPencilAlt, FaEye } from "react-icons/fa";
+
 import { IoMdAdd } from "react-icons/io";
-import Image from "next/image";
+
 import { useAppDispatch, useAppSelector } from "@/lib/store/hooks";
-import { MdOutlineEmail } from "react-icons/md";
-import { CiPhone } from "react-icons/ci";
-import Link from "next/link";
-import { FaFacebook, FaInstagram, FaTwitter, FaLinkedin } from "react-icons/fa";
+
 import { Formik, Form, ErrorMessage, Field } from "formik";
 import * as Yup from "yup";
 import { Country, State, City } from "country-state-city";
 import PhoneInput from "react-phone-input-2";
 import "react-phone-input-2/lib/style.css";
 import api from "@/utils/api";
-
+import { RxCross2 } from "react-icons/rx";
 import { User } from "@/types/Types";
-import { editProfile, uploadBanner, uploadLogo } from "@/lib/store/features/actions/companyActions";
+import { editContact, editProfile, uploadBanner, uploadLogo } from "@/lib/store/features/actions/companyActions";
 import HeaderProfile from "./Header";
+import { IoIosSave } from "react-icons/io";
 export default function ProfileEdit() {
 
   const [loading, setLoading] = useState(false)
   const activecompany = useAppSelector(
     (state) => state.companyLogin.activeCompany
   );
+  console.log("activecompany", activecompany);
 
   const [selectedFile, setSelectedFile] = useState<File | null>(null);
   const [preview, setPreview] = useState(
@@ -45,6 +44,16 @@ export default function ProfileEdit() {
     employee: "",
     position: "",
   });
+  const [services, setServices] = useState(activecompany?.services);
+const [serviceInput, setServiceInput] = useState("");
+
+  const [contact, setContact] = useState({
+    stats: false,
+    name: ""
+  })
+
+
+
 
   useEffect(() => {
     const fetch = async () => {
@@ -60,48 +69,63 @@ export default function ProfileEdit() {
     fetch();
   }, [searchQuery]);
 
-  const validationSchema = Yup.object().shape({
+const serviceValidation=Yup.object().shape({
+  services: Yup.array()
+    .of(Yup.string().required("Service cannot be empty")) 
+    .min(1, "At least one service is required"),
+})
+
+  const contactValidation=Yup.object().shape({
     name: Yup.string().required("Company Name is required"),
-    contact: Yup.string()
-      .matches(/^[0-9]{10}$/, "Invalid mobile number")
-      .required("Mobile Number is required"),
-    about: Yup.string().required("bio is required"),
+    phoneNumber: Yup.string()
+    .matches(/^[0-9]+$/, "Phone number must be only digits")
+    .min(10, "Phone number must be at least 10 digits"),
     founder: Yup.string().required("founder is required"),
     email: Yup.string().required("email is required"),
-    foundedAt: Yup.string().required("founded at is required"),
-    services: Yup.string().required("Services are required"),
+  })
 
-    workHours: Yup.object()
-      .shape({
-        start: Yup.string().required("Start time is required"),
-        end: Yup.string().required("End time is required"),
-      })
-      .required("Work hours are required"),
-    socialMedia: Yup.object().shape({
-      facebook: Yup.string().url("Invalid Facebook URL"),
-      instagram: Yup.string().url("Invalid Instagram URL"),
-      twitter: Yup.string().url("Invalid Twitter URL"),
-      linkedin: Yup.string().url("Invalid LinkedIn URL"),
-    }),
-    employees: Yup.array()
-      .of(
-        Yup.object().shape({
-          employee: Yup.string().required("Employee name is required"),
-          position: Yup.string().required("Position is required"),
-        })
-      )
-      .min(1, "At least one employee is required"),
+  const aboutVlidation = Yup.object().shape({
+    // name: Yup.string().required("Company Name is required"),
+    // contact: Yup.string()
+    //   .matches(/^[0-9]{10}$/, "Invalid mobile number")
+    //   .required("Mobile Number is required"),
+    about: Yup.string().required("bio is required"),
+    // founder: Yup.string().required("founder is required"),
+    // email: Yup.string().required("email is required"),
+    // foundedAt: Yup.string().required("founded at is required"),
+    // services: Yup.string().required("Services are required"),
 
-    IndustryType: Yup.string().required("Industry Type is required"),
-    address: Yup.object().shape({
-      landmark: Yup.string().required("Landmark is required"),
-      country: Yup.string().required("Country is required"),
-      state: Yup.string().required("State is required"),
-      city: Yup.string().required("City is required"),
-      pincode: Yup.string()
-        .matches(/^[0-9]{6}$/, "Invalid Pincode")
-        .required("Pincode is required"),
-    }),
+    // workHours: Yup.object()
+    //   .shape({
+    //     start: Yup.string().required("Start time is required"),
+    //     end: Yup.string().required("End time is required"),
+    //   })
+    //   .required("Work hours are required"),
+    // socialMedia: Yup.object().shape({
+    //   facebook: Yup.string().url("Invalid Facebook URL"),
+    //   instagram: Yup.string().url("Invalid Instagram URL"),
+    //   twitter: Yup.string().url("Invalid Twitter URL"),
+    //   linkedin: Yup.string().url("Invalid LinkedIn URL"),
+    // }),
+    // employees: Yup.array()
+    //   .of(
+    //     Yup.object().shape({
+    //       employee: Yup.string().required("Employee name is required"),
+    //       position: Yup.string().required("Position is required"),
+    //     })
+    //   )
+    //   .min(1, "At least one employee is required"),
+
+    // IndustryType: Yup.string().required("Industry Type is required"),
+    // address: Yup.object().shape({
+    //   landmark: Yup.string().required("Landmark is required"),
+    //   country: Yup.string().required("Country is required"),
+    //   state: Yup.string().required("State is required"),
+    //   city: Yup.string().required("City is required"),
+    //   pincode: Yup.string()
+    //     .matches(/^[0-9]{6}$/, "Invalid Pincode")
+    //     .required("Pincode is required"),
+    // }),
   });
   console.log("selectedemployeee", selectedEmployee);
   console.log("position", positions);
@@ -143,29 +167,51 @@ export default function ProfileEdit() {
     { id: 23, name: "Supply Chain & Logistics" },
   ];
 
+  console.log("activecompany", activecompany);
+
+
   const handleSubmit = async (values: any) => {
-    console.log("vallueee", values);
+
     const companyId = activecompany?._id
     const result = await dispatch(editProfile({ companyId, values }))
     if (result.type === "edit/profile/fulfilled") {
-      console.log("edited");
+      
 
     }
   };
 
+  const handleContactSubmit = async (event: React.FormEvent, values: any) => {
+    event.preventDefault(); // Prevent default form submission
+    event.stopPropagation(); // Stop event propagation
+  
+    console.log("hetetrrrrrrrrrrrrrrrrrr",values);
+    
+    const companyId = activecompany?._id
+    const result=await dispatch(editContact({companyId,values }))
+    if (result.type === "edit/contact/fulfilled") {
+      console.log("editedcontact",result);
+
+    }
+
+  }
+
+  const handleServicesSubmit=(values)=>{
+        console.log("serviiiiii",values);
+        
+  }
   const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
     if (file) {
       setSelectedFile(file);
       setPreview(URL.createObjectURL(file));
-      console.log("File selected:", file);
+     
     }
   };
-  console.log("selectedFile...", selectedFile);
+
 
   const handleBannerChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
-    console.log("file", file);
+    
 
     if (file) {
       setSelectedBanner(file);
@@ -174,10 +220,10 @@ export default function ProfileEdit() {
     }
   };
 
-  console.log("selectedBanner", selectedBanner);
+
 
   const handleUpload = async () => {
-    console.log("dfsadasd");
+    
     if (!selectedFile) return;
     setLoading(true)
 
@@ -218,10 +264,25 @@ export default function ProfileEdit() {
     }
   };
 
+  const handleAddService = (event) => {
+    event.stopPropagation();
+    if (serviceInput.trim() !== "") {
+      setServices([...services, serviceInput]); // Add service to state
+      setServiceInput(""); // Clear input field
+    }
+  };
+
+  const handleDeleteService = (index: number) => {
+    setServices((prevServices) => prevServices.filter((_, i) => i !== index));
+  };
+
+
+
+
   return (
     <>
-      <div className="flex flex-col items-center justify-center lg:flex-row min-h-screen p-6  bg-gray-100 pt-36">
-        <section className="flex flex-col  rounded-lg shadow-[1px_0px_10px_4px_rgba(0,0,0,0.8)] mt-6 lg:mt-0 lg:ml-6 w-4/5">
+      <div className="flex flex-col items-center  justify-center lg:flex-row min-h-screen p-6  bg-white pt-36">
+        <section className="flex flex-col p-10  rounded-lg shadow-[1px_0px_10px_4px_rgba(0,0,0,0.8)] mt-6 lg:mt-0 lg:ml-6 w-4/5">
 
 
           <HeaderProfile handlebannerUpload={handlebannerUpload} loading={loading} handleUpload={handleUpload} activecompany={activecompany} selectedFile={selectedFile} handleFileChange={handleFileChange} bannerPreview={bannerPreview} handleBannerChange={handleBannerChange} selectedBanner={selectedBanner} preview={preview} />
@@ -230,517 +291,105 @@ export default function ProfileEdit() {
 
           <Formik
             initialValues={{
-              name: activecompany?.name || "",
-              contact: undefined,
-              founder: activecompany?.founder || "",
-              foundedAt: activecompany?.foundedAt || "",
+              // name: activecompany?.name || "",
+              // contact: activecompany?.contact,
+              // founder: activecompany?.founder || "",
+              // foundedAt: activecompany?.foundedAt || "",
               about: activecompany?.about || "",
-              email:activecompany?.email||"",
+              // email: activecompany?.email || "",
 
-              workHours: {
-                start: activecompany?.workHours?.start || "",
-                end: activecompany?.workHours?.end || "",
-              },
-              services: activecompany?.services || [],
-              IndustryType: activecompany?.IndustryType || "",
-              address: {
-                landmark: activecompany?.address.landmark || "",
-                country: activecompany?.address.country || "",
-                state: activecompany?.address.state || "",
-                city: activecompany?.address.city || "",
-                pincode: activecompany?.address.pincode || "",
-              },
-              socialMedia: {
-                facebook: activecompany?.socialMedia?.facebook || "",
-                instagram: activecompany?.socialMedia?.instagram || "",
-                twitter: activecompany?.socialMedia?.twitter || "",
-                linkedin: activecompany?.socialMedia?.linkedin || "",
-              },
+              // workHours: {
+              //   start: activecompany?.workHours?.start || "",
+              //   end: activecompany?.workHours?.end || "",
+              // },
+              // services: [],
+              // IndustryType: activecompany?.IndustryType || "",
+              // address: {
+              //   landmark: activecompany?.address.landmark || "",
+              //   country: activecompany?.address.country || "",
+              //   state: activecompany?.address.state || "",
+              //   city: activecompany?.address.city || "",
+              //   pincode: activecompany?.address.pincode || "",
+              // },
+              // socialMedia: {
+              //   facebook: activecompany?.socialMedia?.facebook || "",
+              //   instagram: activecompany?.socialMedia?.instagram || "",
+              //   twitter: activecompany?.socialMedia?.twitter || "",
+              //   linkedin: activecompany?.socialMedia?.linkedin || "",
+              // },
 
-              employees: activecompany?.employees || [],
+              // employees: activecompany?.employees || [],
             }}
-            validationSchema={validationSchema}
+            validationSchema={aboutVlidation}
             onSubmit={handleSubmit}
           >
-            {({ values, handleChange, isSubmitting, setFieldValue }) => (
+            {({ isValid, dirty, values, handleChange, isSubmitting, setFieldValue }) => (
               <Form className="space-y-6">
                 <div className="mt-6 space-y-4  ">
+                  <div className="bg-gray-200 rounded-xl  p-5 flex flex-col items-end" >
+                    {/* about section */}
+                    <div className="flex w-full justify-between items-start p-2">
+                      <h2 className="mb-5">About</h2>
+                      {
+                        contact.stats && contact.name === "about" ? (
+                          <div className="flex items-center space-x-5">
 
 
-                  <div className="flex flex-col items-start justify-center bg-white">
-
-<div className="flex justify-start w-full p-5 font-bold"><h2 className="text-start text-xl">Personal Informations</h2> </div>
-  <div className="p-5 flex justify-start rounded-lg">
-  <div className=" gap-4 space-y-4 ">
-    <div className="w-full flex items-center">
-      <label className="text-sm font-medium">Name Of Company:</label> 
-      <span className="text-sm font-medium italic">{values.name || "Not update yet"}</span>
-    </div>
-    <div className="w-full">
-      <label className="text-sm font-medium">Contact Number:</label>
-      <span className="text-sm font-medium italic">{values.contact || "Not update yet"}</span>
-    </div>
-    <div className="w-full flex items-center">
-    <label className="text-sm font-medium">Founder Of Company:</label>
-    <span className="text-sm font-medium italic">{values.founder || "N/Not update yet"}</span>
-    </div>
-    <div className="w-full">
-    <label className="text-sm font-medium">Founded At:</label>
-    <span className="text-sm font-medium italic">{values.foundedAt || "Not update yet/A"}</span>
-    </div>
-  </div>
-
-  <div className=" gap-4">
-    <div className="w-full flex items-center">
-    <label className="text-sm font-medium">email:</label>
-    <span className="text-sm font-medium italic">{values.email || "N/Not update yet"}</span>
-    </div>
-    <div className="w-full">
-    <label className="text-sm font-medium">Founded At:</label>
-    <span className="text-sm font-medium italic">{values.foundedAt || "Not update yet/A"}</span>
-    </div>
-  </div>
-
-
- 
-</div>
-
-                    {/* <div className=" p-5   w-5/6">
-
-                      <div className="flex flex-col md:flex-row gap-4 ">
-                        <div className="w-full">
-                          <label className="text-sm font-medium">Name *</label>
-                          <Field
-                            type="text"
-                            name="name"
-                            onChange={handleChange}
-                            className="w-full border p-2 rounded-md"
-                          />
-
-                          <ErrorMessage
-                            name="name"
-                            component="div"
-                            className="text-red-500 text-sm"
-                          />
-                        </div>
-                        <div className="w-full">
-                          <label className="text-sm font-medium">
-                            {" "}
-                            Mobile Number *
-                          </label>
-
-                          <PhoneInput
-                            country={"in"}
-                            value={values.contact || ""}
-                            onChange={(phone) => {
-                              console.log("phone", phone);
-
-                              setFieldValue("contact", phone);
-                            }}
-                            inputProps={{
-                              name: "contact",
-                              required: true,
-                              className:
-                                "w-full px-12 py-2.5 border rounded-lg focus:ring-2 focus:ring-primary outline-none text-sm md:text-base",
-                            }}
-                          />
-                          <ErrorMessage
-                            name="contact"
-                            component="div"
-                            className="text-red-500 text-sm"
-                          />
-                        </div>
-                      </div>
-
-                      <div className="flex flex-col md:flex-row gap-4">
-                        <div className="w-full relative">
-                          <label className="text-sm font-medium">Founder*</label>
-                          <Field
-                            type="text"
-                            onChange={handleChange}
-                            className="w-full border p-2 rounded-md"
-                            name="founder"
-                          />
-
-                          <ErrorMessage
-                            name="founder"
-                            component="div"
-                            className="text-red-500 text-sm"
-                          />
-                        </div>
-
-                        <div className="w-full relative">
-                          <label className="text-sm font-medium">
-                            Founded At *
-                          </label>
-                          <Field
-                            type="text"
-                            name="foundedAt"
-                            placeholder="dd/mm/yyyy"
-                            onChange={handleChange}
-                            className="w-full border p-2 rounded-md pr-8"
-                          />
-
-                          <ErrorMessage
-                            name="foundedAt"
-                            component="div"
-                            className="text-red-500 text-sm"
-                          />
-                        </div>
-                      </div>
-                    </div> */}
-                    <div className="flex justify-end w-full"> <button>save</button></div>
-
-                  </div>
-                  <div className="flex flex-col md:flex-row gap-4">
-                    <div className="w-full relative">
-                      <label className="text-sm font-medium">
-                        Our services *
-                      </label>
-                      <Field
-                        type="text"
-                        name="services"
-                        onChange={handleChange}
-                        className="w-full border p-2 rounded-md"
-                        placeholder="eg:-Data Analytics & Big Data"
-                      />
-                      <ErrorMessage
-                        name="services"
-                        component="div"
-                        className="text-red-500 text-sm"
-                      />
-                    </div>
-
-                    <div className="w-full relative">
-                      <label className="text-sm font-medium">Industry *</label>
-
-                      <Field
-                        as="select"
-                        name="IndustryType"
-                        className="w-full border p-2 rounded-md pr-8"
-                        value={values.IndustryType || ""}
-                        onChange={(e: React.ChangeEvent<HTMLSelectElement>) => {
-                          setFieldValue("IndustryType", e.target.value);
-                        }}
-                      >
-                        <option value=""> choose your industry</option>
-                        {industryTypes.map((type) => (
-                          <option key={type.id} value={type.name}>
-                            {type.name}
-                          </option>
-                        ))}
-                      </Field>
-                      <ErrorMessage
-                        name="IndustryType"
-                        component="div"
-                        className="text-red-500 text-sm"
-                      />
-                    </div>
-                  </div>
-
-                  <div className="flex flex-col md:flex-row gap-4">
-                    <div className="w-full relative">
-                      <span className="text-sm font-medium ">Work hours</span>
-                      <div className="flex justify-evenly gap-2">
-                        <div className="flex flex-col w-1/2">
-                          <label className="text-sm ">Start*</label>
-                          <Field
-                            type="text"
-                            onChange={handleChange}
-                            name="workHours.start"
-                            className="w-full border p-2 rounded-md"
-                            placeholder="HH:MM AM/PM"
-                          />
-                          <ErrorMessage
-                            name="workHours.start"
-                            component="div"
-                            className="text-red-500 text-sm"
-                          />
-                        </div>
-                        <div className="flex flex-col w-1/2">
-                          <label className="text-sm ">End*</label>
-                          <Field
-                            type="text"
-                            name="workHours.end"
-                            onChange={handleChange}
-                            className="w-full border p-2 rounded-md"
-                            placeholder="HH:MM AM/PM"
-                          />
-                          <ErrorMessage
-                            name="workHours.end"
-                            component="div"
-                            className="text-red-500 text-sm"
-                          />
-                        </div>
-                      </div>
-                    </div>
-
-                    <div className="w-full relative">
-                      <span className="text-sm font-medium">Add Employees</span>
-                      <input
-                        type="text"
-                        value={searchQuery}
-                        onChange={(e) => setSearchQuery(e.target.value)}
-                        className="w-full border p-2 rounded-md pr-8"
-                        placeholder="Search employees..."
-                      />
-                      {showDropdown && employees.length > 0 && (
-                        <div className="absolute w-full bg-white border rounded-md shadow-md mt-1 max-h-40 overflow-y-auto">
-                          {employees.map((emp) => (
-                            <div
-                              key={emp?._id}
-                              onClick={() => {
-                                setSelectedEmployee(emp?.firstName);
-                                setPosition((prev) => ({
-                                  ...prev,
-                                  employee: emp?.firstName,
-                                }));
-                                setSearchQuery("");
-                                setEmployees([]);
-                              }}
-                              className="p-2 hover:bg-gray-100 cursor-pointer flex justify-between"
+                            <button
+                              type="submit"
+                              className="w-full  text-black p-2 text-2xl rounded-md h-10 font-medium"
+                              disabled={isSubmitting}
                             >
-                              <span>{emp?.firstName}</span>
-                              <span className="text-gray-500 text-sm">
-                                {emp?.email}
-                              </span>
-                            </div>
-                          ))}
-                        </div>
-                      )}
-                      <div className="flex items-center gap-2">
-                        <div className="flex flex-col w-1/2">
-                          <label className="text-sm">Employee *</label>
-                          <Field
-                            type="text"
-                            value={selectedEmployee}
-                            name="employees.employee"
-                            onChange={(
-                              e: React.ChangeEvent<HTMLSelectElement>
-                            ) =>
-                              setPosition({
-                                ...positions,
-                                employee: e.target.value,
-                              })
-                            }
-                            className="w-full border p-2 rounded-md pr-8"
-                          />
-                          <ErrorMessage
-                            name="employees.employee"
-                            component="div"
-                            className="text-red-500 text-sm"
-                          />
-                        </div>
+                              {isSubmitting ? "Submitting..." : <IoIosSave />}
+                            </button>
+                            <button
+                              onClick={() => setContact(prev => ({ ...prev, stats: false, name: "" }))}
+                            >
+                              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 16 16" fill="currentColor" className="size-6">
+                                <path fillRule="evenodd" d="M8 15A7 7 0 1 0 8 1a7 7 0 0 0 0 14Zm2.78-4.22a.75.75 0 0 1-1.06 0L8 9.06l-1.72 1.72a.75.75 0 1 1-1.06-1.06L6.94 8 5.22 6.28a.75.75 0 0 1 1.06-1.06L8 6.94l1.72-1.72a.75.75 0 1 1 1.06 1.06L9.06 8l1.72 1.72a.75.75 0 0 1 0 1.06Z" clipRule="evenodd" />
+                              </svg>
+                            </button>
 
-                        <div className="flex flex-col w-1/2">
-                          <label className="text-sm">Position *</label>
-                          <Field
-                            as="select"
-                            type="text"
-                            name="employees.position"
-                            className="w-full border p-2 rounded-md pr-8"
-                            value={positions.position || ""}
-                            onChange={(
-                              e: React.ChangeEvent<HTMLSelectElement>
-                            ) =>
-                              setPosition({
-                                ...positions,
-                                position: e.target.value,
-                              })
-                            }
-                          >
-                            <option value=""> choose position</option>
-                            {position.map((type) => (
-                              <option key={type.id} value={type.name}>
-                                {type.name}
-                              </option>
-                            ))}
-                          </Field>
-
-                          <ErrorMessage
-                            name="employees.position"
-                            component="div"
-                            className="text-red-500 text-sm"
-                          />
-                        </div>
-
-                        <div className="flex items-center">
+                          </div>
+                        ) : (
                           <button
-                            type="button"
-                            onClick={() => {
-                              if (!selectedEmployee || !positions.position) {
-                                alert("Please select an employee and position");
-                                return;
-                              }
-
-                              setFieldValue("employees", [
-                                ...values.employees,
-                                {
-                                  employee: selectedEmployee,
-                                  position: positions.position,
-                                },
-                              ]);
-
-                              setSelectedEmployee("");
-                              setPosition({ employee: "", position: "" });
-                            }}
-                            className="bg-gray-200 p-2 rounded-full hover:bg-gray-300"
+                            onClick={() => setContact(prev => ({ ...prev, stats: true, name: "about" }))}
                           >
-                            <IoMdAdd className="text-gray-600 text-xl" />
+                            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 16 16" fill="currentColor" className="size-5">
+                              <path d="M13.488 2.513a1.75 1.75 0 0 0-2.475 0L6.75 6.774a2.75 2.75 0 0 0-.596.892l-.848 2.047a.75.75 0 0 0 .98.98l2.047-.848a2.75 2.75 0 0 0 .892-.596l4.261-4.262a1.75 1.75 0 0 0 0-2.474Z" />
+                              <path d="M4.75 3.5c-.69 0-1.25.56-1.25 1.25v6.5c0 .69.56 1.25 1.25 1.25h6.5c.69 0 1.25-.56 1.25-1.25V9A.75.75 0 0 1 14 9v2.25A2.75 2.75 0 0 1 11.25 14h-6.5A2.75 2.75 0 0 1 2 11.25v-6.5A2.75 2.75 0 0 1 4.75 2H7a.75.75 0 0 1 0 1.5H4.75Z" />
+                            </svg>
                           </button>
+                        )
+                      }
+                    </div>
+                    {
+                      contact.stats && contact.name === "about" ? (
+                        <div className="w-full h-full">
+                          <Field
+                            as="textarea"
+                            onChange={handleChange}
+                            className="w-full h-44 border p-2 rounded-md"
+                            name="about"
+                          />
+                          <ErrorMessage
+                            name="about"
+                            component="div"
+                            className="text-red-500 text-sm"
+                          />
                         </div>
-                      </div>
-                    </div>
+                      ) : (
+                        <div>
+                          <span>{values.about} </span>
+                        </div>
+                      )
+                    }
                   </div>
-
-                  <div>
-                    <label className="text-sm font-medium">Write Bio</label>
-                    <Field
-                      as="textarea"
-                      onChange={handleChange}
-                      className="w-full border p-2 rounded-md"
-                      name="about"
-                    />
-                    <ErrorMessage
-                      name="about"
-                      component="div"
-                      className="text-red-500 text-sm"
-                    />
-                  </div>
-                  <span className="text-sm font-medium">Address</span>
-                  <div className="flex items-center justify-center">
-                    <div className="flex flex-col md:flex-row gap-2">
-                      <div className="w-full">
-                        <label className="text-sm ">City *</label>
-                        <Field
-                          as="select"
-                          type="text"
-                          name="address.city"
-                          className="w-full border p-2 rounded-md"
-                          value={values.address.city || ""}
-                          onChange={(
-                            e: React.ChangeEvent<HTMLSelectElement>
-                          ) => {
-                            setFieldValue("address.city", e.target.value);
-                          }}
-                        >
-                          <option value="">Select City</option>
-                          {values.address.state &&
-                            City.getCitiesOfState(
-                              values.address.country,
-                              values.address.state
-                            )?.map((city) => (
-                              <option key={city.name} value={city.name}>
-                                {city.name}
-                              </option>
-                            ))}
-                        </Field>
-
-                        <ErrorMessage
-                          name="address.city"
-                          component="div"
-                          className="text-red-500 text-sm"
-                        />
-                      </div>
-                      <div className="w-full">
-                        <label className="text-sm ">State *</label>
-                        <Field
-                          as="select"
-                          type="text"
-                          name="address.state"
-                          className="w-full border p-2 rounded-md"
-                          value={values.address.state || ""}
-                          onChange={(
-                            e: React.ChangeEvent<HTMLSelectElement>
-                          ) => {
-                            setFieldValue("address.state", e.target.value);
-                          }}
-                        >
-                          <option value="">Select State</option>
-                          {values.address.country &&
-                            State.getStatesOfCountry(
-                              values.address.country
-                            )?.map((state) => (
-                              <option key={state.isoCode} value={state.isoCode}>
-                                {state.name}
-                              </option>
-                            ))}
-                        </Field>
-
-                        <ErrorMessage
-                          name="address.state"
-                          component="div"
-                          className="text-red-500 text-sm"
-                        />
-                      </div>
-                      <div className="w-full">
-                        <label className="text-sm font-medium">Country *</label>
-                        <Field
-                          as="select"
-                          type="text"
-                          name="address.country"
-                          className="w-full border p-2 rounded-md"
-                          value={values.address.country || ""}
-                          onChange={(
-                            e: React.ChangeEvent<HTMLSelectElement>
-                          ) => {
-                            setFieldValue("address.country", e.target.value);
-                          }}
-                        >
-                          <option value="">Select Country</option>
-                          {Country.getAllCountries().map((country) => (
-                            <option
-                              key={country.isoCode}
-                              value={country.isoCode}
-                            >
-                              {country.name}
-                            </option>
-                          ))}
-                        </Field>
-
-                        <ErrorMessage
-                          name="address.country"
-                          component="div"
-                          className="text-red-500 text-sm"
-                        />
-                      </div>
-
-                      <div className="w-full">
-                        <label className="text-sm ">Landmark *</label>
-                        <Field
-                          type="text"
-                          onChange={handleChange}
-                          name="address.landmark"
-                          className="w-full border p-2 rounded-md"
-                        />
-                        <ErrorMessage
-                          name="address.landmark"
-                          component="div"
-                          className="text-red-500 text-sm"
-                        />
-                      </div>
-                      <div className="w-full">
-                        <label className="text-sm ">Pincode *</label>
-                        <Field
-                          type="text"
-                          name="address.pincode"
-                          onChange={handleChange}
-                          className="w-full border p-2 rounded-md"
-                        />
-                        <ErrorMessage
-                          name="address.pincode"
-                          component="div"
-                          className="text-red-500 text-sm"
-                        />
-                      </div>
-                    </div>
-                  </div>
-
-                  <span className="text-sm font-medium">
+                  {/* <span className="text-sm font-medium">
                     Social media profiles
-                  </span>
+                  </span> */}
 
-                  <div className="flex gap-4 items-end">
+                  {/* <div className="flex gap-4 items-end">
                     {["facebook", "instagram", "linkedin", "twitter"].map(
                       (platform) => (
                         <div key={platform} className="w-1/4 flex flex-col">
@@ -773,21 +422,430 @@ export default function ProfileEdit() {
                         </div>
                       )
                     )}
-                  </div>
-                </div>
-
-                <div className="w-1/4">
-                  <button
-                    type="submit"
-                    className="w-full bg-primary text-white p-2 rounded-md h-10 font-medium"
-                    disabled={isSubmitting}
-                  >
-                    {isSubmitting ? "Submitting..." : "save"}
-                  </button>
+                  </div> */}
                 </div>
               </Form>
             )}
           </Formik>
+
+          <Formik
+            initialValues={{
+              name: activecompany?.name || "",
+              contact: undefined,
+              founder: activecompany?.founder || "",
+              email: activecompany?.email || "",
+
+             
+            }}
+            validationSchema={contactValidation}
+            onSubmit={handleContactSubmit}
+          >
+            {({ isValid, dirty, values, handleChange, isSubmitting, setFieldValue }) => (
+              <Form className="space-y-6">
+                <div className="mt-6 space-y-4  ">
+                  
+<div className="flex justify-center">
+{/* contact section */}
+<div className="flex flex-col items-start w-full justify-center rounded-xl bg-gray-200">
+  <div className="flex justify-between w-full p-5  font-bold"><h2 className="text-start text-xl">Contacts</h2>
+    {
+      contact.stats && contact.name === "contact" ? (
+        <div className="flex items-center ">
+
+          <button
+            type="submit"
+            className="w-full  text-black p-2 text-2xl rounded-md h-10 font-medium"
+            disabled={isSubmitting}
+          >
+            {isSubmitting ? "Submitting..." : <IoIosSave />}
+          </button>
+          <button
+            onClick={() => setContact(prev => ({ ...prev, stats: false, name: "" }))}
+          >
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 16 16" fill="currentColor" className="size-6">
+              <path fillRule="evenodd" d="M8 15A7 7 0 1 0 8 1a7 7 0 0 0 0 14Zm2.78-4.22a.75.75 0 0 1-1.06 0L8 9.06l-1.72 1.72a.75.75 0 1 1-1.06-1.06L6.94 8 5.22 6.28a.75.75 0 0 1 1.06-1.06L8 6.94l1.72-1.72a.75.75 0 1 1 1.06 1.06L9.06 8l1.72 1.72a.75.75 0 0 1 0 1.06Z" clipRule="evenodd" />
+            </svg>
+
+          </button>
+        </div>
+      ) : (
+        <button
+          onClick={() => setContact(prev => ({ ...prev, stats: true, name: "contact" }))}
+        >
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 16 16" fill="currentColor" className="size-5">
+            <path d="M13.488 2.513a1.75 1.75 0 0 0-2.475 0L6.75 6.774a2.75 2.75 0 0 0-.596.892l-.848 2.047a.75.75 0 0 0 .98.98l2.047-.848a2.75 2.75 0 0 0 .892-.596l4.261-4.262a1.75 1.75 0 0 0 0-2.474Z" />
+            <path d="M4.75 3.5c-.69 0-1.25.56-1.25 1.25v6.5c0 .69.56 1.25 1.25 1.25h6.5c.69 0 1.25-.56 1.25-1.25V9A.75.75 0 0 1 14 9v2.25A2.75 2.75 0 0 1 11.25 14h-6.5A2.75 2.75 0 0 1 2 11.25v-6.5A2.75 2.75 0 0 1 4.75 2H7a.75.75 0 0 1 0 1.5H4.75Z" />
+          </svg>
+        </button>
+      )
+    }
+  </div>
+
+
+
+  <div className="p-5 flex  w-full justify-start rounded-lg">
+    {
+      contact.stats && contact.name === "contact" ? (
+
+        <div className=" gap-4 space-y-4 w-full ">
+          <div className="w-full flex items-center ">
+            <label className="text-md font-medium bg-white w-2/6 h-10  rounded-xl p-2 space-y-4">Name Of Company:</label>
+
+            <Field
+              type="text"
+              onChange={handleChange}
+              className="w-4/6 ms-3 rounded-xl border p-2 "
+              name="name"
+              placeholder="Enter name.."
+            />
+            <ErrorMessage
+              name="name"
+              component="div"
+              className="text-red-500 text-sm"
+            />
+          </div>
+          <div className="w-full flex items-center ">
+            <label className="text-md font-medium h-10 bg-white w-2/6  rounded-xl p-2 space-y-4">Contact Number:</label>
+            <div className="bg-red-700 w-4/6 ms-3">
+
+
+              <PhoneInput
+                country={"in"}
+                value={values.contact ||""}
+                onChange={(phone) => {
+                  console.log("phone", phone); // Debugging log
+                  setFieldValue("contact", phone || ""); // Ensure it's always a string
+                }}
+                inputProps={{
+                  name: "contact",
+                  required: true,
+                  className: "w-full ms-3 rounded-xl border ps-5 p-2",
+                }}
+              />
+              <ErrorMessage
+              name="contact"
+              component="div"
+              className="text-red-500 text-sm"
+            />
+            </div>
+          </div>
+          <div className="w-full flex items-center">
+            <label className="text-md font-medium h-10 bg-white w-2/6  rounded-xl p-2 space-y-4">Email:</label>
+            <Field
+              type="email"
+              onChange={handleChange}
+              className="w-4/6 ms-3 rounded-xl border p-2 "
+              name="email"
+              placeholder="Enter Email.."
+            />
+            <ErrorMessage
+              name="email"
+              component="div"
+              className="text-red-500 text-sm"
+            />
+          </div>
+
+          <div className="w-full flex items-center">
+            <label className="text-md font-medium h-10 bg-white w-2/6  rounded-xl p-2 space-y-4">Founder Of Company:</label>
+            <Field
+              type="text"
+              onChange={handleChange}
+              className="w-4/6 ms-3 rounded-xl border p-2"
+              name="founder"
+            />
+            <ErrorMessage
+              name="founder"
+              component="div"
+              className="text-red-500 text-sm"
+            />
+
+           
+          </div>
+        </div>
+      ) : (
+        <div className=" gap-4 space-y-4 w-full ">
+          <div className="w-full flex items-center ">
+            <label className="text-md font-medium bg-white w-2/6 h-10  rounded-xl p-2 space-y-4">Name Of Company:</label>
+            <span className="text-md font-medium italic h-10 rounded-xl p-2  ms-3 bg-white w-4/6 space-y-4">{activecompany?.name || "Not update yet"}</span>
+          </div>
+          <div className="w-full flex items-center ">
+            <label className="text-md font-medium h-10 bg-white w-2/6  rounded-xl p-2 space-y-4">Contact Number:</label>
+            <span className="text-md font-medium italic h-10 bg-white w-4/6 ms-3  rounded-xl p-2 space-y-4">{activecompany?.contact || "Not update yet"}</span>
+          </div>
+          <div className="w-full flex items-center">
+            <label className="text-md font-medium h-10 bg-white w-2/6  rounded-xl p-2 space-y-4">Email:</label>
+            <span className="text-md font-medium italic h-10 bg-white w-4/6 ms-3  rounded-xl p-2 space-y-4">{activecompany?.email || "N/Not update yet"}</span>
+          </div>
+          <div className="w-full flex items-center">
+            <label className="text-md font-medium h-10 bg-white w-2/6  rounded-xl p-2 space-y-4">Founder Of Company:</label>
+            <span className="text-md font-medium italic h-10 bg-white w-4/6 ms-3  rounded-xl p-2 space-y-4">{activecompany?.founder || "N/Not update yet"}</span>
+          </div>
+        </div>
+      )
+    }
+  </div>
+
+
+
+</div>
+</div>
+
+                </div>
+              </Form>
+            )}
+          </Formik>
+
+
+
+          <Formik
+            initialValues={{
+              // name: activecompany?.name || "",
+              // contact: activecompany?.contact,
+              // founder: activecompany?.founder || "",
+              // foundedAt: activecompany?.foundedAt || "",
+              about: activecompany?.about || "",
+              // email: activecompany?.email || "",
+
+              // workHours: {
+              //   start: activecompany?.workHours?.start || "",
+              //   end: activecompany?.workHours?.end || "",
+              // },
+              // services: [],
+              // IndustryType: activecompany?.IndustryType || "",
+              // address: {
+              //   landmark: activecompany?.address.landmark || "",
+              //   country: activecompany?.address.country || "",
+              //   state: activecompany?.address.state || "",
+              //   city: activecompany?.address.city || "",
+              //   pincode: activecompany?.address.pincode || "",
+              // },
+              // socialMedia: {
+              //   facebook: activecompany?.socialMedia?.facebook || "",
+              //   instagram: activecompany?.socialMedia?.instagram || "",
+              //   twitter: activecompany?.socialMedia?.twitter || "",
+              //   linkedin: activecompany?.socialMedia?.linkedin || "",
+              // },
+
+              // employees: activecompany?.employees || [],
+            }}
+            validationSchema={aboutVlidation}
+            onSubmit={handleSubmit}
+          >
+            {({ isValid, dirty, values, handleChange, isSubmitting, setFieldValue }) => (
+              <Form className="space-y-6">
+                <div className="mt-6 space-y-4  ">
+                  <div className="bg-gray-200 rounded-xl  p-5 flex flex-col items-end" >
+                    {/* about section */}
+                    <div className="flex w-full justify-between items-start p-2">
+                      <h2 className="mb-5">About</h2>
+                      {
+                        contact.stats && contact.name === "about" ? (
+                          <div className="flex items-center space-x-5">
+
+
+                            <button
+                              type="submit"
+                              className="w-full  text-black p-2 text-2xl rounded-md h-10 font-medium"
+                              disabled={isSubmitting}
+                            >
+                              {isSubmitting ? "Submitting..." : <IoIosSave />}
+                            </button>
+                            <button
+                              onClick={() => setContact(prev => ({ ...prev, stats: false, name: "" }))}
+                            >
+                              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 16 16" fill="currentColor" className="size-6">
+                                <path fillRule="evenodd" d="M8 15A7 7 0 1 0 8 1a7 7 0 0 0 0 14Zm2.78-4.22a.75.75 0 0 1-1.06 0L8 9.06l-1.72 1.72a.75.75 0 1 1-1.06-1.06L6.94 8 5.22 6.28a.75.75 0 0 1 1.06-1.06L8 6.94l1.72-1.72a.75.75 0 1 1 1.06 1.06L9.06 8l1.72 1.72a.75.75 0 0 1 0 1.06Z" clipRule="evenodd" />
+                              </svg>
+                            </button>
+
+                          </div>
+                        ) : (
+                          <button
+                            onClick={() => setContact(prev => ({ ...prev, stats: true, name: "about" }))}
+                          >
+                            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 16 16" fill="currentColor" className="size-5">
+                              <path d="M13.488 2.513a1.75 1.75 0 0 0-2.475 0L6.75 6.774a2.75 2.75 0 0 0-.596.892l-.848 2.047a.75.75 0 0 0 .98.98l2.047-.848a2.75 2.75 0 0 0 .892-.596l4.261-4.262a1.75 1.75 0 0 0 0-2.474Z" />
+                              <path d="M4.75 3.5c-.69 0-1.25.56-1.25 1.25v6.5c0 .69.56 1.25 1.25 1.25h6.5c.69 0 1.25-.56 1.25-1.25V9A.75.75 0 0 1 14 9v2.25A2.75 2.75 0 0 1 11.25 14h-6.5A2.75 2.75 0 0 1 2 11.25v-6.5A2.75 2.75 0 0 1 4.75 2H7a.75.75 0 0 1 0 1.5H4.75Z" />
+                            </svg>
+                          </button>
+                        )
+                      }
+                    </div>
+                    {
+                      contact.stats && contact.name === "about" ? (
+                        <div className="w-full h-full">
+                          <Field
+                            as="textarea"
+                            onChange={handleChange}
+                            className="w-full h-44 border p-2 rounded-md"
+                            name="about"
+                          />
+                          <ErrorMessage
+                            name="about"
+                            component="div"
+                            className="text-red-500 text-sm"
+                          />
+                        </div>
+                      ) : (
+                        <div>
+                          <span>{values.about} </span>
+                        </div>
+                      )
+                    }
+                  </div>
+                  {/* <span className="text-sm font-medium">
+                    Social media profiles
+                  </span> */}
+
+                  {/* <div className="flex gap-4 items-end">
+                    {["facebook", "instagram", "linkedin", "twitter"].map(
+                      (platform) => (
+                        <div key={platform} className="w-1/4 flex flex-col">
+                          <label className="text-sm  capitalize">
+                            {platform} *
+                          </label>
+                          <Field
+                            type="text"
+                            name={`socialMedia.${platform}`}
+                            value={
+                              values.socialMedia[
+                              platform as keyof typeof values.socialMedia
+                              ]
+                            }
+                            onChange={(
+                              e: React.ChangeEvent<HTMLSelectElement>
+                            ) =>
+                              setFieldValue(
+                                `socialMedia.${platform}`,
+                                e.target.value
+                              )
+                            }
+                            className="w-full border p-2 rounded-md h-10"
+                          />
+                          <ErrorMessage
+                            name="socialMeadia[platform]"
+                            component="div"
+                            className="text-red-500 text-sm"
+                          />
+                        </div>
+                      )
+                    )}
+                  </div> */}
+                </div>
+              </Form>
+            )}
+          </Formik>
+
+          <Formik
+            initialValues={{ services: [] }}
+            validationSchema={serviceValidation}
+            onSubmit={handleServicesSubmit}
+          >
+            {({ isValid, dirty, values, handleChange, isSubmitting, setFieldValue }) => (
+              <Form className="space-y-6">
+                <div className="mt-6 space-y-4  ">
+     
+
+<div className="flex justify-center">
+{/* serviece section */}
+<div className="flex flex-col items-start w-full justify-center rounded-xl bg-gray-200">
+  <div className="flex justify-between w-full p-5  font-bold"><h2 className="text-start text-xl">Services</h2>
+    {
+      contact.stats && contact.name === "serviece" ? (
+        <div className="flex items-center ">
+
+          <button
+            type="submit"
+            className="w-full  text-black p-2 text-2xl rounded-md h-10 font-medium"
+            disabled={isSubmitting}
+          >
+            {isSubmitting ? "Submitting..." : <IoIosSave />}
+          </button>
+          <button
+            onClick={() => setContact(prev => ({ ...prev, stats: false, name: "" }))}
+          >
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 16 16" fill="currentColor" className="size-6">
+              <path fillRule="evenodd" d="M8 15A7 7 0 1 0 8 1a7 7 0 0 0 0 14Zm2.78-4.22a.75.75 0 0 1-1.06 0L8 9.06l-1.72 1.72a.75.75 0 1 1-1.06-1.06L6.94 8 5.22 6.28a.75.75 0 0 1 1.06-1.06L8 6.94l1.72-1.72a.75.75 0 1 1 1.06 1.06L9.06 8l1.72 1.72a.75.75 0 0 1 0 1.06Z" clipRule="evenodd" />
+            </svg>
+
+          </button>
+        </div>
+      ) : (
+        <button
+          onClick={() => setContact(prev => ({ ...prev, stats: true, name: "serviece" }))}
+
+        >
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 16 16" fill="currentColor" className="size-5">
+            <path d="M13.488 2.513a1.75 1.75 0 0 0-2.475 0L6.75 6.774a2.75 2.75 0 0 0-.596.892l-.848 2.047a.75.75 0 0 0 .98.98l2.047-.848a2.75 2.75 0 0 0 .892-.596l4.261-4.262a1.75 1.75 0 0 0 0-2.474Z" />
+            <path d="M4.75 3.5c-.69 0-1.25.56-1.25 1.25v6.5c0 .69.56 1.25 1.25 1.25h6.5c.69 0 1.25-.56 1.25-1.25V9A.75.75 0 0 1 14 9v2.25A2.75 2.75 0 0 1 11.25 14h-6.5A2.75 2.75 0 0 1 2 11.25v-6.5A2.75 2.75 0 0 1 4.75 2H7a.75.75 0 0 1 0 1.5H4.75Z" />
+          </svg>
+        </button>
+      )
+    }
+  </div>
+  <div className="p-5 flex  w-full justify-start rounded-lg">
+    <div className=" gap-4 space-y-4 w-full ">
+      <div className="w-full flexcflex-col items-center justify-start ">
+        {
+          contact.stats && contact.name === "serviece" && (
+            <div>
+              <div className="w-full flex justify-center items-center gap-3">
+                <Field
+                  type="text"
+                  name="services"
+                  value={serviceInput}
+                  onChange={(e) => setServiceInput(e.target.value)}
+                  className="w-3/6 border h-12 p-2 rounded-md"
+                  placeholder="Enter your services here.."
+                />
+                 <ErrorMessage
+                name="services"
+                component="div"
+                className="text-red-500 text-sm mt-1 text-center"
+              />
+                <div className="flex items-center">
+                <button
+              
+              className="bg-primary text-white w-full md:w-auto px-4 py-2 rounded-lg font-medium disabled:opacity-50 disabled:cursor-not-allowed transition duration-200 "
+       onClick={handleAddService}
+      //  disabled={!isValid || !dirty}
+            >
+              Add Project
+            </button>
+                </div>
+              </div>
+             
+            </div>
+          )
+        }
+        <div>
+    {services.map((value, index) => (
+      <ul key={index} className="flex items-center gap-2">
+        <li>{value}</li>
+        <button onClick={() => handleDeleteService(index)}>
+                    <RxCross2 className="text-red-500 text-xl cursor-pointer hover:text-red-700 transition" />
+                  </button>
+     
+      </ul>
+    ))}
+  </div>
+      </div>
+    </div>
+  </div>
+</div>
+</div>
+
+                </div>
+              </Form>
+            )}
+          </Formik>
+
+
+
+
+
+
+
         </section>
       </div>
     </>

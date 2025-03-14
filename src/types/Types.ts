@@ -223,6 +223,7 @@ export interface applicationData {
     updatedAt: string;
     userId: User;
     isSaved:boolean
+    _id:string |""
   }
 
   

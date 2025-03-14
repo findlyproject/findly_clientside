@@ -270,6 +270,27 @@ export const loginCompany=createAsyncThunk(
           return rejectWithValue("delete job failed.");
         }
         const data=response.data.company
+        console.log("dataBOUT",data);
+        dispatch(setActiveCompany(data));
+        return data;
+      }
+    );
+
+    export const editContact = createAsyncThunk(
+      "edit/contact",
+      async ({companyId,values}:{companyId?:string,values:any},{ dispatch,rejectWithValue } ) => {
+
+        const response = await handleAsync(() => api.patch(
+          `/company/editcontact/${companyId}`,
+          values
+        ));
+    
+        if (!response || !response.data) {
+          return rejectWithValue("delete job failed.");
+        }
+        const data=response.data.company
+        console.log("datacontact",data);
+        
         dispatch(setActiveCompany(data));
         return data;
       }

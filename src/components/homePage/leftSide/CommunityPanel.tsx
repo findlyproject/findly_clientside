@@ -1,7 +1,7 @@
 "use client"; 
 import { useAppSelector } from "@/lib/store/hooks";
 import Image from "next/image";
-import { useRouter } from "next/navigation"; // ✅ Correct import for Next.js 13+
+import { useRouter } from "next/navigation"; 
 
 export  function CommunityPanel(){
   const router = useRouter();
