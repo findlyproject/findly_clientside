@@ -49,7 +49,7 @@ export default function RightSide() {
       setMembers(response.data.connections);
     };
     fetch();
-    fetchMembers();
+    
   }, []);
 
 
@@ -221,7 +221,7 @@ bg-white border-s border-gray-200 dark:bg-neutral-800 dark:border-neutral-700 w-
                   {activeTab === "focused" ? (
                     focused.map((chat, index) => (
                       <div
-                        key={chat._id}
+                        key={chat?._id}
                         className={`flex items-center justify-between p-2 rounded-lg cursor-pointer transition ${
                           selectedUser === chat
                             ? "bg-blue-100"
@@ -232,7 +232,7 @@ bg-white border-s border-gray-200 dark:bg-neutral-800 dark:border-neutral-700 w-
                         {/* User Info - Aligned to the left */}
                         <div className="flex items-center">
                           <Image
-                            src={chat.connectionID.profileImage}
+                            src={chat.connectionID?.profileImage}
                             alt="User"
                             className="w-10 h-10 rounded-full"
                             width={30}
@@ -249,13 +249,13 @@ bg-white border-s border-gray-200 dark:bg-neutral-800 dark:border-neutral-700 w-
                         <div className="relative">
                           <button
                             onClick={(event) =>
-                              handleDropdown(event, chat.connectionID._id)
+                              handleDropdown(event, chat.connectionID?._id)
                             }
                           >
                             <BsThreeDots className="text-gray-500 hover:text-gray-700 cursor-pointer" />
                           </button>
 
-                          {Dropdown === chat.connectionID._id && (
+                          {Dropdown === chat.connectionID?._id && (
                             <div className="absolute top-full right-0 mt-1 w-40 bg-white shadow-lg rounded-lg border z-50">
                               <ul className="flex flex-col">
                                 <li>

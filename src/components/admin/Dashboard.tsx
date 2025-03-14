@@ -119,7 +119,7 @@ const Dashboard: React.FC = () => {
 
   const pieData = [
     { name: "Users", value: Math.round(userPercentage), color: "#ba99cf" },
-    { name: "Companies", value: companyPercentage, color: "#945eb5" },
+    { name: "Companies", value:  Math.round(companyPercentage), color: "#945eb5" },
     {
       name: "Premium Clients",
       value: Math.round(premuimPercentage),
