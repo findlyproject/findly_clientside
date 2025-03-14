@@ -63,7 +63,7 @@ export default function NetworkPage() {
           );
     }
   return (
-    <div className="flex flex-col md:flex-row gap-4 p-6 bg-gray-100 min-h-screen">
+    <div className="flex flex-col md:flex-row gap-4 pt-28 bg-gray-100 min-h-screen">
       {/* Sidebar */}
       <div className="w-full md:w-1/4 bg-white p-6 rounded-xl shadow-md">
         <h2 className="text-xl font-semibold">Manage My Network</h2>

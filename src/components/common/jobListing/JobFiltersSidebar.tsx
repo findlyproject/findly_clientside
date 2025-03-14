@@ -79,9 +79,7 @@ const JobFiltersSidebar: React.FC<JobFiltersSidebarProps> = ({setInput}) => {
       <FilterSection title="Industry" options={Industry} category="industry" selectedFilters={selectedFilters} onCheckboxChange={handleCheckboxChange} />
       <FilterSection title="Job Type" options={JobType} category="jobType" selectedFilters={selectedFilters} onCheckboxChange={handleCheckboxChange} />
 
-      <div className="mt-6">
-        <h3 className="font-semibold">Selected Filters:</h3>
-      </div>
+     
     </div>
   );
 };

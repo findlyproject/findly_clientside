@@ -93,7 +93,7 @@ const[singlePost,setSinglePost]=useState(false)
           : post.owner?.profileImage ||
             "https://res.cloudinary.com/dq1auwpkm/image/upload/v1738735360/profile_jtwxaj.png"
       }
-      className="rounded-full object-cover"
+      className="rounded-full size-8 object-cover"
       alt={post.owner?.type === "Company" ? post.owner?.name : post.owner?.firstName || "User"}
       width={35}
       height={35}

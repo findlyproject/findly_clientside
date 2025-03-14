@@ -35,7 +35,7 @@ export default function Collection() {
             </svg>
           ),
           text: 'my posts' ,
-           path:`/${routes}/posts/myposts`
+           path:`/not-found`
         },
         activeuser
     ?  {

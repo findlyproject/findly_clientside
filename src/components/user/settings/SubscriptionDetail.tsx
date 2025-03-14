@@ -99,15 +99,16 @@ export default function SubscriptionDetail(){
                 </div>
 
                 <div>
-                  <button
-                    className={
-                      item.active === true
-                        ? "bg-primary text-white px-4 py-2 rounded-md text-sm"
-                        : "bg-white text-gray-700 px-4 py-2 rounded-md text-sm"
-                    }
-                  >
-                    {item?.active === true ? "Active" : "Inactive"}
-                  </button>
+                <span
+  className={`inline-block text-xs px-2 py-1 rounded mt-1 font-medium
+    ${item?.active ? "bg-green-100 text-green-800" : "bg-red-100 text-red-800"}
+  `}
+>
+  {item?.active ? "Active" : "Inactive"}
+</span>
+
+
+
                 </div>
               </div>
             </div>

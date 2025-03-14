@@ -3,14 +3,11 @@ import React, { useEffect, useState } from "react";
 import api from "@/utils/api";
 import { useParams, useRouter } from "next/navigation";
 import Image from "next/image";
-import { toast } from "react-toastify";
 import { applicationData } from "../../../types/Types";
 import handleAsync from "@/utils/handleAsync";
 import { useAppDispatch, useAppSelector } from "@/lib/store/hooks";
-import { useDispatch } from "react-redux";
-import { applicatioAproving, applicatioRejecting, deleteApplcation, handleSaveApplication } from "@/lib/store/features/actions/companyActions";
+import { applicatioAproving, applicatioRejecting } from "@/lib/store/features/actions/companyActions";
 import { Tooltip, Typography } from "@material-tailwind/react";
-import rejected from "../../../../public/assets/Rejected.png"
 
 export default function CandidateDetails() {
   const [activeTab, setActiveTab] = useState("CoverLetter");
@@ -306,7 +303,7 @@ export default function CandidateDetails() {
                                 <button 
                                 onClick={()=>setOpen(false)}
                                 className="absolute right-2 top-2">
-                                  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 16 16" fill="currentColor" class="size-4">
+                                  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 16 16" fill="currentColor" className="size-4">
                                     <path fill-rule="evenodd" d="M8 15A7 7 0 1 0 8 1a7 7 0 0 0 0 14Zm2.78-4.22a.75.75 0 0 1-1.06 0L8 9.06l-1.72 1.72a.75.75 0 1 1-1.06-1.06L6.94 8 5.22 6.28a.75.75 0 0 1 1.06-1.06L8 6.94l1.72-1.72a.75.75 0 1 1 1.06 1.06L9.06 8l1.72 1.72a.75.75 0 0 1 0 1.06Z" clip-rule="evenodd" />
                                   </svg>
 
@@ -358,12 +355,12 @@ export default function CandidateDetails() {
           >
          {
           !open?(
-            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 16 16" fill="currentColor" class="size-4">
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 16 16" fill="currentColor" className="size-4">
             <path d="M2.5 3A1.5 1.5 0 0 0 1 4.5v.793c.026.009.051.02.076.032L7.674 8.51c.206.1.446.1.652 0l6.598-3.185A.755.755 0 0 1 15 5.293V4.5A1.5 1.5 0 0 0 13.5 3h-11Z" />
             <path d="M15 6.954 8.978 9.86a2.25 2.25 0 0 1-1.956 0L1 6.954V11.5A1.5 1.5 0 0 0 2.5 13h11a1.5 1.5 0 0 0 1.5-1.5V6.954Z" />
           </svg>
           ):(
-            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 16 16" fill="currentColor" class="size-4">
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 16 16" fill="currentColor" className="size-4">
   <path fill-rule="evenodd" d="M1.756 4.568A1.5 1.5 0 0 0 1 5.871V12.5A1.5 1.5 0 0 0 2.5 14h11a1.5 1.5 0 0 0 1.5-1.5V5.87a1.5 1.5 0 0 0-.756-1.302l-5.5-3.143a1.5 1.5 0 0 0-1.488 0l-5.5 3.143Zm1.82 2.963a.75.75 0 0 0-.653 1.35l4.1 1.98a2.25 2.25 0 0 0 1.955 0l4.1-1.98a.75.75 0 1 0-.653-1.35L8.326 9.51a.75.75 0 0 1-.652 0L3.575 7.53Z" clip-rule="evenodd" />
 </svg>
 

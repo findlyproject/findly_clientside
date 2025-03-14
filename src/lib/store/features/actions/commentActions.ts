@@ -1,8 +1,9 @@
 import { createAsyncThunk } from "@reduxjs/toolkit";
 import { AxiosResponse } from "axios";
 import api from "../../../../utils/api"; 
-import {  addComment, findCommentReplay, IComment, IReply, setComments,setCommentWithReplay } from "../postSlice";
+import {  addComment, deleteComment, findCommentReplay, setComments,setCommentWithReplay, updateComment } from "../postSlice";
 import handleAsync from "@/utils/handleAsync";
+import { IComment, IReply } from "@/types/Types";
 
 export interface CommentResponse {
   comment: IComment;
@@ -15,6 +16,7 @@ interface AddCommentArgs {
 }
 
 interface updateCommentArgs {
+  postId:string
   commentId: string;
   newComment: string;
   routes:string;
@@ -93,7 +95,7 @@ export const fetchCommentById = createAsyncThunk(
 export const updateAComment = createAsyncThunk(
   "post/updateComment",
   async (
-    { commentId, newComment,routes }: updateCommentArgs,
+    { postId,commentId, newComment,routes }: updateCommentArgs,
     { dispatch, rejectWithValue }
   ) => {
     try {
@@ -105,10 +107,8 @@ export const updateAComment = createAsyncThunk(
         return rejectWithValue("No posts found.");
       }
       console.log(response.data.comment);
-      const responses: AxiosResponse<{ comments: IComment[] }> = await api.get(
-        "/post/allcomments"
-      );
-      dispatch(setComments(responses.data.comments));
+      
+      dispatch(updateComment({postId,commentId, updatedComment: response.data.comment} ));
       return response.data.comment;
     } catch (error) {
       console.error("Error fetching posts:", error);
@@ -121,8 +121,8 @@ export const updateAComment = createAsyncThunk(
 export const deleteAComment = createAsyncThunk(
   "post/deleteAComment",
   async (
-    { commentId,routes }: { commentId: string ,routes:string},
-    { rejectWithValue }
+    { postId,commentId,routes }: { postId:string,commentId: string ,routes:string},
+    {dispatch, rejectWithValue }
   ) => {
     try {
       const response: AxiosResponse<CommentResponse> = await api.post(
@@ -132,7 +132,7 @@ export const deleteAComment = createAsyncThunk(
         return rejectWithValue("No posts found.");
       }
       
-
+      dispatch(deleteComment({postId,commentId:response.data.comment._id}));
       return response.data.comment;
     } catch (error) {
       console.error("Error fetching posts:", error);
