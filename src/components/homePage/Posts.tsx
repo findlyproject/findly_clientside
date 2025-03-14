@@ -22,7 +22,7 @@ const dispatch=useAppDispatch()
 // },[])
   useEffect(() => {
     const fetchuserPosts = async () => {
-      const response = await api.get(`/post/owner`);
+      const response = await api.get(`user/posts`);
       setUserposts(response.data.posts||[]);
     };
     fetchuserPosts();
@@ -90,18 +90,22 @@ dispatch(setSaved(response.data.saved))
                       <button  className =" absolute top-0 right-4 text-md" onClick={()=>handleUnsave(item.postId._id)}>✕
                       </button>
                       <br></br>
-                  {item.postId?.images?.length > 0 ? (
-                    <img
-                      src={item.postId?.images?.[0]}
-                      className="w-full h-40 object-cover rounded-md"
-                    />
-                  ) : (
-                    <video
-                      src={item?.postId?.video}
-                      className="w-full h-[150px] rounded-lg"
-                      controls
-                    />
-                  )}
+                      {item.postId?.images?.length ? (
+  <img
+    src={item.postId.images[0]}
+    alt="Post Image"
+    className="w-full h-40 object-cover rounded-md"  // ✅ Use className
+    width={30}
+    height={30}
+  />
+) : item.postId?.video ? (
+  <video
+    src={item.postId.video}
+    className="w-full h-[150px] rounded-lg"  // ✅ Use className
+    controls
+  />
+) : null}
+
 
                   <p className="text-gray-600 mt-2">
                     {item.postId?.description}

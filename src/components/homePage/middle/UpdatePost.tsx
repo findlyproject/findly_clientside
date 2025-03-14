@@ -1,21 +1,30 @@
 import { fetchAllPosts, updatePostByUser } from "@/lib/store/features/actions/postActions";
-import { useAppDispatch } from "@/lib/store/hooks";
+import { useAppDispatch, useAppSelector } from "@/lib/store/hooks";
 import { useEffect, useState } from "react";
 import { FiImage } from "react-icons/fi";
 import Image from "next/image";
 import { toast } from "react-toastify";
-import { IPost, UpdatePostProps } from "@/types/Types";
+import { IPost } from "@/types/Types";
+import OutsideClickHandler from "react-outside-click-handler";
+export interface UpdatePostProps {
+  post: IPost;
+  UpdateOpen:boolean
+}
 
-export const UpdatePost: React.FC<UpdatePostProps> = ({ post }) => {
+export const UpdatePost: React.FC<UpdatePostProps> = ({ post,UpdateOpen }) => {
   const dispatch = useAppDispatch();
   const [description, setDescription] = useState(post?.description ?? "");
   const [previewImages, setPreviewImages] = useState<string[]>([]);
   const [previewVideo, setPreviewVideo] = useState<string | null>(null);
   const [selectedFiles, setSelectedFiles] = useState<File[]>([]);
   const [oldPost, setOldPost] = useState<IPost | null>(post);
+  const [isopen,setopen]=useState(UpdateOpen)
   useEffect(() => {
     setOldPost(post);   
   }, [post]);
+    const { activeuser } = useAppSelector((state) => state.user);
+  
+  const routes = activeuser ? "user" : "company";
 
   useEffect(() => {   
     return () => {
@@ -60,9 +69,9 @@ export const UpdatePost: React.FC<UpdatePostProps> = ({ post }) => {
 
   const handleSubmit = async (event: React.FormEvent) => {
     event.preventDefault();
-    console.log(post._id)
     dispatch(
       updatePostByUser({
+        routes,
         postId: post._id,
         description,
         mediaFiles: selectedFiles,
@@ -78,6 +87,10 @@ export const UpdatePost: React.FC<UpdatePostProps> = ({ post }) => {
   };
 
   return (
+    isopen&&(
+              <section className="fixed inset-0 z-10 flex items-center justify-center bg-black bg-opacity-50">
+            <OutsideClickHandler onOutsideClick={() => setopen(false)}>
+    
     <div className="w-full mx-auto bg-white p-8 rounded-lg shadow-lg z-50">
       <h2 className="text-2xl font-bold text-gray-900">Update Post</h2>
 
@@ -187,5 +200,8 @@ export const UpdatePost: React.FC<UpdatePostProps> = ({ post }) => {
         </button>
       </form>
     </div>
+    </OutsideClickHandler>
+    </section>
+    )
   );
 };

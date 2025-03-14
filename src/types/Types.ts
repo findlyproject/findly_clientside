@@ -403,11 +403,7 @@ export interface IReport {
     createdAt: string;
     updatedAt?: string;
   }
-  export interface UpdatePostProps {
-    post: IPost;
-    setIsUpdateOpen: React.Dispatch<React.SetStateAction<boolean>>;
-  }
-
+  
   export interface propspsts{
     loadMorePosts:()=>void,
     loading:boolean
@@ -417,7 +413,7 @@ export interface IReport {
   images:string[];
   video:string;
   description:string
-  postId:IPost
+  postId:IPost 
   userId:{
     _id:string
     firstName:string;

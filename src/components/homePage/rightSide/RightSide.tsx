@@ -8,17 +8,20 @@ import api, { socket } from "@/utils/api";
 import { FaEllipsisV } from "react-icons/fa";
 import { IoMdArrowBack } from "react-icons/io";
 import Image from "next/image";
+import { RiArrowDropDownLine } from "react-icons/ri";
 import { HiOutlineAdjustmentsHorizontal } from "react-icons/hi2";
 import { CiSearch } from "react-icons/ci";
 import EmojiPicker from "emoji-picker-react";
 import { EmojiClickData } from "emoji-picker-react";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faSmile } from "@fortawesome/free-solid-svg-icons";
+import OutsideClickHandler from "react-outside-click-handler";
 import { BsThreeDots } from "react-icons/bs";
 import { Connection } from "@/types/Types";
 
 import { MessageType } from "@/types/Types";
 export default function RightSide() {
+  const dispatch = useAppDispatch();
 
   const [selectedUser, setSelectedUser] = useState<Connection | null>(null);
   const [message, setMessage] = useState("");
@@ -30,7 +33,7 @@ export default function RightSide() {
   const [other, setOther] = useState([]);
   const activeuser = useAppSelector((state) => state.user.activeuser);
   const [showPicker, setShowPicker] = useState(false);
-  // const [showPickerImogi, setShowPickerImogi] = useState(false);
+  const [showPickerImogi, setShowPickerImogi] = useState(false);
 
   const [filterDropdown, setfilterDropdown] = useState(false);
   const [Dropdown, setDropdown] = useState<string | null>(null);
@@ -61,9 +64,10 @@ export default function RightSide() {
     }
   }, [activeTab, members]);
 
-  // const fetchMembers = () => {
-  //   const result = dispatch(findnMembers);
-  // };
+  const fetchMembers = () => {
+     dispatch(findnMembers);
+   
+  };
 
   useEffect(() => {
     const fetchMessages = async () => {
@@ -89,12 +93,14 @@ export default function RightSide() {
       `/message/send/${activeuser?._id}/${selectedUser?.connectionID._id}`,
       { message: message }
     );
+    console.log("responseresponse", response);
 
     setMessage("");
   };
 
   useEffect(() => {
     socket.on("connect", () => {
+      console.log("Connected to server:", socket.id);
     });
 
     socket.emit("joinRoom", activeuser?._id);
@@ -108,7 +114,8 @@ export default function RightSide() {
       socket.off("receiveMessage");
       socket.off("connect");
     };
-  }, [selectedUser?.connectionID?._id]);
+  }, [selectedUser?.connectionID?._id,activeuser?._id]);
+
 
 
   const handleEmojiClick = (emojiObject: EmojiClickData) => {
@@ -407,12 +414,12 @@ bg-white border-s border-gray-200 dark:bg-neutral-800 dark:border-neutral-700 w-
                     })}
                   </div>
 
-                  <footer className="p-4   flex items-center">
-                    <div className="w-full pl-3 pr-1 py-1 flex items-center gap-2 justify-between">
+                  <footer className=" pb-1 flex items-center">
+                    <div className="w-full p-1 flex items-center gap-2 justify-between">
                       {/* Input & Emoji Section */}
                       <div className="relative flex flex-col w-full">
                         {/* Input Field & Icons */}
-                        <div className="relative flex items-center bg-white px-3 py-2 rounded-full border border-gray-300 w-full gap-2">
+                        <div className="relative flex items-center bg-white p-1 rounded-full border border-gray-300 w-full gap-2">
                           {/* Emoji Button */}
                           <button
                             type="button"
@@ -436,26 +443,7 @@ bg-white border-s border-gray-200 dark:bg-neutral-800 dark:border-neutral-700 w-
 
                           {/* Attach (Clip) Icon and Send Button */}
                           <div className="flex items-center ">
-                            <button>
-                              <svg
-                                className="cursor-pointer"
-                                xmlns="http://www.w3.org/2000/svg"
-                                width="22"
-                                height="22"
-                                viewBox="0 0 22 22"
-                                fill="none"
-                              >
-                                <g id="Attach 01">
-                                  <path
-                                    d="M14.9332 7.79175L8.77551 14.323C8.23854 14.8925 7.36794 14.8926 6.83097 14.323C6.294 13.7535 6.294 12.83 6.83097 12.2605L12.9887 5.72925"
-                                    stroke="#9CA3AF"
-                                    strokeWidth="1.6"
-                                    strokeLinecap="round"
-                                    strokeLinejoin="round"
-                                  />
-                                </g>
-                              </svg>
-                            </button>
+                           
 
                             {/* Send Button */}
                             <button
@@ -476,7 +464,7 @@ bg-white border-s border-gray-200 dark:bg-neutral-800 dark:border-neutral-700 w-
                                   strokeLinecap="round"
                                 />
                               </svg>
-                              <span>Send</span>
+                            
                             </button>
                           </div>
                         </div>
