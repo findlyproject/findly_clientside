@@ -25,7 +25,6 @@ import "swiper/css/navigation";
 import "swiper/css/pagination";
 import ShareMenu from "@/components/common/ShareMenu";
 import PostView from "./PostView";
-import { fetchAllPosts } from "@/lib/store/features/actions/postActions";
 
 interface PostPreviewProps {
   post: IPost;
