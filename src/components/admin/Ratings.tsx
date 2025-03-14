@@ -3,39 +3,41 @@ import { useAppDispatch, useAppSelector } from "@/lib/store/hooks";
 import React, { useEffect } from "react";
 import { TiTick } from "react-icons/ti";
 import { IoMdStar, IoMdStarHalf, IoMdStarOutline } from "react-icons/io";
+
 import { TiTickOutline } from "react-icons/ti";
-import {
-  adminApproveReviews,
-  adminRemoveRating,
-  findlyReviews,
-} from "@/lib/store/features/actions/adminActions";
-export const Ratings = () => {
-  const dispatch = useAppDispatch();
-  const reviews = useAppSelector((state) => state.admin.reviews);
+import { adminApproveReviews, adminRemoveRating, findlyReviews } from '@/lib/store/features/actions/adminActions';
+export const Ratings=()=> {
+    const dispatch=useAppDispatch()
+    const reviews=useAppSelector((state)=>state.admin.reviews)
 
-  console.log("reviews", reviews);
 
-  const findReviews = async () => {
-    const result = await dispatch(findlyReviews());
-    console.log("result", result);
-  };
-  useEffect(() => {
-    findReviews();
-  }, []);
-  const handleRemove = async (ratingID: string) => {
-    const result = await dispatch(adminRemoveRating(ratingID));
-    console.log("result", result);
-    if (result.type === "remove/reviews/fulfilled") {
-      findReviews();
+const findReviews=async()=>{
+  const result=await dispatch(findlyReviews())
+console.log("result",result);
+
+}
+    useEffect(()=>{
+         findReviews()
+    },[])
+    const handleRemove=async(ratingID:string)=>{
+
+      const result=await dispatch(adminRemoveRating(ratingID))
+      console.log("result",result);
+      if(result.type==="remove/reviews/fulfilled"){
+        findReviews()
+      }
+
+
     }
-  };
 
-  const handleAccept = async (id: string) => {
-    const result = await dispatch(adminApproveReviews(id));
-    if (result.type === "approve/reviews/fulfilled") {
-      findReviews();
+    const handleAccept=async(id:string)=>{
+     
+      const result=await dispatch(adminApproveReviews(id))
+      if(result.type==="approve/reviews/fulfilled"){
+        findReviews()
+      }
+
     }
-  };
   return (
     <div>
       {reviews.map((item) => {

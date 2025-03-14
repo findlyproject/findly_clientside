@@ -6,14 +6,13 @@ import Image from "next/image";
 import { toast } from "react-toastify";
 import { IPost, UpdatePostProps } from "@/types/Types";
 
-export const UpdatePost: React.FC<UpdatePostProps> = ({ post, setIsUpdateOpen }) => {
+export const UpdatePost: React.FC<UpdatePostProps> = ({ post }) => {
   const dispatch = useAppDispatch();
   const [description, setDescription] = useState(post?.description ?? "");
   const [previewImages, setPreviewImages] = useState<string[]>([]);
   const [previewVideo, setPreviewVideo] = useState<string | null>(null);
   const [selectedFiles, setSelectedFiles] = useState<File[]>([]);
   const [oldPost, setOldPost] = useState<IPost | null>(post);
-console.log("jiii")
   useEffect(() => {
     setOldPost(post);   
   }, [post]);

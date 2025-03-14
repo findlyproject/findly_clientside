@@ -8,7 +8,7 @@ import Collection from './Collection'
 export function LeftSideBar() {
   const {activeuser}=useAppSelector((state)=>state.user)
   return (
-    <section className="md:block sm:flex sm:justify-around mt-7 h-screen fixed ">
+    <section className="md:block sm:flex sm:justify-around mt-7 h-screen ">
   <FeedIdentityModule />
   {activeuser && <CommunityPanel />}
   <PremiumFeaturesMenu />
