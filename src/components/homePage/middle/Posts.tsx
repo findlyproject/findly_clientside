@@ -4,7 +4,6 @@ import { PostsList } from "./PostsList";
 import { propspsts } from "@/types/Types";
 
 export const Posts:React.FC<propspsts> = ({loadMorePosts,loading}) => {
-  console.log("loadMorePosts",loadMorePosts);
   
   return (
     <section className="grid-area-posts space-y-3 w-full  mx-auto flex flex-col-reverse md:flex-col ">

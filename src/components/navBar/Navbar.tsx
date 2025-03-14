@@ -475,50 +475,7 @@ function Navbar() {
           </nav>
         </>
       )}
-      {isMenuOpen && (
-        <div className="lg:hidden order-3 absolute top-16 left-0 w-full bg-white shadow-md ">
-          <Link
-            href="/"
-            className="block font-montserrat px-4 py-2 rounded-full "
-            onClick={() => {
-              setIsMenuOpen(false);
-              
-            }}
-          >
-            Home
-          </Link>
-          <Link
-            href="/explore"
-            className="block font-montserrat px-4 py-2 rounded-full "
-            onClick={() => {
-              setIsMenuOpen(false);
-            }}
-          >
-            Explore
-          </Link>
-          <Link
-            href="/create"
-            className="block font-montserrat px-4 py-2 rounded-full"
-            onClick={() => {
-              setIsMenuOpen(false);
-             
-            }}
-          >
-            Create
-          </Link>
-
-          <Link
-            href="/create"
-            className="md:hidden font-montserrat px-4 py-2 rounded-full "
-            onClick={() => {
-              setIsMenuOpen(false);
-            
-            }}
-          >
-            Community
-          </Link>
-        </div>
-      )}
+      
       
     </header>
   );

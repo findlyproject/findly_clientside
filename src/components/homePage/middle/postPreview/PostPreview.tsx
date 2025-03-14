@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faComment, faShare } from "@fortawesome/free-solid-svg-icons";
 import { faBookmark as solidBookmark } from "@fortawesome/free-solid-svg-icons";
@@ -23,6 +23,8 @@ dayjs.extend(relativeTime);
 import "swiper/css";
 import "swiper/css/navigation";
 import "swiper/css/pagination";
+import ShareMenu from "@/components/common/ShareMenu";
+import PostView from "./PostView";
 
 interface PostPreviewProps {
   post: IPost;
@@ -30,7 +32,8 @@ interface PostPreviewProps {
 
 export const PostPreview = ({ post }: PostPreviewProps) => {
   const [localPost, setLocalPost] = useState(post);
-
+  const [isShareMenuVisible, setShareMenuVisible] = useState(false);
+  const [isSaved, setIsSaved] = useState(false);
   const dispatch = useAppDispatch();
   const router = useRouter();
   const [isShowMenu, setIsShowMenu] = useState(false);
@@ -38,9 +41,8 @@ export const PostPreview = ({ post }: PostPreviewProps) => {
   const toggleLikes = () => setIsShowLikes((prev) => !prev);
   const [isShowComments, setIsShowComments] = useState(false);
   const saved = useAppSelector((state) => state.post.saved);
-
+const[singlePost,setSinglePost]=useState(false)
   const currentUser = useAppSelector((state) => state.user.activeuser);
-  console.log(currentUser)
   const route = currentUser ? "user" : "company";
   const activeCompany = useAppSelector(
     (state) => state.companyLogin.activeCompany
@@ -54,71 +56,83 @@ export const PostPreview = ({ post }: PostPreviewProps) => {
     dispatch(setLikes(response.data.post));
     setLocalPost(response.data.post);
   };
+  const routes = currentUser ? "user" : "company";
 
   const handleNextSlide = () => {
     setSlideIndex((prevIndex) =>
-      prevIndex === post.images.length - 1 ? 0 : prevIndex + 1
+      prevIndex === post?.images.length - 1 ? 0 : prevIndex + 1
     );
   };
   const handleSave = async (postId: string) => {
-    const response = await api.post(`/post/user/save/${postId}`);
+    const response = await api.post(`/${route}/save/${postId}`);
     console.log("response of saving a post", response);
-    const res = await api.get("/post/user/all");
+    const res = await api.get(`/${route}/saveds`);
     dispatch(setSaved(res.data.saved));
   };
 
-  const isSaved =
-    Array.isArray(saved) && saved.some((item) => item.postId == post._id);
-
+  useEffect(() => {
+    const savedStatus =
+      Array.isArray(saved) && saved.some((item) => item.postId._id === post._id);
+    setIsSaved(savedStatus);
+  }, [saved, post]);
   return (
     <>
-    <section className="flex flex-col border  border-gray-300 bg-white rounded-lg mx-auto p-4 shadow-md relative">
+    <section className="flex flex-col border  border-gray-300 bg-white rounded-lg mx-auto p-4 shadow-md relative" > 
       {/* Post Owner Details */}
       <section className="flex justify-between ">
-        <div className="flex items-center mb-3">
-          <div
-            className="cursor-pointer"
-            onClick={() => router.push(`/main/profile/${post.owner?._id}`)}
-          >
-            <Image
-              src={
-                post.owner?.type === "Company"
-                  ? post.owner?.logo
-                  : post.owner?.profileImage ||
-                    "https://res.cloudinary.com/dq1auwpkm/image/upload/v1738735360/profile_jtwxaj.png"
-              }
-              className="rounded-full object-cover"
-              alt={post.owner?.firstName || "User"}
-              width={35}
-              height={35}
-            />
-          </div>
+      <div className="flex items-center mb-3">
+  {/* Profile Image Clickable */}
+  <div
+    className="cursor-pointer"
+    onClick={() => router.push(`/main/profile/${post.owner?._id}`)}
+  >
+    <Image
+      src={
+        post.owner?.type === "Company"
+          ? post.owner?.logo
+          : post.owner?.profileImage ||
+            "https://res.cloudinary.com/dq1auwpkm/image/upload/v1738735360/profile_jtwxaj.png"
+      }
+      className="rounded-full object-cover"
+      alt={post.owner?.type === "Company" ? post.owner?.name : post.owner?.firstName || "User"}
+      width={35}
+      height={35}
+    />
+  </div>
 
-          <div className="ml-3">
-            <Link
-              href={
-                post.owner?._id === currentUser?._id
-                  ? `/${route}/profile`
-                  :  `/${route}/${post.owner?._id}/${post.owner?.type}`
-              }
-              className="hover:underline"
-            >
-              <h3 className="text-lg font-semibold text-gray-900">
-              {post.owner
-  ? `${post.owner?.firstName || ""} ${post.owner?.lastName || ""}`.trim() || post.owner?.name || "Unknown User"
-  : "Unknown User"}
+  {/* Owner Info */}
+  <div className="ml-3">
+    <Link
+      href={
+        post.owner?._id === currentUser?._id
+          ? `/${route}/profile`
+          : `/${route}/${post.owner?._id}/${post.owner?.type}`
+      }
+      className="hover:underline"
+    >
+      <h3 className="text-lg font-semibold text-gray-900">
+        {post.owner
+          ? post.owner.type === "Company"
+            ? post.owner.name // Show Company Name
+            : `${post.owner?.firstName || ""} ${post.owner?.lastName || ""}`.trim() || "Unknown User" // Show User Name
+          : "Unknown User"}
+      </h3>
+    </Link>
 
-              </h3>
-            </Link>
-            <div className="text-[10px] text-gray-500">
-              <p className="text-xs text-gray-500">
-                {post.owner?._id === currentUser?._id ||
-                  post.owner?.jobTitle?.[0]}{" "}
-                • {dayjs(post.createdAt).fromNow()}{" "}
-              </p>
-            </div>
-          </div>
-        </div>
+    {/* Additional Info */}
+    <div className="text-[10px] text-gray-500">
+      <p className="text-xs text-gray-500">
+        {post.owner?._id === currentUser?._id
+          ? "You"
+          : post.owner?.type === "Company"
+          ? post.owner.IndustryType || "Company" // Show Industry for Company
+          : post.owner?.jobTitle?.[0] || "Professional"}{" "}
+        • {dayjs(post.createdAt).fromNow()}
+      </p>
+    </div>
+  </div>
+</div>
+
         <div className="cursor-pointer" onClick={() => setIsShowMenu(true)}>
           <svg
             xmlns="http://www.w3.org/2000/svg"
@@ -305,7 +319,7 @@ export const PostPreview = ({ post }: PostPreviewProps) => {
           </button>
           <button
             className="flex items-center text-gray-500 px-4 py-2 rounded-md hover:bg-gray-100 hover:text-black"
-            onClick={() => router.push(`/main/message/${post.owner?._id}`)}
+            onClick={() =>setShareMenuVisible((prev)=>!prev)}
           >
             <FontAwesomeIcon
               icon={faShare}
@@ -313,14 +327,23 @@ export const PostPreview = ({ post }: PostPreviewProps) => {
             />
             <span className="hidden sm:inline">Share</span>
           </button>
+          
         </section>
+        {isShareMenuVisible && (
+      <OutsideClickHandler onOutsideClick={() => setShareMenuVisible(false)}>
+        <div className="absolute right-0 bg-white shadow-lg rounded-lg pt-4 pl-4 w-[400px] h-[150px] z-50">
+        <ShareMenu url={`http://localhost:3000/${routes}/post/${post._id}`} isShareMenuVisible={isShareMenuVisible} />
+        </div>
+      </OutsideClickHandler>
+    )}
       </section>
-
+     
       {isShowComments && post && post.comments && (
         <Comments postId={post._id} comments={post.comments} />
       )}
       
     </section>
+    
     {isShowLikes && (
       <div
         className="fixed inset-0 z-50 bg-black bg-opacity-50 flex items-center justify-center px-4"
@@ -335,37 +358,52 @@ export const PostPreview = ({ post }: PostPreviewProps) => {
           </h2>
 
           <div className="max-h-60 overflow-y-autospace-y-4">
-            {Array.isArray(post.likedBy) && post.likedBy.length > 0 ? (
-              post.likedBy.map((item, index) => (
-                <div
-                  key={`${item._id}-${index}`}
-                  className="flex items-center space-x-4 bg-gray-100 p-3 rounded-lg"
-                >
-                  <Image
-                    src={
-                      item.profileImage ||
-                      "https://res.cloudinary.com/dq1auwpkm/image/upload/v1738735360/profile_jtwxaj.png"
-                    }
-                    alt={item.firstName}
-                    className="w-12 h-12 rounded-full border border-gray-300 object-cover"
-                    width={20}
-                    height={20}
-                  />
-                  <p className="text-gray-700 font-medium">
-                    {item.firstName} {item.lastName}
-                  </p>
-                </div>
-              ))
-            ) : (
-              <div className="text-center text-gray-500">
-                <h1>No likes yet</h1>
-              </div>
-            )}
+          {Array.isArray(post.likedBy) && post.likedBy.length > 0 ? (
+  post.likedBy.map((item, index) => {
+    const isUser = item.type === "user"  // Check if it's a User
+    const isCompany = item.type === "company"; // Check if it's a Company
+
+    return (
+      <div
+        key={`${item._id}-${index}`}
+        className="flex items-center space-x-4 bg-gray-100 p-3 rounded-lg"
+      >
+        <Image
+          src={
+            item.profileImage || item.logo || // Use profileImage for users, logo for companies
+            "https://res.cloudinary.com/dq1auwpkm/image/upload/v1738735360/profile_jtwxaj.png"
+          }
+          alt={isUser ? item.firstName : item.name} // Use firstName for users, name for companies
+          className="w-12 h-12 rounded-full border border-gray-300 object-cover"
+          width={20}
+          height={20}
+        />
+        <p className="text-gray-700 font-medium">
+          {isUser
+            ? `${item.firstName} ${item.lastName}` // Show full name for users
+            : item.name} {/* Show company name for companies */}
+        </p>
+      </div>
+    );
+  })
+) : (
+  <div className="text-center text-gray-500">
+    <h1>No likes yet</h1>
+  </div>
+)}
+
           </div>
         </div>
       </div>
      
     )}
+    {singlePost&&
+     <div
+        className="fixed inset-0 z-50 bg-black bg-opacity-50 flex items-center justify-center px-4">
+          <OutsideClickHandler onOutsideClick={()=>setSinglePost(false)}>
+    <PostView postId={post._id}/>
+    </OutsideClickHandler>
+    </div>}
      </>
   );
 };
