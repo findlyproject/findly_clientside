@@ -8,20 +8,17 @@ import api, { socket } from "@/utils/api";
 import { FaEllipsisV } from "react-icons/fa";
 import { IoMdArrowBack } from "react-icons/io";
 import Image from "next/image";
-import { RiArrowDropDownLine } from "react-icons/ri";
 import { HiOutlineAdjustmentsHorizontal } from "react-icons/hi2";
 import { CiSearch } from "react-icons/ci";
 import EmojiPicker from "emoji-picker-react";
 import { EmojiClickData } from "emoji-picker-react";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faSmile } from "@fortawesome/free-solid-svg-icons";
-import OutsideClickHandler from "react-outside-click-handler";
 import { BsThreeDots } from "react-icons/bs";
 import { Connection } from "@/types/Types";
 
 import { MessageType } from "@/types/Types";
 export default function RightSide() {
-  const dispatch = useAppDispatch();
 
   const [selectedUser, setSelectedUser] = useState<Connection | null>(null);
   const [message, setMessage] = useState("");
@@ -33,7 +30,7 @@ export default function RightSide() {
   const [other, setOther] = useState([]);
   const activeuser = useAppSelector((state) => state.user.activeuser);
   const [showPicker, setShowPicker] = useState(false);
-  const [showPickerImogi, setShowPickerImogi] = useState(false);
+  // const [showPickerImogi, setShowPickerImogi] = useState(false);
 
   const [filterDropdown, setfilterDropdown] = useState(false);
   const [Dropdown, setDropdown] = useState<string | null>(null);
@@ -49,14 +46,12 @@ export default function RightSide() {
   useEffect(() => {
     const fetch = async () => {
       const response = await api.get(`/connecting/getconnection`);
-      console.log("response of members", response);
       setMembers(response.data.connections);
     };
     fetch();
     fetchMembers();
   }, []);
 
-  console.log("memberss", members);
 
   useEffect(() => {
     if (activeTab === "focused") {
@@ -66,10 +61,9 @@ export default function RightSide() {
     }
   }, [activeTab, members]);
 
-  const fetchMembers = () => {
-    const result = dispatch(findnMembers);
-    console.log("result", result);
-  };
+  // const fetchMembers = () => {
+  //   const result = dispatch(findnMembers);
+  // };
 
   useEffect(() => {
     const fetchMessages = async () => {
@@ -77,7 +71,6 @@ export default function RightSide() {
         const responseofMessage = await api.get(
           `/message/conversation/${activeuser?._id}/${selectedUser.connectionID._id}`
         );
-        console.log("responseofMessage", responseofMessage);
         setMessages(responseofMessage.data.messages);
       }
     };
@@ -85,7 +78,6 @@ export default function RightSide() {
   }, [selectedUser, activeuser?._id]);
 
   const handleUserSelect = (user:Connection) => {
-    console.log("user....", user);
     setSelectedUser(user);
     setMessages([]);
     socket.emit("joinRoom", user.connectionID._id);
@@ -97,20 +89,17 @@ export default function RightSide() {
       `/message/send/${activeuser?._id}/${selectedUser?.connectionID._id}`,
       { message: message }
     );
-    console.log("responseresponse", response);
 
     setMessage("");
   };
 
   useEffect(() => {
     socket.on("connect", () => {
-      console.log("Connected to server:", socket.id);
     });
 
     socket.emit("joinRoom", activeuser?._id);
 
     socket.on("receiveMessage", (data) => {
-      console.log("Received message:", data);
       setMessages((prevMessages) => [...prevMessages, data.message]);
     });
 
@@ -121,8 +110,6 @@ export default function RightSide() {
     };
   }, [selectedUser?.connectionID?._id]);
 
-  console.log("all messages", messages);
-  console.log("selectedUser", selectedUser);
 
   const handleEmojiClick = (emojiObject: EmojiClickData) => {
     setMessage((prev) => prev + emojiObject.emoji);

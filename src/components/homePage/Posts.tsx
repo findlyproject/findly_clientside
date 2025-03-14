@@ -12,26 +12,18 @@ export const  Posts=()=> {
   const save=useAppSelector(state=>state.post.saved)
 const dispatch=useAppDispatch()
 
-useEffect(()=>{
-  const fetch=async()=>{
-    const saveResponse = await api.get(`/post/user/saveds`);
-    console.log(
-      "saveResponse",
-      saveResponse
-    );
-    setsavedPosts(saveResponse.data.saved);
-  }
-  fetch()
-},[])
+// useEffect(()=>{
+//   const fetch=async()=>{
+//     const saveResponse = await api.get(`/post/user/saveds`);
+    
+//     setsavedPosts(saveResponse.data.saved);
+//   }
+//   fetch()
+// },[])
   useEffect(() => {
     const fetchuserPosts = async () => {
       const response = await api.get(`/post/owner`);
-      console.log("response of user posts", response);
       setUserposts(response.data.posts||[]);
-
-      
-    const res=await api.get("/post/user/all")
-      dispatch(setSaved(res.data.saved))
     };
     fetchuserPosts();
   }, [dispatch]);
@@ -40,26 +32,23 @@ useEffect(()=>{
 
   useEffect(() => {
     if (activeTab === "saved") {
-      setPosts(savedPosts);
+      setPosts(save);
     } else {
       setPosts(userPosts);
     }
   }, [activeTab,savedPosts,userPosts]);
-console.log("ppoooo",save);
 
 const handleUnsave=async(postid:string)=>{
-const res=await api.post(`/post/user/save/${postid}`)
-console.log("res",res);
+const res=await api.post(`/user/save/${postid}`)
 setsavedPosts((pre)=>pre.filter((item)=>item.postId._id!==postid))
-const response=await api.get("/post/user/all")
+const response=await api.get("/user/saveds")
 dispatch(setSaved(response.data.saved))
 }
 
-console.log("savedPosts",savedPosts);
 
 
   return (
-    <div className="min-h-screen bg-gray-100">
+    <div className="min-h-screen bg-gray-100 pt-20">
       <div className="max-w-3xl mx-auto mt-6 px-4">
         {/* Tabs */}
         <div className="flex justify-center space-x-4">

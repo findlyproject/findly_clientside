@@ -417,13 +417,7 @@ export interface IReport {
   images:string[];
   video:string;
   description:string
-  postId:{
-     _id:string
-     images:string[];
-     video:string;
-     description:string
-
-  }
+  postId:IPost
   userId:{
     _id:string
     firstName:string;

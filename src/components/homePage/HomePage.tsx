@@ -20,7 +20,6 @@ const HomePage = () => {
 const {activeuser}=useAppSelector(state=>state.user)
 const [isLeftSticky, setIsLeftSticky] = useState(false);
   const leftSidebarRef = useRef(null);
-
   // useEffect(() => {
   //   const handleScroll = () => {
   //     if (!leftSidebarRef.current) return;
