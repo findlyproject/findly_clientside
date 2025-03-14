@@ -4,11 +4,11 @@ import { createAsyncThunk } from "@reduxjs/toolkit";
 import handleAsync from "@/utils/handleAsync";
 import { AxiosResponse } from "axios";
 import api from "@/utils/api";
-import { AdminProfile, setAdmin, setCompanies, setJOBTitles, setReviews, setSkills, setUsers } from "../adminSlice";
-
+import {  setAdmin, setCompanies, setJOBTitles, setReviews, setSkills, setUsers } from "../adminSlice";
+import { Admin } from "@/types/Types";
 //login
 interface LoginResponse {
-  findAdmin: AdminProfile;
+  findAdmin: Admin;
 }
 
 export const loginAdmin = createAsyncThunk(
@@ -27,7 +27,7 @@ export const loginAdmin = createAsyncThunk(
     }
 
 
-    dispatch(setAdmin(response?.data?.findAdmin as AdminProfile));
+    dispatch(setAdmin(response?.data?.findAdmin as Admin));
     return response?.data?.findAdmin;
   }
 );
@@ -65,7 +65,7 @@ export const fetchCompanies = createAsyncThunk(
     }
 
     const data = response.data.companies
-
+   
 
     dispatch(setCompanies(data))
     return data
@@ -113,14 +113,14 @@ export const handleBlock = createAsyncThunk(
   "block/companies",
   async (id: string, { rejectWithValue }
   ) => {
-    const response = await handleAsync<AxiosResponse>(() => api.patch(`/admin/blockandunblock/${id}`));
+    const response = await handleAsync<AxiosResponse>(() => api.patch(`/admin/block/${id}`));
     if (!response) {
       return rejectWithValue("block company failed.");
     }
-    const updatedUser = response.data.data;
+    const updatedCompany = response.data.data;
 
 
-    return updatedUser
+    return updatedCompany
   }
 );
 

@@ -7,12 +7,14 @@ import {
 
 import { useAppDispatch, useAppSelector } from "@/lib/store/hooks";
 
+import { useRouter } from "next/navigation";
+
 import { useEffect, useState } from "react";
 
 const Companies = () => {
   const dispatch = useAppDispatch();
   const companies = useAppSelector((state) => state.admin.companies);
-
+  const router = useRouter();
   const [currentPage, setCurrentPage] = useState(1);
   const companiesPerPage = 10;
   useEffect(() => {
@@ -25,13 +27,20 @@ const Companies = () => {
     dispatch(fetchCompanies());
   };
 
-  const unblockAndBlock = (id: string) => {
-    const result = dispatch(handleBlock(id));
+  const unblockAndBlock =async (id: string) => {
+    const result =await dispatch(handleBlock(id));
 
     console.log("result", result);
+    if (handleBlock.fulfilled.match(result)) {
+      console.log("Company status updated:", result.payload);
+      listCompanies(); 
+    } else if (handleBlock.rejected.match(result)) {
+      console.error("Failed to update company status:", result.payload);
+      listCompanies(); 
+    }
+   
   };
 
-  // Pagination Logic
   const indexOfLastCompany = currentPage * companiesPerPage;
   const indexOfFirstCompany = indexOfLastCompany - companiesPerPage;
   const currentCompanies = companies.slice(
@@ -58,10 +67,7 @@ const Companies = () => {
               <thead>
                 <tr className="bg-gray-50">
                   <th className="p-5 text-left font-semibold text-gray-900">
-                    User ID
-                  </th>
-                  <th className="p-5 text-left font-semibold text-gray-900">
-                    Full Name & Email
+                    Company
                   </th>
                   <th className="p-5 text-left font-semibold text-gray-900">
                     Role
@@ -77,7 +83,6 @@ const Companies = () => {
                     key={`${user._id}-${index}`}
                     className="bg-white hover:bg-gray-50"
                   >
-                    <td className="p-5 text-sm text-gray-900">{user._id}</td>
                     <td className="p-5 text-sm text-gray-900">
                       <div className="flex items-center gap-3">
                         <img
@@ -97,14 +102,19 @@ const Companies = () => {
                       {user.role || "N/A"}
                     </td>
                     <td className="p-5 flex gap-2">
-                      <button className="p-2 bg-indigo-600 text-white rounded">
+                      <button
+                        onClick={() =>
+                          router.push(`/admin/companies/${user._id}`)
+                        }
+                        className="p-2 bg-primary text-white rounded"
+                      >
                         View
                       </button>
                       <button
-                        className={`text-xs sm:text-sm px-2 sm:px-4 py-1 sm:py-2 rounded-md text-white transition ${
+                        className={`text-xs sm:text-sm px-2 sm:px-4 py-1 sm:py-2 rounded-md  transition ${
                           user.isBlocked
-                            ? "bg-yellow-500 hover:bg-yellow-400"
-                            : "bg-red-600 hover:bg-red-700"
+                            ? "bg-primary text-white"
+                            : "bg-purple-200 text-primary"
                         }`}
                         onClick={() => unblockAndBlock(user._id)}
                       >

@@ -1,6 +1,7 @@
 "use client";
 
 import { TitleType, SkillType } from "@/types/Types";
+
 import { useEffect, useState } from "react";
 import { IoMdCreate } from "react-icons/io";
 import { toast } from "react-toastify";
@@ -9,7 +10,19 @@ import { VscVerifiedFilled } from "react-icons/vsc";
 import { VscVerified } from "react-icons/vsc";
 import { MdEdit } from "react-icons/md";
 import { useAppDispatch, useAppSelector } from "@/lib/store/hooks";
-import { editSkill, editTitle, handleApproveSkill, handleApproveTitle, handleRemoveSkill, handleRemoveTitle, postSkill, postTitle, showSkills, showSTitles } from "@/lib/store/features/actions/adminActions";
+import {
+  editSkill,
+  editTitle,
+  handleApproveSkill,
+  handleApproveTitle,
+  handleBlock,
+  handleRemoveSkill,
+  handleRemoveTitle,
+  postSkill,
+  postTitle,
+  showSkills,
+  showSTitles,
+} from "@/lib/store/features/actions/adminActions";
 
 const Create = () => {
   const [skill, setSkill] = useState("");
@@ -96,32 +109,29 @@ const Create = () => {
   };
 
   const handleRemove = async (skillId: string) => {
-    console.log("skillId",skillId);
-    
-   const result=await dispatch(handleRemoveSkill(skillId))
-   console.log("result",result);
-   
-   if(result.type==="remove/skill/fulfilled"){
-         dispatch(showSkills())
-   }
+    console.log("skillId", skillId);
 
+    const result = await dispatch(handleRemoveSkill(skillId));
+    console.log("result", result);
+
+    if (result.type === "remove/skill/fulfilled") {
+      dispatch(showSkills());
+    }
   };
 
   const handleTitleRemove = async (titleId: string) => {
-    const result =await dispatch(handleRemoveTitle(titleId))
-  if(result.type==="remove/title/fulfilled"){
-    dispatch(showSTitles())
-  }
+    const result = await dispatch(handleRemoveTitle(titleId));
+    if (result.type === "remove/title/fulfilled") {
+      dispatch(showSTitles());
+    }
   };
 
   const handleTitleApprove = async (titleid: string) => {
+    const result = await dispatch(handleApproveTitle(titleid));
 
-    const result=await dispatch(handleApproveTitle(titleid))
-
-    if(result.type==="approve/title/fulfilled"){
-      dispatch(showSTitles())
+    if (result.type === "approve/title/fulfilled") {
+      dispatch(showSTitles());
     }
-
   };
 
   const handleTitleEdit = async (Item: TitleType) => {
@@ -135,10 +145,10 @@ const Create = () => {
   };
 
   const handleApprove = async (skillid: string) => {
-   const result=await dispatch(handleApproveSkill(skillid))
-                if(result.type==="approve/skills/fulfilled"){
-                 dispatch(showSkills())
-                }
+    const result = await dispatch(handleApproveSkill(skillid));
+    if (result.type === "approve/skills/fulfilled") {
+      dispatch(showSkills());
+    }
   };
   return (
     <div className="flex flex-col items-start min-h-screen bg-gray-100 p-6">

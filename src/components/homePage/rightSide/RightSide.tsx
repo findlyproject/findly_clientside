@@ -221,7 +221,7 @@ bg-white border-s border-gray-200 dark:bg-neutral-800 dark:border-neutral-700 w-
                   {activeTab === "focused" ? (
                     focused.map((chat, index) => (
                       <div
-                        key={index}
+                        key={chat._id}
                         className={`flex items-center justify-between p-2 rounded-lg cursor-pointer transition ${
                           selectedUser === chat
                             ? "bg-blue-100"
@@ -240,7 +240,7 @@ bg-white border-s border-gray-200 dark:bg-neutral-800 dark:border-neutral-700 w-
                           />
                           <div className="ml-3">
                             <h2 className="text-sm font-semibold">
-                              {chat.connectionID.firstName}
+                              {chat.connectionID?.firstName}
                             </h2>
                           </div>
                         </div>
