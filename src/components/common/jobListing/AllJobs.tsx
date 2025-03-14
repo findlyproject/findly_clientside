@@ -17,6 +17,7 @@ function AllJobs({input}:Input) {
   const [loading, setLoading] = useState(false);
   const [hasMore, setHasMore] = useState(true);
   const [isLoading, setIsLoading] = useState(true);
+  const [applied,setapplied]=useState()
 
   // Debounce input changes
   const [debouncedInput, setDebouncedInput] = useState(input);
@@ -58,7 +59,20 @@ function AllJobs({input}:Input) {
       setLoading(false);
     }
   };
-
+  const fetchapplyedjobs = async () => {
+    try {
+      const respons = await api.get("user/applyedjobs")
+      setapplied(respons.data.data)
+      console.log(respons.data.data)
+      console.log(respons.data.data)
+      setIsLoading(false)
+    } catch (error) {
+      console.log(error);
+    }
+  }
+  useEffect(() => {
+      fetchapplyedjobs()
+    }, [])
   useEffect(() => {
     fetchJobs();
   }, [page, debouncedInput]);

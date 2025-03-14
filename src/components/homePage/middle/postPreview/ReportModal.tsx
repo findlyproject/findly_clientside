@@ -1,10 +1,10 @@
 "use client";
 
 import { useState } from "react";
-import api from "@/utils/api";
 import { ReportPostModalType } from "@/types/Types";
 import { useAppDispatch, useAppSelector } from "@/lib/store/hooks";
 import { reportPost } from "@/lib/store/features/actions/userActions";
+import { toast } from "react-toastify";
 
 
 export const ReportPostModal: React.FC<ReportPostModalType> = ({ postId, onClose })=> {
@@ -16,6 +16,7 @@ const dispatch=useAppDispatch()
     const result=await dispatch(reportPost({reason,postId,route}))
     if(result.type==="report/posts/fulfilled"){
       onClose();
+      toast.success("reported")
     }
 
   };

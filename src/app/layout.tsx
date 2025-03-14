@@ -5,6 +5,7 @@ import SessionProvider from "@/providers/auth-provider";
 import { getServerSession } from "next-auth";
 import { Slide, ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
+import { TranslationProvider } from "@/Context/TranslationContext";
 
 export const strokeWidthdata: Metadata = {
   title: "Findly",
@@ -21,7 +22,8 @@ export default async function RootLayout({
     <html lang="en">
       <body>
         <StoreProvider>
-          <SessionProvider session={session}>{children}</SessionProvider>
+        <TranslationProvider>
+          <SessionProvider session={session}>{children} </SessionProvider></TranslationProvider>
           <ToastContainer
             autoClose={1000}
             position="bottom-right"

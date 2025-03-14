@@ -8,9 +8,7 @@ import { UpdatePost } from "../UpdatePost";
 import OutsideClickHandler from "react-outside-click-handler";
 import {
   DeletePost,
-  fetchAllPosts,
 } from "@/lib/store/features/actions/postActions";
-import api from "@/utils/api";
 
 export const PostMenu = ({ post }: PostPreviewProps) => {
   const { activeuser } = useAppSelector((state) => state.user);
@@ -25,6 +23,7 @@ export const PostMenu = ({ post }: PostPreviewProps) => {
 
   };
   return (
+    <>
     <section className="absolute z-10">
       <div className=" bg-white text-sm rounded-lg shadow-lg  p-1">
         {activeuser?._id == post?.owner?._id ? (
@@ -52,19 +51,21 @@ export const PostMenu = ({ post }: PostPreviewProps) => {
             </button>
           </>
         )}
-        {isModalOpen && (
-          <OutsideClickHandler onOutsideClick={() => setIsModalOpen(false)}>
-            <ReportPostModal
-              postId={post._id}
-              onClose={() => setIsModalOpen(false)}
-            />
-          </OutsideClickHandler>
-        )}
-
-        {UpdateOpen && post?._id && (
-              <UpdatePost post={post} UpdateOpen={UpdateOpen} />
-        )}
+        
       </div>
     </section>
+    {isModalOpen && (
+      <OutsideClickHandler onOutsideClick={() => setIsModalOpen(false)}>
+        <ReportPostModal
+          postId={post._id}
+          onClose={() => setIsModalOpen(false)}
+        />
+      </OutsideClickHandler>
+    )}
+
+    {UpdateOpen && post?._id && (
+          <UpdatePost post={post} UpdateOpen={UpdateOpen} />
+    )}
+    </>
   );
 };

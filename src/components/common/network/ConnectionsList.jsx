@@ -1,6 +1,7 @@
 'use client';
-import { setAllConnections } from '@/lib/store/features/userSlice';
-import { useAppDispatch } from '@/lib/store/hooks';
+import { CommunityPanel } from '@/components/homePage/leftSide/CommunityPanel';
+import { setAllConnections, setDetailes } from '@/lib/store/features/userSlice';
+import { useAppDispatch, useAppSelector } from '@/lib/store/hooks';
 import api from '@/utils/api';
 import Image from 'next/image';
 import { useRouter } from 'next/navigation';
@@ -10,8 +11,9 @@ import { useEffect, useState } from 'react';
 export default function ConnectionsList() {
   const router=useRouter()
   const[connections,setConnections]=useState([])
-  
-  console.log("connections",connections);
+  const {peopleIknow}=useAppSelector((state)=>state.user)
+const {activeuser}=useAppSelector(state=>state.user)
+ 
   
   const dispatch=useAppDispatch()
   useEffect(()=>{
@@ -31,16 +33,23 @@ export default function ConnectionsList() {
     console.log("response of remove",response);
     setConnections((prevConnections) =>
       prevConnections.filter((connection) => connection.connectionID?._id !== connectionId)
-    );
-   
+    );  
   }
+  
+  const handleRequest = async (id) => {
+    const response = await api.post(`/connecting/request/${id}`);
+    console.log(" responsevresponse connection", response.data.targetUser);
+    dispatch(setDetailes(response.data.targetUser)); 
+     if(activeuser){dispatch(fetchPeopleKnow())}
+  };
   return (
-    <div className="max-w-2xl mx-auto p-6 bg-white shadow-lg rounded-lg">
-      <h2 className="text-xl font-semibold mb-4">{connections?connections.length:0} Connections</h2>
+    <>
+    <div className="min-h-[80vh] bg-white mt-7 shadow-lg px-4 rounded-lg">
+      <h2 className="text-xl font-semibold pt-11  mb-4">{connections?connections.length:0} Connections</h2>
      
       <div>
         {connections.map((connection, index) => (
-          <div key={index} className="flex items-center justify-between p-3 border-b">
+          <div key={index} className="flex items-center justify-between p-3 ">
             <div className="flex items-center gap-4"
             onClick={()=>router.push(`/userdetails/${connection.connectionID._id}`)}
             >
@@ -66,6 +75,64 @@ export default function ConnectionsList() {
           </div>
         ))}
       </div>
+      <hr></hr>
+      <div className=" mx-auto mt-10">
+  <h2 className="text-xl font-semibold pt-11 mb-4">Here are some recommendations</h2>
+
+  <div className="grid grid-cols-3 gap-2 pt-5 hover:cursor-pointer">
+    {peopleIknow.length > 0 ? (
+      peopleIknow.map((user,index) => (
+        <div key={index} className="bg-white p-6 rounded-lg shadow-lg flex flex-col items-center text-center">
+          <div
+  className="flex flex-col items-center justify-center p-4 bg-white  cursor-pointer transition-transform transform hover:scale-105"
+  onClick={() => router.push(`/user/${user._id}/User`)}
+>
+  {/* Profile Image */}
+  <img
+    src={user.profileImage || "/default-avatar.png"}
+    alt={user.name}
+    className="w-20 h-20 rounded-full object-cover mb-2"
+  />
+
+  {/* User Name */}
+  <h3 className="text-sm font-semibold text-center">{user.firstName} {user.lastName}</h3>
+
+  {/* Job Title */}
+  <p className="text-gray-500 text-xs text-center">{user.jobTitle[0] || "No details available"}</p>
+</div>
+
+          <button
+            onClick={() => handleRequest(user._id)}
+           
+            className={`px-4 py-2 text-white font-medium rounded-md w-full ${
+              connections.includes(user.id)
+                ? "bg-gray-400 cursor-not-allowed"
+                : "bg-blue-600 hover:bg-blue-700"
+            }`}
+          >
+            
+            {(() => {
+    const userConnection = user.connecting.find(conn => conn.connectionID === activeuser._id);
+
+    if (!userConnection) {
+      return "Connect";
+    } else if (userConnection.status === false) {
+      return "Requested";
+    } else if (userConnection.status === true) {
+      return "Connected";
+    }
+  })()}
+          </button>
+        </div>
+      ))
+    ) : (
+      <p className="text-gray-500">No recommendations available.</p>
+    )}
+  </div>
+</div>
+
+      
     </div>
+    </>
   );
 }

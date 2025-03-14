@@ -1,47 +1,45 @@
+import { useAppSelector } from "@/lib/store/hooks";
 import Link from "next/link";
 import React from "react";
 import { HiOutlineMail } from "react-icons/hi";
 import { IoCallOutline } from "react-icons/io5";
 
 export default function HelpandSupport() {
+  const {activeuser}=useAppSelector(state=>state.user)
+  const route =activeuser?"user":"company"
   return (
-    <div className="min-h-screen bg-gray-100 flex flex-col items-start py-8 px-4 space-y-8">
-      <h1 className="text-2xl md:text-3xl font-semibold mb-4 text-center">
+    <div className="min-h-screen bg-gray-100 flex flex-col items-center  py-16 px-6">
+      <h1 className="text-3xl md:text-5xl font-bold mb-10 text-center">
         Help & Support
       </h1>
 
-      <div className="bg-white rounded-2xl shadow-lg p-6 w-full max-w-2xl">
-        <div className="flex flex-col md:flex-row items-center md:items-start md:space-x-6 space-y-4 md:space-y-0">
-          <HiOutlineMail className="text-primary text-4xl" />
-          <div className="text-center md:text-left">
-            <p className="text-xl font-semibold">Need more help?</p>
-            <p className="text-gray-600">
-              Get in touch with us, support is provided daily.{" "}
-              <span>
-                <Link href={`/`} className="text-primary underline">
-                  Contact us
-                </Link>
-              </span>
-            </p>
-          </div>
+      {/* Container for horizontal layout */}
+      <div className="flex flex-col md:flex-row items-center justify-center space-y-6 md:space-y-0 md:space-x-10 w-full max-w-5xl">
+        
+        {/* Help Section */}
+        <div className="bg-white rounded-3xl shadow-lg p-8 w-full md:w-1/2 flex flex-col items-center text-center space-y-6">
+          <HiOutlineMail className="text-primary text-6xl" />
+          <p className="text-2xl font-semibold">Need more help?</p>
+          <p className="text-lg text-gray-600 max-w-md">
+            Get in touch with us, support is provided daily.
+          </p>
+          <Link href={`contactus/contact`} className="text-primary  text-xl">
+            Contact us 
+          </Link>
         </div>
-      </div>
 
-      <div className="bg-white rounded-2xl shadow-lg p-6 w-full max-w-2xl">
-        <div className="flex flex-col md:flex-row items-center md:items-start md:space-x-6 space-y-4 md:space-y-0">
-          <IoCallOutline className="text-primary text-4xl" />
-          <div className="text-center md:text-left">
-            <p className="text-xl font-semibold">Have Questions?</p>
-            <p className="text-gray-600">
-              Our support team is here to assist you—reach out to us anytime.{" "}
-              <span>
-                <Link href={`/`} className="text-primary underline">
-                  Call us
-                </Link>
-              </span>
-            </p>
-          </div>
+        {/* Support Section */}
+        <div className="bg-white rounded-3xl shadow-lg p-8 w-full md:w-1/2 flex flex-col items-center text-center space-y-6">
+          <IoCallOutline className="text-primary text-6xl" />
+          <p className="text-2xl font-semibold">Feedback Form</p>
+          <p className="text-lg text-gray-600 max-w-md">
+          We value your opinion! Share your feedback to help us improve.
+          </p>
+          <Link href={`/${route}/rateus`} className="text-primary  text-xl">
+            Call us
+          </Link>
         </div>
+
       </div>
     </div>
   );

@@ -81,23 +81,26 @@ export const UpdatePost: React.FC<UpdatePostProps> = ({ post,UpdateOpen }) => {
       .unwrap()
       .then(() => {
         toast.success("Post updated successfully!");
+        setopen(false)
         dispatch(fetchAllPosts(1))
       })
       .catch((error) => console.error("Error updating post:", error));
   };
 
   return (
-    isopen&&(
-              <section className="fixed inset-0 z-10 flex items-center justify-center bg-black bg-opacity-50">
+    isopen&&(  
+      <section className="fixed inset-x-0 inset-y-0 z-50 flex-col items-center justify-center bg-black bg-opacity-50">
+
             <OutsideClickHandler onOutsideClick={() => setopen(false)}>
     
-    <div className="w-full mx-auto bg-white p-8 rounded-lg shadow-lg z-50">
+            <div className="max-w-lg mx-auto mt-10 bg-white p-8 rounded-lg shadow-lg">
+
       <h2 className="text-2xl font-bold text-gray-900">Update Post</h2>
 
       {/* Existing Post View */}
       {oldPost && (
-        <div className="mb-4 p-3 border border-gray-300 rounded-md bg-gray-100">
-          <h3 className="text-lg font-semibold text-gray-800">Existing Post</h3>
+        <div className="mb-4 p-3 rounded-md ">
+          <h3 className="text-base font-semibold text-gray-800">Existing Post</h3>
 
           {/* Existing Images */}
           {oldPost?.images?.length && oldPost?.images?.length > 0 && (

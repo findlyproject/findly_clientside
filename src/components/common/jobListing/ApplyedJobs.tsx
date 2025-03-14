@@ -4,10 +4,12 @@ import React, { useEffect, useState } from 'react';
 import api from '@/utils/api';
 import { ApplyJobSkeleton } from './jobcard';
 import { applicationData } from '@/types/Types';
+import { useRouter } from 'next/navigation';
 
 const ApplyedJobs = () => {
   const [jobs, setJobs] = useState<applicationData[]>([])
   const [isloading, setIsLoading] = useState(true)
+  const route=useRouter()
   const fetchapplyedjobs = async () => {
     try {
       const respons = await api.get("user/applyedjobs")
@@ -28,10 +30,12 @@ const ApplyedJobs = () => {
         <ApplyJobSkeleton />
 
       ) : (
-        <div className="flex-1 p-6 bg-white rounded-xl shadow-lg w-3/4">
+        <>
+        {jobs.map((job,index) => (
+<>
+        <div className="flex-1 p-6 bg-white rounded-xl shadow-lg w-3/4 hover:cursor-pointer"  onClick={()=>route.push(`jobs/details/${job?.jobId._id}`)} >
 
           <div className="space-y-6">
-            {jobs.map((job,index) => (
               <div key={index} className="border-b pb-6">
                 <div className="flex justify-between items-start">
                   <div>
@@ -60,9 +64,12 @@ const ApplyedJobs = () => {
                   </div>
                 </div>
               </div>
-            ))}
+            
           </div>
         </div>
+        </>
+      ))}
+</>
       )}
     </div>
   );
