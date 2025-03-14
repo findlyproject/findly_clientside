@@ -56,6 +56,7 @@ const[singlePost,setSinglePost]=useState(false)
     dispatch(setLikes(response.data.post));
     setLocalPost(response.data.post);
   };
+  const routes = currentUser ? "user" : "company";
 
   const handleNextSlide = () => {
     setSlideIndex((prevIndex) =>
@@ -331,7 +332,7 @@ const[singlePost,setSinglePost]=useState(false)
         {isShareMenuVisible && (
       <OutsideClickHandler onOutsideClick={() => setShareMenuVisible(false)}>
         <div className="absolute right-0 bg-white shadow-lg rounded-lg pt-4 pl-4 w-[400px] h-[150px] z-50">
-          <ShareMenu url={post.description} isShareMenuVisible={isShareMenuVisible} />
+        <ShareMenu url={`http://localhost:3000/${routes}/post/${post._id}`} isShareMenuVisible={isShareMenuVisible} />
         </div>
       </OutsideClickHandler>
     )}

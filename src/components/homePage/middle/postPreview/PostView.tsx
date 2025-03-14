@@ -37,7 +37,7 @@ const PostView = ({ postId }: PostViewProps) => {
   const dispatch = useAppDispatch();
   const currentUser = useAppSelector((state) => state.user.activeuser);
   const savedPosts = useAppSelector((state) => state.post.saved);
-
+  const routes = currentUser ? "user" : "company";
   useEffect(() => {
     const fetchPost = async () => {
       try {
@@ -139,7 +139,7 @@ const PostView = ({ postId }: PostViewProps) => {
       {isShareMenuVisible && (
         <OutsideClickHandler onOutsideClick={() => setShareMenuVisible(false)}>
           <div className="absolute right-0 bg-white shadow-lg rounded-lg pt-4 pl-4 w-[400px] h-[150px] z-50">
-            <ShareMenu url={post.description} isShareMenuVisible={isShareMenuVisible} />
+            <ShareMenu url={`http://localhost:3000/${routes}/post/${post._id}`} isShareMenuVisible={isShareMenuVisible} />
           </div>
         </OutsideClickHandler>
       )}
