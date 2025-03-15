@@ -12,6 +12,8 @@ import {
 
 export const PostMenu = ({ post }: PostPreviewProps) => {
   const { activeuser } = useAppSelector((state) => state.user);
+  const { activeCompany } = useAppSelector((state) => state.companyLogin);
+
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [UpdateOpen, setIsUpdateOpen] = useState(false); // post update
 
@@ -26,7 +28,7 @@ export const PostMenu = ({ post }: PostPreviewProps) => {
     <>
     <section className="absolute z-10">
       <div className=" bg-white text-sm rounded-lg shadow-lg  p-1">
-        {activeuser?._id == post?.owner?._id ? (
+        {activeuser?._id == post?.owner?._id || activeCompany?._id == post?.owner?._id ? (
           <>
             <button
               className="flex items-center w-full text-gray-700 hover:bg-gray-100 p-2 rounded-md transition mt-2"

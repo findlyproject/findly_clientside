@@ -379,11 +379,7 @@ export default function ManageAccount() {
         </h2>
 
         <div className="flex flex-col items-start">
-          <Link href={`/`} className="text-black text-md mb-2">
-            Change Password
-          </Link>
-
-          <h1 className="text-black text-md mb-4">{user?.email}</h1>
+         
           <div className="flex space-x-3">
           <button
             onClick={() => setShowModal(true)}

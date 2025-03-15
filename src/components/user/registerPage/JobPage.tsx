@@ -70,22 +70,13 @@ const[Titles,setTitles]=useState<TitleType[]>([])
               }
             };
             
-  const[titlesError,settitlesError]=useState("")
+  // const[titlesError,settitlesError]=useState("")
   const[joblocationError,setjoblocationError]=useState("")
   
     const router = useRouter();
-     
-
-     
-      
-
-      
 const validateForm=()=>{
   let isValid=true
-  if(JobTitles.length===0){
-    settitlesError('jobtitle is required')
-    isValid=false
-  }
+  
 
 
   if(JobLocations.length===0){
@@ -112,7 +103,7 @@ const handleSubmit = async (e: React.FormEvent) => {
 
 
 
-console.log("resultAction",resultAction);
+
 
 
 

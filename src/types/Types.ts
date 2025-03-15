@@ -401,6 +401,7 @@ export interface IReport {
     images:string [];
     video:string;
     owner: User |Company|string|null
+    ownerModel:string;
     likedBy: User[];
     reports:  IReport[];
     comments?:  IComment[] ;
