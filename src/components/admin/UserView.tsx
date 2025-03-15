@@ -6,27 +6,24 @@ import React, { useState, useEffect } from "react";
 import { CiMail } from "react-icons/ci";
 import { LuPhone } from "react-icons/lu";
 import { CiLocationOn } from "react-icons/ci";
-import { blockUser, fetchUsers } from "@/lib/store/features/actions/adminActions";
 import { useAppDispatch } from "@/lib/store/hooks";
 function UserView() {
   const { id } = useParams();
   const [user, setUser] = useState<User | null>(null);
-const dispatch=useAppDispatch()
-const fetchUser = async () => {
-  try {
-    const response = await api.get(`/admin/user/${id}`);
-    console.log("reeeeeee", response);
 
-    setUser(response.data.finduserprofile);
-  } catch (error) {
-    console.error("Failed to fetch user profile:", error);
-  }
-};
+  const fetchUser = async () => {
+    try {
+      const response = await api.get(`/admin/user/${id}`);
+      console.log("reeeeeee", response);
+
+      setUser(response.data.finduserprofile);
+    } catch (error) {
+      console.error("Failed to fetch user profile:", error);
+    }
+  };
   useEffect(() => {
-    
     fetchUser();
   }, []);
-
 
   return (
     <>
@@ -111,8 +108,6 @@ const fetchUser = async () => {
                   user?.location?.countryName}
               </p>
             </div>
-
-            
           </div>
 
           <div className="md:col-span-2 space-y-6">

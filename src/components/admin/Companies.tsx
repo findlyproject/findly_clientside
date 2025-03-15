@@ -16,7 +16,7 @@ const Companies = () => {
   const companies = useAppSelector((state) => state.admin.companies);
   const router = useRouter();
   const [currentPage, setCurrentPage] = useState(1);
-  const companiesPerPage = 10;
+  const companiesPerPage = 4
   useEffect(() => {
     listCompanies();
   }, []);
@@ -58,6 +58,7 @@ const Companies = () => {
     if (currentPage > 1) setCurrentPage(currentPage - 1);
   };
 
+
   return (
     <div className="flex flex-col">
       <div className="overflow-x-auto pb-4">
@@ -78,7 +79,7 @@ const Companies = () => {
                 </tr>
               </thead>
               <tbody className="divide-y divide-gray-300">
-                {companies.map((user, index) => (
+                {currentCompanies.map((user, index) => (
                   <tr
                     key={`${user._id}-${index}`}
                     className="bg-white hover:bg-gray-50"
@@ -141,7 +142,7 @@ const Companies = () => {
                   key={i}
                   className={`px-3 py-1 border rounded-md ${
                     currentPage === i + 1
-                      ? "bg-blue-600 text-white"
+                      ? "bg-primary text-white"
                       : "bg-gray-200"
                   }`}
                   onClick={() => setCurrentPage(i + 1)}

@@ -383,13 +383,13 @@ export const adminDeletePost = createAsyncThunk(
 
 export const removeReports = createAsyncThunk(
   "remove/reports",
-  async (postId: string, { rejectWithValue }
+  async (reportId: string, { rejectWithValue }
   ) => {
-    const response = await handleAsync<AxiosResponse>(() => api.post(`/admin/dismissreports/${postId}`));
+    const response = await handleAsync<AxiosResponse>(() => api.post(`/admin/dismissreports/${reportId}`));
     if (!response) {
-      return rejectWithValue("post deleting failed.");
+      return rejectWithValue("report deleting failed.");
     }
-    const data = response.data.ratings
+    const data = response.data.report
 
     return data
   }

@@ -5,9 +5,9 @@ import { useEffect, useState } from "react";
 
 import React from "react";
 import api, { socket } from "@/utils/api";
-import { FaEllipsisV } from "react-icons/fa";
 import { IoMdArrowBack } from "react-icons/io";
 import Image from "next/image";
+import { RiArrowDropDownLine } from "react-icons/ri";
 import { HiOutlineAdjustmentsHorizontal } from "react-icons/hi2";
 import { CiSearch } from "react-icons/ci";
 import EmojiPicker from "emoji-picker-react";
@@ -15,11 +15,15 @@ import { EmojiClickData } from "emoji-picker-react";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faSmile } from "@fortawesome/free-solid-svg-icons";
 import { BsThreeDots } from "react-icons/bs";
-import { Connection } from "@/types/Types";
+import { Connection, User } from "@/types/Types";
 
 import { MessageType } from "@/types/Types";
+import { toast } from "react-toastify";
 export default function RightSide() {
-
+  const dispatch = useAppDispatch();
+  const [starred, setStarred] = useState([]);
+  const [conversation, setConversation] = useState({});
+  const [Chatlist, setChatlist] = useState([]);
   const [selectedUser, setSelectedUser] = useState<Connection | null>(null);
   const [message, setMessage] = useState("");
   const [messages, setMessages] = useState<MessageType[]>([]);
@@ -27,10 +31,9 @@ export default function RightSide() {
   const [activeTab, setActiveTab] = useState("focused");
   const [focused, setFocused] = useState<Connection[]>([]);
 
-  const [other, setOther] = useState([]);
+  const [other, setOther] = useState<User[]>([]);
   const activeuser = useAppSelector((state) => state.user.activeuser);
   const [showPicker, setShowPicker] = useState(false);
-  // const [showPickerImogi, setShowPickerImogi] = useState(false);
 
   const [filterDropdown, setfilterDropdown] = useState(false);
   const [Dropdown, setDropdown] = useState<string | null>(null);
@@ -42,64 +45,87 @@ export default function RightSide() {
     event.stopPropagation();
     setDropdown(Dropdown === userId ? null : userId);
   };
-  // Fetch Chat Members
+
   useEffect(() => {
     const fetch = async () => {
       const response = await api.get(`/connecting/getconnection`);
+      console.log("response of members", response);
       setMembers(response.data.connections);
     };
     fetch();
-    
+    fetchMembers();
   }, []);
 
+  const handleStarred = async () => {
+    setActiveTab("starred");
+    const starredres = await api.get(`/message/starred`);
+    console.log("starredres", starredres);
+
+    setStarred(starredres.data.starredUsers);
+  };
 
   useEffect(() => {
     if (activeTab === "focused") {
-      setFocused(members);
+      setFocused(Chatlist);
     } else {
       setOther(members);
     }
-  }, [activeTab, members]);
+  }, [activeTab, members, Chatlist, starred]);
 
-  // const fetchMembers = () => {
-  //   const result = dispatch(findnMembers);
-  // };
+  const fetchMembers = () => {
+    const result = dispatch(findnMembers);
+    console.log("result", result);
+  };
 
+  console.log("other..", other);
+  const fetchMessages = async () => {
+    if (selectedUser) {
+      const responseofMessage = await api.get(
+        `/message/conversation/${activeuser?._id}/${
+          selectedUser?.connectionID?._id || selectedUser?._id
+        }`
+      );
+      console.log("responseofMessage", responseofMessage);
+      setMessages(responseofMessage.data.messages);
+    }
+  };
   useEffect(() => {
-    const fetchMessages = async () => {
-      if (selectedUser) {
-        const responseofMessage = await api.get(
-          `/message/conversation/${activeuser?._id}/${selectedUser.connectionID._id}`
-        );
-        setMessages(responseofMessage.data.messages);
-      }
-    };
     fetchMessages();
+    fetchUsers();
   }, [selectedUser, activeuser?._id]);
+  console.log("messages", messages);
 
-  const handleUserSelect = (user:Connection) => {
+  const handleUserSelect = (user: Connection) => {
+    console.log("user....", user);
     setSelectedUser(user);
     setMessages([]);
-    socket.emit("joinRoom", user.connectionID._id);
+    fetchMessages();
+    socket.emit("joinRoom", user?.connectionID?._id || user?._id);
   };
 
   // Send Message
   const handleSendMessage = async () => {
     const response = await api.post(
-      `/message/send/${activeuser?._id}/${selectedUser?.connectionID._id}`,
+      `/message/send/${activeuser?._id}/${
+        selectedUser?.connectionID?._id || selectedUser?._id
+      }`,
       { message: message }
     );
+    console.log("responseresponse", response);
 
     setMessage("");
+    fetchUsers();
   };
 
   useEffect(() => {
     socket.on("connect", () => {
+      console.log("Connected to server:", socket.id);
     });
 
     socket.emit("joinRoom", activeuser?._id);
 
     socket.on("receiveMessage", (data) => {
+      console.log("Received message:", data);
       setMessages((prevMessages) => [...prevMessages, data.message]);
     });
 
@@ -110,76 +136,153 @@ export default function RightSide() {
     };
   }, [selectedUser?.connectionID?._id]);
 
+  console.log("all messages", messages);
+  console.log("selectedUser", selectedUser);
 
   const handleEmojiClick = (emojiObject: EmojiClickData) => {
     setMessage((prev) => prev + emojiObject.emoji);
+  };
+  const fetchUsers = async () => {
+    const response = await api.get(`/message/chatlist`);
+    console.log("response of chatlist of active user", response);
+    setChatlist(response.data.chats);
+  };
+
+  useEffect(() => {
+    fetchUsers();
+  }, []);
+  console.log("Chatlist", Chatlist);
+
+  const fetchAllConversation = async () => {
+    const senderId = activeuser?._id;
+    const receiverId = selectedUser?._id || selectedUser?.connectionID?._id;
+    console.log("selectedUser...conver", selectedUser);
+
+    console.log("senderId,receiverId", senderId, receiverId);
+    if (!senderId || !receiverId) {
+      toast.warn("Sender or Receiver ID missing. Skipping API call.");
+      return;
+    }
+    const response = await api.get(
+      `/message/conversations/${senderId}/${receiverId}`
+    );
+
+    console.log("response of conversation of this user", response);
+    setConversation(response.data.conversation);
+  };
+  useEffect(() => {
+    if (
+      activeuser?._id &&
+      (selectedUser?._id || selectedUser?.connectionID?._id)
+    ) {
+      fetchAllConversation();
+    } else {
+      console.log("Waiting for IDs to be ready...");
+    }
+  }, [activeuser, selectedUser]);
+  console.log("conversss", conversation);
+
+  const handleBlock = async (recieverid: string, block: string) => {
+    if (!activeuser?._id || !recieverid) {
+      console.error("Missing active user or receiver ID");
+      return;
+    }
+    const response = await api.post(
+      `/message/blockOrunblock/${activeuser?._id}/${recieverid}`,
+      { action: block }
+    );
+    console.log("res", response);
+    fetchAllConversation();
+  };
+
+  const handleStar = async (recieverid: string, star: string) => {
+    const response = await api.post(
+      `/message/starOrRemovestar/${activeuser?._id}/${recieverid}`,
+      { action: star }
+    );
+    console.log("response of starring", response);
+    fetchAllConversation();
+  };
+  const handleClearChat = async (receiverId: string) => {
+    const response = await api.patch(
+      `/message/clearchat/${activeuser?._id}/${receiverId}`
+    );
+
+    console.log("response of clearchat", response);
+    fetchMessages();
+  };
+
+  const handleDeleteConversation = async (receiverId: string) => {
+    const response = await api.delete(
+      `/message/deleteconversation/${activeuser?._id}/${receiverId}`
+    );
+
+    console.log("response of handleDeleteConversation", response);
+    fetchAllConversation();
+    setActiveTab("focused");
   };
   return (
     <>
       <div
         id="hs-sidebar-empty-content"
-        className="hs-overlay  [--auto-close:lg] border lg:block lg:translate-x-0 lg:start-auto lg:bottom-0   
+        className="hs-overlay z-50 [--auto-close:lg] border lg:block lg:translate-x-0 lg:start-auto lg:bottom-0   
 hs-overlay-open:translate-x-0
 translate-x-full transition-all duration-300 transform 
 rounded-lg
-  overflow-y-auto h-[80vh] scroll-smooth scrollbar-hidden
-bg-white border-s border-gray-200 dark:bg-neutral-800 dark:border-neutral-700 w-full"
+  overflow-y-auto max-h-screen scroll-smooth scrollbar-hidden
+bg-white border-s border-gray-200 dark:bg-neutral-800 dark:border-neutral-700 w-[270px]"
         role="dialog"
         aria-label="Sidebar"
       >
-        <div className="flex  h-[80vh]">
-          {/* Sidebar - List of Users */}
+        <div className="flex h-screen">
           {!selectedUser && (
             <aside className="w-full  border-r overflow-y-auto">
               <div className="p-4">
                 <div className="flex justify-between items-center w-full border-b border-gray-400">
-                  {/* Left Section */}
-                  <div className="flex  items-center space-x-2 mb-4 ">
+                  <div className="flex items-center space-x-2 mb-4 ">
                     <Image
                       src={activeuser?.profileImage || ""}
                       alt="user"
-                      className="size-6 rounded-full"
+                      className="rounded-full"
                       width={32}
                       height={32}
                     />
                     <h2 className="text-sm font-semibold">Messaging</h2>
                   </div>
 
-                  {/* Right Section */}
                   <div className="flex items-center space-x-2">
                     <div className="relative">
-                      {/* Filter Button */}
                       <button
                         onClick={handleFilterDropdown}
-                        className="p-2  rounded-md hover:bg-gray-200 flex items-center gap-1"
+                        className="p-2 bg-gray-100 rounded-md hover:bg-gray-200 flex items-center gap-1"
                       >
                         <HiOutlineAdjustmentsHorizontal className="text-xl text-gray-600" />
                       </button>
 
-                      {/* Dropdown Menu */}
                       {filterDropdown && (
                         <div className="absolute right-0 mt-2 w-40 bg-white shadow-lg rounded-lg border z-50">
                           <ul className="flex flex-col">
                             <li>
-                              <button className="w-full text-left px-4 py-2 hover:bg-gray-100 text-sm font-semibold">
+                              <button
+                                onClick={() => setActiveTab("other")}
+                                className="w-full text-left px-4 py-2 hover:bg-gray-100 text-sm font-semibold"
+                              >
                                 My Connections
                               </button>
                             </li>
                             <li>
-                              <button className="w-full text-left px-4 py-2 hover:bg-gray-100 text-sm font-semibold">
+                              <button
+                                onClick={handleStarred}
+                                className="w-full text-left px-4 py-2 hover:bg-gray-100 text-sm font-semibold"
+                              >
                                 Starred
-                              </button>
-                            </li>
-                            <li>
-                              <button className="w-full text-left px-4 py-2 hover:bg-gray-100 text-sm font-semibold">
-                                Unread
                               </button>
                             </li>
                           </ul>
                         </div>
                       )}
                     </div>
-                  
+                    <RiArrowDropDownLine className="text-3xl" />
                   </div>
                 </div>
                 <br></br>
@@ -218,10 +321,44 @@ bg-white border-s border-gray-200 dark:bg-neutral-800 dark:border-neutral-700 w-
                 </div>
 
                 <div className="space-y-4 mt-4">
-                  {activeTab === "focused" ? (
-                    focused.map((chat, index) => (
+                  {activeTab === "starred" ? (
+                    starred?.length > 0 ? (
+                      starred.map((user, index) => (
+                        <div
+                          key={index}
+                          className={`flex items-center justify-between p-2 rounded-lg cursor-pointer transition ${
+                            selectedUser === user
+                              ? "bg-blue-100"
+                              : "bg-white hover:bg-gray-200"
+                          }`}
+                          onClick={() => handleUserSelect(user)}
+                        >
+                          <div className="flex items-center">
+                            <img
+                              src={user?.profileImage}
+                              alt="User"
+                              className="w-10 h-10 rounded-full"
+                            />
+                            <div className="ml-3">
+                              <h2 className="text-sm font-semibold">
+                                {user.firstName}
+                              </h2>
+                              <p className="text-sm text-gray-400">
+                                {user.jobTitle?.[0]}
+                              </p>
+                            </div>
+                          </div>
+                        </div>
+                      ))
+                    ) : (
+                      <p className="text-gray-500 text-center">
+                        No Starred Users
+                      </p>
+                    )
+                  ) : activeTab === "other" ? (
+                    other.map((chat, index) => (
                       <div
-                        key={chat?._id}
+                        key={index}
                         className={`flex items-center justify-between p-2 rounded-lg cursor-pointer transition ${
                           selectedUser === chat
                             ? "bg-blue-100"
@@ -229,58 +366,87 @@ bg-white border-s border-gray-200 dark:bg-neutral-800 dark:border-neutral-700 w-
                         }`}
                         onClick={() => handleUserSelect(chat)}
                       >
-                        {/* User Info - Aligned to the left */}
                         <div className="flex items-center">
-                          <Image
+                          <img
                             src={chat.connectionID?.profileImage}
                             alt="User"
                             className="w-10 h-10 rounded-full"
-                            width={30}
-                            height={30}
                           />
                           <div className="ml-3">
                             <h2 className="text-sm font-semibold">
                               {chat.connectionID?.firstName}
                             </h2>
+                            <p className="text-sm text-gray-400">
+                              {chat.connectionID?.jobTitle[0]}
+                            </p>
                           </div>
-                        </div>
-
-                        {/* Three Dots Icon - Aligned to the right */}
-                        <div className="relative">
-                          <button
-                            onClick={(event) =>
-                              handleDropdown(event, chat.connectionID?._id)
-                            }
-                          >
-                            <BsThreeDots className="text-gray-500 hover:text-gray-700 cursor-pointer" />
-                          </button>
-
-                          {Dropdown === chat.connectionID?._id && (
-                            <div className="absolute top-full right-0 mt-1 w-40 bg-white shadow-lg rounded-lg border z-50">
-                              <ul className="flex flex-col">
-                                <li>
-                                  <button className="w-full text-left px-4 py-2 hover:bg-gray-100 text-sm font-semibold">
-                                    Star
-                                  </button>
-                                </li>
-                                <li>
-                                  <button className="w-full text-left px-4 py-2 hover:bg-gray-100 text-sm font-semibold">
-                                    Block
-                                  </button>
-                                </li>
-                                <li>
-                                  <button className="w-full text-left px-4 py-2 hover:bg-gray-100 text-sm font-semibold">
-                                    Delete conversation
-                                  </button>
-                                </li>
-                              </ul>
-                            </div>
-                          )}
                         </div>
                       </div>
                     ))
                   ) : (
-                    <div>noooo</div>
+                    <div>
+                      {focused.map((item) => {
+                        const formattedDate = new Date(
+                          item.lastMessage.timestamp
+                        ).toLocaleDateString("en-US", {
+                          month: "long",
+                          day: "numeric",
+                        });
+
+                        return (
+                          <div
+                            key={item.user?._id}
+                            className={`flex items-center justify-between p-2 rounded-lg cursor-pointer transition  ${
+                              selectedUser === item.user
+                                ? "bg-blue-100"
+                                : "bg-white hover:bg-gray-200"
+                            }`}
+                            onClick={() => handleUserSelect(item.user)}
+                          >
+                            <div className="flex items-center">
+                              <img
+                                src={item.user?.profileImage}
+                                alt="User"
+                                className="w-10 h-10 rounded-full object-cover"
+                              />
+                              <div className="ml-3 ">
+                                <h2 className="text-sm font-semibold">
+                                  {item.user?.firstName}
+                                </h2>
+
+                                <p className="text-sm text-gray-600">
+                                  {item.lastMessage?.message && (
+                                    <>
+                                      <span className="font-medium">
+                                        {item.lastMessage?.sender ===
+                                        activeuser?._id
+                                          ? "You: "
+                                          : item.user?.firstName + ": "}
+                                      </span>
+                                      {item.lastMessage?.message}
+                                    </>
+                                  )}
+                                </p>
+                              </div>
+                            </div>
+
+                            <div className="ml-auto text-xs text-gray-500 text-end flex flex-col items-end">
+                              {item.lastMessage?.message && (
+                                <span>{formattedDate}</span>
+                              )}
+
+                              {item.unreadCount > 0 &&
+                                item.lastMessage.sender !== activeuser?._id &&
+                                !item.lastMessage.seen && (
+                                  <div className="mt-1 inline-flex items-center justify-center w-5 h-5 rounded-full bg-primary text-white text-[10px]">
+                                    {item.unreadCount}
+                                  </div>
+                                )}
+                            </div>
+                          </div>
+                        );
+                      })}
+                    </div>
                   )}
                 </div>
               </div>
@@ -297,55 +463,147 @@ bg-white border-s border-gray-200 dark:bg-neutral-800 dark:border-neutral-700 w-
                         onClick={() => setSelectedUser(null)}
                         className="text-xl"
                       />
-                      <Image
-                        src={selectedUser?.connectionID.profileImage}
+                      <img
+                        src={
+                          selectedUser?.connectionID?.profileImage ||
+                          selectedUser?.profileImage
+                        }
                         className="w-10 h-10 rounded-full"
                         alt="User"
-                        width={10}
-                        height={10}
-
                       />
                       <div className="ml-3">
                         <h2 className="font-medium">
-                          {selectedUser?.connectionID.firstName}
+                          {selectedUser?.connectionID?.firstName ||
+                            selectedUser?.firstName}
                         </h2>
                       </div>
                     </div>
 
                     <div className="relative">
-                      <div className="flex space-x-4 cursor-pointer">
-                        <FaEllipsisV className="text-gray-600" />
-                      </div>
+                      <button
+                        onClick={(event) =>
+                          handleDropdown(
+                            event,
+                            selectedUser?.connectionID?._id || selectedUser?._id
+                          )
+                        }
+                      >
+                        <BsThreeDots className="text-gray-500 hover:text-gray-700 cursor-pointer" />
+                      </button>
+
+                      {(Dropdown === selectedUser?.connectionID?._id ||
+                        Dropdown === selectedUser?._id) &&
+                        selectedUser?._id && (
+                          <div className="absolute top-full right-0 mt-1 w-40 bg-white shadow-lg rounded-lg border z-50">
+                            <ul className="flex flex-col">
+                              {conversation?.isStarredUsers
+                                ?.map((id) => id.toString())
+                                .includes(
+                                  selectedUser?._id ||
+                                    selectedUser?.connectionID?._id
+                                ) ? (
+                                <li>
+                                  <button
+                                    onClick={() =>
+                                      handleStar(
+                                        selectedUser?.connectionID?._id ||
+                                          selectedUser?._id,
+                                        "removestar"
+                                      )
+                                    }
+                                    className="w-full text-left px-4 py-2 hover:bg-gray-100 text-sm font-semibold"
+                                  >
+                                    Remove star
+                                  </button>
+                                </li>
+                              ) : (
+                                <li>
+                                  <button
+                                    onClick={() =>
+                                      handleStar(
+                                        selectedUser?.connectionID?._id ||
+                                          selectedUser?._id,
+                                        "star"
+                                      )
+                                    }
+                                    className="w-full text-left px-4 py-2 hover:bg-gray-100 text-sm font-semibold"
+                                  >
+                                    Star
+                                  </button>
+                                </li>
+                              )}
+
+                              {conversation?.isBlockedUsers
+                                ?.map((id) => id.toString())
+                                .includes(
+                                  activeuser?._id || selectedUser?._id
+                                ) ? (
+                                <li>
+                                  <button
+                                    onClick={() =>
+                                      handleBlock(
+                                        selectedUser?.connectionID?._id ||
+                                          selectedUser?._id,
+                                        "unblock"
+                                      )
+                                    }
+                                    className="w-full text-left px-4 py-2 hover:bg-gray-100 text-sm font-semibold"
+                                  >
+                                    UnBlock
+                                  </button>
+                                </li>
+                              ) : (
+                                <li>
+                                  <button
+                                    onClick={() =>
+                                      handleBlock(
+                                        selectedUser?.connectionID?._id ||
+                                          selectedUser?._id,
+                                        "block"
+                                      )
+                                    }
+                                    className="w-full text-left px-4 py-2 hover:bg-gray-100 text-sm font-semibold"
+                                  >
+                                    Block
+                                  </button>
+                                </li>
+                              )}
+
+                              <li>
+                                <button
+                                  onClick={() =>
+                                    handleDeleteConversation(
+                                      selectedUser?.connectionID?._id ||
+                                        selectedUser?._id
+                                    )
+                                  }
+                                  className="w-full text-left px-4 py-2 hover:bg-gray-100 text-sm font-semibold"
+                                >
+                                  Delete conversation
+                                </button>
+                              </li>
+
+                              <li>
+                                <button
+                                  onClick={() =>
+                                    handleClearChat(
+                                      selectedUser?.connectionID?._id ||
+                                        selectedUser?._id
+                                    )
+                                  }
+                                  className="w-full text-left px-4 py-2 hover:bg-gray-100 text-sm font-semibold"
+                                >
+                                  Clear chat
+                                </button>
+                              </li>
+                            </ul>
+                          </div>
+                        )}
                     </div>
                   </header>
 
-                  {/*                   
-                  <div className="flex-grow p-4 overflow-y-auto"> 
-                    {messages.map((msg, index) => (
-                      <div
-                        key={index}
-                        className={`flex mb-2 ${
-                          msg.sender === activeuser._id
-                            ? "justify-end"
-                            : "justify-start"
-                        }`}
-                      >
-                        <span
-                          className={`inline-block p-2 rounded-lg max-w-xs break-words ${
-                            msg.sender === activeuser._id
-                              ? "bg-blue-500 text-white"
-                              : "bg-gray-200 text-black"
-                          }`}
-                        >
-                          {msg.message}
-                        </span>
-                      </div>
-                    ))}
-                  </div>   */}
-
                   <div className="flex-grow p-4 overflow-y-auto">
                     {messages.map((msg, index) => {
-                      // Check if the previous message was sent by the same sender
                       const showProfile =
                         index === 0 ||
                         messages[index - 1].sender !== msg.sender;
@@ -357,31 +615,28 @@ bg-white border-s border-gray-200 dark:bg-neutral-800 dark:border-neutral-700 w-
                             msg.sender === activeuser?._id ? "ml-auto" : ""
                           }`}
                         >
-                          {/* Show name and profile only if it's the first message of a sequence */}
                           {showProfile && (
                             <div className="flex items-center space-x-1">
-                              <Image
-  src={
-    msg.sender === activeuser?._id
-      ? activeuser?.profileImage || "/default-avatar.png"
-      : selectedUser?.connectionID?.profileImage || "/default-avatar.png"
-  }
-  className="w-8 h-8 rounded-full"
-  width={30}
-  height={30}
-  alt="User Profile"
-  loading="lazy"
-/>
-
+                              <img
+                                src={`${
+                                  msg.sender === activeuser?._id
+                                    ? activeuser?.profileImage
+                                    : selectedUser?.connectionID?.profileImage
+                                    ? selectedUser?.connectionID?.profileImage
+                                    : selectedUser?.profileImage
+                                }`}
+                                className="w-8 h-8 rounded-full"
+                              />
                               <p className="text-sm font-semibold">
                                 {msg.sender === activeuser?._id
                                   ? "You"
-                                  : selectedUser?.connectionID.firstName}
+                                  : selectedUser?.connectionID?.firstName
+                                  ? selectedUser?.connectionID?.firstName
+                                  : selectedUser?.firstName}
                               </p>
                             </div>
                           )}
 
-                          {/* Message Bubble */}
                           <div
                             className={`px-3.5 py-1 rounded-md mb-2 flex flex-col ${
                               msg.sender === activeuser?._id
@@ -389,12 +644,10 @@ bg-white border-s border-gray-200 dark:bg-neutral-800 dark:border-neutral-700 w-
                                 : "bg-gray-100 text-gray-900"
                             }`}
                           >
-                            {/* Message Text */}
                             <h5 className="text-sm font-normal leading-snug">
                               {msg.message}
                             </h5>
 
-                            {/* Timestamp Inside Bubble */}
                             <h6 className="text-gray-300 text-xs font-light self-end mt-1">
                               {new Date(msg.timestamp).toLocaleTimeString([], {
                                 hour: "2-digit",
@@ -405,15 +658,21 @@ bg-white border-s border-gray-200 dark:bg-neutral-800 dark:border-neutral-700 w-
                         </div>
                       );
                     })}
+                    <>
+                      <p>
+                        {conversation?.isBlockedUsers?.map((item) =>
+                          item == activeuser._id
+                            ? "you blocked this user"
+                            : "you are blocked by this user"
+                        )}
+                      </p>
+                    </>
                   </div>
 
                   <footer className="p-4   flex items-center">
                     <div className="w-full pl-3 pr-1 py-1 flex items-center gap-2 justify-between">
-                      {/* Input & Emoji Section */}
                       <div className="relative flex flex-col w-full">
-                        {/* Input Field & Icons */}
                         <div className="relative flex items-center bg-white px-3 py-2 rounded-full border border-gray-300 w-full gap-2">
-                          {/* Emoji Button */}
                           <button
                             type="button"
                             className="p-2 rounded-full"
@@ -424,7 +683,6 @@ bg-white border-s border-gray-200 dark:bg-neutral-800 dark:border-neutral-700 w-
                             </span>
                           </button>
 
-                          {/* Input Field */}
                           <div className="flex-grow">
                             <input
                               className="w-full text-black text-xs font-medium leading-4 focus:outline-none px-2"
@@ -434,30 +692,7 @@ bg-white border-s border-gray-200 dark:bg-neutral-800 dark:border-neutral-700 w-
                             />
                           </div>
 
-                          {/* Attach (Clip) Icon and Send Button */}
                           <div className="flex items-center ">
-                            <button>
-                              <svg
-                                className="cursor-pointer"
-                                xmlns="http://www.w3.org/2000/svg"
-                                width="22"
-                                height="22"
-                                viewBox="0 0 22 22"
-                                fill="none"
-                              >
-                                <g id="Attach 01">
-                                  <path
-                                    d="M14.9332 7.79175L8.77551 14.323C8.23854 14.8925 7.36794 14.8926 6.83097 14.323C6.294 13.7535 6.294 12.83 6.83097 12.2605L12.9887 5.72925"
-                                    stroke="#9CA3AF"
-                                    strokeWidth="1.6"
-                                    strokeLinecap="round"
-                                    strokeLinejoin="round"
-                                  />
-                                </g>
-                              </svg>
-                            </button>
-
-                            {/* Send Button */}
                             <button
                               className="flex items-center px-2 py-2 bg-primary rounded-full shadow text-white text-xs font-semibold"
                               onClick={handleSendMessage}
@@ -481,7 +716,6 @@ bg-white border-s border-gray-200 dark:bg-neutral-800 dark:border-neutral-700 w-
                           </div>
                         </div>
 
-                        {/* Emoji Picker */}
                         {showPicker && (
                           <div
                             className="absolute bottom-full  left-0 mb-2 bg-white shadow-lg rounded-lg p-1 z-50 ml-[-15]"
@@ -497,23 +731,6 @@ bg-white border-s border-gray-200 dark:bg-neutral-800 dark:border-neutral-700 w-
                       </div>
                     </div>
                   </footer>
-
-                  {/* <input
-                      type="text"
-                      placeholder="Type a message..."
-                      className="flex-1 p-2 border rounded-l-md focus:outline-none"
-                      value={message}
-                      onChange={(e) => setMessage(e.target.value)}
-                    />
-                    <button className="text-gray-600 px-4 py-2">
-                      <HiPaperClip />
-                    </button>
-                    <button
-                      onClick={handleSendMessage}
-                      className="bg-blue-500 text-white px-4 py-2 rounded-r-md"
-                    >
-                      <LuSend />
-                    </button> */}
                 </>
               ) : (
                 <div className="flex items-center justify-center h-full text-gray-500">

@@ -2,18 +2,18 @@
 
 import { fetchAllPostsAdmin } from "@/lib/store/features/actions/postActions";
 import { useAppDispatch, useAppSelector } from "@/lib/store/hooks";
-import { Company, User } from "@/types/Types";
+import { Company, IPost, User } from "@/types/Types";
 
 import Image from "next/image";
 import { useRouter } from "next/navigation";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 
 const Posts = () => {
+  const [currentPage, setCurrentPage] = useState(1);
+  const postPerPage = 5;
   const dispatch = useAppDispatch();
 
-  const posts = useAppSelector((state) => state.post.postsAdmin);
-
-  console.log("posts", posts);
+  const posts = useAppSelector((state) => state.post.postsAdmin as IPost[]);
 
   useEffect(() => {
     dispatch(fetchAllPostsAdmin());
@@ -28,6 +28,14 @@ const Posts = () => {
     return typeof owner === "object" && owner !== null && "name" in owner;
   };
 
+  const totalPages = Math.ceil(posts.length / postPerPage);
+  const indexOfLastUser = currentPage * postPerPage;
+  const indexOfFirstUser = indexOfLastUser - postPerPage;
+  const currentPosts = posts.slice(indexOfFirstUser, indexOfLastUser);
+
+  const goToPage = (pageNumber: number) => {
+    setCurrentPage(pageNumber);
+  };
   return (
     <div className="overflow-x-auto max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-10">
       {Array.isArray(posts) && posts.length === 0 ? (
@@ -51,8 +59,8 @@ const Posts = () => {
             </tr>
           </thead>
           <tbody>
-            {Array.isArray(posts) &&
-              posts.map((post, index) => (
+            {Array.isArray(currentPosts) &&
+              currentPosts.map((post, index) => (
                 <tr
                   key={`${post._id}-${index}`}
                   className="hover:bg-gray-50 transition duration-200 ease-in-out"
@@ -152,47 +160,39 @@ const Posts = () => {
         </table>
       )}
 
-      <nav
-        className="flex flex-wrap items-center justify-between mt-6"
-        aria-label="Table navigation"
-      >
-        <span className="text-xs sm:text-sm font-normal text-gray-500 mb-2 sm:mb-0">
-          Showing <span className="font-semibold text-gray-900">1-10</span> of{" "}
-          <span className="font-semibold text-gray-900">1000</span>
-        </span>
-        <ul className="inline-flex space-x-1 text-sm h-8">
-          <li>
-            <a
-              href="#"
-              className="flex items-center justify-center px-3 h-8 leading-tight text-gray-500 bg-white border border-gray-300 rounded-l-md hover:bg-gray-100"
+      <div className="flex justify-center items-center p-4 gap-2">
+        <button
+          onClick={() => goToPage(currentPage - 1)}
+          disabled={currentPage === 1}
+          className="px-3 py-1 bg-gray-300 rounded disabled:opacity-50"
+        >
+          Previous
+        </button>
+
+        {Array.from({ length: totalPages }, (_, index) => index + 1).map(
+          (page) => (
+            <button
+              key={page}
+              onClick={() => goToPage(page)}
+              className={`px-3 py-1 rounded ${
+                currentPage === page
+                  ? "bg-primary text-white"
+                  : "bg-gray-200 hover:bg-gray-300"
+              }`}
             >
-              Previous
-            </a>
-          </li>
-          {[1, 2, 3, 4, 5].map((page) => (
-            <li key={page}>
-              <a
-                href="#"
-                className={`flex items-center justify-center px-3 h-8 leading-tight border border-gray-300 ${
-                  page === 3
-                    ? "text-white bg-primary"
-                    : "text-gray-500 bg-white hover:bg-gray-100"
-                }`}
-              >
-                {page}
-              </a>
-            </li>
-          ))}
-          <li>
-            <a
-              href="#"
-              className="flex items-center justify-center px-3 h-8 leading-tight text-gray-500 bg-white border border-gray-300 rounded-r-md hover:bg-gray-100"
-            >
-              Next
-            </a>
-          </li>
-        </ul>
-      </nav>
+              {page}
+            </button>
+          )
+        )}
+
+        <button
+          onClick={() => goToPage(currentPage + 1)}
+          disabled={currentPage === totalPages}
+          className="px-3 py-1 bg-gray-300 rounded disabled:opacity-50"
+        >
+          Next
+        </button>
+      </div>
     </div>
   );
 };
