@@ -341,7 +341,7 @@ function Navbar() {
                     className="absolute top-full right-0  w-64 bg-white shadow-lg rounded-lg p-2 "
                   >
                     <div className="py-2">
-                      <p className="px-4 text-xs">Your accounts</p>
+                      <p className="px-4 text-xs text-gray-500">Your accounts</p>
                       <button
   className="block w-full text-left px-4 py-2 text-sm hover:bg-gray-100"
   onClick={() => router.push(activeuser ? "/user/profile" : "/company/profile")}
@@ -358,7 +358,7 @@ function Navbar() {
                     </div>
 
                     <div className="py-3">
-                      <p className="px-4 text-xs">More options</p>
+                      <p className="px-4 text-xs text-gray-500">More options</p>
                       <button
                         className="block w-full text-left px-4 py-2 text-sm hover:bg-gray-100"
                         onClick={() => router.push("/mynetwork")}
@@ -373,13 +373,11 @@ function Navbar() {
                       </button>
                       <button
                         className="block w-full text-left px-4 py-2 text-sm hover:bg-gray-100"
-                        onClick={() => router.push("settings")}
+                        onClick={() => router.push(`/${route}/settings`)}
                       >
                         Settings
                       </button>
-                      <button className="block w-full text-left px-4 py-2 text-sm hover:bg-gray-100">
-                        Delete Account
-                      </button>
+                     
                       <button
                         className="block w-full text-left px-4 py-2 text-sm hover:bg-gray-100"
                         onClick={handleLogout}

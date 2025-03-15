@@ -233,7 +233,7 @@ export const updateBasicInfo = createAsyncThunk(
       dispatch(setActive(response?.data.user));
       return response?.data.user;
     } catch  {
-      return rejectWithValue("personal datail not updated");
+      return rejectWithValue("proffessional detail not updated");
     }
   }
 );
@@ -249,7 +249,6 @@ export const updateOtherDetails = createAsyncThunk(
         `user/update-other-details`,
         otherDetails,
       ));
-      console.log(response)
       dispatch(setActive(response?.data.user));
       return response?.data.user;
     } catch {

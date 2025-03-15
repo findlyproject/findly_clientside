@@ -2,6 +2,7 @@
 
 import { useAppSelector } from "@/lib/store/hooks";
 import api from "@/utils/api";
+import handleAsync from "@/utils/handleAsync";
 import Image from "next/image";
 import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
@@ -10,18 +11,21 @@ export  function FeedIdentityModule  (){
   const { activeuser } = useAppSelector((state) => state.user);
   const { activeCompany } = useAppSelector((state) => state.companyLogin);
   const [postlength,setPostLength]=useState(0)
-  useEffect(() => {
-    const fetchPostLength = async () => {
-      try {
-        const response = await api.get(`/post/owner`);
-        setPostLength(response.data.posts.length);
-      } catch (error) {
-        console.error("Error fetching posts:", error);
-      }
-    };
+  const route =activeuser? "user":"company"
+  // useEffect(() => {
+  //   const fetchPostLength = async () => {
+  //     try {
+  //       const response = await handleAsync(()=>api.get(`${route}/posts`));
+  //       if(response?.status==200){
+  //       setPostLength(response.data.posts.length);
+  //       }
+  //     } catch (error) {
+  //       console.error("Error fetching posts:", error);
+  //     }
+  //   };
   
-    fetchPostLength();
-  }, []); // Empty dependency array runs the effect only once
+  //   fetchPostLength();
+  // }, []); // Empty dependency array runs the effect only once
   
   const router = useRouter()
   return (

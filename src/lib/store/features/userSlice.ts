@@ -105,7 +105,8 @@ const loginSlice = createSlice({
       action: PayloadAction<Partial<typeof state.professionalData>>
     ) => {
       if (!action.payload) return;
-
+    
+      // Initialize professionalData only if it doesn't exist
       if (!state.professionalData) {
         state.professionalData = {
           location: state.activeuser?.location || undefined,
@@ -117,32 +118,28 @@ const loginSlice = createSlice({
           projects: state.activeuser?.projects || [],
         };
       }
+    
+      // Loop through keys in action.payload
       Object.entries(action.payload).forEach(([key, value]) => {
         const typedKey = key as keyof typeof state.professionalData;
-
-        if (
-          Array.isArray(state.professionalData[typedKey]) &&
-          Array.isArray(value)
-        ) {
-          const existingArray = state.professionalData[
-            typedKey
-          ] as unknown as User[];
-
-          const uniqueValues = Array.from(
-            new Map(
-              [...existingArray, ...value].map((item) => [
-                JSON.stringify(item),
-                item,
-              ])
-            ).values()
+    
+        if (Array.isArray(state.professionalData[typedKey]) && Array.isArray(value)) {
+          const existingArray = state.professionalData[typedKey] as any[];
+    
+          // Remove duplicates based on a unique property (e.g., `id`)
+          const mergedArray = [...existingArray, ...value];
+          const uniqueArray = mergedArray.filter(
+            (obj, index, self) =>
+              index === self.findIndex((t) => JSON.stringify(t) === JSON.stringify(obj))
           );
-
-          state.professionalData[typedKey] = uniqueValues as never;
+    
+          state.professionalData[typedKey] = uniqueArray as never;
         } else if (value !== undefined) {
           state.professionalData[typedKey] = value as never;
         }
       });
     },
+    
 
     setRemoveField: (
       state,

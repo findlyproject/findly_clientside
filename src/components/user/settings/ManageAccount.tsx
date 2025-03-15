@@ -1,6 +1,5 @@
 "use client";
 import { useAppDispatch, useAppSelector } from "@/lib/store/hooks";
-import api from "@/utils/api";
 import { IoMdCloseCircle } from "react-icons/io";
 
 import {
@@ -17,9 +16,12 @@ import { IoIosLogOut } from "react-icons/io";
 
 import { useRouter } from "next/navigation";
 import DeleteAccount from "./DeleteAccount";
-import { SetLogout } from "@/lib/store/features/userSlice";
+import { setDetailes, SetLogout } from "@/lib/store/features/userSlice";
 import { setCompanyLogOut } from "@/lib/store/features/companyslice";
 import { deleteAccount, deleteAccountVerification } from "@/lib/store/features/actions/userActions";
+import { useTranslation } from "@/Context/TranslationContext";
+import api from "@/utils/api";
+import { button } from "@material-tailwind/react";
 
 
 export default function ManageAccount() {
@@ -33,6 +35,7 @@ export default function ManageAccount() {
   const [selectedReasons, setSelectedReasons] = useState<number[]>([]);
   const user = useAppSelector((state) => state.user.activeuser );
   const company = useAppSelector((state) => state.companyLogin.activeCompany );
+  const[activeSubscriptions,setactiveSubscriptions]=useState()
   const route = user ? "user" : "company";
   const dispatch = useAppDispatch();
   const reasons = [
@@ -51,6 +54,13 @@ export default function ManageAccount() {
     "We have concerns about data security and privacy",
     "Other",
   ];
+  const { translateText, language, setLanguage } = useTranslation();
+  const [translatedText, setTranslatedText] = useState("");
+
+  const handleTranslate = async () => {
+    const translated = await translateText("Hello, how are you?");
+    setTranslatedText(translated);
+  };
 
   const closeOtpModal = () => {
     setShowPick(false);
@@ -85,7 +95,22 @@ export default function ManageAccount() {
     setIsDarkMode(!isDarkMode);
     document.documentElement.classList.toggle("dark");
   };
-
+  useEffect(() => {
+    const details = async () => {
+      const response = await api.get(`/payment/subscriptiondetails`);
+      console.log("Response of details of payment", response);
+  
+      // Filter active subscriptions
+      const activeSubscription = response.data.subscription.filter((sub) =>
+        new Date(sub.endDate) > new Date()
+      );
+      setactiveSubscriptions(activeSubscription)
+     
+    };
+  
+    details();
+  }, []);
+  
   const handleDropdown = () => {
     setIsShow(!isShow);
   };
@@ -167,8 +192,8 @@ export default function ManageAccount() {
                 <span className="font-semibold">Email:</span> {user?.email}
               </p>
               <p className="text-lg text-gray-600">
-                <span className="font-semibold">Location:</span>{" "}
-                {user?.location?.city}
+                <span className="font-semibold">Gender:</span>{" "}
+                {user?.gender}
               </p>
             </div>
           </div>
@@ -223,14 +248,14 @@ export default function ManageAccount() {
         <div className="mt-6 flex justify-end">
           <Link
             href={`/${route}/profile/edit`}
-            className="text-blue-500 hover:underline"
+            className="text-primary hover:underline"
           >
             Edit Profile
           </Link>
         </div>
       </div>
 
-      <div className="bg-white rounded-2xl shadow-lg p-6 sm:p-8 w-full max-w-3xl">
+      {/* <div className="bg-white rounded-2xl shadow-lg p-6 sm:p-8 w-full max-w-3xl">
         <h2 className="text-xl font-semibold text-gray-700 mb-4">Display</h2>
 
         <div className="flex justify-between items-center">
@@ -251,37 +276,57 @@ export default function ManageAccount() {
             </div>
           </label>
         </div>
+      </div> */}
+
+<div className="bg-white rounded-2xl shadow-lg p-6 sm:p-8 w-full max-w-3xl">
+      <h2 className="text-xl font-semibold text-gray-700 mb-4">
+        Language Preference
+      </h2>
+
+      <div className="flex justify-between items-center mb-4">
+        <h1>Current Language: {language.toUpperCase()}</h1>
+        <select
+          onChange={(e) => setLanguage(e.target.value)}
+          value={language}
+          className="border rounded-md p-2"
+        >
+          <option value="en">English</option>
+          <option value="fr">French</option>
+          <option value="es">Spanish</option>
+          <option value="de">German</option>
+        </select>
       </div>
 
-      <div className="bg-white rounded-2xl shadow-lg p-6 sm:p-8 w-full max-w-3xl">
-        <h2 className="text-xl font-semibold text-gray-700 mb-4">
-          Language Preference
-        </h2>
+      <button
+        onClick={handleTranslate}
+        className="bg-primary text-white px-4 py-2 rounded-md hover:bg-blue-700"
+      >
+        Translate
+      </button>
 
-        <div className="flex justify-between items-center">
-          <h1>Language</h1>
-          <button className="bg-primary text-white font-semibold px-4 py-2 rounded-full">
-            Select
-          </button>
-        </div>
-      </div>
+      {translatedText && (
+        <p className="mt-4 text-gray-700 font-semibold">
+          Translated: {translatedText}
+        </p>
+      )}
+    </div>
 
       <div className="bg-white rounded-2xl shadow-lg p-6 sm:p-8 w-full max-w-3xl">
         <h2 className="text-xl font-semibold text-gray-700 mb-4">
           Subscriptions & Payments
         </h2>
 
-        <div className="flex flex-col">
-          <Link href={`/`} className="text-primary text-md mb-2">
+        <div className=" flex-col space-y-4">
+          <Link href={`/${route}/premium`} className="text-primary text-md mb-2">
             Upgrade your account
           </Link>
-          <hr className="w-[calc(100%+64px)] -mx-8 border-gray-300" />
-          <div className="flex justify-between items-center">
+          
+          <div className="flex justify-between items-center" onClick={handleDropdown}>
             <button className="text-primary text-start text-md mb-2">
-              View Purchase History
+              View Active Subscription
             </button>
             <svg
-              onClick={handleDropdown}
+              
               className={`w-4 h-4 transition-transform ${
                 isShow ? "rotate-180" : "rotate-0"
               }`}
@@ -301,18 +346,35 @@ export default function ManageAccount() {
 
           {isShow && (
             <div className="bg-gray-100 rounded-lg p-4 text-sm text-gray-600">
-              <ul className="space-y-2">
-                <li>Order #12345 - $49.99 - Completed</li>
-                <li>Order #67890 - $29.99 - Completed</li>
-                <li>Order #11223 - $19.99 - Pending</li>
-              </ul>
+             <ul className="space-y-2">
+             <ul className="space-y-2">
+  {activeSubscriptions?.map((subscription) => (
+    <li key={subscription._id} className="p-2 border rounded-lg">
+      <strong>Plan:</strong> {subscription.plan} <br />
+      <strong>Price:</strong> ₹{subscription.price} <br />
+      <strong>End Date:</strong> {new Date(subscription.endDate).toLocaleDateString()} <br />
+      <strong>Payment Status:</strong> {subscription.paymentStatus} <br />
+
+      {subscription.paymentStatus === "pending" && (
+        <button
+          onClick={() => router.push(`/${route}/premium/verification/${subscription.sessionId}`)}
+          className="mt-2 px-4 py-2 bg-blue-500 text-white rounded-lg hover:bg-blue-600 transition"
+        >
+          Finish
+        </button>
+      )}
+    </li>
+  ))}
+</ul>
+
+</ul>
+
             </div>
           )}
         </div>
-      </div>
+      
 
-      <div className="bg-white rounded-2xl shadow-lg p-6 sm:p-8 w-full max-w-3xl">
-        <h2 className="text-xl font-semibold text-gray-700 mb-4">
+        <h2 className="text-xl font-semibold text-gray-700 mt-5 mb-4">
           Account Management
         </h2>
 
@@ -322,15 +384,22 @@ export default function ManageAccount() {
           </Link>
 
           <h1 className="text-black text-md mb-4">{user?.email}</h1>
+          <div className="flex space-x-3">
           <button
             onClick={() => setShowModal(true)}
-            className="text-red-900 text-md mb-2"
+            className="bg-red-500 rounded-lg p-3 text-white text-md mb-2"
           >
             Delete Account
           </button>
-          <button className="text-xl text-red-900" title="Logout">
-            <IoIosLogOut />
-          </button>
+          <button
+            onClick={() => setShowModal(true)}
+            className="bg-red-500 flex gap-3 rounded-lg p-3 text-white text-md mb-2"
+          >
+
+  Logout <IoIosLogOut className="text-xl pt-1" />
+</button>
+
+          </div>
 
           {showModal &&
             (user ? (

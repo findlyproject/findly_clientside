@@ -32,9 +32,14 @@ const postSlice = createSlice({
   initialState,
   reducers: {
     setPosts: (state, action: PayloadAction<IPost[]>) => {
-      state.posts = [...(state.posts ?? []), ...action.payload];
-      
+      const existingIds = new Set(state.posts?.map(post => post.id) ?? []);
+    
+      state.posts = [
+        ...(state.posts ?? []), 
+        ...action.payload.filter(post => !existingIds.has(post.id))
+      ];
     },
+    
     setPostsAdmin: (state, action: PayloadAction<IPost[]>) => {
       state.postsAdmin =action.payload
       
@@ -44,7 +49,7 @@ const postSlice = createSlice({
       if(state.posts!==null)
         state.posts=state.posts.concat(action.payload);
     },
-    updatePost: (state, action: PayloadAction<{ postId: string; updatedData: Partial<IPost> }>) => {
+    updatePost: (state, action: PayloadAction<{ postId: string; updatedData: IPost }>) => {
       if (!state.posts) return; // Return early if posts list is null
     
       const { postId, updatedData } = action.payload;
@@ -54,6 +59,12 @@ const postSlice = createSlice({
         state.posts[postIndex] = { ...state.posts[postIndex], ...updatedData };
       }
     },
+    deletePost: (state, action: PayloadAction<string>) => {
+      if (!state.posts) return; 
+    
+      state.posts = state.posts.filter((post) => post._id !== action.payload);
+    },
+    
     
     //comment 
     setComments: (state, action: PayloadAction<IComment[]>) => {
@@ -66,7 +77,35 @@ const postSlice = createSlice({
       if (post?.comments) {
         post.comments.push(comment);
       }
-    },         
+    },   
+    
+    updateComment: (
+      state,
+      action: PayloadAction<{ postId: string; commentId: string; updatedComment: IComment }>
+    ) => {
+      const { postId, commentId, updatedComment } = action.payload;
+      
+      const post = state.posts?.find((p) => p._id === postId);
+      if (!post || !Array.isArray(post.comments)) return;
+    
+      const commentIndex = post.comments.findIndex((c) => c._id === commentId);
+      if (commentIndex !== -1) {
+        post.comments[commentIndex] = updatedComment;
+      }
+    },
+    
+    deleteComment: (
+      state,
+      action: PayloadAction<{ postId: string; commentId: string }>
+    ) => {
+      const { postId, commentId } = action.payload;
+      
+      const post = state.posts?.find((p) => p._id === postId);
+      if (!post || !Array.isArray(post.comments)) return;
+    
+      post.comments = post.comments.filter((c) => c._id !== commentId);
+    },
+    
     findCommentReplay:(state,action)=>{
       
       
@@ -97,6 +136,6 @@ const postSlice = createSlice({
   
 });
 
-export const {setPostsAdmin, setPosts,addPost,addComment,setComments,findCommentReplay,removeDeletedReply,setCommentWithReplay,updatePost,setLikes,setSaved,resetPostState,} = postSlice.actions;
+export const {setPostsAdmin, setPosts,addPost,deletePost,addComment,setComments,updateComment,deleteComment,findCommentReplay,removeDeletedReply,setCommentWithReplay,updatePost,setLikes,setSaved,resetPostState,} = postSlice.actions;
 
 export default postSlice.reducer;

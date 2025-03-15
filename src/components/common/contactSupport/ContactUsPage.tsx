@@ -3,7 +3,6 @@
 import { Admin } from "@/types/Types";
 import { User } from "@/types/Types";
 import { useAppDispatch, useAppSelector } from "@/lib/store/hooks";
-import api from "@/utils/api";
 import { useState } from "react";
 import { helpeAndContact } from "@/lib/store/features/actions/contactActions";
 import { toast } from "react-toastify";
@@ -72,7 +71,7 @@ export default function ContactUsPage() {
   };
 
   return (
-    <div className="flex flex-col md:flex-row w-full max-w-4xl mx-auto min-h-[80vh]  p-4 md:p-8 ">
+    <div className="flex flex-col  md:flex-row w-full max-w-4xl mx-auto min-h-[80vh]  p-4 md:pt-28 ">
       <div
         className="w-full md:w-1/2 h-[300px] md:h-auto bg-cover bg-center rounded-lg flex flex-col justify-between p-6 text-white"
         style={{
