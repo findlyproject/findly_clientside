@@ -61,7 +61,8 @@ console.log("result",result);
 
                 <div className="font-medium">
                   <p>
-                    username
+                    {item.userId?.firstName}{" "}
+                    {item.userId?.lastName || "unknown"}
                     <time
                       dateTime="2014-08-16 19:00"
                       className="block text-sm text-gray-500 dark:text-gray-400"

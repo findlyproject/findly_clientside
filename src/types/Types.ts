@@ -45,9 +45,10 @@ export interface Ieducation {
   startYear: string;
   endYear: string;
   college: string;
-  Subject: string;
+  subject: string;
+  _id:string;
 
-}[]
+}
 
 export interface IlocationType {
   country: string;
@@ -105,8 +106,10 @@ export interface User{
   experience: {
     jobRole: string;
     companyName: string;
+    description:string
     startYear: string;
     endYear: string;
+    _id:string;
   }[];
   projects?: {
     title: string;
@@ -119,18 +122,8 @@ export interface User{
   about?: string;
   createdAt:string;
   updatedAt:string;
-  resumePDF?: {
-    fileUrl: string;
-    fileName: string;
-    uploadedAt: Date | null;
-    isDeleted: boolean;
-  }[];
-  resumeVideo?: {
-    fileUrl: string;
-    fileName: string;
-    uploadedAt: Date | null;
-    isDeleted: boolean;
-  }[];
+  resumePDF?: ResumeFile[];
+  resumeVideo?: ResumeFile[];
   role: "user" | "premium";
   subscriptionEndDate: Date | null;
   subscriptionStartDate: Date | null;
@@ -151,6 +144,13 @@ export interface FilesState {
   resume: File | null;
   introductionVideo: File | null;
 }
+export interface ResumeFile {
+  fileUrl: string;
+  fileName: string;
+  uploadedAt: Date | null;
+  isDeleted: boolean;
+}
+
 
 
 export interface Company {
@@ -165,7 +165,8 @@ export interface Company {
   followers?:User[]
   banner?: string;
   foundedAt: Date;
-  employees?: {
+  employees: {
+    _id:string;
     employee: string;  
     position: string; 
   }[];
@@ -192,7 +193,7 @@ export interface Company {
     start:string,
     end:string
   }
-  services?:string[]
+  services:string[]
   subscriptionEndDate?: Date | null;
   subscriptionStartDate?: Date | null;
   isBlocked?: boolean;
@@ -354,6 +355,8 @@ export interface IReport {
   isDeleted:boolean;  
   createdAt:Date;
   updatedAt:Date;
+  postId:IPost
+  userId:User
   
   }
   
@@ -396,11 +399,11 @@ export interface IReport {
   export interface IPost {
     _id: string;
     description: string;
-    images?:string [];
-    video?:string;
+    images:string [];
+    video:string;
     owner: User |Company|string|null
-    likedBy?: User[];
-    reports?:  IReport[]| null|undefined;
+    likedBy: User[];
+    reports:  IReport[];
     comments?:  IComment[] ;
     isDeleted?: boolean;
     createdAt: string;
@@ -420,13 +423,7 @@ export interface IReport {
   images:string[];
   video:string;
   description:string
-  postId:{
-     _id:string
-     images:string[];
-     video:string;
-     description:string
-
-  }
+  postId:IPost
   userId:{
     _id:string
     firstName:string;
@@ -495,8 +492,12 @@ export interface Admin {
 export interface DailyRevenueType {
   day: string;
   revenue: number;
+  
 }
 
+export interface ItemDashboard{
+  item:DailyRevenueType
+}
 
 
 //job

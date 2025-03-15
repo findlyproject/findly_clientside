@@ -11,7 +11,7 @@ import { useEffect, useState } from "react";
 import api from "@/utils/api";
 import CountUp from "react-countup";
 import { toast } from "react-toastify";
-import { formChangeEvent, Job, MouseEventType } from "@/types/Types";
+import { formChangeEvent } from "@/types/Types";
 
 function LandingPage() {
   const [users, setUsers] = useState([]);
@@ -43,44 +43,10 @@ function LandingPage() {
   };
 
   const router = useRouter();
-  
-  
  
-  const [nameQuery, setNameQuery] = useState("");
-  const [locationQuery, setLocationQuery] = useState("");
-  const [results, setResults] = useState<Job[]>([]);
-  const [showSuggestions, setShowSuggestions] = useState(false);
-  const [showLocationSuggestions, setShowLocationSuggestions] = useState(false);
-  console.log("results", results);
+  
 
-  useEffect(() => {
-    console.log("hey useEffcet");
-    console.log("nameQuery", nameQuery.length);
-    if (nameQuery.length > 0 || locationQuery.length > 0) {
-      fetchSuggestions();
-    } else {
-      setResults([]);
-    }
-  }, [nameQuery, locationQuery]);
-  console.log("showSuggestions", showSuggestions);
-  console.log("showLocationSuggestions", showLocationSuggestions);
-
-  const fetchSuggestions = async () => {
-    try {
-      console.log("fffff");
-
-      const response = await api.get(
-        `/user/jobsearch?jobName=${nameQuery}&location=${locationQuery}`
-      );
-      setResults(response.data.jobs);
-      // setShowSuggestions(true);
-    } catch (error) {
-      console.error("Error fetching search results", error);
-    }
-  };
-
-
-  const handleSubmit = (e:MouseEventType) => {
+  const handleSubmit = (e:formChangeEvent) => {
     e.preventDefault();
     toast.error("please login");
   };
@@ -338,8 +304,8 @@ function LandingPage() {
       <div className="mt-16">
         <Testimonials />
       </div>
-      <div className="grid grid-cols-1 md:grid-cols-2 gap-5 px-10 py-10">
-        <div className="bg-gray-200 p-6 rounded-lg flex flex-col md:flex-row items-center justify-between">
+      <div className="grid grid-cols-1 md:grid-cols-2 gap-10 p-36">
+        {/* <div className="bg-gray-200 p-6 rounded-lg flex flex-col md:flex-row items-center justify-between">
           <div className="md:w-1/2">
             <h2 className="text-2xl font-bold">Become a Candidate</h2>
             <p className="text-gray-600">
@@ -357,8 +323,78 @@ function LandingPage() {
           <div className="md:w-1/2">
             <Image src={register3} alt="Register" width={300} height={200} />
           </div>
-        </div>
-        <div className="bg-primary text-gray-100 p-6 rounded-lg flex flex-col md:flex-row items-center justify-between relative">
+          
+        </div> */}
+        
+        <div className="max-w-sm w-full lg:max-w-full lg:flex h-auto">
+  <div className="h-40 lg:h-auto lg:w-48 flex-none bg-cover rounded-t lg:rounded-t-none lg:rounded-l text-center overflow-hidden">
+  <Image className="rounded-l" src={register3} alt="Avatar of Jonathan Reinink"/>
+
+  </div>
+  <div className="border-r border-b border-l border-gray-400 lg:border-l-0 lg:border-t lg:border-gray-400 bg-gray-100 rounded-b lg:rounded-b-none lg:h-[270px] lg:rounded-r p-4 flex flex-col justify-between leading-normal">
+    <div className="mb-8 mx-10 text-center">
+      
+      <div className="text-gray-900 font-bold text-xl mb-2">Become a Candidate</div>
+      <p className="text-gray-700 text-base mb-4 "> Registering as a jobseeker is a vital step to access employment
+              opportunities, resources, and support tailored to your career
+              goals.</p>
+   
+              <button
+ onClick={() => router.push(`/user/register`)}
+  type="submit"
+  className="flex justify-center gap-2 items-center mx-auto shadow-xl text-md bg-primary backdrop-blur-md lg:font-semibold isolation-auto  before:absolute before:w-full before:transition-all before:duration-700 before:hover:w-full before:-left-full before:hover:left-0 before:rounded-full before:bg-white hover:text-primary before:-z-10 before:aspect-square before:hover:scale-150 before:hover:duration-700 relative z-10 px-4 py-2 overflow-hidden border-2 rounded-full group text-white mb-4"
+>
+  Register
+  <svg
+    className="w-6 h-6 justify-end group-hover:rotate-90 group-hover:bg-gray-50 text-gray-50 ease-linear duration-300 rounded-full border border-white group-hover:border-none p-1 rotate-45"
+    viewBox="0 0 16 19"
+    xmlns="http://www.w3.org/2000/svg"
+  >
+    <path
+      d="M7 18C7 18.5523 7.44772 19 8 19C8.55228 19 9 18.5523 9 18H7ZM8.70711 0.292893C8.31658 -0.0976311 7.68342 -0.0976311 7.29289 0.292893L0.928932 6.65685C0.538408 7.04738 0.538408 7.68054 0.928932 8.07107C1.31946 8.46159 1.95262 8.46159 2.34315 8.07107L8 2.41421L13.6569 8.07107C14.0474 8.46159 14.6805 8.46159 15.0711 8.07107C15.4616 7.68054 15.4616 7.04738 15.0711 6.65685L8.70711 0.292893ZM9 18L9 1H7L7 18H9Z"
+      className="fill-white group-hover:fill-primary"
+    ></path>
+  </svg>
+</button>
+    </div>
+  </div>
+</div>
+<div className="max-w-sm w-full lg:max-w-full lg:flex h-auto">
+  <div className="h-40 lg:h-auto lg:w-48 flex-none bg-cover rounded-t lg:rounded-t-none lg:rounded-l text-center overflow-hidden">
+  <Image className="rounded-l" src={register3} alt="Avatar of Jonathan Reinink"/>
+
+  </div>
+  <div className="border-r border-b border-l border-gray-400 lg:border-l-0 lg:border-t lg:border-gray-400 bg-gray-100 rounded-b lg:rounded-b-none lg:h-[270px] lg:rounded-r p-4 flex flex-col justify-between leading-normal">
+    <div className="mb-8 mx-10 text-center">
+      
+      <div className="text-gray-900 font-bold text-xl mb-2">Become an Employer</div>
+      <p className="text-gray-700 text-base mb-4">  Registering as a recruiter or employer enables access to a diverse
+              talent pool and streamlines the hiring process, enhancing
+              workforce management.</p>
+   
+             
+<button
+ onClick={() => router.push(`/company/register`)}
+  type="submit"
+  className="flex justify-center gap-2 items-center mx-auto shadow-xl text-md bg-primary backdrop-blur-md lg:font-semibold isolation-auto  before:absolute before:w-full before:transition-all before:duration-700 before:hover:w-full before:-left-full before:hover:left-0 before:rounded-full before:bg-white hover:text-primary before:-z-10 before:aspect-square before:hover:scale-150 before:hover:duration-700 relative z-10 px-4 py-2 overflow-hidden border-2 rounded-full group text-white mb-4"
+>
+  Register
+  <svg
+    className="w-6 h-6 justify-end group-hover:rotate-90 group-hover:bg-gray-50 text-gray-50 ease-linear duration-300 rounded-full border border-white group-hover:border-none p-1 rotate-45"
+    viewBox="0 0 16 19"
+    xmlns="http://www.w3.org/2000/svg"
+  >
+    <path
+      d="M7 18C7 18.5523 7.44772 19 8 19C8.55228 19 9 18.5523 9 18H7ZM8.70711 0.292893C8.31658 -0.0976311 7.68342 -0.0976311 7.29289 0.292893L0.928932 6.65685C0.538408 7.04738 0.538408 7.68054 0.928932 8.07107C1.31946 8.46159 1.95262 8.46159 2.34315 8.07107L8 2.41421L13.6569 8.07107C14.0474 8.46159 14.6805 8.46159 15.0711 8.07107C15.4616 7.68054 15.4616 7.04738 15.0711 6.65685L8.70711 0.292893ZM9 18L9 1H7L7 18H9Z"
+      className="fill-white group-hover:fill-primary"
+    ></path>
+  </svg>
+</button>
+
+    </div>
+  </div>
+</div>
+        {/* <div className="bg-primary text-gray-100 p-6 rounded-lg flex flex-col md:flex-row items-center justify-between relative">
           <div className="md:w-1/2">
             <h2 className="text-2xl font-bold">Become an Employer</h2>
             <p>
@@ -376,7 +412,7 @@ function LandingPage() {
           <div className="md:w-1/2 flex justify-end">
             <Image src={register4} alt="Register" width={300} height={200} />
           </div>
-        </div>
+        </div> */}
       </div>
     </div>
   );

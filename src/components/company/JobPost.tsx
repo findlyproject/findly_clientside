@@ -72,12 +72,14 @@ export const JobPost = () => {
     if (e.key === "Enter" && inputValue.trim()) {
       e.preventDefault();
   
-      const updatedList = [...values[fieldName], inputValue.trim()];
-      setFieldValue(fieldName, updatedList.join(", ")); // ✅ Store as string in Formik
+      const updatedList = [...(values[fieldName] || []), inputValue.trim()];
+  
+      setFieldValue(fieldName, updatedList); // ✅ Store as an array in Formik
       setList(updatedList); // ✅ Update local state for UI
       setInputValue(""); // Clear input
     }
   };
+  
   const handleSubmit = async (values) => {
     values.requirements = requirement;
     values.benefits = benefit;
@@ -108,7 +110,7 @@ export const JobPost = () => {
             qualification: "",
             jobResponsibilities: "",
             description: "",
-            requirements: "",
+            requirements: [],
             contactEmail: "",
             contactPhone: "",
             benefits:""

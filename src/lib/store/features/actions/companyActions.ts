@@ -296,6 +296,88 @@ export const loginCompany=createAsyncThunk(
       }
     );
 
+    export const editEmployee = createAsyncThunk(
+      "edit/employee",
+      async ({companyId,values}:{companyId?:string,values:any},{ dispatch,rejectWithValue } ) => {
+
+        const response = await handleAsync(() => api.patch(
+          `/company/editemployee/${companyId}`,
+        {employees:values}
+        ));
+    
+        if (!response || !response.data) {
+          return rejectWithValue("delete job failed.");
+        }
+        const data=response.data.company
+        console.log("datacontact",data);
+        
+        dispatch(setActiveCompany(data));
+        return data;
+      }
+    );
+
+    
+    export const editProfetional = createAsyncThunk(
+      "edit/profetional",
+      async ({companyId,values}:{companyId?:string,values:any},{ dispatch,rejectWithValue } ) => {
+
+        const response = await handleAsync(() => api.patch(
+          `/company/editprofetional/${companyId}`,
+          values
+        ));
+    
+        if (!response || !response.data) {
+          return rejectWithValue("delete job failed.");
+        }
+        const data=response.data.company
+        console.log("datacontact",data);
+        
+        dispatch(setActiveCompany(data));
+        return data;
+      }
+    );
+
+      
+    export const editsocialmedia = createAsyncThunk(
+      "edit/socialmedia",
+      async ({companyId,values}:{companyId?:string,values:any},{ dispatch,rejectWithValue } ) => {
+
+        const response = await handleAsync(() => api.patch(
+          `/company/editsocialmedia/${companyId}`,
+          values
+        ));
+    
+        if (!response || !response.data) {
+          return rejectWithValue("delete job failed.");
+        }
+        const data=response.data.company
+        console.log("datacontact",data);
+        
+        dispatch(setActiveCompany(data));
+        return data;
+      }
+    );
+
+    export const editService = createAsyncThunk(
+      "edit/service",
+      async ({companyId,services}:{companyId?:string,services:any},{ dispatch,rejectWithValue } ) => {
+
+        const response = await handleAsync(() => api.patch(
+          `/company/editservices/${companyId}`,
+          {services:services}
+        ));
+    
+        if (!response || !response.data) {
+          return rejectWithValue("delete job failed.");
+        }
+        const data=response.data.company
+        console.log("datacontact",data);
+        
+        dispatch(setActiveCompany(data));
+        return data;
+      }
+    );
+
 
     export const uploadLogo = createAsyncThunk(
       "upload/profile/logo",

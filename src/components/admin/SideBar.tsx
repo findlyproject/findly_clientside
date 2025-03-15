@@ -1,33 +1,35 @@
 "use client";
-import Image from "next/image";
-import user from "../../../public/assets/user-06.webp";
+
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { FaPlus } from "react-icons/fa6";
 import { MdOutlineReviews } from "react-icons/md";
 import { logOutAdmin } from "@/lib/store/features/actions/adminActions";
-import { useAppDispatch } from "@/lib/store/hooks";
+import { useAppDispatch, useAppSelector } from "@/lib/store/hooks";
 import { MouseEventType } from "@/types/Types";
+
+import Logo from "@/utils/Logo";
 const Sidebar = () => {
   const router = useRouter();
-  const dispatch=useAppDispatch()
-  const handleAdminLogout = async (e:MouseEventType) => {
+  const dispatch = useAppDispatch();
+  const reportsLength=useAppSelector((state)=>state.admin.reports)
+  const handleAdminLogout = async (e: MouseEventType) => {
     e.preventDefault();
 
-    const result=await dispatch(logOutAdmin())
-    if(result.type==="auth/logoutAdmin/fulfilled"){
+    const result = await dispatch(logOutAdmin());
+    if (result.type === "auth/logoutAdmin/fulfilled") {
       router.push("/");
     }
   };
+  console.log("reportsLength",reportsLength);
+  
   return (
-    <div className="xl:p-4 p-2 flex-col justify-start items-start gap-5 inline-flex  fixed">
-      <div className="w-full pt-4 justify-between items-center gap-2.5 inline-flex">
-        <Link href="">
-          <Image src={user} alt="Pagedone logo image" className="w-2 h-2" />
-        </Link>
+    <div className="xl:p-4 p-2 flex-col justify-start items-start gap-5 inline-flex  fixed h-screen bg-white">
+      <div className="w-full pt-4 justify-between items-center gap-2.5 inline-flex ">
+        <Logo />
       </div>
 
-      <div className="w-full">
+      <div className="w-full ">
         <div className="w-full h-8 px-3 items-center flex">
           <h6 className="text-gray-500 text-xs font-semibold leading-4 hidden lg:block">
             MENU
@@ -36,7 +38,7 @@ const Sidebar = () => {
         <ul className="flex-col gap-1 flex">
           <li>
             <Link href="/admin/dashboard">
-              <div className="flex-col flex p-3 bg-white rounded-lg">
+              <div className="flex-col flex p-3  rounded-lg">
                 <div className="h-5 gap-3 flex">
                   <div className="relative" title="home">
                     <svg
@@ -82,7 +84,7 @@ const Sidebar = () => {
           <li></li>
           <li>
             <div className="flex-col flex">
-              <div className="flex-col flex p-3 bg-white rounded-lg">
+              <div className="flex-col flex p-3  rounded-lg">
                 <div className="justify-between inline-flex">
                   <Link href="/admin/reports" className="h-5 gap-3 flex">
                     <div className="relative" title="Reports">
@@ -105,17 +107,11 @@ const Sidebar = () => {
                       Reports
                     </h2>
                   </Link>
-                
 
-
-
-                  <Link
-                    href=""
-                    className="lg:flex items-center gap-3 hidden "
-                  >
-                    <div className="px-2.5 py-0.5 bg-indigo-100 rounded-3xl">
-                      <h6 className="text-indigo-600 text-xs font-medium leading-4">
-                        12
+                  <Link href="" className="lg:flex items-center gap-3 hidden ">
+                    <div className="px-2.5 py-0.5 bg-purple-200 rounded-3xl">
+                      <h6 className="text-primary text-xs font-medium leading-4">
+                        {reportsLength||0}
                       </h6>
                     </div>
                     <div className="relative">
@@ -149,7 +145,7 @@ const Sidebar = () => {
               <div className="flex-col flex p-3 bg-white rounded-lg">
                 <div className="h-5 gap-3 flex">
                   <div className="relative" title="ratings">
-                  <MdOutlineReviews className="text-2xl text-gray-500"/>
+                    <MdOutlineReviews className="text-2xl text-gray-500" />
                   </div>
                   <h2 className="text-gray-500 text-sm font-medium leading-snug hidden lg:block">
                     Ratings
@@ -204,12 +200,12 @@ const Sidebar = () => {
                         <path
                           strokeLinecap="round"
                           strokeLinejoin="round"
-                          d="M15 19.128a9.38 9.38 0 0 0 2.625.372 9.337 9.337 0 0 0 4.121-.952 4.125 4.125 0 0 0-7.533-2.493M15 19.128v-.003c0-1.113-.285-2.16-.786-3.07M15 19.128v.106A12.318 12.318 0 0 1 8.624 21c-2.331 0-4.512-.645-6.374-1.766l-.001-.109a6.375 6.375 0 0 1 11.964-3.07M12 6.375a3.375 3.375 0 1 1-6.75 0 3.375 3.375 0 0 1 6.75 0Zm8.25 2.25a2.625 2.625 0 1 1-5.25 0 2.625 2.625 0 0 1 5.25 0Z"
+                          d="M2.25 21h19.5m-18-18v18m10.5-18v18m6-13.5V21M6.75 6.75h.75m-.75 3h.75m-.75 3h.75m3-6h.75m-.75 3h.75m-.75 3h.75M6.75 21v-3.375c0-.621.504-1.125 1.125-1.125h2.25c.621 0 1.125.504 1.125 1.125V21M3 3h12m-.75 4.5H21m-3.75 3.75h.008v.008h-.008v-.008Zm0 3h.008v.008h-.008v-.008Zm0 3h.008v.008h-.008v-.008Z"
                         />
                       </svg>
                     </div>
                     <h2 className="text-gray-500 text-sm font-medium leading-snug hidden lg:block">
-                      Comapnies
+                      Companies
                     </h2>
                   </div>
                 </div>
@@ -285,14 +281,12 @@ const Sidebar = () => {
             </Link>
           </li>
 
-
-
           <li>
             <Link href="/admin/create">
               <div className="p-3 rounded-lg items-center inline-flex">
                 <div className="h-5 items-center gap-3 flex">
                   <div className="relative" title="Profile">
-                  <FaPlus />
+                    <FaPlus />
                   </div>
                   <h2 className="text-gray-500 text-sm font-medium leading-snug hidden lg:block">
                     Create
@@ -303,38 +297,7 @@ const Sidebar = () => {
           </li>
 
           <li>
-            <Link href="">
-              <div className="p-3 rounded-lg items-center inline-flex">
-                <div className="h-5 items-center gap-3 flex">
-                  <div className="relative" title="Settings">
-                    <svg
-                      xmlns="http://www.w3.org/2000/svg"
-                      width="20"
-                      height="20"
-                      viewBox="0 0 20 20"
-                      fill="none"
-                    >
-                      <g id="Help circle">
-                        <path
-                          id="icon"
-                          d="M6.89302 7.67903C6.89302 8.12086 7.2512 8.47903 7.69302 8.47903C8.13485 8.47903 8.49302 8.12086 8.49302 7.67903H6.89302ZM9.41044 11.9928C9.41044 12.4346 9.76861 12.7928 10.2104 12.7928C10.6523 12.7928 11.0104 12.4346 11.0104 11.9928H9.41044ZM9.97915 13.7854C9.53732 13.7854 9.17915 14.1436 9.17915 14.5854C9.17915 15.0273 9.53732 15.3854 9.97915 15.3854V13.7854ZM10.0208 15.3854C10.4626 15.3854 10.8208 15.0273 10.8208 14.5854C10.8208 14.1436 10.4626 13.7854 10.0208 13.7854V15.3854ZM16.7 10C16.7 13.7003 13.7003 16.7 10 16.7V18.3C14.584 18.3 18.3 14.584 18.3 10H16.7ZM10 16.7C6.29969 16.7 3.3 13.7003 3.3 10H1.7C1.7 14.584 5.41604 18.3 10 18.3V16.7ZM3.3 10C3.3 6.29969 6.29969 3.3 10 3.3V1.7C5.41604 1.7 1.7 5.41604 1.7 10H3.3ZM10 3.3C13.7003 3.3 16.7 6.29969 16.7 10H18.3C18.3 5.41604 14.584 1.7 10 1.7V3.3ZM8.49302 7.67903C8.49302 7.14654 8.68796 6.80331 8.93991 6.58348C9.20767 6.34985 9.58974 6.21456 10 6.21456C10.4103 6.21456 10.7923 6.34985 11.0601 6.58348C11.312 6.80331 11.507 7.14654 11.507 7.67903H13.107C13.107 6.70187 12.7252 5.91287 12.112 5.37787C11.5146 4.85667 10.7432 4.61456 10 4.61456C9.25677 4.61456 8.48535 4.85667 7.888 5.37787C7.27483 5.91287 6.89302 6.70187 6.89302 7.67903H8.49302ZM11.507 7.67903C11.507 8.07278 11.4159 8.2976 11.308 8.46417C11.1782 8.66443 11.0054 8.81873 10.7151 9.08755C10.4468 9.33601 10.1005 9.6662 9.83713 10.1449C9.56679 10.6362 9.41044 11.2306 9.41044 11.9928H11.0104C11.0104 11.4613 11.1162 11.1393 11.2389 10.9162C11.3686 10.6805 11.5464 10.4984 11.8023 10.2614C12.0362 10.0449 12.3874 9.74064 12.6508 9.33412C12.936 8.89392 13.107 8.36372 13.107 7.67903H11.507ZM9.97915 15.3854H10.0208V13.7854H9.97915V15.3854Z"
-                          fill="#6B7280"
-                        />
-                      </g>
-                    </svg>
-                  </div>
-                  <h2 className="text-gray-500 text-sm font-medium leading-snug hidden lg:block">
-                    Settings
-                  </h2>
-                </div>
-              </div>
-            </Link>
-          </li>
-
-
-        
-          <li>
-            <button  onClick={handleAdminLogout}>
+            <button onClick={handleAdminLogout}>
               <div className="p-3 rounded-lg items-center inline-flex">
                 <div className="h-5 items-center gap-3 flex">
                   <div className="relative" title="Logout">

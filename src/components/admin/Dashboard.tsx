@@ -1,12 +1,45 @@
 "use client";
 import React, { useState, useEffect } from "react";
 import { Chart } from "primereact/chart";
-
-
+import {
+  BarChart,
+  Bar,
+  XAxis,
+  YAxis,
+  Tooltip,
+  PieChart,
+  Pie,
+  Cell,
+  ResponsiveContainer,
+} from "recharts";
 import api from "@/utils/api";
 import { Company, DailyRevenueType, User } from "@/types/Types";
+import { useAppDispatch, useAppSelector } from "@/lib/store/hooks";
+import { fetchCompanies } from "@/lib/store/features/actions/adminActions";
 
 const Dashboard: React.FC = () => {
+  const [barData, setBardata] = useState([]);
+  const [activecompany, setActiveCompany] = useState(0);
+  const [activeusers, setActiveusers] = useState(0);
+  const [premiumusers, setPremiumUsers] = useState(0);
+  const companies = useAppSelector((state) => state.admin.companies);
+  const users = useAppSelector((state) => state.admin.users);
+  const premuimPercentage =
+    companies.length + users.length > 0
+      ? (premiumusers / (companies.length + users.length)) * 100
+      : 0;
+
+  const dispatch = useAppDispatch();
+
+  console.log("premuimPercentage", premuimPercentage);
+  const companyPercentage =
+    companies.length > 0 ? (activecompany / companies.length) * 100 : 0;
+
+  const userPercentage =
+    users.length > 0 ? (activeusers / users.length) * 100 : 0;
+
+  console.log("users", users.length);
+  console.log("premiumusers", premiumusers);
   const [chartData, setChartData] = useState({});
   const [chartOptions, setChartOptions] = useState({});
 
@@ -27,6 +60,15 @@ const Dashboard: React.FC = () => {
 
   useEffect(() => {
     const fetch = async () => {
+      const companies = await api.get("admin/companies");
+      setActiveCompany(companies.data.activeCompaniesCount);
+      // setPremiumCompanies(companies.data.premiumCompaniesCount)
+      const users = await api.get(`/admin/users`);
+      setActiveusers(users.data.activeUsersCount);
+
+      setPremiumUsers(
+        users.data.premiumUsersCount + companies.data.premiumCompaniesCount
+      );
       const dailyUsers = await api.get(`/admin/dailyusers`);
       console.log("dailyUsers", dailyUsers);
 
@@ -42,88 +84,55 @@ const Dashboard: React.FC = () => {
       setDailyCompany(dailyCompanies.data.dailyCompanyCount);
       setaboutCompany(dailyCompanies.data.Todaycompanies);
 
-
       const user = await api.get(`/admin/dailyuser`);
- 
 
       setDaily(user.data.dailyRevenue || []);
 
       const companyrevenue = await api.get(`/admin/new`);
       console.log("nnn", companyrevenue);
       setCompany(companyrevenue.data.dailyRevenue || []);
+
+      const barresponse = await api.get(`/admin/sevendays`);
+      const apiData = barresponse.data.data;
+
+      const formattedData = apiData.map((item) => ({
+        date: item.day,
+        Revenue: item.revenue,
+      }));
+
+      setBardata(formattedData);
     };
     fetch();
   }, []);
 
   console.log("dailyCompany", dailyCompany);
   console.log("aboutUser", aboutUser);
-
   useEffect(() => {
-    const documentStyle = getComputedStyle(document.documentElement);
-    const textColor = documentStyle.getPropertyValue("--text-color");
-    const textColorSecondary = documentStyle.getPropertyValue(
-      "--text-color-secondary"
-    );
-    const surfaceBorder = documentStyle.getPropertyValue("--surface-border");
-    const data = {
-      labels: x1Labels,
-      datasets: [
-        {
-          label: "User Total revenue",
-          data: dailyData,
-          fill: false,
-          borderColor: documentStyle.getPropertyValue("--blue-500"),
-          tension: 0.4,
-        },
-        {
-          label: "Company Total revenue",
-          data: companydata,
-          fill: false,
-          borderColor: documentStyle.getPropertyValue("--pink-500"),
-          tension: 0.4,
-        },
-      ],
-    };
-    const options = {
-      maintainAspectRatio: false,
-      aspectRatio: 0.6,
-      plugins: {
-        legend: {
-          labels: {
-            color: textColor,
-          },
-        },
-      },
-      scales: {
-        x: {
-          ticks: {
-            color: textColorSecondary,
-          },
-          grid: {
-            color: surfaceBorder,
-          },
-        },
-        y: {
-          ticks: {
-            color: textColorSecondary,
-          },
-          grid: {
-            color: surfaceBorder,
-          },
-        },
-      },
-    };
+    listCompanies();
+  }, []);
 
-    setChartData(data);
-    setChartOptions(options);
-  }, [daily, company]);
+  console.log("bardata", barData);
+
+  const listCompanies = () => {
+    dispatch(fetchCompanies());
+  };
+
+  const pieData = [
+    { name: "Users", value: Math.round(userPercentage), color: "#ba99cf" },
+    { name: "Companies", value: companyPercentage, color: "#945eb5" },
+    {
+      name: "Premium Clients",
+      value: Math.round(premuimPercentage),
+      color: "#6b48ab",
+    },
+  ];
 
   return (
     <div>
       <div className="mt-12">
         <div className="mb-12 grid gap-y-10 gap-x-6 md:grid-cols-2 xl:grid-cols-4">
           <div className="relative flex flex-col bg-clip-border rounded-xl bg-white text-gray-700 shadow-md">
-            <div className="bg-clip-border mx-4 rounded-xl overflow-hidden bg-gradient-to-tr from-blue-600 to-blue-400 text-white shadow-blue-500/40 shadow-lg absolute -mt-4 grid h-16 w-16 place-items-center">
+            <div className="bg-clip-border mx-4 rounded-xl overflow-hidden bg-gradient-to-tr bg-primary text-white shadow-purple-500/40 shadow-lg absolute -mt-4 grid h-16 w-16 place-items-center">
               <svg
                 xmlns="http://www.w3.org/2000/svg"
                 viewBox="0 0 24 24"
@@ -157,7 +166,7 @@ const Dashboard: React.FC = () => {
           </div>
 
           <div className="relative flex flex-col bg-clip-border rounded-xl bg-white text-gray-700 shadow-md">
-            <div className="bg-clip-border mx-4 rounded-xl overflow-hidden bg-gradient-to-tr from-pink-600 to-pink-400 text-white shadow-pink-500/40 shadow-lg absolute -mt-4 grid h-16 w-16 place-items-center">
+            <div className="bg-clip-border mx-4 rounded-xl overflow-hidden bg-gradient-to-tr  bg-primary text-white shadow-purple-500/40  shadow-lg absolute -mt-4 grid h-16 w-16 place-items-center">
               <svg
                 xmlns="http://www.w3.org/2000/svg"
                 viewBox="0 0 24 24"
@@ -189,7 +198,7 @@ const Dashboard: React.FC = () => {
           </div>
 
           <div className="relative flex flex-col bg-clip-border rounded-xl bg-white text-gray-700 shadow-md">
-            <div className="bg-clip-border mx-4 rounded-xl overflow-hidden bg-gradient-to-tr from-green-600 to-green-400 text-white shadow-green-500/40 shadow-lg absolute -mt-4 grid h-16 w-16 place-items-center">
+            <div className="bg-clip-border mx-4 rounded-xl overflow-hidden bg-gradient-to-tr  bg-primary text-white shadow-purple-500/40  shadow-lg absolute -mt-4 grid h-16 w-16 place-items-center">
               <svg
                 xmlns="http://www.w3.org/2000/svg"
                 viewBox="0 0 24 24"
@@ -216,7 +225,7 @@ const Dashboard: React.FC = () => {
             </div>
           </div>
           <div className="relative flex flex-col bg-clip-border rounded-xl bg-white text-gray-700 shadow-md">
-            <div className="bg-clip-border mx-4 rounded-xl overflow-hidden bg-gradient-to-tr from-orange-600 to-orange-400 text-white shadow-orange-500/40 shadow-lg absolute -mt-4 grid h-16 w-16 place-items-center">
+            <div className="bg-clip-border mx-4 rounded-xl overflow-hidden bg-gradient-to-tr  bg-primary text-white shadow-purple-500/40  shadow-lg absolute -mt-4 grid h-16 w-16 place-items-center">
               <svg
                 xmlns="http://www.w3.org/2000/svg"
                 viewBox="0 0 24 24"
@@ -260,7 +269,7 @@ const Dashboard: React.FC = () => {
                       strokeWidth="3"
                       stroke="currentColor"
                       aria-hidden="true"
-                      className="h-4 w-4 text-blue-500"
+                      className="h-4 w-4 text-primary"
                     >
                       <path
                         strokeLinecap="round"
@@ -274,31 +283,6 @@ const Dashboard: React.FC = () => {
                     this day
                   </p>
                 </div>
-                <button
-                  aria-expanded="false"
-                  aria-haspopup="menu"
-                  id=":r5:"
-                  className="relative middle none font-sans font-medium text-center uppercase transition-all disabled:opacity-50 disabled:shadow-none disabled:pointer-events-none w-8 max-w-[32px] h-8 max-h-[32px] rounded-lg text-xs text-blue-gray-500 hover:bg-blue-gray-500/10 active:bg-blue-gray-500/30"
-                  type="button"
-                >
-                  <span className="absolute top-1/2 left-1/2 transform -translate-y-1/2 -translate-x-1/2">
-                    <svg
-                      xmlns="http://www.w3.org/2000/svg"
-                      fill="currenColor"
-                      viewBox="0 0 24 24"
-                      strokeWidth="3"
-                      stroke="currentColor"
-                      aria-hidden="true"
-                      className="h-6 w-6"
-                    >
-                      <path
-                        strokeLinecap="round"
-                        strokeLinejoin="round"
-                        d="M12 6.75a.75.75 0 110-1.5.75.75 0 010 1.5zM12 12.75a.75.75 0 110-1.5.75.75 0 010 1.5zM12 18.75a.75.75 0 110-1.5.75.75 0 010 1.5z"
-                      ></path>
-                    </svg>
-                  </span>
-                </button>
               </div>
               <div className="p-6 overflow-x-scroll px-0 pt-0 pb-2">
                 <table className="w-full min-w-[640px] table-auto">
@@ -393,7 +377,7 @@ const Dashboard: React.FC = () => {
                       strokeWidth="3"
                       stroke="currentColor"
                       aria-hidden="true"
-                      className="h-4 w-4 text-blue-500"
+                      className="h-4 w-4 text-primary"
                     >
                       <path
                         strokeLinecap="round"
@@ -407,31 +391,6 @@ const Dashboard: React.FC = () => {
                     this day
                   </p>
                 </div>
-                <button
-                  aria-expanded="false"
-                  aria-haspopup="menu"
-                  id=":r5:"
-                  className="relative middle none font-sans font-medium text-center uppercase transition-all disabled:opacity-50 disabled:shadow-none disabled:pointer-events-none w-8 max-w-[32px] h-8 max-h-[32px] rounded-lg text-xs text-blue-gray-500 hover:bg-blue-gray-500/10 active:bg-blue-gray-500/30"
-                  type="button"
-                >
-                  <span className="absolute top-1/2 left-1/2 transform -translate-y-1/2 -translate-x-1/2">
-                    <svg
-                      xmlns="http://www.w3.org/2000/svg"
-                      fill="currenColor"
-                      viewBox="0 0 24 24"
-                      strokeWidth="3"
-                      stroke="currentColor"
-                      aria-hidden="true"
-                      className="h-6 w-6"
-                    >
-                      <path
-                        strokeLinecap="round"
-                        strokeLinejoin="round"
-                        d="M12 6.75a.75.75 0 110-1.5.75.75 0 010 1.5zM12 12.75a.75.75 0 110-1.5.75.75 0 010 1.5zM12 18.75a.75.75 0 110-1.5.75.75 0 010 1.5z"
-                      ></path>
-                    </svg>
-                  </span>
-                </button>
               </div>
               <div className="p-6 overflow-x-scroll px-0 pt-0 pb-2">
                 <table className="w-full min-w-[640px] table-auto">
@@ -513,8 +472,77 @@ const Dashboard: React.FC = () => {
         </div>
       </div>
 
-      <div className="card">
+      {/* <div className="card">
         <Chart type="line" data={chartData} options={chartOptions} />
+      </div> */}
+
+      <div className="p-4 grid grid-cols-1 md:grid-cols-2 gap-4">
+        {/* Bar Chart Section */}
+        <div className="bg-white rounded-lg shadow-md p-4">
+          <div className="flex justify-between items-center mb-2">
+            <h3 className="font-semibold text-lg">Latest Sales</h3>
+            <span className="text-sm text-gray-500">Last 7 days</span>
+          </div>
+          <ResponsiveContainer width="100%" height={250}>
+            <BarChart data={barData}>
+              <XAxis dataKey="date" />
+              <YAxis />
+              <Tooltip
+                contentStyle={{
+                  backgroundColor: "#fff",
+                  borderRadius: "8px",
+                  border: "1px solid #ddd",
+                }}
+                itemStyle={{ color: "#6b48ab", fontWeight: "bold" }}
+                cursor={{ fill: "transparent" }}
+              />
+              <Bar
+                dataKey="Revenue"
+                fill="#6b48ab"
+                activeBar={false}
+                barSize={10}
+                radius={[5, 5, 0, 0]}
+              />
+            </BarChart>
+          </ResponsiveContainer>
+          <div className="text-right mt-2">
+            <a href="#" className="text-primary text-sm">
+              Overview
+            </a>
+          </div>
+        </div>
+
+        {/* Pie Chart Section */}
+        <div className="bg-white rounded-lg shadow-md p-4">
+          <h3 className="font-semibold text-lg mb-4">Users</h3>
+          <ResponsiveContainer width="100%" height={250}>
+            <PieChart>
+              <Pie
+                data={pieData}
+                cx="50%"
+                cy="50%"
+                innerRadius={60}
+                outerRadius={80}
+                paddingAngle={3}
+                dataKey="value"
+              >
+                {pieData.map((entry, index) => (
+                  <Cell key={`cell-${index}`} fill={entry.color} />
+                ))}
+              </Pie>
+            </PieChart>
+          </ResponsiveContainer>
+          <div className="flex justify-around mt-4 text-center">
+            {pieData.map((item, index) => (
+              <div key={index}>
+                <p className="text-sm font-medium">{item.name}</p>
+                <p className="text-sm" style={{ color: item.color }}>
+                  {item.value}%
+                </p>
+              </div>
+            ))}
+          </div>
+        </div>
       </div>
     </div>
   );

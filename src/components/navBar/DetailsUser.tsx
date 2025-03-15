@@ -79,8 +79,8 @@ const DetailsUser = ({ id }: { id: string }) => {
   };
 
   return (
-    <div className="max-w-4xl mx-auto bg-white shadow-lg rounded-lg overflow-hidden mt-5">
-      <div className="max-w-4xl mx-auto bg-white shadow-lg rounded-lg overflow-visible mt-5">
+    <div className="max-w-4xl mx-auto bg-white shadow-lg rounded-lg overflow-hidden ">
+      <div className="max-w-4xl mx-auto bg-white shadow-lg rounded-lg pt-16 overflow-visible mt-5">
         <div className="relative h-36 bg-gray-300">
           <Image
             className="object-cover"
@@ -187,9 +187,13 @@ const DetailsUser = ({ id }: { id: string }) => {
                           </button>
                         </div>
 
-                        <div className="flex items-center space-x-2 px-4 py-2 hover:bg-gray-100 cursor-pointer">
+                        <div
+                        onClick={() => setIsreportModalOpen(true)}  
+                        className="flex items-center space-x-2 px-4 py-2 hover:bg-gray-100 cursor-pointer">
                           <MdOutlineReport />
-                          <button className="text-left">Report</button>
+                          <button className="text-left"
+                           
+                         >Report</button>
                         </div>
                         {isreportModalOpen && (
                           <ReportUserModal
@@ -362,7 +366,7 @@ const DetailsUser = ({ id }: { id: string }) => {
         <div className="p-6 border-t">
           <h3 className="text-lg font-semibold">Projects</h3>
           <div className="mt-2">
-            {user.projects.map((item, index) => (
+            {user?.projects.map((item, index) => (
               <div key={index} className="mb-4">
                 <p className="font-bold">{item.title}</p>
                 <p className="text-gray-600">{item.description}</p>
@@ -426,11 +430,11 @@ const DetailsUser = ({ id }: { id: string }) => {
 
                 <div>
                   <p className="font-semibold">
-                    {person.connectionID.firstName}
+                    {person?.connectionID?.firstName}
                   </p>
                   <p className="text-xs text-gray-500">
-                    {person.connectionID.connecting
-                      ? person.connectionID.connecting.length
+                    {person?.connectionID?.connecting
+                      ? person?.connectionID?.connecting?.length
                       : 0}{" "}
                     followers
                   </p>

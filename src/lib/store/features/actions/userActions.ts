@@ -181,6 +181,86 @@ export const forgotPassword = createAsyncThunk(
   }
 )
 
+//update profile//
+
+// Update Banner
+export const updateBanner = createAsyncThunk(
+  "user/updateBanner",
+  async (banner: string, { dispatch,rejectWithValue }) => {
+    try {
+      const response = await handleAsync<AxiosResponse<RegisterResponse>>(() => api.put(
+        `user/update-banner`,
+        { banner },
+      ));
+      
+      dispatch(setActive(response?.data.user));
+      return response?.data;
+
+    } catch  {
+      return rejectWithValue("the banner not updated");
+    }
+  }
+);
+
+// Update Profile Image
+export const updateProfileImage = createAsyncThunk(
+  "user/updateProfileImage",
+  async (profileImage: string, { dispatch,rejectWithValue }) => {
+    try {
+      const response = await handleAsync<AxiosResponse<RegisterResponse>>(() => api.put(
+      
+        `user/update-profile-image`,
+        { profileImage },
+      ));
+      dispatch(setActive(response?.data.user));
+      return response?.data.user;
+    } catch {
+      return rejectWithValue("the profileimage not updated");
+    }
+  }
+);
+
+// Update Personal Details
+export const updateBasicInfo = createAsyncThunk(
+  "user/updateBasicInfo",
+  async (basicInfo: object, {dispatch, rejectWithValue }) => {
+    try {
+      const response = await handleAsync<AxiosResponse<RegisterResponse>>(() => api.put(
+     
+        `user/update-basic-info`,
+        basicInfo,
+      ));
+      dispatch(setActive(response?.data.user));
+      return response?.data.user;
+    } catch  {
+      return rejectWithValue("personal datail not updated");
+    }
+  }
+);
+
+// Update Professional Details
+export const updateOtherDetails = createAsyncThunk(
+  "user/updateOtherDetails",
+  async (otherDetails: object, {dispatch, rejectWithValue }) => {
+    try {
+      console.log(otherDetails)
+      const response = await handleAsync<AxiosResponse<RegisterResponse>>(() => api.put(
+
+        `user/update-other-details`,
+        otherDetails,
+      ));
+      console.log(response)
+      dispatch(setActive(response?.data.user));
+      return response?.data.user;
+    } catch {
+      return rejectWithValue("professional details not updated");
+    }
+  }
+);
+
+//update profile//
+
+
 // fetch the people might i know
 export const fetchPeopleKnow = createAsyncThunk(
   "post/fetchPeopleKnow",

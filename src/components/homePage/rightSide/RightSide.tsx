@@ -8,23 +8,18 @@ import api, { socket } from "@/utils/api";
 import { FaEllipsisV } from "react-icons/fa";
 import { IoMdArrowBack } from "react-icons/io";
 import Image from "next/image";
-import { RiArrowDropDownLine } from "react-icons/ri";
 import { HiOutlineAdjustmentsHorizontal } from "react-icons/hi2";
 import { CiSearch } from "react-icons/ci";
 import EmojiPicker from "emoji-picker-react";
 import { EmojiClickData } from "emoji-picker-react";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faSmile } from "@fortawesome/free-solid-svg-icons";
-import OutsideClickHandler from "react-outside-click-handler";
 import { BsThreeDots } from "react-icons/bs";
-import { Connection, User } from "@/types/Types";
+import { Connection } from "@/types/Types";
 
 import { MessageType } from "@/types/Types";
-import { toast } from "react-toastify";
 export default function RightSide() {
-  const dispatch = useAppDispatch();
-  const [conversation, setConversation] = useState({});
-  const [Chatlist, setChatlist] = useState([]);
+
   const [selectedUser, setSelectedUser] = useState<Connection | null>(null);
   const [message, setMessage] = useState("");
   const [messages, setMessages] = useState<MessageType[]>([]);
@@ -32,9 +27,10 @@ export default function RightSide() {
   const [activeTab, setActiveTab] = useState("focused");
   const [focused, setFocused] = useState<Connection[]>([]);
 
-  const [other, setOther] = useState<User[]>([]);
+  const [other, setOther] = useState([]);
   const activeuser = useAppSelector((state) => state.user.activeuser);
   const [showPicker, setShowPicker] = useState(false);
+  // const [showPickerImogi, setShowPickerImogi] = useState(false);
 
   const [filterDropdown, setfilterDropdown] = useState(false);
   const [Dropdown, setDropdown] = useState<string | null>(null);
@@ -50,73 +46,60 @@ export default function RightSide() {
   useEffect(() => {
     const fetch = async () => {
       const response = await api.get(`/connecting/getconnection`);
-      console.log("response of members", response);
       setMembers(response.data.connections);
     };
     fetch();
-    fetchMembers();
+    // fetchMembers();
   }, []);
 
-  console.log("memberss", members);
 
   useEffect(() => {
     if (activeTab === "focused") {
-      setFocused(Chatlist);
+      setFocused(members);
     } else {
       setOther(members);
     }
-  }, [activeTab, members, Chatlist]);
+  }, [activeTab, members]);
 
-  const fetchMembers = () => {
-    const result = dispatch(findnMembers);
-    console.log("result", result);
-  };
-  const fetchMessages = async () => {
-    if (selectedUser) {
-      const responseofMessage = await api.get(
-        `/message/conversation/${activeuser?._id}/${
-          selectedUser?.connectionID?._id || selectedUser?._id
-        }`
-      );
-      console.log("responseofMessage", responseofMessage);
-      setMessages(responseofMessage.data.messages);
-    }
-  };
+  // const fetchMembers = () => {
+  //   const result = dispatch(findnMembers);
+  // };
+
   useEffect(() => {
-    
+    const fetchMessages = async () => {
+      if (selectedUser) {
+        const responseofMessage = await api.get(
+          `/message/conversation/${activeuser?._id}/${selectedUser.connectionID._id}`
+        );
+        setMessages(responseofMessage.data.messages);
+      }
+    };
     fetchMessages();
   }, [selectedUser, activeuser?._id]);
-  console.log("messages", messages);
 
-  const handleUserSelect = (user: Connection) => {
-    console.log("user....", user);
+  const handleUserSelect = (user:Connection) => {
     setSelectedUser(user);
     setMessages([]);
-    socket.emit("joinRoom", user?.connectionID?._id || user?._id);
+    socket.emit("joinRoom", user.connectionID._id);
   };
 
   // Send Message
   const handleSendMessage = async () => {
     const response = await api.post(
-      `/message/send/${activeuser?._id}/${
-        selectedUser?.connectionID?._id || selectedUser?._id
-      }`,
+      `/message/send/${activeuser?._id}/${selectedUser?.connectionID._id}`,
       { message: message }
     );
-    console.log("responseresponse", response);
 
     setMessage("");
   };
 
   useEffect(() => {
     socket.on("connect", () => {
-      console.log("Connected to server:", socket.id);
     });
 
     socket.emit("joinRoom", activeuser?._id);
 
     socket.on("receiveMessage", (data) => {
-      console.log("Received message:", data);
       setMessages((prevMessages) => [...prevMessages, data.message]);
     });
 
@@ -127,112 +110,35 @@ export default function RightSide() {
     };
   }, [selectedUser?.connectionID?._id]);
 
-  console.log("all messages", messages);
-  console.log("selectedUser", selectedUser);
 
   const handleEmojiClick = (emojiObject: EmojiClickData) => {
     setMessage((prev) => prev + emojiObject.emoji);
   };
-
-  useEffect(() => {
-    const fetchUsers = async () => {
-      const response = await api.get(`/message/chatlist`);
-      console.log("response of chatlist of active user", response);
-      setChatlist(response.data.chats);
-    };
-    fetchUsers();
-  }, []);
-  console.log("Chatlist", Chatlist);
-
-  const fetchAllConversation = async () => {
-    const senderId = activeuser?._id;
-    const receiverId = selectedUser?._id || selectedUser?.connectionID?._id;
-    console.log("selectedUser...conver", selectedUser);
-
-    console.log("senderId,receiverId", senderId, receiverId);
-    if (!senderId || !receiverId) {
-      toast.warn("Sender or Receiver ID missing. Skipping API call.");
-      return; // Stop if IDs are missing
-    }
-    const response = await api.get(
-      `/message/conversations/${senderId}/${receiverId}`
-    );
-
-    console.log("response of conversation of this user", response);
-    setConversation(response.data.conversation);
-  };
-  useEffect(() => {
-    if (
-      activeuser?._id &&
-      (selectedUser?._id || selectedUser?.connectionID?._id)
-    ) {
-      fetchAllConversation();
-    } else {
-      console.log("Waiting for IDs to be ready...");
-    }
-  }, [activeuser, selectedUser]);
-  console.log("conversss", conversation);
-
-  const handleBlock = async (recieverid: string, block: string) => {
-    if (!activeuser?._id || !recieverid) {
-      console.error("Missing active user or receiver ID");
-      return;
-    }
-    const response = await api.post(
-      `/message/blockOrunblock/${activeuser?._id}/${recieverid}`,
-      { action: block }
-    );
-    console.log("res", response);
-    fetchAllConversation();
-  };
-
-  const handleStar = async (recieverid: string, star: string) => {
-    const response = await api.post(
-      `/message/starOrRemovestar/${activeuser?._id}/${recieverid}`,
-      { action: star }
-    );
-    console.log("response of starring", response);
-    fetchAllConversation();
-  };
-const handleClearChat=async(receiverId:string)=>{
-  const response=await api.patch(`/message/clearchat/${activeuser?._id}/${receiverId}`)
-
-  console.log("response of clearchat",response);
-  fetchMessages();
-}
-
-
-const handleDeleteConversation=async(receiverId:string)=>{
-  const response=await api.delete(`/message/deleteconversation/${activeuser?._id}/${receiverId}`)
-
-  console.log("response of clearchat",response);
-  fetchAllConversation();
-}
   return (
     <>
       <div
         id="hs-sidebar-empty-content"
-        className="hs-overlay z-50 [--auto-close:lg] border lg:block lg:translate-x-0 lg:start-auto lg:bottom-0   
+        className="hs-overlay  [--auto-close:lg] border lg:block lg:translate-x-0 lg:start-auto lg:bottom-0   
 hs-overlay-open:translate-x-0
 translate-x-full transition-all duration-300 transform 
 rounded-lg
-  overflow-y-auto max-h-screen scroll-smooth scrollbar-hidden
-bg-white border-s border-gray-200 dark:bg-neutral-800 dark:border-neutral-700 w-[270px]"
+  overflow-y-auto h-[80vh] scroll-smooth scrollbar-hidden
+bg-white border-s border-gray-200 dark:bg-neutral-800 dark:border-neutral-700 w-full"
         role="dialog"
         aria-label="Sidebar"
       >
-        <div className="flex h-screen">
+        <div className="flex  h-[80vh]">
           {/* Sidebar - List of Users */}
           {!selectedUser && (
             <aside className="w-full  border-r overflow-y-auto">
               <div className="p-4">
                 <div className="flex justify-between items-center w-full border-b border-gray-400">
                   {/* Left Section */}
-                  <div className="flex items-center space-x-2 mb-4 ">
+                  <div className="flex  items-center space-x-2 mb-4 ">
                     <Image
                       src={activeuser?.profileImage || ""}
                       alt="user"
-                      className="rounded-full"
+                      className="size-6 rounded-full"
                       width={32}
                       height={32}
                     />
@@ -245,7 +151,7 @@ bg-white border-s border-gray-200 dark:bg-neutral-800 dark:border-neutral-700 w-
                       {/* Filter Button */}
                       <button
                         onClick={handleFilterDropdown}
-                        className="p-2 bg-gray-100 rounded-md hover:bg-gray-200 flex items-center gap-1"
+                        className="p-2  rounded-md hover:bg-gray-200 flex items-center gap-1"
                       >
                         <HiOutlineAdjustmentsHorizontal className="text-xl text-gray-600" />
                       </button>
@@ -273,7 +179,7 @@ bg-white border-s border-gray-200 dark:bg-neutral-800 dark:border-neutral-700 w-
                         </div>
                       )}
                     </div>
-                    <RiArrowDropDownLine className="text-3xl" />
+                  
                   </div>
                 </div>
                 <br></br>
@@ -312,10 +218,10 @@ bg-white border-s border-gray-200 dark:bg-neutral-800 dark:border-neutral-700 w-
                 </div>
 
                 <div className="space-y-4 mt-4">
-                  {activeTab === "other" ? (
-                    other.map((chat, index) => (
+                  {activeTab === "focused" ? (
+                    focused.map((chat, index) => (
                       <div
-                        key={index}
+                        key={chat._id}
                         className={`flex items-center justify-between p-2 rounded-lg cursor-pointer transition ${
                           selectedUser === chat
                             ? "bg-blue-100"
@@ -325,69 +231,56 @@ bg-white border-s border-gray-200 dark:bg-neutral-800 dark:border-neutral-700 w-
                       >
                         {/* User Info - Aligned to the left */}
                         <div className="flex items-center">
-                          <img
+                          <Image
                             src={chat.connectionID.profileImage}
                             alt="User"
                             className="w-10 h-10 rounded-full"
+                            width={30}
+                            height={30}
                           />
                           <div className="ml-3">
                             <h2 className="text-sm font-semibold">
-                              {chat.connectionID.firstName}
+                              {chat.connectionID?.firstName}
                             </h2>
                           </div>
+                        </div>
+
+                        {/* Three Dots Icon - Aligned to the right */}
+                        <div className="relative">
+                          <button
+                            onClick={(event) =>
+                              handleDropdown(event, chat.connectionID._id)
+                            }
+                          >
+                            <BsThreeDots className="text-gray-500 hover:text-gray-700 cursor-pointer" />
+                          </button>
+
+                          {Dropdown === chat.connectionID._id && (
+                            <div className="absolute top-full right-0 mt-1 w-40 bg-white shadow-lg rounded-lg border z-50">
+                              <ul className="flex flex-col">
+                                <li>
+                                  <button className="w-full text-left px-4 py-2 hover:bg-gray-100 text-sm font-semibold">
+                                    Star
+                                  </button>
+                                </li>
+                                <li>
+                                  <button className="w-full text-left px-4 py-2 hover:bg-gray-100 text-sm font-semibold">
+                                    Block
+                                  </button>
+                                </li>
+                                <li>
+                                  <button className="w-full text-left px-4 py-2 hover:bg-gray-100 text-sm font-semibold">
+                                    Delete conversation
+                                  </button>
+                                </li>
+                              </ul>
+                            </div>
+                          )}
                         </div>
                       </div>
                     ))
                   ) : (
-                    <div>
-                      {focused.map((item) => {
-                        const formattedDate = new Date(
-                          item.lastMessage.timestamp
-                        ).toLocaleDateString("en-US", {
-                          month: "long",
-                          day: "numeric",
-                        });
-
-                        return (
-                          <div
-                            key={item.user?._id}
-                            className={`flex items-center justify-between p-2 rounded-lg cursor-pointer transition  ${
-                              selectedUser === item.user
-                                ? "bg-blue-100"
-                                : "bg-white hover:bg-gray-200"
-                            }`}
-                            onClick={() => handleUserSelect(item.user)}
-                          >
-                            {/* User Info - Aligned to the left */}
-                            <div className="flex items-center">
-                              <img
-                                src={item.user.profileImage}
-                                alt="User"
-                                className="w-10 h-10 rounded-full object-cover"
-                              />
-                              <div className="ml-3 ">
-                                <h2 className="text-sm font-semibold">
-                                  {item.user.firstName}
-                                </h2>
-                                <p className="text-sm text-gray-600">
-                                  <span className="font-medium">
-                                    {item.lastMessage?.sender === activeuser?._id
-                                      ? "You: "
-                                      : item.user?.firstName + ": "}
-                                  </span>
-                                  {item.lastMessage?.message}
-                                </p>
-                              </div>
-                            </div>
-
-                            {/* Date - Aligned to the right and centered vertically */}
-                            <div className="ml-auto text-xs text-gray-500">
-                              {formattedDate}
-                            </div>
-                          </div>
-                        );
-                      })}
-                    </div>
+                    <div>noooo</div>
                   )}
                 </div>
               </div>
@@ -404,129 +297,25 @@ bg-white border-s border-gray-200 dark:bg-neutral-800 dark:border-neutral-700 w-
                         onClick={() => setSelectedUser(null)}
                         className="text-xl"
                       />
-                      <img
-                        src={
-                          selectedUser?.connectionID?.profileImage ||
-                          selectedUser?.profileImage
-                        }
+                      <Image
+                        src={selectedUser?.connectionID.profileImage}
                         className="w-10 h-10 rounded-full"
                         alt="User"
+                        width={10}
+                        height={10}
+
                       />
                       <div className="ml-3">
                         <h2 className="font-medium">
-                          {selectedUser?.connectionID?.firstName ||
-                            selectedUser?.firstName}
+                          {selectedUser?.connectionID.firstName}
                         </h2>
                       </div>
                     </div>
 
                     <div className="relative">
-                      <button
-                        onClick={(event) =>
-                          handleDropdown(
-                            event,
-                            selectedUser?.connectionID?._id || selectedUser?._id
-                          )
-                        }
-                      >
-                        <BsThreeDots className="text-gray-500 hover:text-gray-700 cursor-pointer" />
-                      </button>
-
-                      {(Dropdown === selectedUser?.connectionID?._id || Dropdown === selectedUser?._id) && 
-                        (selectedUser?._id && (
-                          <div className="absolute top-full right-0 mt-1 w-40 bg-white shadow-lg rounded-lg border z-50">
-                            <ul className="flex flex-col">
-                              {conversation?.isStarredUsers
-                                ?.map((id) => id.toString())
-                                .includes(
-                                  selectedUser?._id ||
-                                    selectedUser?.connectionID?._id
-                                ) ? (
-                                <li>
-                                  <button
-                                    onClick={() =>
-                                      handleStar(
-                                        selectedUser?.connectionID?._id ||
-                                          selectedUser?._id,
-                                        "removestar"
-                                      )
-                                    }
-                                    className="w-full text-left px-4 py-2 hover:bg-gray-100 text-sm font-semibold"
-                                  >
-                                    Remove star
-                                  </button>
-                                </li>
-                              ) : (
-                                <li>
-                                  <button
-                                    onClick={() =>
-                                      handleStar(
-                                        selectedUser?.connectionID?._id ||
-                                          selectedUser?._id,
-                                        "star"
-                                      )
-                                    }
-                                    className="w-full text-left px-4 py-2 hover:bg-gray-100 text-sm font-semibold"
-                                  >
-                                    Star
-                                  </button>
-                                </li>
-                              )}
-
-                              {conversation?.isBlockedUsers
-                                ?.map((id) => id.toString())
-                                .includes(
-                                  activeuser?._id || selectedUser?._id
-                                ) ? (
-                                <li>
-                                  <button
-                                    onClick={() =>
-                                      handleBlock(
-                                        selectedUser?.connectionID?._id ||
-                                          selectedUser?._id,
-                                        "unblock"
-                                      )
-                                    }
-                                    className="w-full text-left px-4 py-2 hover:bg-gray-100 text-sm font-semibold"
-                                  >
-                                    UnBlock
-                                  </button>
-                                </li>
-                              ) : (
-                                <li>
-                                  <button
-                                    onClick={() =>
-                                      handleBlock(
-                                        selectedUser?.connectionID?._id ||
-                                          selectedUser?._id,
-                                        "block"
-                                      )
-                                    }
-                                    className="w-full text-left px-4 py-2 hover:bg-gray-100 text-sm font-semibold"
-                                  >
-                                    Block
-                                  </button>
-                                </li>
-                              )}
-
-                              <li>
-                                <button 
-                                onClick={()=>handleDeleteConversation( selectedUser?.connectionID?._id ||selectedUser?._id,)}
-                                className="w-full text-left px-4 py-2 hover:bg-gray-100 text-sm font-semibold">
-                                  Delete conversation
-                                </button>
-                              </li>
-
-                              <li>
-                                <button 
-                                onClick={()=>handleClearChat( selectedUser?.connectionID?._id ||selectedUser?._id,)}
-                                className="w-full text-left px-4 py-2 hover:bg-gray-100 text-sm font-semibold">
-                                  Clear chat
-                                </button>
-                              </li>
-                            </ul>
-                          </div>
-                        ))}
+                      <div className="flex space-x-4 cursor-pointer">
+                        <FaEllipsisV className="text-gray-600" />
+                      </div>
                     </div>
                   </header>
 
@@ -571,22 +360,23 @@ bg-white border-s border-gray-200 dark:bg-neutral-800 dark:border-neutral-700 w-
                           {/* Show name and profile only if it's the first message of a sequence */}
                           {showProfile && (
                             <div className="flex items-center space-x-1">
-                              <img
-                                src={`${
-                                  msg.sender === activeuser?._id
-                                    ? activeuser?.profileImage
-                                    : selectedUser?.connectionID?.profileImage
-                                    ? selectedUser?.connectionID?.profileImage
-                                    : selectedUser?.profileImage
-                                }`}
-                                className="w-8 h-8 rounded-full"
-                              />
+                              <Image
+  src={
+    msg.sender === activeuser?._id
+      ? activeuser?.profileImage || "/default-avatar.png"
+      : selectedUser?.connectionID?.profileImage || "/default-avatar.png"
+  }
+  className="w-8 h-8 rounded-full"
+  width={30}
+  height={30}
+  alt="User Profile"
+  loading="lazy"
+/>
+
                               <p className="text-sm font-semibold">
                                 {msg.sender === activeuser?._id
                                   ? "You"
-                                  : selectedUser?.connectionID?.firstName
-                                  ? selectedUser?.connectionID?.firstName
-                                  : selectedUser?.firstName}
+                                  : selectedUser?.connectionID.firstName}
                               </p>
                             </div>
                           )}

@@ -1,148 +1,196 @@
 import React, { useState } from "react";
 import { Country, State, City } from "country-state-city";
 import { useAppDispatch, useAppSelector } from "@/lib/store/hooks";
-import {
-  
-  setLocation
-} from "@/lib/store/features/userSlice";
 import { IlocationType } from "@/types/Types";
-import { User } from "@/types/Types";
+import { Formik, Form, Field, ErrorMessage } from "formik";
+import * as Yup from "yup";
+import { setprofessionalUserData } from "@/lib/store/features/userSlice";
+import { RxCross2 } from "react-icons/rx";
+
+const LocationSchema = Yup.object().shape({
+  country: Yup.string().required("Country is required"),
+});
+
 function Location() {
   const dispatch = useAppDispatch();
-  const user = useAppSelector(
-    (state) => state.user.activeuser as User | null
+  const professionalUserData = useAppSelector(
+    (state) => state.user.professionalData
   );
-  const [newLocation, setNewLocation] = useState<IlocationType>({
-    country: "",
-    countryName: "",
-    state: "",
-    stateName: "",
-    city: "",
-  });
+  const handleRemove = () => {
+    console.log("first");
+    dispatch(
+      setprofessionalUserData({
+        ...professionalUserData,
+        location: undefined, // Set location to undefined
+      })
+    );
+  };
+
+  const [selectedCountry, setSelectedCountry] = useState<string>("");
+  const [selectedState, setSelectedState] = useState<string>("");
 
   const countries = Country.getAllCountries();
-  const states = newLocation.country
-    ? State.getStatesOfCountry(newLocation.country)
+  const states = selectedCountry
+    ? State.getStatesOfCountry(selectedCountry)
     : [];
-  const cities = newLocation.state
-    ? City.getCitiesOfState(newLocation.country, newLocation.state)
+  const cities = selectedState
+    ? City.getCitiesOfState(selectedCountry, selectedState)
     : [];
-
-  const handleChange = (
-    e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>
-  ) => {
-    const { name, value } = e.target;
-
-    if (name === "country") {
-      const selectedCountry = countries.find((c) => c.isoCode === value);
-      setNewLocation({
-        country: selectedCountry?.isoCode || "",
-        countryName: selectedCountry?.name || "",
-        state: "",
-        stateName: "",
-        city: "",
-      });
-    } else if (name === "state") {
-      const selectedState = states.find((s) => s.isoCode === value);
-      setNewLocation({
-        ...newLocation,
-        state: selectedState?.isoCode || "",
-        stateName: selectedState?.name || "",
-        city: "",
-      });
-    } else if (name === "city") {
-      setNewLocation({ ...newLocation, city: value });
-    }
-  };
-
-  const handleAddLocation = () => {
-    if (newLocation.country && newLocation.state && newLocation.city) {
-      dispatch(setLocation(newLocation));
-      setNewLocation({
-        country: "",
-        countryName: "",
-        state: "",
-        stateName: "",
-        city: "",
-      });
-    }
-  };
 
   return (
-    <div>
-      <div className="p-6 bg-gray-100 rounded-lg shadow-lg mt-4 w-full">
-        <h2 className="text-2xl font-semibold mb-4 text-gray-800">Locations</h2>
+    <div className="px-4 md:px-10 lg:px-20">
+      <h2 className="text-2xl font-semibold mb-4 text-gray-800 text-center">
+        Locations
+      </h2>
 
-        <select
-          name="country"
-          className="border p-3 w-full rounded-lg mb-3 focus:outline-none focus:ring-2 focus:ring-blue-400"
-          value={newLocation.country}
-          onChange={handleChange}
-        >
-          <option value="">Select Country</option>
-          {countries.map((country) => (
-            <option key={country.isoCode} value={country.isoCode}>
-              {country.name}
-            </option>
-          ))}
-        </select>
+      <Formik
+        initialValues={{
+          country: "",
+          countryName: "",
+          state: "",
+          stateName: "",
+          city: "",
+        }}
+        validationSchema={LocationSchema}
+        onSubmit={(values, { resetForm }) => {
+          const selectedCountryData = countries.find(
+            (c) => c.isoCode === values.country
+          );
+          const selectedStateData = states.find(
+            (s) => s.isoCode === values.state
+          );
 
-        {/* State Dropdown */}
-        <select
-          name="state"
-          className="border p-3 w-full rounded-lg mb-3 focus:outline-none focus:ring-2 focus:ring-blue-400"
-          value={newLocation.state}
-          onChange={handleChange}
-          disabled={!newLocation.country}
-        >
-          <option value="">Select State</option>
-          {states.map((state) => (
-            <option key={state.isoCode} value={state.isoCode}>
-              {state.name}
-            </option>
-          ))}
-        </select>
+          const newLocation: IlocationType = {
+            country: values.country,
+            countryName: selectedCountryData?.name || "",
+            state: values.state || "", // Allow empty state
+            stateName: selectedStateData?.name || "",
+            city: values.city || "", // Allow empty city
+          };
 
-        {/* City Dropdown */}
-        <select
-          name="city"
-          className="border p-3 w-full rounded-lg mb-3 focus:outline-none focus:ring-2 focus:ring-blue-400"
-          value={newLocation.city}
-          onChange={handleChange}
-          disabled={!newLocation.state}
-        >
-          <option value="">Select City</option>
-          {cities.map((city) => (
-            <option key={city.name} value={city.name}>
-              {city.name}
-            </option>
-          ))}
-        </select>
+          dispatch(
+            setprofessionalUserData({
+              ...professionalUserData,
+              location: newLocation, // Directly update the location object
+            })
+          );
 
-        <button
-          onClick={handleAddLocation}
-          className="bg-blue-500 text-white px-4 py-2 rounded-lg font-medium hover:bg-blue-600 transition duration-200 disabled:opacity-50 disabled:cursor-not-allowed mt-3"
-          disabled={
-            !newLocation.country || !newLocation.state || !newLocation.city
-          }
-        >
-          Add Location
-        </button>
+          resetForm();
+          setSelectedCountry("");
+          setSelectedState("");
+        }}
+      >
+        {({ values, setFieldValue }) => (
+          <Form className="space-y-4">
+            {/* Country Selection */}
+            <div>
+              <Field
+                as="select"
+                name="country"
+                className="border p-3 w-full rounded-lg focus:outline-none focus:ring-2 focus:ring-purple-400"
+                onChange={(e: React.ChangeEvent<HTMLSelectElement>) => {
+                  const value = e.target.value;
+                  setSelectedCountry(value);
+                  setSelectedState("");
+                  setFieldValue("country", value);
+                  setFieldValue(
+                    "countryName",
+                    countries.find((c) => c.isoCode === value)?.name || ""
+                  );
+                  setFieldValue("state", "");
+                  setFieldValue("stateName", "");
+                  setFieldValue("city", "");
+                }}
+              >
+                <option value="">Select Country</option>
+                {countries.map((country) => (
+                  <option key={country.isoCode} value={country.isoCode}>
+                    {country.name}
+                  </option>
+                ))}
+              </Field>
+              <ErrorMessage
+                name="country"
+                component="div"
+                className="text-red-500 text-sm mt-1"
+              />
+            </div>
 
+            {/* State Selection (Optional) */}
+            <div>
+              <Field
+                as="select"
+                name="state"
+                className="border p-3 w-full rounded-lg focus:outline-none focus:ring-2 focus:ring-purple-400"
+                disabled={!values.country}
+                onChange={(e: React.ChangeEvent<HTMLSelectElement>) => {
+                  const value = e.target.value;
+                  setSelectedState(value);
+                  setFieldValue("state", value);
+                  setFieldValue(
+                    "stateName",
+                    states.find((s) => s.isoCode === value)?.name || ""
+                  );
+                }}
+              >
+                <option value="">Select State (Optional)</option>
+                {states.map((state) => (
+                  <option key={state.isoCode} value={state.isoCode}>
+                    {state.name}
+                  </option>
+                ))}
+              </Field>
+            </div>
+
+            {/* City Selection (Optional) */}
+            <div>
+              <Field
+                as="select"
+                name="city"
+                className="border p-3 w-full rounded-lg focus:outline-none focus:ring-2 focus:ring-purple-400"
+                disabled={!values.state}
+              >
+                <option value="">Select City (Optional)</option>
+                {cities.map((city) => (
+                  <option key={city.name} value={city.name}>
+                    {city.name}
+                  </option>
+                ))}
+              </Field>
+            </div>
+
+            {/* Submit Button */}
+            <button
+              type="submit"
+              className="w-full bg-primary text-white px-4 py-2 rounded-lg font-medium  transition duration-200 disabled:opacity-50 disabled:cursor-not-allowed mt-3"
+              disabled={!values.country}
+            >
+              Add Location
+            </button>
+          </Form>
+        )}
+      </Formik>
+
+      {/* Display Selected Location */}
+      {professionalUserData?.location && (
         <div className="mt-4">
-          <h3 className="text-xl font-semibold">Added Locations</h3>
           <ul className="mt-2">
-            <li className="bg-gray-200 p-3 rounded-md mb-2 flex justify-between items-center">
-              <div>
-                <p className="font-semibold">
-                  {user?.location?.countryName} - {user?.location?.stateName} -{" "}
-                  {user?.location?.city}
-                </p>
-              </div>
+            <li className="bg-gray-200 p-3 flex justify-between rounded-md text-center font-semibold">
+              {professionalUserData.location.countryName}
+              {professionalUserData.location.stateName &&
+                ` - ${professionalUserData.location.stateName}`}
+              {professionalUserData.location.city &&
+                ` - ${professionalUserData.location.city}`}
+
+              <button onClick={handleRemove}>
+                <RxCross2 className="text-red-500 text-xl cursor-pointer" />
+              </button>
             </li>
           </ul>
         </div>
-      </div>
+      )}
+
+      {/* Display Selected Location */}
     </div>
   );
 }

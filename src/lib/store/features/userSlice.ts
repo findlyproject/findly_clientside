@@ -1,108 +1,11 @@
-
-
-import { Ieducation, IlocationType, JobLocationType, SavedType, User } from "@/types/Types";
+import {
+  Ieducation,
+  IlocationType,
+  JobLocationType,
+  User,
+} from "@/types/Types";
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
-import { Url } from "url";
 
-// export interface Ieducation {
-//   qualification: string;
-//   startYear: string;
-//   endYear: string;
-//   college: string;
-//   Subject: string;
-
-// }[]
-
-// export interface IlocationType {
-//   country: string;
-//   countryName: string;
-//   state: string;
-//   stateName: string;
-//   city: string;
-// }
-
-// export interface JobLocationType {
-//   country: string;
-//   countryName: string;
-//   state: string;
-//   stateName: string;
-//   city: string;
-// }
-
-// export interface UserProfile {
-//   firstName: string;
-//   lastName: string;
-//   email: string;
-//   password: string;
-//   phoneNumber?: string;
-//   dateOfBirth?: Date;
-//   type: string;
-//   name: string;
-//   logo: string;
-//   following: UserProfile[];
-
-//   gender: string;
-
-//   location?: IlocationType;
-
-//   profileImage?: string;
-//   banner?: string;
-//   skills?: string[];
-//   jobTitle?: string[];
-//   jobLocation?: JobLocationType[];
-//   education: Ieducation[]
-
-//   experience: {
-//     jobRole: string;
-//     companyName: string;
-//     startYear: string;
-//     endYear: string;
-//   }[];
-//   projects?: {
-//     title: string;
-//     description: string;
-//     link?: string | Url | undefined;
-//   }[];
-
-//   connecting: Connection[]
-//   about?: string;
-//   createdAt:string;
-//   updatedAt:string;
-//   resumePDF?: {
-//     fileUrl: string;
-//     fileName: string;
-//     uploadedAt: Date | null;
-//     isDeleted: boolean;
-//   }[];
-//   resumeVideo?: {
-//     fileUrl: string;
-//     fileName: string;
-//     uploadedAt: Date | null;
-//     isDeleted: boolean;
-//   }[];
-//   role: "user" | "premium";
-//   subscriptionEndDate: Date | null;
-//   subscriptionStartDate: Date | null;
-//   coverLetter?: string;
-//   isBlocked?: boolean;
-//   _id: string;
-// }
-
-// export interface Connection {
-
-//   connectionID: {
-//     _id: string;
-//     profileImage: string;
-//     firstName: string;
-//     jobTitle: string[];
-//     connecting:Connection[]
-//   };
-//   status:boolean
-  
-//   createdAt:string;
-//   _id:string
-
-// }
 interface LoginState {
   activeuser: User | null;
   googlestate: boolean;
@@ -114,7 +17,7 @@ interface LoginState {
     email: string;
     otp: string;
   };
-  savedJobs: SavedType[];
+  savedJobs: string[];
   jobfilter: {
     title: string;
     experienceLevel: string;
@@ -122,13 +25,26 @@ interface LoginState {
     jobType: string;
   };
   allJobs: string[];
+  professionalData: {
+    location?: IlocationType;
+    skills?: string[];
+    jobTitle?: string[];
+    jobLocation?: JobLocationType[];
+    education: Ieducation[];
+    experience: {
+      jobRole: string;
+      companyName: string;
+      description: string;
+      startYear: string;
+      endYear: string;
+    }[];
+    projects?: {
+      title: string;
+      description: string;
+      link?: string;
+    }[];
+  };
 }
-
-
-
-
-
-
 
 const initialState: LoginState = {
   activeuser: null,
@@ -146,35 +62,19 @@ const initialState: LoginState = {
     title: "",
     experienceLevel: "",
     industry: "",
-    jobType: ""
+    jobType: "",
   },
-  allJobs:[]
+  allJobs: [],
+  professionalData: {
+    location: undefined,
+    skills: [],
+    jobTitle: [],
+    jobLocation: [],
+    education: [],
+    experience: [],
+    projects: [],
+  },
 };
-
-// interface EditState {
-//   firstName?: string;
-//   lastName?: string;
-//   email?: string;
-//   phoneNumber?: string;
-//   dateOfBirth?: Date;
-//   about?: string;
-//   profileImage?: string;
-//   banner?: string;
-// }
-interface ResumeFile {
-  fileUrl: string;
-  fileName: string;
-  uploadedAt: Date | null;
-  isDeleted: boolean;
-}
-
-interface ResumePayload {
-  resumePDF: ResumeFile[];
-  resumeVideo: ResumeFile[];
-}
-
-
-
 
 const loginSlice = createSlice({
   name: "login",
@@ -189,66 +89,93 @@ const loginSlice = createSlice({
     SetLogout: (state) => {
       state.activeuser = null;
       state.googlestate = true;
+      state.professionalData = {
+        location: undefined,
+        skills: [],
+        jobTitle: [],
+        jobLocation: [],
+        education: [],
+        experience: [],
+        projects: [],
+      };
     },
-    setEducation: (state, action: PayloadAction<Ieducation>) => {
-      state.activeuser?.education.push(action.payload);
-    },
-    setRemoveEducation: (state, action: PayloadAction<number>) => {
-      if (state.activeuser?.education) {
-        state.activeuser.education = state.activeuser.education.filter(
-          (_, index) => index !== action.payload
-        );
+    //setting the professional of activeuser
+    setprofessionalUserData: (
+      state,
+      action: PayloadAction<Partial<typeof state.professionalData>>
+    ) => {
+      if (!action.payload) return;
+
+      if (!state.professionalData) {
+        state.professionalData = {
+          location: state.activeuser?.location || undefined,
+          skills: state.activeuser?.skills || [],
+          jobTitle: state.activeuser?.jobTitle || [],
+          jobLocation: state.activeuser?.jobLocation || [],
+          education: [...(state.activeuser?.education || [])],
+          experience: state.activeuser?.experience || [],
+          projects: state.activeuser?.projects || [],
+        };
       }
+      Object.entries(action.payload).forEach(([key, value]) => {
+        const typedKey = key as keyof typeof state.professionalData;
+
+        if (
+          Array.isArray(state.professionalData[typedKey]) &&
+          Array.isArray(value)
+        ) {
+          const existingArray = state.professionalData[
+            typedKey
+          ] as unknown as User[];
+
+          const uniqueValues = Array.from(
+            new Map(
+              [...existingArray, ...value].map((item) => [
+                JSON.stringify(item),
+                item,
+              ])
+            ).values()
+          );
+
+          state.professionalData[typedKey] = uniqueValues as never;
+        } else if (value !== undefined) {
+          state.professionalData[typedKey] = value as never;
+        }
+      });
     },
-    setjobLocations: (state, action: PayloadAction<JobLocationType>) => {
-      state.activeuser?.jobLocation?.push(action.payload);
-    },
-    setRemovejoblocation: (state, action: PayloadAction<number>) => {
-      if (state.activeuser?.jobLocation) {
-        state.activeuser.jobLocation = state.activeuser.jobLocation.filter(
-          (_, index) => index !== action.payload
-        );
-      }
-    },
-    setjobTItles: (state, action: PayloadAction<string>) => {
-      state.activeuser?.jobTitle?.push(action.payload);
-    },
-    setRemovjobTItles: (state, action: PayloadAction<number>) => {
-      if (state.activeuser?.jobTitle) {
-        state.activeuser.jobTitle = state.activeuser.jobTitle.filter(
-          (_, index) => index !== action.payload
-        );
-      }
-    },
-    setLocation: (state, action: PayloadAction<IlocationType>) => {
-      if (state.activeuser) {
-        state.activeuser.location = action.payload;
-      }
-    },
-    setPersonalDetails: (state, action: PayloadAction<Partial<User>>) => {
-      if (state.activeuser) {
-        state.activeuser.firstName =
-          action.payload.firstName ?? state.activeuser.firstName;
-        state.activeuser.lastName =
-          action.payload.lastName ?? state.activeuser.lastName;
-        state.activeuser.email = action.payload.email ?? state.activeuser.email;
-        state.activeuser.phoneNumber =
-          action.payload.phoneNumber ?? state.activeuser.phoneNumber;
-        state.activeuser.dateOfBirth =
-          action.payload.dateOfBirth ?? state.activeuser.dateOfBirth;
-        state.activeuser.about = action.payload.about ?? state.activeuser.about;
-      }
-    },
-    setProject: (
+
+    setRemoveField: (
       state,
       action: PayloadAction<{
-        title: string;
-        description: string;
-        link?: string;
+        field:
+          | "education"
+          | "jobTitle"
+          | "projects"
+          | "skills"
+          | "experience"
+          | "jobLocation"
+          | "location";
+        index: number;
       }>
     ) => {
-      state.activeuser?.projects?.push(action.payload);
+      const { field, index } = action.payload;
+
+      if (state.activeuser && Array.isArray(state.activeuser[field])) {
+        state.activeuser[field] = state.activeuser[field].filter(
+          (_, i) => i !== index
+        ) as never;
+      }
+
+      if (
+        state.professionalData &&
+        Array.isArray(state.professionalData[field])
+      ) {
+        state.professionalData[field] = state.professionalData[field].filter(
+          (_, i) => i !== index
+        ) as never;
+      }
     },
+
     setremovproject: (state, action: PayloadAction<number>) => {
       if (state.activeuser?.projects) {
         state.activeuser.projects = state.activeuser.projects.filter(
@@ -256,16 +183,7 @@ const loginSlice = createSlice({
         );
       }
     },
-    setskils: (state, action: PayloadAction<string>) => {
-      state.activeuser?.skills?.push(action.payload);
-    },
-    setRemovskils: (state, action: PayloadAction<number>) => {
-      if (state.activeuser?.skills) {
-        state.activeuser.skills = state.activeuser.skills.filter(
-          (_, index) => index !== action.payload
-        );
-      }
-    },
+
     setResume: (state, action: PayloadAction<ResumePayload>) => {
       if (state.activeuser) {
         state.activeuser.resumePDF = action.payload.resumePDF;
@@ -285,10 +203,7 @@ const loginSlice = createSlice({
     setDetailes: (state, action) => {
       state.userdetails = action.payload;
     },
-    setConnectionRequest: (
-      state,
-      action: PayloadAction<User | null>
-    ) => {
+    setConnectionRequest: (state, action: PayloadAction<User | null>) => {
       state.connectionRequest = action.payload;
     },
     setAllConnections: (state, action: PayloadAction<User[]>) => {
@@ -324,18 +239,11 @@ export const {
   setAllConnections,
   setConnectionRequest,
   setDetailes,
-  setEducation,
-  setLocation,
-  setRemovskils,
-  setProject,
+  setprofessionalUserData,
+  setRemoveField,
+
   setremovproject,
-  setRemoveEducation,
-  setjobLocations,
-  setskils,
-  setPersonalDetails,
-  setRemovjobTItles,
-  setjobTItles,
-  setRemovejoblocation,
+
   setImages,
   setforgotPassword,
   setPeopleKnow,

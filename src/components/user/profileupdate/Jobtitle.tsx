@@ -1,82 +1,77 @@
-import { setjobTItles, setRemovjobTItles } from '@/lib/store/features/userSlice';
-import { useAppDispatch, useAppSelector } from '@/lib/store/hooks';
-import React, { useState } from 'react'
-import { RxCross2 } from 'react-icons/rx';
-
-
-const jobTitles = [
-  "Frontend Developer",
-  "Backend Developer",
-  "Full Stack Developer",
-  "Software Engineer",
-  "UI/UX Designer",
-  "DevOps Engineer",
-  "Data Scientist",
-  "Machine Learning Engineer",
-  "Product Manager",
-  "QA Engineer",
-];
+import { setprofessionalUserData } from "@/lib/store/features/userSlice";
+import { useAppDispatch, useAppSelector } from "@/lib/store/hooks";
+import React, { useState } from "react";
+import { RxCross2 } from "react-icons/rx";
 
 function Jobtitle() {
-  const dispatch = useAppDispatch()
-  const user = useAppSelector((state)=>state.user.activeuser)
-     const [selectedSkill, setSelectedSkill] = useState("");
-    
-      const handleAddSkill = () => {
-        if (selectedSkill && user && user.jobTitle && !user.jobTitle.includes(selectedSkill)) {
-          dispatch(setjobTItles(selectedSkill))
-          setSelectedSkill("");
-        }
-      };
-    
-      const handleRemoveSkill = (index:number) => {
-       dispatch(setRemovjobTItles(index))
-      };
+  const dispatch = useAppDispatch();
+  const user = useAppSelector((state) => state.user.activeuser);
+  const jobTitles = useAppSelector((state) => state.admin.titles);
+
+  // Initialize job titles with existing user job titles
+  const [jobTitle, setJobTitle] = useState<string[]>(user?.jobTitle || []);
+  const [selectedJob, setSelectedJob] = useState("");
+
+  const handleAddJobTitle = () => {
+    if (selectedJob && !jobTitle.includes(selectedJob)) {
+      const updatedJobTitles = [...jobTitle, selectedJob];
+      setJobTitle(updatedJobTitles);
+      dispatch(setprofessionalUserData({ jobTitle: updatedJobTitles }));
+      setSelectedJob("");
+    }
+  };
+
+  const handleRemoveJobTitle = (index: number) => {
+    const updatedJobTitles = jobTitle.filter((_, i) => i !== index);
+    setJobTitle(updatedJobTitles);
+    dispatch(setprofessionalUserData({ jobTitle: updatedJobTitles }));
+  };
+
   return (
     <div>
-      <div className="p-6 bg-gray-100 rounded-lg shadow-lg mt-4 w-full">
-      <h2 className="text-2xl font-semibold mb-4 text-gray-800">Job Title</h2>
+      <h2 className="text-lg font-semibold mb-4 text-gray-800 text-center md:text-left">
+        Job Title
+      </h2>
 
-      {/* Skill Dropdown and Button */}
-      <div className="flex gap-3 items-center ">
+      {/* Dropdown & Button */}
+      <div className="flex flex-col md:flex-row gap-3 items-center">
         <select
-          className="border p-3 w-96 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-400"
-          value={selectedSkill}
-          onChange={(e) => setSelectedSkill(e.target.value)}
+          className="border p-3 w-full md:w-96 rounded-lg focus:outline-none focus:ring-2 focus:ring-purple-400"
+          value={selectedJob}
+          onChange={(e) => setSelectedJob(e.target.value)}
         >
-          <option value="">Select a skill</option>
-          {jobTitles.map((skill, index) => (
-            <option key={index} value={skill}>
-              {skill}
+          <option value="">Select a Job</option>
+          {jobTitles.map((job, index) => (
+            <option key={index} value={job.name}>
+              {job.name}
             </option>
           ))}
         </select>
 
         <button
-          className="bg-blue-500 text-white px-4 py-2 rounded-lg font-medium hover:bg-blue-600 transition duration-200 disabled:opacity-50 disabled:cursor-not-allowed"
-          onClick={handleAddSkill}
-          disabled={!selectedSkill}
+          className="bg-primary text-white p-2 rounded-lg font-medium disabled:opacity-50 transition duration-200 disabled:cursor-not-allowed"
+          onClick={handleAddJobTitle}
+          disabled={!selectedJob}
         >
           Add
         </button>
       </div>
 
-      {/* Display Added Skills */}
-      {user && user.jobTitle && user.jobTitle.length > 0 && (
+      {/* Display Added Job Titles */}
+      {jobTitle.length > 0 && (
         <div className="mt-4">
-          <h3 className="text-lg font-medium text-gray-700 mb-2">Added Skills:</h3>
-          <ul className="flex flex-wrap gap-2">
-            {user.jobTitle.map((skill, index) => (
+          <ul className="flex flex-wrap gap-2 justify-center md:justify-start">
+            {jobTitle.map((job, index) => (
               <li
                 key={index}
-                className="bg-blue-100 text-blue-800 px-3 py-1 rounded-full flex items-center gap-2 font-medium"
+                className="bg-blue-100 text-blue-800 px-3 py-1 rounded-full flex items-center gap-2 text-sm"
               >
-                {skill}
+                {job}
                 <button
-                  onClick={() => handleRemoveSkill(index)}
+                  onClick={() => handleRemoveJobTitle(index)}
                   className="text-red-500 hover:text-red-700 transition"
                 >
-                  <RxCross2 size={18} />
+                  <RxCross2 size={15} />
                 </button>
               </li>
             ))}
@@ -84,8 +79,7 @@ function Jobtitle() {
         </div>
       )}
     </div>
-    </div>
-  )
+  );
 }
 
-export default Jobtitle
+export default Jobtitle;

@@ -38,14 +38,14 @@ const Testimonials = () => {
   };
 
   return (
-    <section className="py-24">
+    <section className="py-10">
       
       <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
         <div className="mb-16 text-center">
           <span className="text-sm text-gray-500 font-medium block mb-2">
             TESTIMONIAL
           </span>
-          <h2 className="text-4xl font-bold text-gray-900">
+          <h2 className="text-4xl font-bold text-white">
             What our happy users say!
           </h2>
         </div>

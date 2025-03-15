@@ -1,16 +1,31 @@
 "use client";
 
 import { useAppSelector } from "@/lib/store/hooks";
+import api from "@/utils/api";
 import Image from "next/image";
 import { useRouter } from "next/navigation";
+import { useEffect, useState } from "react";
 
 export  function FeedIdentityModule  (){ 
   const { activeuser } = useAppSelector((state) => state.user);
   const { activeCompany } = useAppSelector((state) => state.companyLogin);
-
+  const [postlength,setPostLength]=useState(0)
+  useEffect(() => {
+    const fetchPostLength = async () => {
+      try {
+        const response = await api.get(`/post/owner`);
+        setPostLength(response.data.posts.length);
+      } catch (error) {
+        console.error("Error fetching posts:", error);
+      }
+    };
+  
+    fetchPostLength();
+  }, []); // Empty dependency array runs the effect only once
+  
   const router = useRouter()
   return (
-    <section className="rounded-lg border  border-gray-300 min-h-[240px] bg-white" onClick={()=>router.push(`/user/profile`)}>
+    <section className="rounded-lg border hover:cursor-pointer border-gray-300 min-h-[240px] bg-white" onClick={()=>router.push(`/user/profile`)}>
       {activeuser ? (
         <>
       <div className="relative">
@@ -36,13 +51,26 @@ export  function FeedIdentityModule  (){
       {/* User Info */}
       <div className="mt-12 text-center">
         <h3 className="text-lg font-semibold">{activeuser?.firstName} {activeuser?.lastName}</h3>
-        <p className="text-gray-500 text-sm">{activeuser?.email}</p>
+        {activeuser?.jobTitle && (
+  <span className="font-medium text-xs leading-7 text-gray-700 transition-all duration-500 group-hover:text-indigo-600">
+    {activeuser.jobTitle.join(" | ")}
+  </span>
+ 
+)}
+<br/>
+<span className="font-medium text-xs leading-7 text-gray-700 transition-all duration-500 group-hover:text-indigo-600">
+  {[activeuser?.jobLocation?.[0]?.countryName, activeuser?.jobLocation?.[0]?.stateName, activeuser?.jobLocation?.[0]?.city]
+    .filter(Boolean) // Remove any `undefined` or `null` values
+    .join(" , ")}
+</span>
+
+
       </div>
 
       {/* Stats Section */}
       <div className="mt-4 flex justify-around border-t pb-10 border-gray-200 pt-4">
         <div className="text-center">
-          <p className="font-bold text-lg">do</p>
+          <p className="font-bold text-lg">{postlength}</p>
           <p className="text-gray-500 text-sm">Post</p>
         </div>
         <div className="text-center">
