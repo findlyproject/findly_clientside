@@ -20,23 +20,7 @@ const HomePage = () => {
 const {activeuser}=useAppSelector(state=>state.user)
 const [isLeftSticky, setIsLeftSticky] = useState(false);
   const leftSidebarRef = useRef(null);
-  // useEffect(() => {
-  //   const handleScroll = () => {
-  //     if (!leftSidebarRef.current) return;
-      
-  //     const sidebarBottom = leftSidebarRef.current.getBoundingClientRect().bottom;
-  //     const windowHeight = window.innerHeight;
-      
-  //     if (sidebarBottom <= windowHeight) {
-  //       setIsLeftSticky(true);  // Make it sticky when it reaches the end
-  //     } else {
-  //       setIsLeftSticky(false); // Allow normal scrolling
-  //     }
-  //   };
-
-  //   window.addEventListener("scroll", handleScroll);
-  //   return () => window.removeEventListener("scroll", handleScroll);
-  // }, []);
+ 
 
   
   useEffect(() => {
@@ -85,6 +69,7 @@ const [isLeftSticky, setIsLeftSticky] = useState(false);
       </div>
 
   <Posts loadMorePosts={loadMorePosts} loading={loading} />
+  
   {activeuser&&
   <>
   <button
@@ -110,6 +95,7 @@ const [isLeftSticky, setIsLeftSticky] = useState(false);
     transition={{ duration: 0.3, ease: "easeInOut" }}
   >
   <RightSide/>
+  
   </motion.div>}
   </>}
 </section>

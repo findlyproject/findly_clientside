@@ -12,21 +12,28 @@ export  function FeedIdentityModule  (){
   const { activeCompany } = useAppSelector((state) => state.companyLogin);
   const [postlength,setPostLength]=useState(0)
   const route =activeuser? "user":"company"
-  // useEffect(() => {
-  //   const fetchPostLength = async () => {
-  //     try {
-  //       const response = await handleAsync(()=>api.get(`${route}/posts`));
-  //       if(response?.status==200){
-  //       setPostLength(response.data.posts.length);
-  //       }
-  //     } catch (error) {
-  //       console.error("Error fetching posts:", error);
-  //     }
-  //   };
+ 
   
-  //   fetchPostLength();
-  // }, []); // Empty dependency array runs the effect only once
+  useEffect(() => {
+    const fetchPostLength = async () => {
+      try {
+        const response = await handleAsync(()=>api.get(`${route}/posts`));
+        if(response?.status==200){
+
+          console.log("response",response);
+          
+        setPostLength(response.data.posts.length);
+        }
+      } catch (error) {
+        console.error("Error fetching posts:", error);
+      }
+    };
   
+    fetchPostLength();
+  }, []); 
+
+
+  console.log("postlength",postlength);
   const router = useRouter()
   return (
     <section className="rounded-lg border hover:cursor-pointer border-gray-300 min-h-[240px] bg-white" onClick={()=>router.push(`/user/profile`)}>
@@ -120,11 +127,11 @@ export  function FeedIdentityModule  (){
         {/* Stats Section */}
         <div className="mt-4 flex justify-around border-t pb-10 border-gray-200 pt-4">
           <div className="text-center">
-            <p className="font-bold text-lg">do</p>
+            <p className="font-bold text-lg">{postlength}</p>
             <p className="text-gray-500 text-sm">Post</p>
           </div>
           <div className="text-center">
-            <p className="font-bold text-lg">0</p>
+            <p className="font-bold text-lg">{activeCompany?.followers?.length}</p>
             <p className="text-gray-500 text-sm">Connections</p>
           </div>
           <div className="text-center">

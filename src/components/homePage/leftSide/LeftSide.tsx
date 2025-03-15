@@ -16,8 +16,11 @@ export function LeftSideBar() {
       
   {activeuser && pathname !== "/mynetwork/networklist" && <CommunityPanel />}
 
-  <PremiumFeaturesMenu />
-  <Collection />
+ <PremiumFeaturesMenu />
+  
+    <Collection />
+  
+  
 </section>
 
   )
