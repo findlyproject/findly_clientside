@@ -3,18 +3,19 @@ import { setLikes, setSaved } from "@/lib/store/features/postSlice";
 import { useAppDispatch, useAppSelector } from "@/lib/store/hooks";
 import api from "@/utils/api";
 import React, { useState, useEffect } from "react";
-import { SavePost } from "@/types/Types";
+import { IPost, SavePost } from "@/types/Types";
 import { useSearchParams } from "next/navigation";
+import Image from "next/image";
 export const  Posts=()=> {
   const searchParams = useSearchParams();
   const name = searchParams.get("name");
   console.log(name)
   const [activeTab, setActiveTab] = useState(name);
-  const [posts, setPosts] = useState<SavePost[]>([]);
+  const [posts, setPosts] = useState<IPost[]>([]);
   const [userPosts, setUserposts] = useState<SavePost[]>([]);
   const [userLiked, setUserLiked] = useState<SavePost[]>([]);
 
-  const [savedPosts, setsavedPosts] = useState<SavePost[]>([]);
+  const [savedPosts, setsavedPosts] = useState<IPost[]>([]);
   const save=useAppSelector(state=>state.post.saved)
   const {activeuser}=useAppSelector(state=>state.user)
 const route =activeuser?"user":"company"
@@ -33,7 +34,7 @@ setUserLiked(responses.data.likedPosts)
     fetchuserPosts();
   }, [dispatch]);
 
-
+console.log(save)
 
   useEffect(() => {
     if (activeTab === "saved") {
@@ -45,7 +46,7 @@ setUserLiked(responses.data.likedPosts)
 
 const handleUnsave=async(postid:string)=>{
 const res=await api.post(`/${route}/save/${postid}`)
-setsavedPosts((pre)=>pre.filter((item)=>item.postId._id!==postid))
+setsavedPosts((pre)=>pre.filter((item)=>item._id!==postid))
 const response=await api.get(`/${route}/saveds`)
 dispatch(setSaved(response.data.saved))
 }
@@ -56,7 +57,7 @@ const handleLike = async (postId: string) => {
   const responses=await api.get(`/${route}/likes`)
   setUserLiked(responses.data.likedPosts)
 };
-
+console.log(posts)
   return (
     <div className="min-h-screen bg-gray-100 pt-20">
       <div className="max-w-3xl mx-auto mt-6 px-4">
@@ -106,24 +107,24 @@ const handleLike = async (postId: string) => {
 
         <div className="mt-6 grid grid-cols-1 md:grid-cols-2 gap-6">
           {activeTab === "saved" ? (
-            posts.length > 0 ? (
-              posts.map((item) => (
+            save.length > 0 ? (
+              save.map((item) => (
                 <div
-                  key={item.postId?._id}
+                  key={item?.postId._id}
                   className="relative bg-white shadow-md rounded-lg p-4 hover:shadow-lg transition"
                 >
                       <button  className =" absolute top-0 right-4 text-md" onClick={()=>handleUnsave(item.postId._id)}>✕
                       </button>
                       <br></br>
-                      {item.postId?.images?.length ? (
-  <img
-    src={item.postId.images[0]}
+                      {item?.postId.images?.length ? (
+  <Image
+    src={item?.postId.images[0]}
     alt="Post Image"
     className="w-full h-40 object-cover rounded-md"  // ✅ Use className
     width={30}
     height={30}
   />
-) : item.postId?.video ? (
+) : item?.video ? (
   <video
     src={item.postId.video}
     className="w-full h-[150px] rounded-lg"  // ✅ Use className
@@ -133,7 +134,7 @@ const handleLike = async (postId: string) => {
 
 
                   <p className="text-gray-600 mt-2">
-                    {item.postId?.description}
+                    {item?.postId.description}
                   </p>
                 
                 </div>
@@ -145,32 +146,37 @@ const handleLike = async (postId: string) => {
             )
           ) :activeTab === "posts" ? (
             <>
-           {posts.length > 0 ? (
-            posts.map((item) => (
-              <div
-                key={item._id}
-                className="bg-white shadow-md rounded-lg p-4 hover:shadow-lg transition"
-              >
-                  {item.images?.length > 0 ? (
-                    <img
-                      src={item.images?.[0]}
-                      className="w-full h-40 object-cover rounded-md"
-                    />
-                  ) : (
-                    <video
-                      src={item?.video}
-                      className="w-full h-[150px] rounded-lg"
-                      controls
-                    />
-                  )}
-                <p className="text-gray-600 mt-2">{item.description}</p>
-              </div>
-            ))
-          ) : (
-            <p className="text-gray-500 text-center col-span-2">
-              No created posts available
-            </p>
-          )}
+           {posts.filter((item) => !item.isDeleted).length > 0 ? (
+  <div>
+    <h2 className="text-lg font-semibold text-gray-800 mb-4">Active Posts</h2>
+    <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+      {posts
+        .filter((item) => !item.isDeleted)
+        .map((item) => (
+          <div
+            key={item._id}
+            className="bg-white shadow-md rounded-lg p-4 hover:shadow-lg transition"
+          >
+            {item.images?.length > 0 ? (
+              <img
+                src={item.images[0]}
+                className="w-full h-40 object-cover rounded-md"
+              />
+            ) : (
+              <video
+                src={item?.video}
+                className="w-full h-[150px] rounded-lg"
+                controls
+              />
+            )}
+            <p className="text-gray-600 mt-2">{item.description}</p>
+          </div>
+        ))}
+    </div>
+  </div>
+) : (
+  <p className="text-gray-500 text-center">No active posts available</p>
+)}
           </>
         ):(
           <>

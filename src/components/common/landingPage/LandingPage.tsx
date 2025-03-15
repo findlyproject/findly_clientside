@@ -16,8 +16,12 @@ import sighup from "../../../../public/assets/signup.svg"
 import jobhunt from "../../../../public/assets/jobhunt.svg"
 import resume from "../../../../public/assets/resume.svg"
 import interview from "../../../../public/assets/interview.svg"
-import { PlaceholdersAndVanishInput } from "@/Animation/PlaceholdersAndVanishInput";
+import women from "../../../../public/assets/women.jpg"
+import men from "../../../../public/assets/men.jpg"
 
+
+import { PlaceholdersAndVanishInput } from "@/Animation/PlaceholdersAndVanishInput";
+import { motion } from "framer-motion";
 
 
 const content = [
@@ -163,7 +167,7 @@ function LandingPage() {
                     
                    
 
-                    <form action="#" method="POST" className="relative mt-8 rounded-full sm:mt-12">
+                    <div  className="relative mt-8 rounded-full sm:mt-12">
                         <div className="relative">
                             <div className="absolute rounded-full -inset-px bg-gradient-to-r from-white to-purple-500"></div>
                             <div className="relative">
@@ -181,7 +185,7 @@ function LandingPage() {
                             </div>
                         </div>
                        
-                    </form>
+                    </div>
 
                     <div className="mt-8 sm:mt-12">
                         <p className="text-lg font-normal text-white">Trusted by 50k+ users</p>
@@ -377,117 +381,59 @@ function LandingPage() {
      
         <AnimatedTestimonials />
      
-      <div className="grid grid-cols-1 md:grid-cols-2 gap-10 p-36">
-        {/* <div className="bg-gray-200 p-6 rounded-lg flex flex-col md:flex-row items-center justify-between">
-          <div className="md:w-1/2">
-            <h2 className="text-2xl font-bold">Become a Candidate</h2>
-            <p className="text-gray-600">
-              Registering as a jobseeker is a vital step to access employment
-              opportunities, resources, and support tailored to your career
-              goals.
-            </p>
-            <button
-              onClick={() => router.push(`/user/register`)}
-              className="bg-primary text-gray-100 px-5 py-2 rounded-full mt-4"
-            >
-              Register Now
-            </button>
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-10 p-12">
+      {[{
+        title: "Become a Candidate",
+        description: "Registering as a jobseeker is a vital step to access employment opportunities, resources, and support tailored to your career goals.",
+        image: women,
+        route: "/user/register"
+      }, {
+        title: "Become an Employer",
+        description: "Registering as a recruiter or employer enables access to a diverse talent pool and streamlines the hiring process, enhancing workforce management.",
+        image: men,
+        route: "/company/register"
+      }].map((item, index) => (
+        <motion.div
+          key={index}
+          initial={{ opacity: 0, y: 50 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.5, delay: index * 0.2 }}
+          whileHover={{ scale: 1.05 }}
+          className="max-w-sm w-full lg:max-w-full lg:flex h-auto shadow-lg rounded-lg overflow-hidden bg-white"
+        >
+          <div className=" lg:h-auto lg:w-48 flex-none bg-cover rounded-l-lg text-center overflow-hidden">
+            <Image className="rounded-l-lg h-full object-cover" src={item.image} alt={item.title} width={192} height={160} />
           </div>
-          <div className="md:w-1/2">
-            <Image src={register3} alt="Register" width={300} height={200} />
+          <div className="border border-gray-200 bg-gray-100 rounded-r-lg p-6 flex flex-col justify-between leading-normal">
+            <div className="text-center">
+              <h2 className="text-gray-900 font-bold text-xl mb-2">{item.title}</h2>
+              <p className="text-gray-700 text-base mb-4">{item.description}</p>
+              <motion.button
+                whileHover={{ scale: 1.1 }}
+                whileTap={{ scale: 0.95 }}
+                onClick={() => router.push(item.route)}
+                className="flex items-center justify-center gap-2 mx-auto text-md bg-primary text-white px-5 py-2 rounded-full shadow-md transition-transform duration-300 hover:bg-opacity-90"
+              >
+                Register
+                <svg
+                  className="w-5 h-5 transform transition-transform duration-300 group-hover:translate-x-1"
+                  viewBox="0 0 16 19"
+                  xmlns="http://www.w3.org/2000/svg"
+                >
+                  <path
+                    d="M7 18C7 18.5523 7.44772 19 8 19C8.55228 19 9 18.5523 9 18H7ZM8.70711 0.292893C8.31658 -0.0976311 7.68342 -0.0976311 7.29289 0.292893L0.928932 6.65685C0.538408 7.04738 0.538408 7.68054 0.928932 8.07107C1.31946 8.46159 1.95262 8.46159 2.34315 8.07107L8 2.41421L13.6569 8.07107C14.0474 8.46159 14.6805 8.46159 15.0711 8.07107C15.4616 7.68054 15.4616 7.04738 15.0711 6.65685L8.70711 0.292893ZM9 18L9 1H7L7 18H9Z"
+                    className="fill-white"
+                  ></path>
+                </svg>
+              </motion.button>
+            </div>
           </div>
-          
-        </div> */}
-        
-        <div className="max-w-sm w-full lg:max-w-full lg:flex h-auto">
-  <div className="h-40 lg:h-auto lg:w-48 flex-none bg-cover rounded-t lg:rounded-t-none lg:rounded-l text-center overflow-hidden">
-  <Image className="rounded-l" src={register3} alt="Avatar of Jonathan Reinink"/>
-
-  </div>
-  <div className="border-r border-b border-l border-gray-400 lg:border-l-0 lg:border-t lg:border-gray-400 bg-gray-100 rounded-b lg:rounded-b-none lg:h-[270px] lg:rounded-r p-4 flex flex-col justify-between leading-normal">
-    <div className="mb-8 mx-10 text-center">
-      
-      <div className="text-gray-900 font-bold text-xl mb-2">Become a Candidate</div>
-      <p className="text-gray-700 text-base mb-4 "> Registering as a jobseeker is a vital step to access employment
-              opportunities, resources, and support tailored to your career
-              goals.</p>
-   
-              <button
- onClick={() => router.push(`/user/register`)}
-  type="submit"
-  className="flex justify-center gap-2 items-center mx-auto shadow-xl text-md bg-primary backdrop-blur-md lg:font-semibold isolation-auto  before:absolute before:w-full before:transition-all before:duration-700 before:hover:w-full before:-left-full before:hover:left-0 before:rounded-full before:bg-white hover:text-primary before:-z-10 before:aspect-square before:hover:scale-150 before:hover:duration-700 relative z-10 px-4 py-2 overflow-hidden border-2 rounded-full group text-white mb-4"
->
-  Register
-  <svg
-    className="w-6 h-6 justify-end group-hover:rotate-90 group-hover:bg-gray-50 text-gray-50 ease-linear duration-300 rounded-full border border-white group-hover:border-none p-1 rotate-45"
-    viewBox="0 0 16 19"
-    xmlns="http://www.w3.org/2000/svg"
-  >
-    <path
-      d="M7 18C7 18.5523 7.44772 19 8 19C8.55228 19 9 18.5523 9 18H7ZM8.70711 0.292893C8.31658 -0.0976311 7.68342 -0.0976311 7.29289 0.292893L0.928932 6.65685C0.538408 7.04738 0.538408 7.68054 0.928932 8.07107C1.31946 8.46159 1.95262 8.46159 2.34315 8.07107L8 2.41421L13.6569 8.07107C14.0474 8.46159 14.6805 8.46159 15.0711 8.07107C15.4616 7.68054 15.4616 7.04738 15.0711 6.65685L8.70711 0.292893ZM9 18L9 1H7L7 18H9Z"
-      className="fill-white group-hover:fill-primary"
-    ></path>
-  </svg>
-</button>
+        </motion.div>
+      ))}
     </div>
-  </div>
-</div>
-<div className="max-w-sm w-full lg:max-w-full lg:flex h-auto">
-  <div className="h-40 lg:h-auto lg:w-48 flex-none bg-cover rounded-t lg:rounded-t-none lg:rounded-l text-center overflow-hidden">
-  <Image className="rounded-l" src={register3} alt="Avatar of Jonathan Reinink"/>
-
-  </div>
-  <div className="border-r border-b border-l border-gray-400 lg:border-l-0 lg:border-t lg:border-gray-400 bg-gray-100 rounded-b lg:rounded-b-none lg:h-[270px] lg:rounded-r p-4 flex flex-col justify-between leading-normal">
-    <div className="mb-8 mx-10 text-center">
-      
-      <div className="text-gray-900 font-bold text-xl mb-2">Become an Employer</div>
-      <p className="text-gray-700 text-base mb-4">  Registering as a recruiter or employer enables access to a diverse
-              talent pool and streamlines the hiring process, enhancing
-              workforce management.</p>
-   
-             
-<button
- onClick={() => router.push(`/company/register`)}
-  type="submit"
-  className="flex justify-center gap-2 items-center mx-auto shadow-xl text-md bg-primary backdrop-blur-md lg:font-semibold isolation-auto  before:absolute before:w-full before:transition-all before:duration-700 before:hover:w-full before:-left-full before:hover:left-0 before:rounded-full before:bg-white hover:text-primary before:-z-10 before:aspect-square before:hover:scale-150 before:hover:duration-700 relative z-10 px-4 py-2 overflow-hidden border-2 rounded-full group text-white mb-4"
->
-  Register
-  <svg
-    className="w-6 h-6 justify-end group-hover:rotate-90 group-hover:bg-gray-50 text-gray-50 ease-linear duration-300 rounded-full border border-white group-hover:border-none p-1 rotate-45"
-    viewBox="0 0 16 19"
-    xmlns="http://www.w3.org/2000/svg"
-  >
-    <path
-      d="M7 18C7 18.5523 7.44772 19 8 19C8.55228 19 9 18.5523 9 18H7ZM8.70711 0.292893C8.31658 -0.0976311 7.68342 -0.0976311 7.29289 0.292893L0.928932 6.65685C0.538408 7.04738 0.538408 7.68054 0.928932 8.07107C1.31946 8.46159 1.95262 8.46159 2.34315 8.07107L8 2.41421L13.6569 8.07107C14.0474 8.46159 14.6805 8.46159 15.0711 8.07107C15.4616 7.68054 15.4616 7.04738 15.0711 6.65685L8.70711 0.292893ZM9 18L9 1H7L7 18H9Z"
-      className="fill-white group-hover:fill-primary"
-    ></path>
-  </svg>
-</button>
 
     </div>
-  </div>
-</div>
-        {/* <div className="bg-primary text-gray-100 p-6 rounded-lg flex flex-col md:flex-row items-center justify-between relative">
-          <div className="md:w-1/2">
-            <h2 className="text-2xl font-bold">Become an Employer</h2>
-            <p>
-              Registering as a recruiter or employer enables access to a diverse
-              talent pool and streamlines the hiring process, enhancing
-              workforce management.
-            </p>
-            <button
-              onClick={() => router.push(`/company/register`)}
-              className="bg-gray-100 text-primary px-5 py-2 rounded-full mt-4"
-            >
-              Register Now
-            </button>
-          </div>
-          <div className="md:w-1/2 flex justify-end">
-            <Image src={register4} alt="Register" width={300} height={200} />
-          </div>
-        </div> */}
-      </div>
-    </div>
+    
   );
 }
 
