@@ -163,7 +163,7 @@ const router=useRouter()
     router.push("/company/profile/edit")
   }
   return (
-    <div className="min-h-screen py-10 bg-gray-200 flex justify-center items-center pt-28">
+    <div className="min-h-screen bg-gray-200 flex justify-center items-center ">
       <div className="bg-white p-8 rounded-lg shadow-lg w-full max-w-3xl ">
       <div className="relative w-full flex flex-col ">
 

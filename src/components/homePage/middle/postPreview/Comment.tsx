@@ -167,6 +167,7 @@ export const Comments = ({ postId, comments }: CommentsProps) => {
       })
     );
     setEdit(false);
+    setIsShowMenu(false)
    
   };
   //delete comment
@@ -415,7 +416,7 @@ export const Comments = ({ postId, comments }: CommentsProps) => {
                                 }]`
                               : "Reply"}
                           </button>
-                          {comment?.user?._id === activeuser?._id && (
+                          {comment?.user?._id === activeuser?._id ||comment?.user?._id === activeCompany?._id &&(
                             <button
                               onClick={() => toggleMenu(comment._id)}
                               className="hover:underline"

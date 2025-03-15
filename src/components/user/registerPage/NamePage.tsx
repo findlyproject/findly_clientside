@@ -58,30 +58,30 @@ export  default function NamePage() {
         <input 
           type="radio" 
           name="gender" 
-          value="Male" 
+          value="male" 
           id="male" 
           onChange={handleChange}
-          checked={gender === "Male"}
+          checked={gender === "male"}
         />
         <label htmlFor="male">Male</label>
 
         <input 
           type="radio" 
           name="gender" 
-          value="Female" 
+          value="female" 
           id="female" 
           onChange={handleChange}
-          checked={gender === "Female"}
+          checked={gender === "female"}
         />
         <label htmlFor="female">Female</label>
 
         <input 
           type="radio" 
           name="gender" 
-          value="Other" 
+          value="other" 
           id="other" 
           onChange={handleChange}
-          checked={gender === "Other"}
+          checked={gender === "other"}
         />
         <label htmlFor="other">Other</label>
       </div>
