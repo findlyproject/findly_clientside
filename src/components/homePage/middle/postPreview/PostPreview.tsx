@@ -73,7 +73,7 @@ const[singlePost,setSinglePost]=useState(false)
 
   useEffect(() => {
     const savedStatus =
-      Array.isArray(saved) && saved.some((item) => item.postId._id === post._id);
+      Array.isArray(saved) && saved.some((item) => item.postId?._id === post?._id);
     setIsSaved(savedStatus);
   }, [saved, post]);
   return (
