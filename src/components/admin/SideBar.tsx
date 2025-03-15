@@ -5,14 +5,13 @@ import { useRouter } from "next/navigation";
 import { FaPlus } from "react-icons/fa6";
 import { MdOutlineReviews } from "react-icons/md";
 import { logOutAdmin } from "@/lib/store/features/actions/adminActions";
-import { useAppDispatch, useAppSelector } from "@/lib/store/hooks";
+import { useAppDispatch } from "@/lib/store/hooks";
 import { MouseEventType } from "@/types/Types";
 
 import Logo from "@/utils/Logo";
 const Sidebar = () => {
   const router = useRouter();
   const dispatch = useAppDispatch();
-  const reportsLength=useAppSelector((state)=>state.admin.reports)
   const handleAdminLogout = async (e: MouseEventType) => {
     e.preventDefault();
 
@@ -21,8 +20,7 @@ const Sidebar = () => {
       router.push("/");
     }
   };
-  console.log("reportsLength",reportsLength);
-  
+
   return (
     <div className="xl:p-4 p-2 flex-col justify-start items-start gap-5 inline-flex  fixed h-screen bg-white">
       <div className="w-full pt-4 justify-between items-center gap-2.5 inline-flex ">
@@ -106,34 +104,6 @@ const Sidebar = () => {
                     <h2 className="text-gray-500 text-sm font-medium leading-snug hidden lg:block">
                       Reports
                     </h2>
-                  </Link>
-
-                  <Link href="" className="lg:flex items-center gap-3 hidden ">
-                    <div className="px-2.5 py-0.5 bg-purple-200 rounded-3xl">
-                      <h6 className="text-primary text-xs font-medium leading-4">
-                        {reportsLength||0}
-                      </h6>
-                    </div>
-                    <div className="relative">
-                      <svg
-                        xmlns="http://www.w3.org/2000/svg"
-                        width="16"
-                        height="16"
-                        viewBox="0 0 16 16"
-                        fill="none"
-                      >
-                        <g id="Right arrow 4">
-                          <path
-                            id="icon"
-                            d="M6.00236 3.99719L10.0025 7.99736L6 11.9999"
-                            stroke="#6B7280"
-                            strokeWidth="1.6"
-                            strokeLinecap="round"
-                            strokeLinejoin="round"
-                          />
-                        </g>
-                      </svg>
-                    </div>
                   </Link>
                 </div>
               </div>

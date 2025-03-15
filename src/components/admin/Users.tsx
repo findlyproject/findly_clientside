@@ -51,7 +51,7 @@ const Users = () => {
                   <th className="p-5 text-left font-semibold text-gray-900">
                     User
                   </th>
-                 
+
                   <th className="p-5 text-left font-semibold text-gray-900">
                     Role
                   </th>
@@ -63,7 +63,6 @@ const Users = () => {
               <tbody className="divide-y divide-gray-300">
                 {currentUsers.map((user) => (
                   <tr key={user._id} className="bg-white hover:bg-gray-50">
-                    
                     <td className="p-5 text-sm text-gray-900">
                       <div className="flex items-center gap-3">
                         <img
@@ -74,7 +73,10 @@ const Users = () => {
                           className="w-10 h-10 rounded-full"
                         />
                         <div>
-                          <p className="text-xs text-gray-500"> {user.firstName} {user.lastName}</p>
+                          <p className="text-xs text-gray-500">
+                            {" "}
+                            {user.firstName} {user.lastName}
+                          </p>
                           <p className="text-xs text-gray-500">{user.email}</p>
                         </div>
                       </div>
@@ -121,7 +123,7 @@ const Users = () => {
                     onClick={() => goToPage(page)}
                     className={`px-3 py-1 rounded ${
                       currentPage === page
-                        ? "bg-indigo-600 text-white"
+                        ? "bg-primary text-white"
                         : "bg-gray-200 hover:bg-gray-300"
                     }`}
                   >

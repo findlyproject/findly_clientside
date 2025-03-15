@@ -1,6 +1,5 @@
 "use client";
 import React, { useState, useEffect } from "react";
-import { Chart } from "primereact/chart";
 import {
   BarChart,
   Bar,
@@ -119,7 +118,7 @@ const Dashboard: React.FC = () => {
 
   const pieData = [
     { name: "Users", value: Math.round(userPercentage), color: "#ba99cf" },
-    { name: "Companies", value: companyPercentage, color: "#945eb5" },
+    { name: "Companies", value:  Math.round(companyPercentage), color: "#945eb5" },
     {
       name: "Premium Clients",
       value: Math.round(premuimPercentage),
@@ -159,7 +158,7 @@ const Dashboard: React.FC = () => {
             </div>
             <div className="border-t border-blue-gray-50 p-4">
               <p className="block antialiased font-sans text-base leading-relaxed font-normal text-blue-gray-600">
-                <strong className="text-green-500">+55%</strong>&nbsp;than last
+                <strong className="text-primary">+55%</strong>&nbsp;than last
                 week
               </p>
             </div>
@@ -191,7 +190,7 @@ const Dashboard: React.FC = () => {
             </div>
             <div className="border-t border-blue-gray-50 p-4">
               <p className="block antialiased font-sans text-base leading-relaxed font-normal text-blue-gray-600">
-                <strong className="text-green-500">+3%</strong>&nbsp;than last
+                <strong className="text-primary">+3%</strong>&nbsp;than last
                 month
               </p>
             </div>
@@ -219,7 +218,7 @@ const Dashboard: React.FC = () => {
             </div>
             <div className="border-t border-blue-gray-50 p-4">
               <p className="block antialiased font-sans text-base leading-relaxed font-normal text-blue-gray-600">
-                <strong className="text-red-500">-2%</strong>&nbsp;than
+                <strong className="text-primary">-2%</strong>&nbsp;than
                 yesterday
               </p>
             </div>
@@ -246,7 +245,7 @@ const Dashboard: React.FC = () => {
             </div>
             <div className="border-t border-blue-gray-50 p-4">
               <p className="block antialiased font-sans text-base leading-relaxed font-normal text-blue-gray-600">
-                <strong className="text-green-500">+5%</strong>&nbsp;than
+                <strong className="text-primary">+5%</strong>&nbsp;than
                 yesterday
               </p>
             </div>
@@ -477,7 +476,7 @@ const Dashboard: React.FC = () => {
       </div> */}
 
       <div className="p-4 grid grid-cols-1 md:grid-cols-2 gap-4">
-        {/* Bar Chart Section */}
+       
         <div className="bg-white rounded-lg shadow-md p-4">
           <div className="flex justify-between items-center mb-2">
             <h3 className="font-semibold text-lg">Latest Sales</h3>
@@ -512,7 +511,7 @@ const Dashboard: React.FC = () => {
           </div>
         </div>
 
-        {/* Pie Chart Section */}
+      
         <div className="bg-white rounded-lg shadow-md p-4">
           <h3 className="font-semibold text-lg mb-4">Users</h3>
           <ResponsiveContainer width="100%" height={250}>

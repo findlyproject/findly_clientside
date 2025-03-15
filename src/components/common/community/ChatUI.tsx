@@ -190,7 +190,11 @@ console.log("commuu",community);
   const cancelFileSelection = () => {
     setFilePreview(null);
   };
-
+ const getcommunity = async () => {
+    const response = await api.get("/message/all");
+    console.log("respons all comunity", response);
+    
+  };
   //// join to community
   const handleJoin = async (id:string) => {
     try {
@@ -199,6 +203,7 @@ console.log("commuu",community);
       socket.on("communtjoin", (data) => {
         console.log("join comunity", data);
         setCommunity(data);
+        getcommunity()
       });
     } catch (error) {
       console.log("join error", error);
@@ -281,7 +286,7 @@ console.log("commuu",community);
             >
               {community ? (
                 <>
-                  <header className="flex items-center gap-2 bg-white p-4 border-b">
+                  <header className="  flex items-center gap-2 bg-white p-4 border-b">
                     <button
                       className="p-2 block sm:hidden text-3xl"
                       onClick={() => setIsopen(!isopen)}
@@ -311,8 +316,8 @@ console.log("commuu",community);
                     <div>
                       {community.members.find(
                         (member) =>
-                          member.memberId._id === activeCompany?._id ||
-                          member.memberId._id === activeuser?._id
+                          member.memberId === activeCompany?._id ||
+                          member.memberId === activeuser?._id
                       ) ? (
                         <div>
                           <ul className="flex flex-col space-y-4 p-4  rounded-lg">
@@ -426,7 +431,7 @@ console.log("commuu",community);
                                                   onDelete(item._id);
                                                   setActiveDropdown(null);
                                                 }}
-                                                className="flex w-full items-center px-3 py-2 text-sm text-red-600 hover:bg-red-50"
+                                                className="flex w-full items-center px-3 py-2 text-sm text-primary hover:bg-red-50"
                                               >
                                                 <FaTrash className="w-3 h-3 mr-2" />
                                                 Delete
@@ -434,7 +439,7 @@ console.log("commuu",community);
 
                                               <button
                                                 onClick={() => {
-                                                  // Add copy to clipboard functionality
+                                                 
                                                   navigator.clipboard.writeText(
                                                     item.message
                                                   );
@@ -443,7 +448,7 @@ console.log("commuu",community);
                                                     "Copied to clipboard"
                                                   );
                                                 }}
-                                                className="flex w-full items-center px-3 py-2 text-sm text-gray-700 hover:bg-gray-50"
+                                                className="flex w-full items-center px-3 py-2 text-sm text-primary hover:bg-gray-50"
                                               >
                                                 <FaCopy className="w-3 h-3 mr-2" />
                                                 Copy
@@ -570,39 +575,17 @@ console.log("commuu",community);
                   <footer className="p-4 h-20 bg-white border-t flex">
                     {community.members.find(
                       (member) =>
-                        member.memberId._id == activeCompany?._id ||
-                        member.memberId._id === activeuser?._id
+                        member.memberId == activeCompany?._id ||
+                        member.memberId === activeuser?._id
                     ) ? (
                       <>
-                        {/* <input
-                          type="text"
-                          placeholder="Type a message..."
-                          value={input.message}
-                          onChange={(e) =>
-                            setInput({ message: e.target.value, type: "text" })
-                          }
-                          className="flex-1 p-2 border rounded-l-md focus:outline-none"
-                        />
-                        <button
-                          className="text-primary px-4 py-2 rounded-none border-t border-b border-r"
-                          onClick={toggleFileModal}
-                        >
-                          <HiPaperClip className="w-5 h-5" />
-                        </button>
-
-                        <button
-                          className="bg-primary text-white px-4 py-2 rounded-r-md"
-                          onClick={() => sendmessage(community?._id)}
-                          disabled={!input.message.trim()}
-                        >
-                          <LuSend className="w-5 h-5" />
-                        </button> */}
+                      
 
 
 
 
                         
-<div className="w-full pl-3 pr-1 py-1 rounded-3xl border border-gray-200 items-center gap-2 inline-flex justify-between">
+<div className="w-full pl-3 pr-1 py-1 rounded-3xl border border-gray-200 items-center gap-2 inline-flex justify-between ">
 <div className="flex items-center gap-2">
 <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth="1.5" stroke="currentColor" className="size-6 text-primary">
   <path strokeLinecap="round" strokeLinejoin="round" d="M15.182 15.182a4.5 4.5 0 0 1-6.364 0M21 12a9 9 0 1 1-18 0 9 9 0 0 1 18 0ZM9.75 9.75c0 .414-.168.75-.375.75S9 10.164 9 9.75 9.168 9 9.375 9s.375.336.375.75Zm-.375 0h.008v.015h-.008V9.75Zm5.625 0c0 .414-.168.75-.375.75s-.375-.336-.375-.75.168-.75.375-.75.375.336.375.75Zm-.375 0h.008v.015h-.008V9.75Z" />

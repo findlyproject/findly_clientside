@@ -337,6 +337,8 @@ export const loginCompany=createAsyncThunk(
       }
     );
 
+
+
       
     export const editsocialmedia = createAsyncThunk(
       "edit/socialmedia",
@@ -473,6 +475,20 @@ export const loginCompany=createAsyncThunk(
       async (applicationId:string,{rejectWithValue } ) => {
 
         const response = await handleAsync(() =>  api.delete(`/company/deleteapplication`, { data: { applicationId } }));
+    console.log("ree finded",response);
+    
+        if (!response || !response.data) {
+          return rejectWithValue("delete job failed.");
+        }
+     
+      }
+    );
+
+    export const postJobs = createAsyncThunk(
+      "post/job",
+      async (values,{rejectWithValue } ) => {
+
+        const response = await handleAsync(() =>  api.post(`/company/jobposting`,values));
     console.log("ree finded",response);
     
         if (!response || !response.data) {
