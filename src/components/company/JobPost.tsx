@@ -1,6 +1,9 @@
 "use client";
+import { postJobs } from "@/lib/store/features/actions/companyActions";
+import { useAppDispatch } from "@/lib/store/hooks";
 import api from "@/utils/api";
 import { ErrorMessage, Field, Form, Formik } from "formik";
+import { useRouter } from "next/navigation";
 import { useState } from "react";
 import { toast } from "react-toastify";
 import * as Yup from "yup";
@@ -30,13 +33,13 @@ const validationSchema = Yup.object().shape({
     .required("Application deadline is required")
     .min(new Date(), "Deadline cannot be in the past"),
   qualification: Yup.string().required("Qualification is required"),
-  jobResponsibilities:  Yup.array()
-  .of(Yup.string().required("responsibility cannot be empty"))
-  .min(1, "At least one responsibility is required"),
+  jobResponsibilities: Yup.array()
+    .of(Yup.string().required("responsibility cannot be empty"))
+    .min(1, "At least one responsibility is required"),
   benefits: Yup.array()
-  .of(Yup.string().required("Benefits cannot be empty"))
-  .min(1, "At least one benefits is required"),
-  
+    .of(Yup.string().required("Benefits cannot be empty"))
+    .min(1, "At least one benefits is required"),
+
   description: Yup.string().required("Job description is required"),
   requirements: Yup.array()
     .of(Yup.string().required("Requirement cannot be empty"))
@@ -58,6 +61,8 @@ export const JobPost = () => {
 
   const [responsibleInput, setResponsibleInput] = useState("");
   const [responsible, setResponsible] = useState<string[]>([]);
+  const dispatch = useAppDispatch()
+  const router=useRouter()
 
   // Generalized function for handling Enter key events
   const handleKeyDown = (
@@ -71,22 +76,31 @@ export const JobPost = () => {
   ) => {
     if (e.key === "Enter" && inputValue.trim()) {
       e.preventDefault();
-  
+
       const updatedList = [...(values[fieldName] || []), inputValue.trim()];
-  
+
       setFieldValue(fieldName, updatedList); // ✅ Store as an array in Formik
       setList(updatedList); // ✅ Update local state for UI
       setInputValue(""); // Clear input
     }
   };
-  
+
   const handleSubmit = async (values) => {
     values.requirements = requirement;
     values.benefits = benefit;
     values.jobResponsibilities = responsible;
 
-    console.log(values);
+    console.log("valuessssssssss", values);
 
+
+    const result = await dispatch(postJobs(values))
+
+    if (result.type === "post/job/fulfilled") {
+      console.log("resu", result);
+
+      router.push("/company/posts/jobs")
+
+    }
     // const response = await api.post("/company/final-register", formData);
     // if (response.status == 201) {
     //   console.log("Registration successful:", response.data);
@@ -113,7 +127,7 @@ export const JobPost = () => {
             requirements: [],
             contactEmail: "",
             contactPhone: "",
-            benefits:""
+            benefits: ""
           }}
           validationSchema={validationSchema}
           onSubmit={handleSubmit}
@@ -229,20 +243,17 @@ export const JobPost = () => {
                   <Field
                     as="select"
                     name="experienceLevel"
-                    className="block w-full  bg-white border border-gray-300 rounded-md py-2 px-3 text-gray-900 focus:outline-none focus:ring-2 focus:ring-primary sm:text-sm"
+                    className="block w-full bg-white border border-gray-300 rounded-md py-2 px-3 text-gray-900 focus:outline-none focus:ring-2 focus:ring-primary sm:text-sm"
                   >
-                    <option value="">choose your experience level</option>
-                    <option value="Hourly">Entry</option>
-                    <option value="Monthly">Mid</option>
-                    <option value="Yearly">Senior</option>
-                    <option value="Yearly">Expert</option>
+                    <option value="">Choose your experience level</option>
+                    <option value="Entry">Entry</option>
+                    <option value="Mid">Mid</option>
+                    <option value="Senior">Senior</option>
+                    <option value="Expert">Expert</option>
                   </Field>
-                  <ErrorMessage
-                    name="experienceLevel"
-                    component="div"
-                    className="text-red-500 text-sm"
-                  />
+                  <ErrorMessage name="experienceLevel" component="div" className="text-red-500 text-sm" />
                 </div>
+
                 <div className="lg:w-1/2 w-full">
                   <label className="block mb-2 text-lg">Job Location</label>
                   <Field
@@ -304,7 +315,7 @@ export const JobPost = () => {
                     onKeyDown={(e) =>
                       handleKeyDown(
                         e, requirementInput, setRequirementInput, setRequirement, values, setFieldValue, "requirements"
-                        
+
                       )
                     }
                     placeholder="Type a requirement and press Enter"
@@ -317,9 +328,8 @@ export const JobPost = () => {
                   />
 
                   <div
-                    className={`mt-2 p-3 w-full rounded-md ${
-                      requirement.length ? "bg-gray-100" : "bg-transparent"
-                    }`}
+                    className={`mt-2 p-3 w-full rounded-md ${requirement.length ? "bg-gray-100" : "bg-transparent"
+                      }`}
                   >
                     {requirement.length !== 0 && (
                       <ul className="list-disc list-inside w-full">
@@ -356,21 +366,20 @@ export const JobPost = () => {
                     onChange={(e) => setBenefitInput(e.target.value)}
                     onKeyDown={(e) =>
                       handleKeyDown(
-                        e, benefitInput, setBenefitInput, setBenefit, values, setFieldValue, "benefit" 
+                        e, benefitInput, setBenefitInput, setBenefit, values, setFieldValue, "benefit"
                       )
                     }
                     placeholder="Type a benefit and press Enter"
                     className="block w-full  bg-white border border-gray-300 rounded-md py-2 px-3 text-gray-900 focus:outline-none focus:ring-2 focus:ring-primary sm:text-sm"
                   />
- <ErrorMessage
+                  <ErrorMessage
                     name="benefits"
                     component="div"
                     className="text-red-500 text-sm"
                   />
                   <div
-                    className={`mt-2 p-3 w-full rounded-md ${
-                      benefit.length ? "bg-gray-100" : "bg-transparent"
-                    }`}
+                    className={`mt-2 p-3 w-full rounded-md ${benefit.length ? "bg-gray-100" : "bg-transparent"
+                      }`}
                   >
                     {benefit.length !== 0 && (
                       <ul className="list-disc list-inside w-full">
@@ -406,7 +415,7 @@ export const JobPost = () => {
                     Job Responsibilities
                   </label>
                   <Field
-                  as="textarea"
+                    as="textarea"
                     rows={2}
                     value={responsibleInput}
                     onChange={(e) => setResponsibleInput(e.target.value)}
@@ -420,15 +429,14 @@ export const JobPost = () => {
                     placeholder="Type a responsibility and press Enter"
                     className="block w-full  bg-white border border-gray-300 rounded-md py-2 px-3 text-gray-900 focus:outline-none focus:ring-2 focus:ring-primary sm:text-sm"
                   />
-<ErrorMessage
+                  <ErrorMessage
                     name="jobResponsibilities"
                     component="div"
                     className="text-red-500 text-sm"
                   />
                   <div
-                    className={`mt-2 p-3 w-full rounded-md ${
-                      responsible.length ? "bg-gray-100" : "bg-transparent"
-                    }`}
+                    className={`mt-2 p-3 w-full rounded-md ${responsible.length ? "bg-gray-100" : "bg-transparent"
+                      }`}
                   >
                     {responsible.length !== 0 && (
                       <ul className="list-disc list-inside w-full">
@@ -459,7 +467,7 @@ export const JobPost = () => {
                   <Field
                     as="textarea"
                     name="description"
-               className="block w-full  bg-white border border-gray-300 rounded-md py-2 px-3 text-gray-900 focus:outline-none focus:ring-2 focus:ring-primary sm:text-sm"
+                    className="block w-full  bg-white border border-gray-300 rounded-md py-2 px-3 text-gray-900 focus:outline-none focus:ring-2 focus:ring-primary sm:text-sm"
                     rows={6}
                     placeholder="Enter Job Description"
                   />
@@ -477,7 +485,7 @@ export const JobPost = () => {
                   <label className="block mb-2 text-lg">Contact Email</label>
                   <Field
                     type="email"
-                     name="contactEmail"
+                    name="contactEmail"
                     placeholder="your email"
                     className="block w-full  bg-white border border-gray-300 rounded-md py-2 px-3 text-gray-900 focus:outline-none focus:ring-2 focus:ring-primary sm:text-sm"
                   />
