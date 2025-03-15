@@ -3,7 +3,7 @@
 "use client";
 
 import { applicationList, deleteApplcation, getSavedApplication, handleSaveApplication } from "@/lib/store/features/actions/companyActions";
-import { useAppDispatch } from "@/lib/store/hooks";
+import { useAppDispatch, useAppSelector } from "@/lib/store/hooks";
 import React, { useEffect, useState } from "react";
 import Image from "next/image";
 import api from "@/utils/api";
@@ -47,7 +47,9 @@ const AppliedUsers = () => {
   const [selectedStatuses, setSelectedStatuses] = useState<string[]>([]);
   const [filters, setFilters] = useState({
     isSaved: false, // Default value
+
   });
+  const candidates=useAppSelector((state)=>state.companyLogin.application)
 
   const toggleSavedFilter = () => {
     setFilters((prev) => ({ ...prev, isSaved: !prev.isSaved }));
@@ -101,6 +103,7 @@ const AppliedUsers = () => {
   const allApplications = async () => {
     const response = await api.get("/company/findapplications");
     if (response.status === 200) {
+      dispatch(applicationList());
       setApplication(response.data.appliedUsers);
     }
   };
@@ -109,6 +112,7 @@ const AppliedUsers = () => {
     const result =await dispatch(deleteApplcation(applicationId))
     if(result.type==="delete/application/fulfilled"){
       allApplications()
+      dispatch(applicationList());
     }
   }
 
@@ -117,7 +121,7 @@ const AppliedUsers = () => {
 
   const startIndex = (currentPage - 1) * itemsPerPage;
 
-  const filteredApplications = application.filter((app) => {
+  const filteredApplications = candidates.filter((app) => {
     const matchesJobFilter =
       selectedJobIds.length > 0 ? selectedJobIds.includes(app?.jobId?._id) : true;
 
@@ -141,7 +145,7 @@ const AppliedUsers = () => {
     const result = await dispatch(handleSaveApplication(applicationId))
 
     if (result.type === "save/application/fulfilled") {
-
+      dispatch(applicationList());
       allApplications()
 
     }
@@ -186,17 +190,17 @@ const AppliedUsers = () => {
         )}
       </h1>
 
-      <div className="flex flex-col lg:flex-row gap-6  ">
+      <div className="flex flex-col lg:flex-row gap-6   ">
 
-        <aside className="w-full lg:w-1/4  bg-gray-300 p-4 rounded-md shadow-md overflow-y-auto">
+        <aside className="w-full lg:w-1/4 h-screen  bg-gray-300  p-4 rounded-md shadow-md overflow-y-auto">
 
-          <h2 className="text-lg font-semibold mb-2">Filter Profiles</h2>
+          <h2 className="text-lg font-semibold  mb-2">Filter Profiles</h2>
           <div className="space-y-3 " >
             <div>
               <h3 className="font-medium mb-2">Job title</h3>
-              <ul className="text-sm text-gray-600">
+              <ul className="text-sm text-black space-y-2">
                 {jobs.map((job) => (
-                  <li key={job._id} className="text-xl">
+                  <li key={job._id} className="text-md">
                     <input
                       type="checkbox"
                       className="mr-2"
@@ -210,8 +214,11 @@ const AppliedUsers = () => {
             </div>
             <div>
               <h3 className="font-medium mb-2">Others</h3>
-              <ul>
-                <li>
+              <ul className="space-y-2 text-sm">
+                <li 
+              
+                >
+                  
                   <input
                     type="checkbox"
                     checked={filters.isSaved}
@@ -275,7 +282,7 @@ const AppliedUsers = () => {
                         <span 
                         onClick={()=>handleDelete(user._id)}
                         > <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 16 16" fill="currentColor" className="size-4">
-                          <path fill-rule="evenodd" d="M5 3.25V4H2.75a.75.75 0 0 0 0 1.5h.3l.815 8.15A1.5 1.5 0 0 0 5.357 15h5.285a1.5 1.5 0 0 0 1.493-1.35l.815-8.15h.3a.75.75 0 0 0 0-1.5H11v-.75A2.25 2.25 0 0 0 8.75 1h-1.5A2.25 2.25 0 0 0 5 3.25Zm2.25-.75a.75.75 0 0 0-.75.75V4h3v-.75a.75.75 0 0 0-.75-.75h-1.5ZM6.05 6a.75.75 0 0 1 .787.713l.275 5.5a.75.75 0 0 1-1.498.075l-.275-5.5A.75.75 0 0 1 6.05 6Zm3.9 0a.75.75 0 0 1 .712.787l-.275 5.5a.75.75 0 0 1-1.498-.075l.275-5.5a.75.75 0 0 1 .786-.711Z" clip-rule="evenodd" />
+                          <path fillRule="evenodd" d="M5 3.25V4H2.75a.75.75 0 0 0 0 1.5h.3l.815 8.15A1.5 1.5 0 0 0 5.357 15h5.285a1.5 1.5 0 0 0 1.493-1.35l.815-8.15h.3a.75.75 0 0 0 0-1.5H11v-.75A2.25 2.25 0 0 0 8.75 1h-1.5A2.25 2.25 0 0 0 5 3.25Zm2.25-.75a.75.75 0 0 0-.75.75V4h3v-.75a.75.75 0 0 0-.75-.75h-1.5ZM6.05 6a.75.75 0 0 1 .787.713l.275 5.5a.75.75 0 0 1-1.498.075l-.275-5.5A.75.75 0 0 1 6.05 6Zm3.9 0a.75.75 0 0 1 .712.787l-.275 5.5a.75.75 0 0 1-1.498-.075l.275-5.5a.75.75 0 0 1 .786-.711Z" clipRule="evenodd" />
                         </svg></span>
                       </div>
                     </div>

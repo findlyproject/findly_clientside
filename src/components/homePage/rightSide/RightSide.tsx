@@ -52,7 +52,7 @@ export default function RightSide() {
       setMembers(response.data.connections);
     };
     fetch();
-    fetchMembers();
+    // fetchMembers();
   }, []);
 
 
