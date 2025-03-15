@@ -57,9 +57,7 @@ const DetailsUser = ({ id }: { id: string }) => {
   const activeuserid = useAppSelector((state) => state.user.activeuser);
   console.log("activeuseridactiveuserid", activeuserid);
 
-  const user = useAppSelector(
-    (state) => state.user.userdetails
-  ) as User | null;
+  const user = useAppSelector((state) => state.user.userdetails) as User | null;
   console.log("usereeee", user);
 
   useEffect(() => {
@@ -118,14 +116,25 @@ const DetailsUser = ({ id }: { id: string }) => {
                 </span>
               </div>
               <p className="text-gray-900">{user?.jobTitle?.[0]}</p>
-              <p className="text-gray-900 text-sm">
+              <div className="flex items-center">
+              <p className="text-gray-900 text-sm me-3">
                 {user?.location?.city}•{" "}
-                {user?.connecting?.filter((item) => item.status === true)
+              
+              </p>
+              {
+                activeuserid&&(
+                  <span>
+              {user?.connecting?.filter((item) => item.status === true)
                   .length || 0}{" "}
                 connections
-              </p>
+              </span>
+                )
+              }
+              </div>
 
-              <div className="relative flex gap-4 mt-5">
+              {
+                activeuserid&&(
+                  <div className="relative flex gap-4 mt-5">
                 {user?.connecting?.some(
                   (conn) =>
                     conn.connectionID?._id === activeuserid?._id &&
@@ -273,6 +282,8 @@ const DetailsUser = ({ id }: { id: string }) => {
                   )}
                 </div>
               </div>
+                )
+              }
             </div>
 
             {user?.education && user.education.length > 0 ? (

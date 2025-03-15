@@ -163,7 +163,7 @@ const router=useRouter()
     router.push("/company/profile/edit")
   }
   return (
-    <div className="min-h-screen bg-gray-200 flex justify-center items-center ">
+    <div className="min-h-screen bg-gray-200 p-10 flex justify-center items-center ">
       <div className="bg-white p-8 rounded-lg shadow-lg w-full max-w-3xl ">
       <div className="relative w-full flex flex-col ">
 
@@ -202,9 +202,6 @@ const router=useRouter()
  </div>
 
 </div>
-
-
-
 
         <div className="mt-14">
           <h2>About</h2>
@@ -292,11 +289,11 @@ const router=useRouter()
             Keeping this section updated ensures your team has the latest information.</p>
 
 
-          <button
+          {/* <button
             onClick={() => setIsOpenPosts(true)}
             className="px-4 py-2 bg-primary text-white rounded-lg hover:bg-white hover:text-primary hover:border border-black transition">
             <FaRegImage />
-          </button>
+          </button> */}
           <button
             onClick={() => setIsOpen(true)}
             className="px-4 py-2 bg-primary text-white  rounded-lg hover:bg-white hover:text-primary hover:border border-black transition ml-2">

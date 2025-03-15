@@ -30,7 +30,7 @@ export const ViewProfile = () => {
 
   return (
     <>
-      <section className="relative  pt-64 pb-24">
+      <section className="relative  ">
         <Image
           src={activeuser?.banner || ""}
           alt="cover-image"
