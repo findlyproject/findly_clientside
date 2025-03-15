@@ -17,7 +17,7 @@ export default function Collection() {
             </svg>
           ),
           text: 'Saved items' ,
-           path:`/${routes}/posts`
+           path:`/${routes}/posts?name=saved`
         },
         { 
           icon: (
@@ -26,7 +26,7 @@ export default function Collection() {
             </svg>
           ),
           text: 'Liked posts' ,
-           path:`/${routes}/appliedjobs`
+           path:`/${routes}/posts?name=liked`
         },
         { 
           icon: (
@@ -35,7 +35,7 @@ export default function Collection() {
             </svg>
           ),
           text: 'my posts' ,
-           path:`/${routes}/posts/myposts`
+           path:`/${routes}/posts?name=posts`
         },
         activeuser
     ?  {

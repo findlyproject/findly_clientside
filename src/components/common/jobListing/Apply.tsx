@@ -1,19 +1,17 @@
 
 "use client"
-import Navbar from '@/components/navBar/Navbar';
 import { useAppSelector } from '@/lib/store/hooks';
 import api from '@/utils/api';
 import { AxiosError } from 'axios';
-import Link from 'next/link';
 import { useParams, useRouter } from 'next/navigation';
 import React, { useState } from 'react';
-import { FaArrowLeft } from 'react-icons/fa';
 import { toast } from 'react-toastify';
 
 const Apply = () => {
   const activ = useAppSelector((state) => state.user.activeuser);
   const { id } = useParams();
   const router = useRouter()
+  const [activeTab, setActiveTab] = useState("resume"); // Default tab
 
   const [data, setData] = useState({
     resumDocName: activ?.resumePDF?.[0]?.fileName || "my resume",
@@ -148,27 +146,56 @@ const Apply = () => {
   return (
     <>
     
-    <div className="min-h-screen bg-gray-50 py-12 px-4">
-     
+    <div className="min-h-screen pt-28  py-12 px-4">
+    
       <div className="max-w-3xl mx-auto bg-white rounded-xl shadow-lg p-8">
-      <Link 
-      href={`/user/jobs/details/${id}`}
-      className='bg-primary p-2 rounded-lg text-white flex justify-center items-center gap-2'
-      
-      >
-       <FaArrowLeft />Back to details
-      </Link>
+      <div className="mb-5 flex justify-around">
+            <p
+              onClick={() => setActiveTab("resume")}
+              className={`cursor-pointer ${
+                activeTab === "resume"
+                  ? "text-primary font-bold"
+                  : "text-gray-500"
+              }`}
+            >
+              Resume
+            </p>
+            <p
+              onClick={() => setActiveTab("video")}
+              className={`cursor-pointer ${
+                activeTab === "video"
+                  ? "text-primary font-bold"
+                  : "text-gray-500"
+              }`}
+            >
+              Video
+            </p>
+            <p
+              onClick={() => setActiveTab("coverletter")}
+              className={`cursor-pointer ${
+                activeTab === "coverletter"
+                  ? "text-primary font-bold"
+                  : "text-gray-500"
+              }`}
+            >
+              CoverLetter
+            </p>
+          </div>
+     
         <h1 className="text-2xl font-bold text-center mb-8">Your Application Documents</h1>
 
         <form onSubmit={handleSubmit} className="space-y-8">
+        {activeTab === "resume" ? (
+            <>
           <div className="space-y-4">
+          
             <h2 className="text-xl font-semibold">Resume Document</h2>
 
             {data.resumDocUrl && (
               <div className="bg-blue-50 p-4 rounded-lg mb-4">
                 <div className="flex items-center justify-between">
                   <div className="flex items-center space-x-3">
-                    <svg className="w-8 h-8 text-blue-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <svg className="w-8 h-8 text-primary" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                       <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V7a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
                     </svg>
                     <div>
@@ -176,7 +203,7 @@ const Apply = () => {
                       <p className="text-sm text-gray-500">Uploaded on {data?.resumDocUploadedAt ? new Date(data.resumDocUploadedAt).toLocaleDateString() : "N/A"}</p>
                     </div>
                   </div>
-                  <a href={data.resumDocUrl || undefined} target='blank' className="text-blue-500 hover:text-blue-700 cursor-pointer">veiw resum</a>
+                  <a href={data.resumDocUrl || undefined} target='blank' className="text-primary hover:text-blue-700 cursor-pointer">veiw resum</a>
                 </div>
               </div>
             )}
@@ -195,7 +222,7 @@ const Apply = () => {
                 />
                 <label
                   htmlFor="resumeDoc"
-                  className="bg-blue-500 text-white px-4 py-2 rounded-md cursor-pointer hover:bg-blue-600"
+                  className="bg-primary text-white px-4 py-2 rounded-md cursor-pointer hover:bg-opacity-95"
                 >
                   {data.resumDocUrl ? "Update Document" : "Upload Document"}
                 </label>
@@ -206,7 +233,9 @@ const Apply = () => {
               </div>
             </div>
           </div>
-
+          </>
+              ):activeTab === "video"?( 
+<>
 
           {/* Video Resume Section */}
           <div className="space-y-4">
@@ -214,7 +243,7 @@ const Apply = () => {
             <div className="bg-blue-50 p-4 rounded-lg mb-4">
               <div className="flex items-center justify-between">
                 <div className="flex items-center space-x-3">
-                  <svg className="w-8 h-8 text-blue-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <svg className="w-8 h-8 text-primary" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M15 10l4.553-2.276A1 1 0 0121 8.618v6.764a1 1 0 01-1.447.894L15 14M5 18h8a2 2 0 002-2V8a2 2 0 00-2-2H5a2 2 0 00-2 2v8a2 2 0 002 2z" />
                   </svg>
                   <div>
@@ -224,7 +253,7 @@ const Apply = () => {
                 </div>
                 <button
                   type="button"
-                  className="text-blue-500 hover:text-blue-700"
+                  className="text-primary hover:text-blue-700"
                   onClick={() => setIsModalOpen(true)}
                 >
                   Play
@@ -266,7 +295,7 @@ const Apply = () => {
               />
               <label
                 htmlFor="resumeVideo"
-                className="bg-blue-500 text-white px-4 py-2 rounded-md cursor-pointer hover:bg-blue-600"
+                className="bg-primary text-white px-4 py-2 rounded-md cursor-pointer hover:bg-opacity-95"
               >
                 Update Video
               </label>
@@ -276,31 +305,36 @@ const Apply = () => {
               <p className="mt-2 text-sm text-gray-500">Max size: 100MB</p>
             </div>
           </div>
-
+          </>
+) :(
+  <>
           <div className="space-y-4">
             <h2 className="text-xl font-semibold">Cover Letter</h2>
             <textarea
               rows={6}
-              className="w-full px-4 py-3 border rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+              className="w-full px-4 py-3 border rounded-lg focus:ring-2 focus:ring-primary focus:border-primary"
               placeholder="Write your cover letter here..."
               value={data.coverLetter}
               onChange={(e) => setData({ ...data, coverLetter: e.target.value })}
             />
           </div>
           <button
-            type="submit"
-            className="w-full bg-green-500 text-white py-3 px-4 rounded-lg font-medium hover:bg-green-600 transition-colors flex justify-center items-center gap-3"
-          >
-            {isLoading ? (
-              " Apply"
+          type="submit"
+          className="w-full bg-primary text-white py-3 px-4 rounded-lg font-medium hover:bg-opacity-95 transition-colors flex justify-center items-center gap-3"
+        >
+          {isLoading ? (
+            " Apply"
 
-            ) : (
-              <>
-                <div className="w-5 h-5 border-2 border-white border-t-transparent rounded-full animate-spin"></div>
-                loading...
-              </>
-            )}
-          </button>
+          ) : (
+            <>
+              <div className="w-5 h-5 border-2 border-white border-t-transparent rounded-full animate-spin"></div>
+              loading...
+            </>
+          )}
+        </button>
+        </>
+)}
+          
 
         </form>
       </div>

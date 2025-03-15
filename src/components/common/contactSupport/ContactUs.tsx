@@ -11,7 +11,7 @@ const ContactUs: React.FC = () => {
   const route = activeCompany ? "company" : "user";
 
   return (
-    <section className="w-full py-10 font-inter">
+    <section className="w-full py-10 font-inter pt-28">
       <div className="w-full max-w-7xl px-6 lg:px-8 mx-auto">
         <div className="grid lg:grid-cols-1 grid-cols-1 gap-x-16 xl:gap-x-24 gap-y-14 max-w-lg md:max-w-3xl lg:max-w-full mx-auto">
           <div>
@@ -52,9 +52,10 @@ const ContactUs: React.FC = () => {
                 </p>
               </div>
 
-              <div className="rounded-2xl border border-gray-200 bg-white p-7 group transition-all duration-500 hover:bg-primary">
+              <div className="rounded-2xl border border-gray-200 bg-white p-7 group transition-all duration-500 hover:bg-primary" 
+               onClick={() => router.push(`/contactus/blog`)}>
                 <Link
-                  href="#"
+                  href=""
                   className="w-14 h-14 bg-primary rounded-full flex items-center justify-center mb-5 transition-all duration-500 group-hover:bg-white cursor-pointer"
                 >
                   <svg

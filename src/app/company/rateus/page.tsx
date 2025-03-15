@@ -2,7 +2,7 @@ import RateUs from "@/components/common/contactSupport/RateUs";
 import Navbar from "@/components/navBar/Navbar";
 import React from "react";
 
-export function page() {
+export default function page() {
   return (
     <div>
       <Navbar />
@@ -10,4 +10,3 @@ export function page() {
     </div>
   );
 }
-

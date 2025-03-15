@@ -2,21 +2,108 @@
 
 import Image from "next/image";
 import { useRouter } from "next/navigation";
-import register4 from "../../../../public/assets/register4.jpg";
 import register3 from "../../../../public/assets/register3.jpg";
 import goup from "../../../../public/landingPage-group-discussion.png";
-
-import Testimonials from "./Testimonial";
+import  { AnimatedTestimonials } from "./Testimonial";
 import { useEffect, useState } from "react";
 import api from "@/utils/api";
 import CountUp from "react-countup";
 import { toast } from "react-toastify";
 import { formChangeEvent } from "@/types/Types";
+import BlurText from "@/Animation/BlurText";
+import { StickyScroll } from "@/Animation/Slider";
+import sighup from "../../../../public/assets/signup.svg"
+import jobhunt from "../../../../public/assets/jobhunt.svg"
+import resume from "../../../../public/assets/resume.svg"
+import interview from "../../../../public/assets/interview.svg"
+import { PlaceholdersAndVanishInput } from "@/Animation/PlaceholdersAndVanishInput";
+
+
+
+const content = [
+  {
+    title: "Create an Account",
+    description:
+      "Get started by signing up with your details. Provide your name, email, and a secure password to create your account. This will give you access to a personalized job search experience.",
+    content: (
+      <div className="h-full w-full flex items-center justify-center text-white">
+       <Image
+          src={sighup}
+          width={300}
+          height={300}
+          className="h-full w-full object-fit"
+          alt="Job search illustration"
+        />
+      </div>
+    ),
+  },
+  {
+    title: "Find a Suitable Job",
+    description:
+      "Use our advanced job search filters to find positions that match your skills, experience, and preferences. Browse through various job listings from top companies and industries.",
+    content: (
+      <div className="h-full w-full flex items-center justify-center text-white">
+        <Image
+          src={jobhunt}
+          width={300}
+          height={300}
+          className="h-full w-full object-fit"
+          alt="Job search illustration"
+        />
+      </div>
+    ),
+  },
+  {
+    title: "Upload Your CV/Resume",
+    description:
+      "Make your profile stand out by uploading your latest resume. This helps recruiters and employers understand your qualifications, experience, and achievements at a glance.",
+    content: (
+      <div className="h-full w-full flex items-center justify-center text-white">
+      <Image
+        src={resume}
+        width={300}
+        height={300}
+        className="h-full w-full object-fit"
+        alt="Job search illustration"
+      />
+    </div>
+    ),
+  },
+  {
+    title: "Apply for a Job",
+    description:
+      "Once you've found the perfect job, submit your application with just a few clicks. Track your application status and stay updated on interview opportunities.",
+    content: (
+      <div className="h-full w-full flex items-center justify-center text-white">
+      <Image
+        src={interview}
+        width={300}
+        height={300}
+        className="h-full w-full object-fit"
+        alt="Job search illustration"
+      />
+    </div>
+    ),
+  },
+];
 
 function LandingPage() {
   const [users, setUsers] = useState([]);
   const [companies, setCompanies] = useState([]);
   const [revenue, setRevenue] = useState([]);
+  const placeholders = [
+    "Search for software developer jobs...",
+    "Find remote marketing positions...",
+    "Explore data analyst roles near you...",
+    "Look for entry-level finance jobs...",
+    "Discover UI/UX design opportunities...",
+];
+
+ 
+  const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    console.log(e.target.value);
+  };
+  
 
   useEffect(() => {
     showUsers();
@@ -46,21 +133,35 @@ function LandingPage() {
  
   
 
-  const handleSubmit = (e:formChangeEvent) => {
+  const onSubmit = (e:formChangeEvent) => {
     e.preventDefault();
     toast.error("please login");
   };
   
   return (
-    <div className="w-full h-full bg-primary">
+    <div className="w-full h-full bg-white">
       <>
       
-    <section className="relative overflow-hidden pt-5 pb-20 ">
+    <section className="relative overflow-hidden bg-primary pt-5 pb-20 ">
         <div className="px-4 mx-auto relativea sm:px-6 lg:px-8 max-w-7xl">
             <div className="grid items-center grid-cols-1 gap-y-12 lg:grid-cols-2 gap-x-16">
                 <div>
-                    <h1 className="text-4xl font-normal text-white sm:text-5xl lg:text-6xl xl:text-7xl">Connecting You with Employers</h1>
-                    <p className="mt-4 text-lg font-normal text-gray-400 sm:mt-8">Find your dream job effortlessly! Create your profile, upload your resume, and explore opportunities that match your skills. Take the next step in your career today! </p>
+                <BlurText
+  text="Connecting You with Employers"
+  delay={150}
+  animateBy="words"
+  direction="top"
+  className="text-4xl font-normal text-white sm:text-5xl lg:text-6xl xl:text-7xl"
+/>
+<BlurText
+  text="Find your dream job effortlessly! Create your profile, upload your resume, and explore opportunities that match your skills. Take the next step in your career today! "
+  delay={150}
+  animateBy="words"
+  direction="top"
+  className="mt-4 text-lg font-normal text-gray-400 sm:mt-8"
+/>
+                    
+                   
 
                     <form action="#" method="POST" className="relative mt-8 rounded-full sm:mt-12">
                         <div className="relative">
@@ -71,12 +172,15 @@ function LandingPage() {
                                         <path strokeLinecap="round" strokeLinejoin="round" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
                                     </svg>
                                 </div>
-                                <input type="text" name="" id="" placeholder="Try Java Developer, React Dev etc." className="block w-full py-4 pr-6 text-black placeholder-gray-500  border border-transparent rounded-full pl-14 sm:py-5 focus:border-transparent focus:ring-0" />
+                                {/* <input type="text" name="" id="" placeholder="Try Java Developer, React Dev etc." className="block w-full py-4 pr-6 text-black placeholder-gray-500  border border-transparent rounded-full pl-14 sm:py-5 focus:border-transparent focus:ring-0" /> */}
+                                <PlaceholdersAndVanishInput
+        placeholders={placeholders}
+        onChange={handleChange}
+        onSubmit={onSubmit}
+      />
                             </div>
                         </div>
-                        <div className="sm:absolute flex sm:right-1.5 sm:inset-y-1.5 mt-4 sm:mt-0">
-                            <button type="submit" className="inline-flex items-center justify-center w-full px-5 py-5 text-sm font-semibold tracking-widest text-primary uppercase transition-all duration-200 bg-white rounded-full sm:w-auto sm:py-3 hover:opacity-90" onClick={handleSubmit}>Find A Job</button>
-                        </div>
+                       
                     </form>
 
                     <div className="mt-8 sm:mt-12">
@@ -166,14 +270,16 @@ function LandingPage() {
 
                     <img className="relative w-full max-w-md mx-auto" src="https://landingfoliocom.imgix.net/store/collection/dusk/images/hero/2/illustration.png" alt="" />
                 </div>
+
             </div>
         </div>
+        
     </section>
 
 
       </>
 
-      <section className="py-0">
+      <section className=" bg-primary mb-20">
         <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-10 text-center">
             {/* Expert Consultants */}
@@ -211,8 +317,7 @@ function LandingPage() {
             </div>
           </div>
         </div>
-      </section>
-      <div className="relative flex flex-col items-center bg-primary py-20">
+        <div className="relative flex flex-col items-center mt-20   py-18">
         <div className="relative bg-gray-100 shadow-lg p-10 flex flex-col md:flex-row items-center w-2/3 justify-center z-10">
           <div className="md:w-2/3">
             <h3 className="text-gray-500 text-sm uppercase">Who We Are</h3>
@@ -249,61 +354,29 @@ function LandingPage() {
             className="object-cover rounded-md"
           />
         </div>
-        <div className="absolute top-1/2 -mt-40 w-full h-4/6  bg-white  flex justify-center items-center p-32 z-0"></div>
+        </div>
+      </section>
+      <div className="relative flex flex-col items-center  py-18">
+        
+        
+        <div className="absolute top-1/2 -mt-40 w-full h-3/6  bg-white  flex justify-center items-center  z-0"></div>
         <section className="py-24 relative">
-        <div className="w-full max-w-7xl px-4 md:px-5 lg:px-5 mx-auto">
+        <div className="w-full  px-4 md:px-5 lg:px-5 mx-auto">
             <div className="w-full flex-col justify-start items-center lg:gap-12 gap-10 inline-flex">
                 <div className="w-full flex-col justify-start items-center gap-3 flex">
                     <h2 className="w-full text-center text-gray-900 text-4xl font-bold font-manrope leading-normal">How It Works</h2>
                     <p className="w-full text-center text-gray-500 text-base font-normal leading-relaxed">A detailed breakdown of processes and mechanisms behind a system or product, <br/>simplifying complex concepts for easy understanding.</p>
                 </div>
-                <div className="w-full justify-start items-center gap-4 flex md:flex-row flex-col">
-                    <div className="grow shrink basis-0 flex-col justify-start items-center gap-2.5 inline-flex">
-                        <div className="self-stretch flex-col justify-start items-center gap-0.5 flex">
-                            <h3 className="self-stretch text-center text-primary text-4xl font-extrabold font-manrope leading-normal">1</h3>
-                            <h4 className="self-stretch text-center text-gray-900 text-xl font-semibold leading-8">Create account</h4>
-                        </div>
-                        <p className="self-stretch text-center text-gray-400 text-base font-normal leading-relaxed">Sign up with your details to get started.</p>
-                    </div>
-                    <svg className="md:flex hidden" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none">
-                        <path d="M5.50159 6L11.5018 12.0002L5.49805 18.004M12.5016 6L18.5018 12.0002L12.498 18.004" stroke="#4F46E5" strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round"/>
-                    </svg>
-                    <div className="grow shrink basis-0 flex-col justify-start items-center gap-2.5 inline-flex">
-                        <div className="self-stretch flex-col justify-start items-center gap-0.5 flex">
-                            <h3 className="self-stretch text-center text-primary text-4xl font-extrabold font-manrope leading-normal">2</h3>
-                            <h4 className="self-stretch text-center text-gray-900 text-xl font-semibold leading-8">Find a Suitable Job</h4>
-                        </div>
-                        <p className="self-stretch text-center text-gray-400 text-base font-normal leading-relaxed">Search and explore job listings that match your profile.</p>
-                    </div>
-                    <svg className="md:flex hidden" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none">
-                        <path d="M5.50159 6L11.5018 12.0002L5.49805 18.004M12.5016 6L18.5018 12.0002L12.498 18.004" stroke="#4F46E5" strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round"/>
-                    </svg>
-                    <div className="grow shrink basis-0 flex-col justify-start items-center gap-2.5 inline-flex">
-                        <div className="self-stretch flex-col justify-start items-center gap-0.5 flex">
-                            <h3 className="self-stretch text-center text-primary text-4xl font-extrabold font-manrope leading-normal">3</h3>
-                            <h4 className="self-stretch text-center text-gray-900 text-xl font-semibold leading-8">Upload Your CV/Resume</h4>
-                        </div>
-                        <p className="self-stretch text-center text-gray-400 text-base font-normal leading-relaxed">Upload your resume to showcase your skills and experience.</p>
-                    </div>
-                    <svg className="md:flex hidden" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none">
-                        <path d="M5.50159 6L11.5018 12.0002L5.49805 18.004M12.5016 6L18.5018 12.0002L12.498 18.004" stroke="#4F46E5" strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round"/>
-                    </svg>
-                    <div className="grow shrink basis-0 flex-col justify-start items-center gap-2.5 inline-flex">
-                        <div className="self-stretch flex-col justify-start items-center gap-0.5 flex">
-                            <h3 className="self-stretch text-center text-primary text-4xl font-extrabold font-manrope leading-normal">3</h3>
-                            <h4 className="self-stretch text-center text-gray-900 text-xl font-semibold leading-8">Apply for a Job</h4>
-                        </div>
-                        <p className="self-stretch text-center text-gray-400 text-base font-normal leading-relaxed">Submit your application and get hired.</p>
-                    </div>
-                </div>
+                
+                <StickyScroll content={content}/>
             </div>
         </div>
     </section>
                                             
       </div>
-      <div className="mt-16">
-        <Testimonials />
-      </div>
+     
+        <AnimatedTestimonials />
+     
       <div className="grid grid-cols-1 md:grid-cols-2 gap-10 p-36">
         {/* <div className="bg-gray-200 p-6 rounded-lg flex flex-col md:flex-row items-center justify-between">
           <div className="md:w-1/2">

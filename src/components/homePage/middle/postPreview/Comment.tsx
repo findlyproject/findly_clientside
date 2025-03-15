@@ -21,9 +21,7 @@ import {
 } from "@/lib/store/features/actions/commentActions";
 import EmojiPicker from "emoji-picker-react";
 import { EmojiClickData } from "emoji-picker-react";
-import { BsThreeDots } from "react-icons/bs";
 import Image from "next/image";
-import { fetchAllPosts } from "@/lib/store/features/actions/postActions";
 import OutsideClickHandler from "react-outside-click-handler";
 dayjs.extend(relativeTime);
 
@@ -162,18 +160,20 @@ export const Comments = ({ postId, comments }: CommentsProps) => {
     if (!commentData.trim()) return;
     dispatch(
       updateAComment({
+        postId,
         commentId: editingCommentId,
         newComment: commentData,
         routes,
       })
     );
     setEdit(false);
-    dispatch(fetchAllPosts(0));
+    setIsShowMenu(false)
+   
   };
   //delete comment
   const deleteComment = async (commentid: string) => {
-    dispatch(deleteAComment({ commentId: commentid, routes }));
-    dispatch(fetchAllPosts(0));
+    dispatch(deleteAComment({ postId,commentId: commentid, routes }));
+    
   };
 
   const addReply = async (commentId: string) => {
@@ -325,7 +325,7 @@ export const Comments = ({ postId, comments }: CommentsProps) => {
                       <div className="mt-2 flex gap-2">
                         <button
                           className="bg-green-500 text-white px-4 py-1 rounded-md"
-                          onClick={handleSaveEdit}
+                          onClick={()=>handleSaveEdit()}
                         >
                           Save
                         </button>
@@ -343,21 +343,20 @@ export const Comments = ({ postId, comments }: CommentsProps) => {
                   ) : (
                     <div className="flex items-start space-x-3">
                       <div className="w-8 h-8">
-                        <Image
-                          src={
-                            comment.user
-                              ? "profileImage" in comment.user &&
-                                comment.user.profileImage
-                                ? comment.user.profileImage
-                                : comment.user.logo ||
-                                  "https://res.cloudinary.com/dq1auwpkm/image/upload/v1738735360/profile_jtwxaj.png"
-                              : "https://res.cloudinary.com/dq1auwpkm/image/upload/v1738735360/profile_jtwxaj.png"
-                          }
-                          alt="User Profile"
-                          width={30}
-                          height={30}
-                          className="w-full h-full rounded-full object-cover"
-                        />
+                      <Image
+  src={
+    comment.user?.type === "user"
+      ? comment.user.profileImage ||
+        "https://res.cloudinary.com/dq1auwpkm/image/upload/v1738735360/profile_jtwxaj.png"
+      : comment.user?.logo ||
+        "https://res.cloudinary.com/dq1auwpkm/image/upload/v1738735360/profile_jtwxaj.png"
+  }
+  alt="User Profile"
+  width={30}
+  height={30}
+  className="w-full h-full rounded-full object-cover"
+/>
+
                       </div>
 
                       <div className="flex-grow">
@@ -417,21 +416,24 @@ export const Comments = ({ postId, comments }: CommentsProps) => {
                                 }]`
                               : "Reply"}
                           </button>
-                          {comment?.user?._id === activeuser?._id && (
+                          {comment?.user?._id === activeuser?._id ||comment?.user?._id === activeCompany?._id &&(
                             <button
                               onClick={() => toggleMenu(comment._id)}
                               className="hover:underline"
                             >
-                              <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="size-6">
-  <path stroke-linecap="round" stroke-linejoin="round" d="M6.75 12a.75.75 0 1 1-1.5 0 .75.75 0 0 1 1.5 0ZM12.75 12a.75.75 0 1 1-1.5 0 .75.75 0 0 1 1.5 0ZM18.75 12a.75.75 0 1 1-1.5 0 .75.75 0 0 1 1.5 0Z" />
+                              <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth="1.5" stroke="currentColor" className="size-6">
+  <path strokeLinecap="round" strokeLinejoin="round" d="M6.75 12a.75.75 0 1 1-1.5 0 .75.75 0 0 1 1.5 0ZM12.75 12a.75.75 0 1 1-1.5 0 .75.75 0 0 1 1.5 0ZM18.75 12a.75.75 0 1 1-1.5 0 .75.75 0 0 1 1.5 0Z" />
 </svg>
 
 
-                              {isShowMenu && openCommentId == comment._id && (
+                              
+                            </button>
+                          )}
+                          {isShowMenu && openCommentId == comment._id && (
                                 <OutsideClickHandler
                                   onOutsideClick={() => setIsShowMenu(false)}
                                 >
-                                  <div className="absolute  bg-white border border-gray-200 rounded-lg shadow-lg ">
+                                  <div className="absolute z-50 bg-white border border-gray-200 rounded-lg shadow-lg ">
                                     <div className="border-t border-gray-200">
                                       <button
                                         className="w-full text-left px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"
@@ -453,8 +455,6 @@ export const Comments = ({ postId, comments }: CommentsProps) => {
                                   </div>
                                 </OutsideClickHandler>
                               )}
-                            </button>
-                          )}
                         </div>
                       </div>
                     </div>
@@ -625,8 +625,8 @@ export const Comments = ({ postId, comments }: CommentsProps) => {
                                         className="text-gray-500 hover:text-gray-700   text-xl"
                                         onClick={() => toggleOptionsMenu(r._id)}
                                       >
-                                       <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" className="size-5">
-  <path stroke-linecap="round" stroke-linejoin="round" d="M12 6.75a.75.75 0 1 1 0-1.5.75.75 0 0 1 0 1.5ZM12 12.75a.75.75 0 1 1 0-1.5.75.75 0 0 1 0 1.5ZM12 18.75a.75.75 0 1 1 0-1.5.75.75 0 0 1 0 1.5Z" />
+                                       <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth="1.5" stroke="currentColor" className="size-5">
+  <path strokeLinecap="round" strokeLinejoin="round" d="M12 6.75a.75.75 0 1 1 0-1.5.75.75 0 0 1 0 1.5ZM12 12.75a.75.75 0 1 1 0-1.5.75.75 0 0 1 0 1.5ZM12 18.75a.75.75 0 1 1 0-1.5.75.75 0 0 1 0 1.5Z" />
 </svg>
 
                                       </button>

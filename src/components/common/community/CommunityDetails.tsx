@@ -20,6 +20,7 @@ export default function CommunityDetails({
 }: CommunityDetailsProps) {
   const [activeTab, setActiveTab] = useState("images");
   const activeuser = useAppSelector((state) => state.user.activeuser);
+  const activeCompany=useAppSelector((state)=>state.companyLogin.activeCompany)
   const [message, setMessage] = useState<CommunityMessage[]>([]);
   const router = useRouter();
   const [details, setDetails] = useState<Community | null>(null);
@@ -43,7 +44,7 @@ export default function CommunityDetails({
   console.log("mmmm", message);
 
   const isMember = details?.members?.some(
-    (item) => item.memberId._id === activeuser?._id
+    (item) => item.memberId?._id === activeuser?._id
   );
   console.log("isMember", isMember);
 
@@ -190,6 +191,8 @@ export default function CommunityDetails({
     }
   };
 
+  console.log("details",details);
+  
   return (
     <div className="max-w-4xl w-full mx-auto p-4">
       <button className="absolute top-0 left-4 text-md" onClick={onClose}>
@@ -213,38 +216,44 @@ export default function CommunityDetails({
             onChange={handleFileChange}
           />
 
-          {selectedFile !== null ? (
-            <button
-              onClick={() => details?._id && handleUpload(details?._id)}
-              className="absolute inset-0 flex items-center justify-center bg-primary text-white p-1 rounded"
-            >
-              Upload
-            </button>
-          ) : (
-            <label
-              htmlFor="logoUpload"
-              className="absolute bottom-1 right-1 bg-gray-200 p-2 rounded-full shadow-md hover:bg-gray-300 transition"
-            >
-              <FaPencilAlt className="text-gray-600 text-sm" />
-            </label>
-          )}
+{activeCompany?._id === details?.createdBy?._id && (
+  selectedFile !== null ? (
+    <button
+      onClick={() => details?._id && handleUpload(details?._id)}
+      className="absolute inset-0 flex items-center justify-center bg-primary text-white p-1 rounded"
+    >
+      Upload
+    </button>
+  ) : (
+    <label
+      htmlFor="logoUpload"
+      className="absolute bottom-1 right-1 bg-gray-200 p-2 rounded-full shadow-md hover:bg-gray-300 transition"
+    >
+      <FaPencilAlt className="text-gray-600 text-sm" />
+    </label>
+  )
+)}
+
         </div>
 
         <h2 className="mt-2 text-xl font-semibold text-gray-800 flex items-center">
           {details?.name}
           <span className="ml-2">
-            {isnameEdit ? (
-              <FaSave
-                onClick={() => details?._id && handleSaveName(details?._id)}
-                className="text-green-500 text-lg cursor-pointer"
-              />
-            ) : (
-              <MdModeEditOutline
-                onClick={handleEditNameClick}
-                className="text-blue-500 text-lg cursor-pointer"
-              />
-            )}
-          </span>
+  {activeCompany?._id === details?.createdBy?._id && (
+    isnameEdit ? (
+      <FaSave
+        onClick={() => details?._id && handleSaveName(details?._id)}
+        className="text-green-500 text-lg cursor-pointer"
+      />
+    ) : (
+      <MdModeEditOutline
+        onClick={handleEditNameClick}
+        className="text-blue-500 text-lg cursor-pointer"
+      />
+    )
+  )}
+</span>
+
         </h2>
 
         {isnameEdit ? (
@@ -265,18 +274,21 @@ export default function CommunityDetails({
           <p className="flex items-center text-black text-md font-semibold">
             Description
             <span className="ml-2">
-              {isEditing ? (
-                <FaSave
-                  onClick={() => details?._id && handleSaveClick(details?._id)}
-                  className="text-green-500 text-lg cursor-pointer"
-                />
-              ) : (
-                <MdModeEditOutline
-                  onClick={handleEditClick}
-                  className="text-blue-500 text-lg cursor-pointer"
-                />
-              )}
-            </span>
+  {activeCompany?._id === details?.createdBy?._id && (
+    isEditing ? (
+      <FaSave
+        onClick={() => details?._id && handleSaveClick(details?._id)}
+        className="text-green-500 text-lg cursor-pointer"
+      />
+    ) : (
+      <MdModeEditOutline
+        onClick={handleEditClick}
+        className="text-blue-500 text-lg cursor-pointer"
+      />
+    )
+  )}
+</span>
+
           </p>
 
           {isEditing ? (
@@ -332,7 +344,7 @@ export default function CommunityDetails({
         <div className="flex gap-4 mb-4">
           <button
             className={`px-4 py-2 rounded-md ${
-              activeTab === "images" ? "bg-blue-500 text-white" : "bg-gray-200"
+              activeTab === "images" ? "bg-primary text-white" : "bg-gray-200"
             }`}
             onClick={() => setActiveTab("images")}
           >
@@ -340,7 +352,7 @@ export default function CommunityDetails({
           </button>
           <button
             className={`px-4 py-2 rounded-md ${
-              activeTab === "videos" ? "bg-blue-500 text-white" : "bg-gray-200"
+              activeTab === "videos" ? "bg-primary text-white" : "bg-gray-200"
             }`}
             onClick={() => setActiveTab("videos")}
           >
@@ -349,7 +361,7 @@ export default function CommunityDetails({
 
           <button
             className={`px-4 py-2 rounded-md ${
-              activeTab === "members" ? "bg-blue-500 text-white" : "bg-gray-200"
+              activeTab === "members" ? "bg-primary text-white" : "bg-gray-200"
             }`}
             onClick={() => setActiveTab("members")}
           >
@@ -399,19 +411,19 @@ export default function CommunityDetails({
                   <img
                     src={
                       member.memberModel === "User"
-                        ? member.memberId.profileImage
-                        : member.memberId.logo
+                        ? member.memberId?.profileImage
+                        : member.memberId?.logo
                     }
                     className="w-8 h-8 rounded-full"
                     alt={
                       member.memberModel === "User"
-                        ? member.memberId.firstName
-                        : member.memberId.name
+                        ? member.memberId?.firstName
+                        : member.memberId?.name
                     }
                   />
                   <span className="ml-3">
                     {member.memberModel === "User"
-                      ? member.memberId.firstName
+                      ? member.memberId?.firstName
                       : ""}
                   </span>
 

@@ -1,7 +1,7 @@
 "use client"; 
 import { useAppSelector } from "@/lib/store/hooks";
 import Image from "next/image";
-import { useRouter } from "next/navigation"; // ✅ Correct import for Next.js 13+
+import { useRouter } from "next/navigation"; 
 
 export  function CommunityPanel(){
   const router = useRouter();
@@ -22,8 +22,8 @@ export  function CommunityPanel(){
               className="flex items-center p-1 hover:bg-gray-100 cursor-pointer rounded-lg transition"
               onClick={() => router.push(`/user/${user._id}/User`)}
             >
-              <div className="w-14 p-3 h-14 rounded-full overflow-hidden">
-                <Image src={user.profileImage||""} className="w-8 h-8 object-cover" width={20} height={20} alt={user.firstName} />
+              <div className="  p-2  rounded-full overflow-hidden">
+                <Image src={user.profileImage||""} className="size-8 rounded-full object-fit" width={20} height={20} alt={user.firstName} />
               </div>
               <div className="ml-2">
                 <div className="text-base font-medium text-gray-800">{user.firstName}</div>

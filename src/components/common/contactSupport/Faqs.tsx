@@ -47,7 +47,7 @@ const FAQSection: React.FC = () => {
         
           <div className="w-full lg:w-1/2">
             <Image
-              src="https://pagedone.io/asset/uploads/1696230182.png"
+              src=""
               alt="FAQ section"
               className="w-96 rounded-xl object-cover"
               height={30}

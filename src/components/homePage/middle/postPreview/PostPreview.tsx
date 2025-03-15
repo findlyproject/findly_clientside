@@ -9,7 +9,7 @@ import { useRouter } from "next/navigation";
 import Image from "next/image";
 import Link from "next/link";
 import { setLikes, setSaved } from "@/lib/store/features/postSlice";
-import { IPost } from "@/types/Types";
+import { IPost, User } from "@/types/Types";
 import "swiper/css";
 import "swiper/css/navigation";
 import { useAppDispatch, useAppSelector } from "@/lib/store/hooks";
@@ -31,6 +31,7 @@ interface PostPreviewProps {
 }
 
 export const PostPreview = ({ post }: PostPreviewProps) => {
+  console.log(post)
   const [localPost, setLocalPost] = useState(post);
   const [isShareMenuVisible, setShareMenuVisible] = useState(false);
   const [isSaved, setIsSaved] = useState(false);
@@ -72,7 +73,7 @@ const[singlePost,setSinglePost]=useState(false)
 
   useEffect(() => {
     const savedStatus =
-      Array.isArray(saved) && saved.some((item) => item.postId._id === post._id);
+      Array.isArray(saved) && saved.some((item) => item.postId?._id === post?._id);
     setIsSaved(savedStatus);
   }, [saved, post]);
   return (
@@ -88,13 +89,19 @@ const[singlePost,setSinglePost]=useState(false)
   >
     <Image
       src={
-        post.owner?.type === "Company"
-          ? post.owner?.logo
-          : post.owner?.profileImage ||
+        post.owner && typeof post.owner === "object" && post.owner.type === "Company"
+          ? post.owner.logo || "https://via.placeholder.com/35" // Default if no logo
+          : (post.owner as User)?.profileImage ||
             "https://res.cloudinary.com/dq1auwpkm/image/upload/v1738735360/profile_jtwxaj.png"
       }
-      className="rounded-full object-cover"
-      alt={post.owner?.type === "Company" ? post.owner?.name : post.owner?.firstName || "User"}
+      className="rounded-full size-8 object-cover"
+      alt={
+        post.owner && typeof post.owner === "object"
+          ? post.owner.type === "Company"
+            ? post.owner.name || "Company"
+            : (post.owner as User)?.firstName || "User"
+          : "Unknown"
+      }
       width={35}
       height={35}
     />
@@ -104,34 +111,37 @@ const[singlePost,setSinglePost]=useState(false)
   <div className="ml-3">
     <Link
       href={
-        post.owner?._id === currentUser?._id
+        post.owner && typeof post.owner === "object" && post.owner._id === currentUser?._id
           ? `/${route}/profile`
           : `/${route}/${post.owner?._id}/${post.owner?.type}`
       }
       className="hover:underline"
     >
       <h3 className="text-lg font-semibold text-gray-900">
-        {post.owner
+        {post.owner && typeof post.owner === "object"
           ? post.owner.type === "Company"
-            ? post.owner.name // Show Company Name
-            : `${post.owner?.firstName || ""} ${post.owner?.lastName || ""}`.trim() || "Unknown User" // Show User Name
-          : "Unknown User"}
+            ? post.owner.name || "Unknown Company" // Show Company Name
+            : `${(post.owner as User)?.firstName || ""} ${(post.owner as User)?.lastName || ""}`.trim() || "Unknown User" // Show User Name
+          : "Unknown Owner"}
       </h3>
     </Link>
 
     {/* Additional Info */}
     <div className="text-[10px] text-gray-500">
       <p className="text-xs text-gray-500">
-        {post.owner?._id === currentUser?._id
-          ? "You"
-          : post.owner?.type === "Company"
-          ? post.owner.IndustryType || "Company" // Show Industry for Company
-          : post.owner?.jobTitle?.[0] || "Professional"}{" "}
+        {post.owner && typeof post.owner === "object"
+          ? post.owner._id === currentUser?._id
+            ? "You"
+            : post.owner.type === "Company"
+            ? post.owner.IndustryType || "Company" // Show Industry for Company
+            : (post.owner as User)?.jobTitle?.[0] || "Professional"
+          : "Unknown"}{" "}
         • {dayjs(post.createdAt).fromNow()}
       </p>
     </div>
   </div>
 </div>
+
 
         <div className="cursor-pointer" onClick={() => setIsShowMenu(true)}>
           <svg

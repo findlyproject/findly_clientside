@@ -14,6 +14,7 @@ import EmojiPicker from "emoji-picker-react";
 import { EmojiClickData } from "emoji-picker-react";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faSmile } from "@fortawesome/free-solid-svg-icons";
+import OutsideClickHandler from "react-outside-click-handler";
 import { BsThreeDots } from "react-icons/bs";
 import { Connection, User } from "@/types/Types";
 
@@ -53,7 +54,7 @@ export default function RightSide() {
       setMembers(response.data.connections);
     };
     fetch();
-    fetchMembers();
+    // fetchMembers();
   }, []);
 
   const handleStarred = async () => {
@@ -112,6 +113,7 @@ export default function RightSide() {
       { message: message }
     );
     console.log("responseresponse", response);
+    console.log("responseresponse", response);
 
     setMessage("");
     fetchUsers();
@@ -119,6 +121,7 @@ export default function RightSide() {
 
   useEffect(() => {
     socket.on("connect", () => {
+      console.log("Connected to server:", socket.id);
       console.log("Connected to server:", socket.id);
     });
 
@@ -711,7 +714,7 @@ bg-white border-s border-gray-200 dark:bg-neutral-800 dark:border-neutral-700 w-
                                   strokeLinecap="round"
                                 />
                               </svg>
-                              <span>Send</span>
+                            
                             </button>
                           </div>
                         </div>

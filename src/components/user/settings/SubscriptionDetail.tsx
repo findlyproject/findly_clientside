@@ -47,19 +47,17 @@ export default function SubscriptionDetail(){
       </div>
 
       <div>
-        {details.length > 0 ? (
-          details.map((item, index) => (
-            <div key={index}>
-              <h2 className="text-lg md:text-xl font-semibold mb-4">
+      <h2 className="text-xl md:text-xl  mt-20 font-semibold mb-4">
                 Subscription History
               </h2>
+        {details.length > 0 ? 
+        (
+          
+          details.map((item, index) => (
+            <div key={index}>
+             
               <ul className="space-y-4">
-                {item.features.map((feature, i) => (
-                  <li key={i} className="flex items-start space-x-3">
-                    <FaCheckCircle className="text-primary mt-1 text-xl" />
-                    <p className="text-gray-700">{feature}</p>
-                  </li>
-                ))}
+               
               </ul>
             </div>
           ))
@@ -99,17 +97,27 @@ export default function SubscriptionDetail(){
                 </div>
 
                 <div>
-                  <button
-                    className={
-                      item.active === true
-                        ? "bg-primary text-white px-4 py-2 rounded-md text-sm"
-                        : "bg-white text-gray-700 px-4 py-2 rounded-md text-sm"
-                    }
-                  >
-                    {item?.active === true ? "Active" : "Inactive"}
-                  </button>
+                <span
+  className={`inline-block text-xs px-2 py-1 rounded mt-1 font-medium
+    ${item?.active ? "bg-green-100 text-green-800" : "bg-red-100 text-red-800"}
+  `}
+>
+  {item?.active ? "Active" : "Inactive"}
+</span>
+
+
+
                 </div>
+                
               </div>
+              <hr></hr>
+              {item.features.map((feature, i) => (
+                
+                  <li key={i} className="flex items-start space-x-3">
+                    <FaCheckCircle className="text-primary mt-1 text-xl" />
+                    <p className="text-gray-700">{feature}</p>
+                  </li>
+                ))}
             </div>
           ))
         ) : (

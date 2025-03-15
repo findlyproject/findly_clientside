@@ -263,9 +263,9 @@ export const ViewProfile = () => {
             <div className="flex space-x-1 border overflow-x-auto p-2 justify-center flex-wrap ">
               {connections.length > 0 ? (
                 connections.slice(0, 4).map((connect, index) => (
-                  <>
+                  <div  key={index} >
                     <div
-                      key={index}
+                     
                       className="flex-col items-center space-x-3 p-3 border rounded-lg shadow-sm mb-4 w-auto"
                     >
                       <div
@@ -305,7 +305,7 @@ export const ViewProfile = () => {
                     >
                       Show all→
                     </button>
-                  </>
+                  </div>
                 ))
               ) : (
                 <p>No connections available.</p>

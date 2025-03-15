@@ -2,35 +2,34 @@
 import React, { useEffect, useState } from "react";
 import { Star } from "lucide-react";
 import { useRouter } from "next/navigation";
-
 import { RateFindly } from "@/lib/store/features/actions/userActions";
 import { useAppDispatch, useAppSelector } from "@/lib/store/hooks";
 import { toast } from "react-toastify";
 
 const RateUs: React.FC = () => {
-
   const dispatch = useAppDispatch();
   const router = useRouter();
   const [rating, setRating] = useState<number | null>(0);
   const [message, setMessage] = useState("");
-  const [selectedStars, setSelectedStars] = useState<number[]>([]); 
-const activeuser=useAppSelector((state)=>state.user.activeuser)
-   const route=activeuser?"user":"company"
-const activeCompany = useAppSelector((state) => state.companyLogin.activeCompany)
+  
+  const activeUser = useAppSelector((state) => state.user.activeuser);
+  const activeCompany = useAppSelector((state) => state.companyLogin.activeCompany);
+  const route = activeUser ? "user" : "company";
 
-useEffect(() => {
-  if (!activeCompany && !activeuser) {
-    toast.error("Login first to get access");
-    setTimeout(() => {
-      router.push("/");
-    }, 8000); // Delay navigation by 2 seconds
-  }
-}, [activeCompany, activeuser,router]);
+  useEffect(() => {
+    if (!activeCompany && !activeUser) {
+      toast.error("Login first to get access");
+      setTimeout(() => {
+        router.push("/");
+      }, 2000); // Reduced delay to 2s for better UX
+    }
+  }, [activeCompany, activeUser, router]);
 
+  if (!activeCompany && !activeUser) return null; // Prevent rendering if unauthorized
 
-// If not authorized, return `null` (or a loader)
-if (!activeCompany && !activeuser) return null;
-
+  const handleStarClick = (star: number) => {
+    setRating(star); // Store the selected rating directly
+  };
 
   const handleSubmit = async () => {
     if (rating === null || message.trim() === "") {
@@ -45,24 +44,12 @@ if (!activeCompany && !activeuser) return null;
     if (RateFindly.fulfilled.match(resultAction)) {
       setMessage("");
       setRating(null);
-      setSelectedStars([]);
       toast.success("Review submitted successfully!");
     } else {
       toast.warn("Failed to submit review.");
     }
   };
-  
 
-  const handleStarClick = (star: number) => {
-    setRating(star === rating ? null : star);
-    if (selectedStars.includes(star)) {
-      
-      setSelectedStars(selectedStars.filter((s) => s !== star));
-    } else {
-     
-      setSelectedStars([...selectedStars, star]);
-    }
-  };
   return (
     <div className="flex justify-center items-center min-h-screen px-4 py-8 bg-gray-100">
       <div className="bg-white shadow-lg rounded-lg p-6 w-full max-w-2xl">
@@ -76,7 +63,7 @@ if (!activeCompany && !activeuser) return null;
           We value your opinion! Share your feedback to help us improve.
         </p>
 
-       
+        {/* Star Rating */}
         <div className="mt-6 text-center">
           <label className="text-gray-700 font-medium text-lg">
             Rate our website
@@ -86,9 +73,7 @@ if (!activeCompany && !activeuser) return null;
               <Star
                 key={star}
                 className={`w-7 h-7 cursor-pointer transition-all duration-200 ${
-                  selectedStars.includes(star)
-                    ? "text-yellow-500 fill-yellow-500"
-                    : "text-gray-300"
+                  star <= (rating ?? 0) ? "text-yellow-500 fill-yellow-500" : "text-gray-300"
                 }`}
                 onClick={() => handleStarClick(star)}
                 aria-label={`Rate ${star} star${star > 1 ? "s" : ""}`}
@@ -97,7 +82,7 @@ if (!activeCompany && !activeuser) return null;
           </div>
         </div>
 
-       
+        {/* Feedback Text Area */}
         <div className="mt-6">
           <label className="text-gray-700 font-medium text-lg">Message</label>
           <textarea
@@ -109,7 +94,7 @@ if (!activeCompany && !activeuser) return null;
           />
         </div>
 
-      
+        {/* Buttons */}
         <div className="flex flex-col sm:flex-row items-center justify-center gap-4 mt-6">
           <button
             className="w-full sm:w-auto border border-primary text-primary px-6 py-2 rounded-full hover:bg-purple-100 transition-all"

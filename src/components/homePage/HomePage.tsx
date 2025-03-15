@@ -72,7 +72,7 @@ const [isLeftSticky, setIsLeftSticky] = useState(false);
 
   return (
   <section
-  className="grid bg-gray-100 pt-16 -z-10 transition-all duration-300 grid-cols-1 lg:grid-cols-[15%_20%_40%_25%] lg:justify-center "
+  className="grid bg-gray-100 pt-16 -z-10 transition-all duration-300 grid-cols-1  lg:grid-cols-[15%_20%_40%_25%] lg:justify-center "
 >
   <div className="w-full"></div>
 <div

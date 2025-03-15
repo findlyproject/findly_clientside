@@ -1,10 +1,18 @@
 "use client";
 import { createAsyncThunk } from "@reduxjs/toolkit";
 import { AxiosResponse } from "axios";
-import { setPosts, addPost, setPostsAdmin, PostState } from "../postSlice";
+import {
+  setPosts,
+  addPost,
+  setPostsAdmin,
+  PostState,
+  updatePost,
+  deletePost,
+} from "../postSlice";
 import handleAsync from "@/utils/handleAsync";
 import api from "@/utils/api";
 import { IPost } from "@/types/Types";
+import { toast } from "react-toastify";
 
 // fetch all the posts
 export const fetchAllPostsAdmin = createAsyncThunk(
@@ -14,13 +22,13 @@ export const fetchAllPostsAdmin = createAsyncThunk(
       const response: AxiosResponse<{ posts: IPost[] }> = await api.get(
         `/admin/findallposts`
       );
-console.log("response of admin posts",response);
+      console.log("response of admin posts", response);
 
       if (!response.data || !response.data.posts) {
         return rejectWithValue("No posts found.");
       }
 
-      dispatch(setPostsAdmin(response.data.posts)); 
+      dispatch(setPostsAdmin(response.data.posts));
       return response.data.posts;
     } catch (error) {
       console.error("Error fetching posts:", error);
@@ -30,7 +38,7 @@ console.log("response of admin posts",response);
 );
 export const fetchAllPosts = createAsyncThunk(
   "post/fetchAllPosts",
-  async (page:number = 1, { dispatch, rejectWithValue, getState }) => {
+  async (page: number = 1, { dispatch, rejectWithValue, getState }) => {
     try {
       const response: AxiosResponse<{ posts: IPost[] }> = await api.get(
         `/post/allposts?page=${page}&limit=5`
@@ -43,27 +51,22 @@ export const fetchAllPosts = createAsyncThunk(
 
       const data: IPost[] = response.data.posts;
 
-     
-
-      
       const { post } = getState() as { post: PostState };
-      const prevPosts = post.posts ?? []; 
+      const prevPosts = post.posts ?? [];
 
-   
       const updatedPosts = [...prevPosts];
 
       data.forEach((job) => {
         if (!job.isDeleted) {
           const index = updatedPosts.findIndex((j) => j?._id === job?._id);
           if (index !== -1) {
-            updatedPosts[index] = { ...job }; 
+            updatedPosts[index] = { ...job };
           } else {
             updatedPosts.push({ ...job });
           }
         }
       });
 
-     
       dispatch(setPosts(updatedPosts));
 
       return updatedPosts;
@@ -74,51 +77,46 @@ export const fetchAllPosts = createAsyncThunk(
   }
 );
 
-
-
 export const addPostByUser = createAsyncThunk(
   "posts/addPost",
   async (
-    { description, mediaFiles }: { description: string; mediaFiles: File[] },
+    {
+      description,
+      mediaFiles,
+      routes,
+    }: { description: string; mediaFiles: File[]; routes: string },
     { dispatch, rejectWithValue }
   ) => {
-    console.log("Media Files to Upload:", mediaFiles);
     const formData = new FormData();
 
     formData.append("description", description);
-    console.log("Media Files to Upload:", mediaFiles);
-    formData.append("media", mediaFiles[0]);
 
-    mediaFiles.forEach((file,index) => {
-      console.log("file",file+" index",index);
-      
+    mediaFiles.forEach((file, index) => {
       formData.append("media", file);
     });
 
- 
-      const response = await api.post("/post/upload", formData);
-      console.log("jhdsgfhdgsjhfgjs", formData);
+    const response = await api.post(`/${routes}/upload`, formData);
 
-      if (response.status >= 200 && response.status < 300) {
-        alert("Post added successfully");
+    if (response.status >= 200 && response.status < 300) {
+      toast.success("Post added successfully");
 
-        dispatch(addPost(response.data.post));
+      dispatch(addPost(response.data.post));
 
-        const allPostsResponse: AxiosResponse<{ posts: IPost[] }> =
-          await api.get("/post/allposts");
+      const allPostsResponse: AxiosResponse<{ posts: IPost[] }> = await api.get(
+        "/post/allposts"
+      );
 
-        if (!allPostsResponse.data || !allPostsResponse.data.posts) {
-          return rejectWithValue("No posts found.");
-        }
-
-        dispatch(setPosts(allPostsResponse.data.posts)); // ✅ Update Redux store
-        return allPostsResponse.data.posts;
-      } else {
-        throw new Error(
-          `Error: ${response.data.message || "Failed to add post"}`
-        );
+      if (!allPostsResponse.data || !allPostsResponse.data.posts) {
+        return rejectWithValue("No posts found.");
       }
 
+      dispatch(setPosts(allPostsResponse.data.posts)); // ✅ Update Redux store
+      return allPostsResponse.data.posts;
+    } else {
+      throw new Error(
+        `Error: ${response.data.message || "Failed to add post"}`
+      );
+    }
   }
 );
 
@@ -128,7 +126,7 @@ export const fetchPostById = createAsyncThunk(
     const response = await handleAsync<AxiosResponse<{ post: IPost }>>(() =>
       api.get(`/post/post/${id}`)
     );
-console.log("post",response);
+    console.log("post", response);
 
     if (!response?.data || !response.data.post) {
       return rejectWithValue("No posts found.");
@@ -142,27 +140,30 @@ export const updatePostByUser = createAsyncThunk(
   "posts/updatePostByUser",
   async (
     {
+      routes,
       postId,
       description,
       mediaFiles,
-    }: { postId: string; description: string; mediaFiles: File[] },
-    { rejectWithValue }
+    }: {
+      routes: string;
+      postId: string;
+      description: string;
+      mediaFiles: File[];
+    },
+    { dispatch, rejectWithValue }
   ) => {
     try {
       const formData = new FormData();
 
       formData.append("description", description);
-      console.log("Media Files to Upload:", mediaFiles);
-      formData.append("media", mediaFiles[0]);
 
       mediaFiles.forEach((file) => {
         formData.append("media", file);
       });
 
-      console.log(postId);
-      const response = await api.patch(`post/update/${postId}`, formData);
-
-      return response.data;
+      const response = await api.patch(`${routes}/update/${postId}`, formData);
+      dispatch(updatePost({ postId, updatedData: response.data.post }));
+      return response.data.post;
     } catch (error: any) {
       return rejectWithValue(error.response?.data || "Something went wrong");
     }
@@ -172,18 +173,16 @@ export const updatePostByUser = createAsyncThunk(
 //  delete a post by the owner
 export const DeletePost = createAsyncThunk(
   "post/softDeletePost",
-  async ({ postId }: { postId: string }, { rejectWithValue }) => {
+  async ({ postId }: { postId: string }, {dispatch, rejectWithValue }) => {
     try {
-      console.log("first");
       const response: AxiosResponse<{ post: IPost }> = await api.put(
         `/post/delete/${postId}`
       );
-      console.log(response);
 
       if (!response.data || !response.data.post) {
         return rejectWithValue("Post not found.");
       }
-
+      dispatch(deletePost(response.data.post._id))
       return response.data.post;
     } catch (error) {
       console.error("Error deleting post:", error);
