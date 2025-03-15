@@ -78,7 +78,7 @@ const[singlePost,setSinglePost]=useState(false)
   }, [saved, post]);
   return (
     <>
-    <section className="flex flex-col border  border-gray-300 bg-white rounded-lg mx-auto p-4 shadow-md relative" > 
+    <section className="flex flex-col border border-gray-300 bg-white rounded-lg mx-auto p-4 shadow-md relative" > 
       {/* Post Owner Details */}
       <section className="flex justify-between ">
       <div className="flex items-center mb-3">

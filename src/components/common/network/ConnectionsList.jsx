@@ -51,7 +51,7 @@ const {activeuser}=useAppSelector(state=>state.user)
         {connections.map((connection, index) => (
           <div key={index} className="flex items-center justify-between p-3 ">
             <div className="flex items-center gap-4"
-             onClick={()=>router.push(`user/${connection._id}/User`)}
+             onClick={()=>router.push(`user/${connection.connectionID._id}/User`)}
             >
               <Image src={connection.connectionID.profileImage} alt={connection.connectionID.firstName} width={50} height={50} className="rounded-full" />
               <div>

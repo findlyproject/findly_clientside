@@ -205,9 +205,9 @@ const handleAddLocation = () => {
           </div>
         ))}
       </div>
-            {titlesError && (
+            {/* {titlesError && (
               <span className="text-red-500">{titlesError}</span>
-            )}
+            )} */}
           </div>
 
           <div className="flex flex-col w-1/2">

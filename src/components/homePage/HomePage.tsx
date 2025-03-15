@@ -63,7 +63,8 @@ const [isLeftSticky, setIsLeftSticky] = useState(false);
     
     console.log('ho');
     setLoading(true);
-    await dispatch(fetchAllPosts(page + 1));
+   const response= await dispatch(fetchAllPosts(page + 1));
+   console.log(response)
     setPage((prevPage) => prevPage + 1);
     setLoading(false);
   };
@@ -75,6 +76,7 @@ const [isLeftSticky, setIsLeftSticky] = useState(false);
   className="grid bg-gray-100 pt-16 -z-10 transition-all duration-300 grid-cols-1  lg:grid-cols-[15%_20%_40%_25%] lg:justify-center "
 >
   <div className="w-full"></div>
+  
 <div
         ref={leftSidebarRef}
         className={`overflow-y-auto ${
