@@ -32,11 +32,11 @@ const postSlice = createSlice({
   initialState,
   reducers: {
     setPosts: (state, action: PayloadAction<IPost[]>) => {
-      const existingIds = new Set(state.posts?.map(post => post.id) ?? []);
+      const existingIds = new Set(state.posts?.map(post => post._id) ?? []);
     
       state.posts = [
         ...(state.posts ?? []), 
-        ...action.payload.filter(post => !existingIds.has(post.id))
+        ...action.payload.filter(post => !existingIds.has(post._id))
       ];
     },
     
