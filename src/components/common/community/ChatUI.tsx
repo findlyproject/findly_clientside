@@ -253,6 +253,7 @@ console.log("commuu",community);
     return () => mediaQuery.removeEventListener("change", handleChange);
   });
   console.log("isopen", isopen);
+  console.log("community.members",community?.members )
   return (
     <div className="w-full flex bg-gray-100 relative h-screen pt-24">
       <div className={`${isopen ? "flex absolute left-0 z-50" : ""}`}>
@@ -316,8 +317,8 @@ console.log("commuu",community);
                     <div>
                       {community.members.find(
                         (member) =>
-                          member.memberId === activeCompany?._id ||
-                          member.memberId === activeuser?._id
+                          member.memberId == activeCompany?._id ||
+                          member.memberId == activeuser?._id
                       ) ? (
                         <div>
                           <ul className="flex flex-col space-y-4 p-4  rounded-lg">
