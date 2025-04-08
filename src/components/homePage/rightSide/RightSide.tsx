@@ -290,14 +290,14 @@ bg-white border-s border-gray-200 dark:bg-neutral-800 dark:border-neutral-700 w-
                 </div>
                 <br></br>
 
-                <div className="w-full relative">
+                {/* <div className="w-full relative">
                   <CiSearch className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-500 " />
                   <input
                     type="text"
                     placeholder="Search..."
                     className="w-full pl-10 pr-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-black text-sm"
                   />
-                </div>
+                </div> */}
 
                 <div className="flex justify-center space-x-4">
                   <button

@@ -2,7 +2,7 @@
 
 import Image from "next/image";
 import { useRouter } from "next/navigation";
-import register3 from "../../../../public/assets/register3.jpg";
+// import register3 from "../../../../public/assets/register3.jpg";
 import goup from "../../../../public/landingPage-group-discussion.png";
 import  { AnimatedTestimonials } from "./Testimonial";
 import { useEffect, useState } from "react";
@@ -12,7 +12,7 @@ import { toast } from "react-toastify";
 import { formChangeEvent } from "@/types/Types";
 import BlurText from "@/Animation/BlurText";
 import { StickyScroll } from "@/Animation/Slider";
-import sighup from "../../../../public/assets/signup.svg"
+// import sighup from "../../../../public/assets/signup.svg"
 import jobhunt from "../../../../public/assets/jobhunt.svg"
 import resume from "../../../../public/assets/resume.svg"
 import interview from "../../../../public/assets/interview.svg"
@@ -31,13 +31,13 @@ const content = [
       "Get started by signing up with your details. Provide your name, email, and a secure password to create your account. This will give you access to a personalized job search experience.",
     content: (
       <div className="h-full w-full flex items-center justify-center text-white">
-       <Image
+       {/* <Image
           src={sighup}
           width={300}
           height={300}
           className="h-full w-full object-fit"
           alt="Job search illustration"
-        />
+        /> */}
       </div>
     ),
   },

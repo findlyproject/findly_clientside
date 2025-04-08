@@ -111,31 +111,18 @@ console.log(posts)
 
         <div className="mt-6 grid grid-cols-1 md:grid-cols-2 gap-6">
           {activeTab === "saved" ? (
-<<<<<<< HEAD
             save.length > 0 ? (
               save.map((item) => (
                 <div
                   key={item?.postId._id}
-=======
-            save?.length > 0 ? (
-              save.map((item) => (
-                <div
-                  key={item?.postId?._id}
->>>>>>> b19a8b9a355b3d60918ceeb50b385cc203c07c99
                   className="relative bg-white shadow-md rounded-lg p-4 hover:shadow-lg transition"
                 >
                       <button  className =" absolute top-0 right-4 text-md" onClick={()=>handleUnsave(item.postId?._id)}>✕
                       </button>
                       <br></br>
-<<<<<<< HEAD
                       {item?.postId.images?.length ? (
   <Image
     src={item?.postId.images[0]}
-=======
-                      {item?.postId?.images?.length ? (
-  <Image
-    src={item?.postId?.images?.[0]}
->>>>>>> b19a8b9a355b3d60918ceeb50b385cc203c07c99
     alt="Post Image"
     className="w-full h-40 object-cover rounded-md"  // ✅ Use className
     width={30}
@@ -151,11 +138,7 @@ console.log(posts)
 
 
                   <p className="text-gray-600 mt-2">
-<<<<<<< HEAD
                     {item?.postId.description}
-=======
-                    {item?.postId?.description}
->>>>>>> b19a8b9a355b3d60918ceeb50b385cc203c07c99
                   </p>
                 
                 </div>
