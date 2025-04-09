@@ -266,13 +266,13 @@ useEffect(()=>{
             }}
           >
             <h3 className="text-2xl font-bold dark:text-white text-black">
-              {testimonials[active].userId.firstName} {testimonials[active].userId.lastName}
+              {testimonials[active]?.userId.firstName} {testimonials[active]?.userId.lastName}
             </h3>
             <p className="text-sm text-gray-500 dark:text-neutral-500">
               {testimonials[active]?.userId.jobTitle}
             </p>
             <motion.p className="text-lg text-gray-500 mt-8 dark:text-neutral-300">
-              {testimonials[active].review.split(" ").map((word, index) => (
+              {testimonials[active]?.review.split(" ").map((word, index) => (
                 <motion.span
                   key={index}
                   initial={{

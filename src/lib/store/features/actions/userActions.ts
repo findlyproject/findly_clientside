@@ -6,8 +6,7 @@ import handleAsync from "@/utils/handleAsync";
 import { AxiosResponse } from "axios";
 import {setAllRatings,Rating} from '../ratingSlice'
 import { toast } from "react-toastify";
-import { setAlljobs } from "../jobSlice";
-import { resetPostState, setLikes } from "../postSlice";
+import { resetPostState } from "../postSlice";
 
 //register
 interface RegisterResponse {
@@ -285,14 +284,14 @@ export const fetchPeopleKnow = createAsyncThunk(
 // get saved jobs//
 
 
-export const fetchSavedJobs = createAsyncThunk<UserProfile[],number,{rejectWithValue:string}>(
+export const fetchSavedJobs = createAsyncThunk(
   "/user/getsavedjobs",
   async (page, { dispatch, rejectWithValue }) => {
     try {
       const response: AxiosResponse<{ suggestedUsers: UserProfile[] }> = await api.get(
         `/user/getsavedjobs?page=${page}`
       );
-      
+      console.log("response",response)
       if (!response.data.data || !response.data.data) {
         return rejectWithValue("No user found");
       }
