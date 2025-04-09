@@ -1,3 +1,4 @@
+/* eslint-disable react-hooks/exhaustive-deps */
 
 
 "use client";
@@ -18,7 +19,7 @@ const HomePage = () => {
   const [loading, setLoading] = useState(false);
   const dispatch = useAppDispatch(); 
 const {activeuser}=useAppSelector(state=>state.user)
-const [isLeftSticky, setIsLeftSticky] = useState(false);
+// const [isLeftSticky, setIsLeftSticky] = useState(false);
   const leftSidebarRef = useRef(null);
  
 
@@ -29,6 +30,7 @@ const [isLeftSticky, setIsLeftSticky] = useState(false);
     if(activeuser){dispatch(fetchPeopleKnow())}
 
   }, [dispatch])
+  
   useEffect(()=>{
    Display()
   },[])
@@ -63,9 +65,7 @@ const [isLeftSticky, setIsLeftSticky] = useState(false);
   
 <div
         ref={leftSidebarRef}
-        className={`overflow-y-auto ${
-          isLeftSticky ? "sticky top-0 h-screen" : "h-auto"
-        }`}
+        className={`overflow-y-auto `}
       >
         <LeftSideBar />
       </div>

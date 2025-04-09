@@ -58,8 +58,7 @@ const PricingPlans: React.FC = () => {
   );
   const route = activeCompany ? "company" : "user";
   const purchasePlan = async (plan: Plan) => {
-    console.log("activeCompany", activeCompany);
-    console.log("routepreee", route);
+ 
 
     const resultAction = await dispatch(subscription({ plan, route }));
     console.log("resultAction", resultAction);
