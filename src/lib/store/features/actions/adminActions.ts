@@ -6,6 +6,7 @@ import { AxiosResponse } from "axios";
 import api from "@/utils/api";
 import {  setAdmin, setCompanies, setJOBTitles, setReviews, setSkills, setUsers } from "../adminSlice";
 import { Admin } from "@/types/Types";
+
 //login
 interface LoginResponse {
   findAdmin: Admin;

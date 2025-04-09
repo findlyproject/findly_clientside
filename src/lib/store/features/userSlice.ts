@@ -82,7 +82,7 @@ const loginSlice = createSlice({
   name: "login",
   initialState,
   reducers: {
-    setActive: (state, action: PayloadAction<User | null>) => {
+    setActive: (state, action) => {
       state.activeuser = action.payload;
     },
     setGooglelogin: (state) => {

@@ -6,9 +6,8 @@ import { AxiosResponse } from "axios";
 import { setActiveCompany, setAppliedUsers, setCompanyLogOut } from "../companyslice";
 import { setforgotPassword } from "../companyslice";
 import { resetPostState } from "../postSlice";
-import { Rating } from "../ratingSlice";
 import { ReviewInput } from "@/components/company/CompanyDeatailsPage";
-import { modalProps } from "@/components/company/JobPostModal";
+import { Company } from "@/types/Types";
 
 
 export const loginCompany=createAsyncThunk(
@@ -147,7 +146,7 @@ export const loginCompany=createAsyncThunk(
     
     export const registerSendOtp = createAsyncThunk(
       "company/otp/register",
-      async (values:{ name: string; email: string },{dispatch, rejectWithValue } ) => {
+      async (values:{ name: string; email: string },{rejectWithValue } ) => {
 
         const response = await handleAsync(() =>api.post("company/send-otp", values));
     
@@ -259,7 +258,7 @@ export const loginCompany=createAsyncThunk(
 
     export const editProfile = createAsyncThunk(
       "edit/profile",
-      async ({companyId,values}:{companyId?:string,values:any},{ dispatch,rejectWithValue } ) => {
+      async ({companyId,values}:{companyId?:string,values:Company},{ dispatch,rejectWithValue } ) => {
 
         const response = await handleAsync(() => api.patch(
           `/company/edit/${companyId}`,
@@ -278,7 +277,7 @@ export const loginCompany=createAsyncThunk(
 
     export const editContact = createAsyncThunk(
       "edit/contact",
-      async ({companyId,values}:{companyId?:string,values:any},{ dispatch,rejectWithValue } ) => {
+      async ({companyId,values}:{companyId?:string,values:Company},{ dispatch,rejectWithValue } ) => {
 
         const response = await handleAsync(() => api.patch(
           `/company/editcontact/${companyId}`,
@@ -298,7 +297,7 @@ export const loginCompany=createAsyncThunk(
 
     export const editEmployee = createAsyncThunk(
       "edit/employee",
-      async ({companyId,values}:{companyId?:string,values:any},{ dispatch,rejectWithValue } ) => {
+      async ({companyId,values}:{companyId?:string,values:Company},{ dispatch,rejectWithValue } ) => {
 
         const response = await handleAsync(() => api.patch(
           `/company/editemployee/${companyId}`,
@@ -319,7 +318,7 @@ export const loginCompany=createAsyncThunk(
     
     export const editProfetional = createAsyncThunk(
       "edit/profetional",
-      async ({companyId,values}:{companyId?:string,values:any},{ dispatch,rejectWithValue } ) => {
+      async ({companyId,values}:{companyId?:string,values:Company},{ dispatch,rejectWithValue } ) => {
 
         const response = await handleAsync(() => api.patch(
           `/company/editprofetional/${companyId}`,
@@ -342,7 +341,7 @@ export const loginCompany=createAsyncThunk(
       
     export const editsocialmedia = createAsyncThunk(
       "edit/socialmedia",
-      async ({companyId,values}:{companyId?:string,values:any},{ dispatch,rejectWithValue } ) => {
+      async ({companyId,values}:{companyId?:string,values:Company},{ dispatch,rejectWithValue } ) => {
 
         const response = await handleAsync(() => api.patch(
           `/company/editsocialmedia/${companyId}`,
@@ -362,7 +361,7 @@ export const loginCompany=createAsyncThunk(
 
     export const editService = createAsyncThunk(
       "edit/service",
-      async ({companyId,services}:{companyId?:string,services:any},{ dispatch,rejectWithValue } ) => {
+      async ({companyId,services}:{companyId?:string,services:Company},{ dispatch,rejectWithValue } ) => {
 
         const response = await handleAsync(() => api.patch(
           `/company/editservices/${companyId}`,
