@@ -1,3 +1,4 @@
+/* eslint-disable react-hooks/exhaustive-deps */
 "use client";
 import React, { useEffect, useState } from "react";
 import api from "@/utils/api";
@@ -9,9 +10,10 @@ import handleAsync from "@/utils/handleAsync";
 import { useAppDispatch, useAppSelector } from "@/lib/store/hooks";
 
 import { applicatioAproving, applicationList, applicatioRejecting, deleteApplcation, handleSaveApplication } from "@/lib/store/features/actions/companyActions";
-import { Button, Tooltip, Typography } from "@material-tailwind/react";
+import {  Tooltip, Typography } from "@material-tailwind/react";
 import ConfirmationModal from "./DeleteConfirm";
-import SendIcon from "@mui/icons-material/Send";
+import { toast } from "react-toastify";
+
 
 
 
@@ -19,6 +21,11 @@ export default function CandidateDetails() {
   const [activeTab, setActiveTab] = useState("CoverLetter");
   const [user, setUser] = useState<applicationData>();
   const [offerLetter, setOfferLetter] = useState("");
+  const [loading, setLoading] = useState(false);
+  const [date,setDate] = useState("");
+  const [modal,setmodal] = useState(false);
+
+
   const [open, setOpen] = useState(false)
   const [selectedId, setSelectedId] = useState<string | null>(null);
   const [isModalOpen, setIsModalOpen] = useState(false);
@@ -32,7 +39,7 @@ export default function CandidateDetails() {
 
   const fetchData = async () => {
     const response = await handleAsync(() =>
-      api.get(`/company/findapplications/${userId}/${jobId}`)
+      api.get(`/company/findapplications/${userId}/${jobId}`),
     );
     if (response) {
       setUser(response.data.application);
@@ -43,7 +50,7 @@ export default function CandidateDetails() {
     if (userId && jobId) {
       fetchData();
     }
-  }, [userId, jobId]);
+  }, [userId, jobId,modal]);
 
   const rejectJobApplication = async () => {
 
@@ -58,6 +65,18 @@ export default function CandidateDetails() {
 
   };
 
+  const generateOfferLetter = async (id:string) => {
+    try {
+      setLoading(true);
+      const response = await api.post("company/generate-offer-letter", {jobApplicationId:id, startDate:date});
+      setOfferLetter(response.data.offerLetter); // Update textarea with generated content
+    } catch (error) {
+      console.error("Error generating offer letter:", error);
+      toast.error("Failed to generate offer letter");
+    } finally {
+      setLoading(false);
+    }
+  };
 
   const approveApplication = async () => {
 
@@ -66,7 +85,6 @@ export default function CandidateDetails() {
       jobId: jobId as string,
       offerLetter
     }));
-    console.log("Thunk Result:", result);
     if (result.type === "application/approve/fulfilled") {
       fetchData()
     }
@@ -399,35 +417,58 @@ export default function CandidateDetails() {
                         {
                           open && (
 
-                            <div className="min-h-96  ">
-                              <div className="flex justify-between mb-2 h-full">
-                                <h3 className="text-lg font-medium">Offer Letter</h3>
+                            <div className="min-h-96">
+                            <div className="flex justify-between mb-2 mt-4 h-full">
+                              <h3 className="text-lg font-medium">Offer Letter</h3>
+        {/* <input type="date" value={date} onChange={(e:InputChangeEvent)=>setdate(e.target.value)}/> */}
+        <input
+  type="date"
+  value={date || ''}
+  onChange={(e: React.ChangeEvent<HTMLInputElement>) => setDate(e.target.value)}
+/>
 
-                              </div>
-                              <div className="relative">
-                                <button
-                                  onClick={() => setOpen(false)}
-                                  className="absolute right-2 top-2">
-                                  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 16 16" fill="currentColor" className="size-4">
-                                    <path fillRule="evenodd" d="M8 15A7 7 0 1 0 8 1a7 7 0 0 0 0 14Zm2.78-4.22a.75.75 0 0 1-1.06 0L8 9.06l-1.72 1.72a.75.75 0 1 1-1.06-1.06L6.94 8 5.22 6.28a.75.75 0 0 1 1.06-1.06L8 6.94l1.72-1.72a.75.75 0 1 1 1.06 1.06L9.06 8l1.72 1.72a.75.75 0 0 1 0 1.06Z" clip-rule="evenodd" />
-                                  </svg>
-
-                                </button>
-                                <textarea
-                                  className="w-full  min-h-96 border"
-                                  onChange={(e) => setOfferLetter(e.target.value)}
-                                />
-                              </div>
-                              <div className="flex items-center mt-2 justify-end gap-5">
-
-                                <button
-                                  className="bg-primary text-white rounded-xl p-2"
-                                  onClick={approveApplication}
-                                >
-                                  Approve
-                                </button>
-                              </div>
+                              <button
+                                className="text-white bg-primary p-2 rounded-lg"
+                                onClick={()=>{generateOfferLetter(user?._id);setmodal(true)}}
+                                disabled={loading}
+                              >
+                                {loading ? "Generating..." : "Generate"}
+                              </button>
                             </div>
+                      
+                            <div className="relative">
+                              <button
+                                onClick={() => setOfferLetter("")}
+                                className="absolute right-2 top-2"
+                              >
+                                <svg
+                                  xmlns="http://www.w3.org/2000/svg"
+                                  viewBox="0 0 16 16"
+                                  fill="currentColor"
+                                  className="size-4"
+                                >
+                                  <path
+                                    fillRule="evenodd"
+                                    d="M8 15A7 7 0 1 0 8 1a7 7 0 0 0 0 14Zm2.78-4.22a.75.75 0 0 1-1.06 0L8 9.06l-1.72 1.72a.75.75 0 1 1-1.06-1.06L6.94 8 5.22 6.28a.75.75 0 0 1 1.06-1.06L8 6.94l1.72-1.72a.75.75 0 1 1 1.06 1.06L9.06 8l1.72 1.72a.75.75 0 0 1 0 1.06Z"
+                                    clipRule="evenodd"
+                                  />
+                                </svg>
+                              </button>
+                      
+                              <textarea
+                                className="w-full min-h-96 border p-2"
+                                value={offerLetter}
+                                onChange={(e) => setOfferLetter(e.target.value)}
+                                placeholder="Generated offer letter will appear here..."
+                              />
+                            </div>
+                      
+                            <div className="flex items-center mt-2 justify-end gap-5">
+                              <button className="bg-primary text-white rounded-xl p-2" onClick={approveApplication}>
+                                Approve
+                              </button>
+                            </div>
+                          </div>
                           )
                         }
 
@@ -495,6 +536,8 @@ export default function CandidateDetails() {
           </div>
         </div>
       </div>
+    
+
     </div>
   );
 }

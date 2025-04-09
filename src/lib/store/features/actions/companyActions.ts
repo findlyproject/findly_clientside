@@ -493,6 +493,7 @@ export const loginCompany=createAsyncThunk(
     
         if (!response || !response.data) {
           return rejectWithValue("delete job failed.");
+          
         }
      
       }

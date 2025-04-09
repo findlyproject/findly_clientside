@@ -2,6 +2,7 @@
 
 import { useAppDispatch } from '@/lib/store/hooks';
 import api from '@/utils/api';
+import Image from 'next/image';
 import { useRouter } from 'next/navigation';
 import React,{useEffect, useState} from 'react'
 
@@ -70,9 +71,30 @@ export default function NetworkPage() {
         <button className='hover:bg-gray-300 w-full'
         onClick={()=>router.push(`/mynetwork/networklist`)}>
         <p className="text-gray-500 mt-2">Connections {connections?connections.length:0}</p>
+        
 
         </button>
-       
+        {connections.map((connection, index) => (
+                  <div key={index} className="flex  justify-between p-3 ">
+                    <div className="flex  gap-4"
+                     onClick={()=>router.push(`user/${connection.connectionID._id}/User`)}
+                    >
+                      <Image src={connection.connectionID.profileImage} alt={connection.connectionID.firstName} width={50} height={50} className="rounded-full" />
+                      <div>
+                        <p className="font-medium text-gray-900">{connection.connectionID.firstName}</p>
+                        <p className="text-sm text-gray-600">{connection.connectionID.jobTitle[0]}</p>
+                        <p className="text-xs text-gray-500">{connection.createdAt ? new Date(connection.createdAt).toLocaleDateString() : ""}
+                        </p>
+                      </div>
+                    </div>
+                    <div className='flex gap-4'>
+                    
+         
+        
+                      </div>
+                    
+                  </div>
+                ))}
       </div>
       
       {/* Invitations Container */}

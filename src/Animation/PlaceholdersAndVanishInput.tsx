@@ -40,7 +40,7 @@ export function PlaceholdersAndVanishInput({
       }
       document.removeEventListener("visibilitychange", handleVisibilityChange);
     };
-  }, [placeholders]);
+  }, [handleVisibilityChange, placeholders, startAnimation]);
 
   const canvasRef = useRef<HTMLCanvasElement>(null);
   const newDataRef = useRef<any[]>([]);
@@ -207,7 +207,7 @@ export function PlaceholdersAndVanishInput({
       />
 
 <div className="sm:absolute flex sm:right-1.5 sm:inset-y-1.5 mt-4 sm:mt-0">
-                            <button type="submit" className="inline-flex items-center justify-center hover:cursor-pointer w-full px-5 py-5 text-sm font-semibold tracking-widest text-primary uppercase transition-all duration-200 bg-white rounded-full sm:w-auto sm:py-3 hover:opacity-90" >Find A Job
+  <button type="submit" className="inline-flex items-center justify-center hover:cursor-pointer w-full px-5 py-5 text-sm font-semibold tracking-widest text-primary uppercase transition-all duration-200 bg-white rounded-full sm:w-auto sm:py-3 hover:opacity-90" >Find A Job
                        
         <motion.svg
           xmlns="http://www.w3.org/2000/svg"

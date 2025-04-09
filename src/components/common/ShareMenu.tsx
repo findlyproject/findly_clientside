@@ -12,7 +12,7 @@ import {
 import { toast } from "react-toastify";
 
 interface ShareMenuProps {
-  url: string; // Define 'url' as a string
+  url: string; 
   isShareMenuVisible: boolean;
 }
 const ShareMenu: React.FC<ShareMenuProps> = ({ url, isShareMenuVisible }) => {

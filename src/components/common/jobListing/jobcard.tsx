@@ -7,7 +7,7 @@ import { useRouter } from "next/navigation";
 import { LuBookmark, LuBookmarkCheck } from "react-icons/lu";
 import { useAppDispatch, useAppSelector } from "@/lib/store/hooks";
 import { saveJobs } from "@/lib/store/features/actions/userActions";
-import { Salary, SavedType } from "@/types/Types";
+import {  Salary } from "@/types/Types";
 interface JobCardProps {
   date: string;
   company: string;
@@ -33,7 +33,9 @@ export const JobCard: React.FC<JobCardProps> = ({
 }) => {
   const [mounted, setMounted] = useState(false);
   const route = useRouter();
-const savedjobs:SavedType[] = useAppSelector((state)=>state.user.savedJobs)
+const savedjobs = useAppSelector((state)=>state.user.savedJobs)
+console.log("ss",savedjobs);
+
 const dispatch = useAppDispatch()
   useEffect(() => {
     setMounted(true);
@@ -54,7 +56,7 @@ const dispatch = useAppDispatch()
         
         <button className="text-lg"
         onClick={()=>dispatch(saveJobs(_id))}
-        >{savedjobs.find((item)=>item.jobId._id.includes(_id)) ? <LuBookmarkCheck />:<LuBookmark />
+        >{savedjobs.find((item)=>item.jobId?._id.includes(_id)) ? <LuBookmarkCheck />:<LuBookmark />
 }</button>
       </div>
 

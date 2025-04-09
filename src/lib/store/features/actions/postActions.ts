@@ -38,7 +38,7 @@ export const fetchAllPostsAdmin = createAsyncThunk(
 );
 export const fetchAllPosts = createAsyncThunk(
   "post/fetchAllPosts",
-  async (page: number = 1, { dispatch, rejectWithValue, getState }) => {
+  async (page: number , { dispatch, rejectWithValue, getState }) => {
     try {
       const response: AxiosResponse<{ posts: IPost[] }> = await api.get(
         `/post/allposts?page=${page}&limit=5`
