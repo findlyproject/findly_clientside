@@ -1,3 +1,4 @@
+/* eslint-disable react-hooks/exhaustive-deps */
 
 
 "use client";
@@ -8,7 +9,7 @@ import React, { useEffect, useState } from "react";
 import Image from "next/image";
 import api from "@/utils/api";
 import { useRouter } from "next/navigation";
-import classNames from "classnames";
+
 
 
 const AppliedUsers = () => {
@@ -49,6 +50,8 @@ const AppliedUsers = () => {
     isSaved: false, // Default value
 
   });
+  
+  
   const candidates=useAppSelector((state)=>state.companyLogin.application)
 
   const toggleSavedFilter = () => {
@@ -64,7 +67,7 @@ const AppliedUsers = () => {
     postedJobs();
     allApplications();
     findAllsavedApplications()
-  }, []);
+  }, [application]);
 
 
   const findAllsavedApplications = async () => {

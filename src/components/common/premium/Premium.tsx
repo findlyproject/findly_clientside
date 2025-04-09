@@ -1,5 +1,5 @@
 "use client";
-import React, { useState } from "react";
+
 import { subscription } from "@/lib/store/features/actions/subscriptionActions";
 import { useAppDispatch, useAppSelector } from "@/lib/store/hooks";
 import { useRouter } from "next/navigation";
@@ -49,8 +49,9 @@ const plans: Plan[] = [
 ];
 
 const PricingPlans: React.FC = () => {
+  const isYearly=false
   const router = useRouter();
-  const [isYearly, setIsYearly] = useState(false);
+  // const [isYearly, setIsYearly] = useState(false);
   const dispatch = useAppDispatch();
   const activeCompany = useAppSelector(
     (state) => state.companyLogin.activeCompany

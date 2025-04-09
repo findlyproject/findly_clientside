@@ -1,3 +1,4 @@
+/* eslint-disable react-hooks/exhaustive-deps */
 "use client";
 import React, { useEffect, useState } from "react";
 import api from "@/utils/api";
@@ -9,10 +10,10 @@ import handleAsync from "@/utils/handleAsync";
 import { useAppDispatch, useAppSelector } from "@/lib/store/hooks";
 
 import { applicatioAproving, applicationList, applicatioRejecting, deleteApplcation, handleSaveApplication } from "@/lib/store/features/actions/companyActions";
-import { Button, Tooltip, Typography } from "@material-tailwind/react";
+import {  Tooltip, Typography } from "@material-tailwind/react";
 import ConfirmationModal from "./DeleteConfirm";
-import SendIcon from "@mui/icons-material/Send";
 import { toast } from "react-toastify";
+
 
 
 
@@ -21,7 +22,7 @@ export default function CandidateDetails() {
   const [user, setUser] = useState<applicationData>();
   const [offerLetter, setOfferLetter] = useState("");
   const [loading, setLoading] = useState(false);
-  const [date,setdate] = useState();
+  const [date,setDate] = useState("");
   const [modal,setmodal] = useState(false);
 
 
@@ -49,7 +50,7 @@ export default function CandidateDetails() {
     if (userId && jobId) {
       fetchData();
     }
-  }, [userId, jobId]);
+  }, [userId, jobId,modal]);
 
   const rejectJobApplication = async () => {
 
@@ -64,7 +65,7 @@ export default function CandidateDetails() {
 
   };
 
-  const generateOfferLetter = async (id) => {
+  const generateOfferLetter = async (id:string) => {
     try {
       setLoading(true);
       const response = await api.post("company/generate-offer-letter", {jobApplicationId:id, startDate:date});
@@ -419,7 +420,12 @@ export default function CandidateDetails() {
                             <div className="min-h-96">
                             <div className="flex justify-between mb-2 mt-4 h-full">
                               <h3 className="text-lg font-medium">Offer Letter</h3>
-        <input type="date" value={date} onChange={(e)=>setdate(e.target.value)}/>
+        {/* <input type="date" value={date} onChange={(e:InputChangeEvent)=>setdate(e.target.value)}/> */}
+        <input
+  type="date"
+  value={date || ''}
+  onChange={(e: React.ChangeEvent<HTMLInputElement>) => setDate(e.target.value)}
+/>
 
                               <button
                                 className="text-white bg-primary p-2 rounded-lg"

@@ -1,3 +1,4 @@
+/* eslint-disable react-hooks/exhaustive-deps */
 "use client";
 
 import { saveJobs } from "@/lib/store/features/actions/userActions";
@@ -10,17 +11,21 @@ import { useParams, useRouter } from "next/navigation";
 import React, { useEffect, useState } from "react";
 import { LuBookmark, LuBookmarkCheck } from "react-icons/lu";
 import { Jobdetailcard, JobDetailSkeleton } from "./jobcard";
-import { Job, JobPosting } from "@/types/Types";
+import { Job, JobPosting, SavedType } from "@/types/Types";
 import OutsideClickHandler from "react-outside-click-handler";
 import ShareMenu from "../ShareMenu";
 
 const JobDetails = () => {
+
+  
   const { id } = useParams();
   const route = useRouter();
   const [detail, setDetails] = useState<JobPosting | null>(null);
   const [similarjob, setimilarjob] = useState<Job[]>([]);
   const [isShareMenuVisible, setShareMenuVisible] = useState(false);
-  const [applied,setapplied]=useState()
+  const [applied,setapplied]=useState<SavedType[]>([])
+  console.log("applied",applied);
+  
 
   const [samecompany, setSamecompany] = useState<Job[]>([]);
   const [loading, setLoadin] = useState(true);

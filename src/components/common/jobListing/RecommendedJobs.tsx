@@ -1,3 +1,4 @@
+/* eslint-disable react-hooks/exhaustive-deps */
 import React, { useEffect, useState } from "react";
 import { JobCard, JobSkeleton } from "./jobcard";
 import api from "@/utils/api";

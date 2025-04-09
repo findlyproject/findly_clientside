@@ -30,7 +30,7 @@ export  function FeedIdentityModule  (){
     };
   
     fetchPostLength();
-  }, []); 
+  }, [route]); 
 
 
   console.log("postlength",postlength);

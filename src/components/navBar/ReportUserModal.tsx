@@ -2,7 +2,7 @@
 
 import { useState } from "react";
 import api from "@/utils/api";
-import { useDispatch } from "react-redux";
+
 import { reportUser } from "@/lib/store/features/actions/userActions";
 import { useAppDispatch } from "@/lib/store/hooks";
 

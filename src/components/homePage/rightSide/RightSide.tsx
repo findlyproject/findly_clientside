@@ -1,5 +1,6 @@
-import { findnMembers } from "@/lib/store/features/actions/communityActions";
-import { useAppDispatch, useAppSelector } from "@/lib/store/hooks";
+/* eslint-disable react-hooks/exhaustive-deps */
+// import { findnMembers } from "@/lib/store/features/actions/communityActions";
+
 
 import { useEffect, useState } from "react";
 
@@ -9,20 +10,22 @@ import { IoMdArrowBack } from "react-icons/io";
 import Image from "next/image";
 import { RiArrowDropDownLine } from "react-icons/ri";
 import { HiOutlineAdjustmentsHorizontal } from "react-icons/hi2";
-import { CiSearch } from "react-icons/ci";
 import EmojiPicker from "emoji-picker-react";
 import { EmojiClickData } from "emoji-picker-react";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faSmile } from "@fortawesome/free-solid-svg-icons";
-import OutsideClickHandler from "react-outside-click-handler";
+
 import { BsThreeDots } from "react-icons/bs";
 import { Connection, User } from "@/types/Types";
 
 import { MessageType } from "@/types/Types";
 import { toast } from "react-toastify";
+import { useAppSelector } from "@/lib/store/hooks";
 export default function RightSide() {
-  const dispatch = useAppDispatch();
-  const [starred, setStarred] = useState([]);
+  // const dispatch = useAppDispatch();
+  const [starred, setStarred] = useState<Connection[]> ([]);
+  
+  
   const [conversation, setConversation] = useState({});
   const [Chatlist, setChatlist] = useState([]);
   const [selectedUser, setSelectedUser] = useState<Connection | null>(null);
@@ -31,8 +34,10 @@ export default function RightSide() {
   const [members, setMembers] = useState([]);
   const [activeTab, setActiveTab] = useState("focused");
   const [focused, setFocused] = useState<Connection[]>([]);
+  console.log("focused",focused);
+  const [other, setOther] = useState<Connection[]>([]);
 
-  const [other, setOther] = useState<User[]>([]);
+  
   const activeuser = useAppSelector((state) => state.user.activeuser);
   const [showPicker, setShowPicker] = useState(false);
 
@@ -58,12 +63,15 @@ export default function RightSide() {
   }, []);
 
   const handleStarred = async () => {
+    console.log("haje");
+    
     setActiveTab("starred");
     const starredres = await api.get(`/message/starred`);
     console.log("starredres", starredres);
 
     setStarred(starredres.data.starredUsers);
   };
+  console.log("sttttt",starred);
 
   useEffect(() => {
     if (activeTab === "focused") {
@@ -73,10 +81,10 @@ export default function RightSide() {
     }
   }, [activeTab, members, Chatlist, starred]);
 
-  const fetchMembers = () => {
-    const result = dispatch(findnMembers);
-    console.log("result", result);
-  };
+  // const fetchMembers = () => {
+  //   const result = dispatch(findnMembers);
+  //   console.log("result", result);
+  // };
 
   console.log("other..", other);
   const fetchMessages = async () => {
@@ -96,7 +104,8 @@ export default function RightSide() {
   }, [selectedUser, activeuser?._id]);
   console.log("messages", messages);
 
-  const handleUserSelect = (user: Connection) => {
+  const handleUserSelect = (user:Connection) => {
+
     console.log("user....", user);
     setSelectedUser(user);
     setMessages([]);
@@ -337,17 +346,21 @@ bg-white border-s border-gray-200 dark:bg-neutral-800 dark:border-neutral-700 w-
                           onClick={() => handleUserSelect(user)}
                         >
                           <div className="flex items-center">
-                            <img
-                              src={user?.profileImage}
-                              alt="User"
-                              className="w-10 h-10 rounded-full"
-                            />
+                      
+
+                      <Image
+                        src={user?.profileImage || "/default-profile.png"} // fallback if undefined
+                        alt="User"
+                        width={40}
+                        height={40}
+                        className="rounded-full object-cover"
+                      />
                             <div className="ml-3">
                               <h2 className="text-sm font-semibold">
-                                {user.firstName}
+                                {user?.firstName}
                               </h2>
                               <p className="text-sm text-gray-400">
-                                {user.jobTitle?.[0]}
+                                {user?.jobTitle?.[0]}
                               </p>
                             </div>
                           </div>
@@ -370,11 +383,13 @@ bg-white border-s border-gray-200 dark:bg-neutral-800 dark:border-neutral-700 w-
                         onClick={() => handleUserSelect(chat)}
                       >
                         <div className="flex items-center">
-                          <img
-                            src={chat.connectionID?.profileImage}
-                            alt="User"
-                            className="w-10 h-10 rounded-full"
-                          />
+                        <Image
+  src={chat.connectionID?.profileImage || '/default-profile.png'}
+  alt="User"
+  width={40}
+  height={40}
+  className="rounded-full"
+/>
                           <div className="ml-3">
                             <h2 className="text-sm font-semibold">
                               {chat.connectionID?.firstName}
@@ -390,7 +405,7 @@ bg-white border-s border-gray-200 dark:bg-neutral-800 dark:border-neutral-700 w-
                     <div>
                       {focused.map((item) => {
                         const formattedDate = new Date(
-                          item.lastMessage.timestamp
+                          item?.lastMessage?.timestamp
                         ).toLocaleDateString("en-US", {
                           month: "long",
                           day: "numeric",
@@ -407,11 +422,13 @@ bg-white border-s border-gray-200 dark:bg-neutral-800 dark:border-neutral-700 w-
                             onClick={() => handleUserSelect(item.user)}
                           >
                             <div className="flex items-center">
-                              <img
-                                src={item.user?.profileImage}
-                                alt="User"
-                                className="w-10 h-10 rounded-full object-cover"
-                              />
+                            <Image
+  src={item.user?.profileImage || '/default-profile.png'}
+  alt="User"
+  width={40}
+  height={40}
+  className="rounded-full object-cover"
+/>
                               <div className="ml-3 ">
                                 <h2 className="text-sm font-semibold">
                                   {item.user?.firstName}
@@ -466,14 +483,17 @@ bg-white border-s border-gray-200 dark:bg-neutral-800 dark:border-neutral-700 w-
                         onClick={() => setSelectedUser(null)}
                         className="text-xl"
                       />
-                      <img
-                        src={
-                          selectedUser?.connectionID?.profileImage ||
-                          selectedUser?.profileImage
-                        }
-                        className="w-10 h-10 rounded-full"
-                        alt="User"
-                      />
+                 <Image
+  src={
+    selectedUser?.connectionID?.profileImage ||
+    selectedUser?.profileImage ||
+    '/default-profile.png'
+  }
+  alt="User"
+  width={40}
+  height={40}
+  className="rounded-full"
+/>
                       <div className="ml-3">
                         <h2 className="font-medium">
                           {selectedUser?.connectionID?.firstName ||
