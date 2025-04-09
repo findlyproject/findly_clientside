@@ -1,3 +1,4 @@
+/* eslint-disable react-hooks/exhaustive-deps */
 "use client";
 import { LuSend } from "react-icons/lu";
 import { useEffect, useState } from "react";
@@ -7,14 +8,14 @@ import api, { socket } from "@/utils/api";
 import { useAppDispatch, useAppSelector } from "@/lib/store/hooks";
 import { FaEllipsisV } from "react-icons/fa";
 import { findnMembers } from "@/lib/store/features/actions/communityActions";
-import { Connection, MessageType, User } from "@/types/Types";
+import { Connection, MessageType } from "@/types/Types";
+import Image from 'next/image';
 export const ChatList=()=> {
   const dispatch=useAppDispatch()
   const [selectedUser, setSelectedUser] = useState<Connection|null>(null);
   const [message, setMessage] = useState("");
   const [messages, setMessages] = useState<MessageType[]>([]);
   const [members, setMembers] = useState<Connection[]>([]);
-  const[Chatlist,setChatlist]=useState([])
   const activeuser = useAppSelector((state) => state.user.activeuser);
 
   // Fetch Chat Members
@@ -112,11 +113,13 @@ console.log("selectedUser",selectedUser);
                 }`}
                 onClick={() => handleUserSelect(chat)}
               >
-                <img
-                  src={chat.connectionID?.profileImage}
-                  alt="User"
-                  className="w-10 h-10 rounded-full"
-                />
+              <Image
+  src={chat.connectionID?.profileImage || '/default-profile.png'}
+  alt="User"
+  width={40}
+  height={40}
+  className="rounded-full"
+/>
                 <div className="ml-3">
                   <h2 className="text-sm font-semibold">
                     {chat.connectionID?.firstName}
@@ -134,11 +137,13 @@ console.log("selectedUser",selectedUser);
           <>
             <header className="flex items-center justify-between bg-gray-50 p-4 border-b">
               <div className="flex items-center">
-                <img
-                  src={selectedUser.connectionID.profileImage}
-                  className="w-10 h-10 rounded-full"
-                  alt="User"
-                />
+              <Image
+  src={selectedUser.connectionID?.profileImage || '/default-profile.png'}
+  alt="User"
+  width={40}
+  height={40}
+  className="rounded-full"
+/>
                 <div className="ml-3">
                   <h2 className="font-medium">
                     {selectedUser.connectionID.firstName}

@@ -74,12 +74,12 @@ export interface Connection {
     jobTitle: string[];
     connecting:Connection[]
   };
-  status?:boolean
-  jobTitle?: string[];
-  profileImage?: string;
-  firstName?: string;
-  createdAt?:string;
-  _id?:string
+  status:boolean
+  jobTitle: string[];
+  profileImage: string;
+  firstName: string;
+  createdAt:string;
+  _id:string
   unreadCount:number
   lastMessage:{
     _id:string;
@@ -96,6 +96,17 @@ export interface Connection {
 _id:string;
   profileImage: string;
   }
+
+}
+
+export interface conversation{
+  isBlockedUsers:string[];
+  isStarredUsers:string[];
+  lastUpdated:string;
+  messages:string[];
+participants:string[];
+_id:string
+
 
 }
 export interface User{

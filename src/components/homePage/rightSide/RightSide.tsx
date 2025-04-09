@@ -16,17 +16,19 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faSmile } from "@fortawesome/free-solid-svg-icons";
 
 import { BsThreeDots } from "react-icons/bs";
-import { Connection, User } from "@/types/Types";
+import { Connection, conversation, User } from "@/types/Types";
 
 import { MessageType } from "@/types/Types";
 import { toast } from "react-toastify";
 import { useAppSelector } from "@/lib/store/hooks";
 export default function RightSide() {
   // const dispatch = useAppDispatch();
-  const [starred, setStarred] = useState<Connection[]> ([]);
+  const [starred, setStarred] = useState<Connection[]>([]);
+
+
+  const [conversation, setConversation] = useState<conversation>();
+  console.log("coneeeee",conversation);
   
-  
-  const [conversation, setConversation] = useState({});
   const [Chatlist, setChatlist] = useState([]);
   const [selectedUser, setSelectedUser] = useState<Connection | null>(null);
   const [message, setMessage] = useState("");
@@ -34,10 +36,10 @@ export default function RightSide() {
   const [members, setMembers] = useState([]);
   const [activeTab, setActiveTab] = useState("focused");
   const [focused, setFocused] = useState<Connection[]>([]);
-  console.log("focused",focused);
+  console.log("focused", focused);
   const [other, setOther] = useState<Connection[]>([]);
 
-  
+
   const activeuser = useAppSelector((state) => state.user.activeuser);
   const [showPicker, setShowPicker] = useState(false);
 
@@ -64,14 +66,14 @@ export default function RightSide() {
 
   const handleStarred = async () => {
     console.log("haje");
-    
+
     setActiveTab("starred");
     const starredres = await api.get(`/message/starred`);
     console.log("starredres", starredres);
 
     setStarred(starredres.data.starredUsers);
   };
-  console.log("sttttt",starred);
+  console.log("sttttt", starred);
 
   useEffect(() => {
     if (activeTab === "focused") {
@@ -90,8 +92,7 @@ export default function RightSide() {
   const fetchMessages = async () => {
     if (selectedUser) {
       const responseofMessage = await api.get(
-        `/message/conversation/${activeuser?._id}/${
-          selectedUser?.connectionID?._id || selectedUser?._id
+        `/message/conversation/${activeuser?._id}/${selectedUser?.connectionID?._id || selectedUser?._id
         }`
       );
       console.log("responseofMessage", responseofMessage);
@@ -104,7 +105,7 @@ export default function RightSide() {
   }, [selectedUser, activeuser?._id]);
   console.log("messages", messages);
 
-  const handleUserSelect = (user:Connection) => {
+  const handleUserSelect = (user: Connection) => {
 
     console.log("user....", user);
     setSelectedUser(user);
@@ -116,8 +117,7 @@ export default function RightSide() {
   // Send Message
   const handleSendMessage = async () => {
     const response = await api.post(
-      `/message/send/${activeuser?._id}/${
-        selectedUser?.connectionID?._id || selectedUser?._id
+      `/message/send/${activeuser?._id}/${selectedUser?.connectionID?._id || selectedUser?._id
       }`,
       { message: message }
     );
@@ -310,22 +310,20 @@ bg-white border-s border-gray-200 dark:bg-neutral-800 dark:border-neutral-700 w-
 
                 <div className="flex justify-center space-x-4">
                   <button
-                    className={`px-4 py-2 text-sm font-semibold transition-all ${
-                      activeTab === "focused"
+                    className={`px-4 py-2 text-sm font-semibold transition-all ${activeTab === "focused"
                         ? "border-b-2 border-primary text-primary"
                         : "border-b border-gray-700 text-gray-700"
-                    }`}
+                      }`}
                     onClick={() => setActiveTab("focused")}
                   >
                     Focused
                   </button>
 
                   <button
-                    className={`px-4 py-2 text-sm font-semibold transition-all ${
-                      activeTab === "other"
+                    className={`px-4 py-2 text-sm font-semibold transition-all ${activeTab === "other"
                         ? "border-b-2 border-primary text-primary"
                         : "border-b border-gray-700 text-gray-700"
-                    }`}
+                      }`}
                     onClick={() => setActiveTab("other")}
                   >
                     Other
@@ -338,23 +336,22 @@ bg-white border-s border-gray-200 dark:bg-neutral-800 dark:border-neutral-700 w-
                       starred.map((user, index) => (
                         <div
                           key={index}
-                          className={`flex items-center justify-between p-2 rounded-lg cursor-pointer transition ${
-                            selectedUser === user
+                          className={`flex items-center justify-between p-2 rounded-lg cursor-pointer transition ${selectedUser === user
                               ? "bg-blue-100"
                               : "bg-white hover:bg-gray-200"
-                          }`}
+                            }`}
                           onClick={() => handleUserSelect(user)}
                         >
                           <div className="flex items-center">
-                      
 
-                      <Image
-                        src={user?.profileImage || "/default-profile.png"} // fallback if undefined
-                        alt="User"
-                        width={40}
-                        height={40}
-                        className="rounded-full object-cover"
-                      />
+
+                            <Image
+                              src={user?.profileImage || "/default-profile.png"} // fallback if undefined
+                              alt="User"
+                              width={40}
+                              height={40}
+                              className="rounded-full object-cover"
+                            />
                             <div className="ml-3">
                               <h2 className="text-sm font-semibold">
                                 {user?.firstName}
@@ -375,21 +372,20 @@ bg-white border-s border-gray-200 dark:bg-neutral-800 dark:border-neutral-700 w-
                     other.map((chat, index) => (
                       <div
                         key={index}
-                        className={`flex items-center justify-between p-2 rounded-lg cursor-pointer transition ${
-                          selectedUser === chat
+                        className={`flex items-center justify-between p-2 rounded-lg cursor-pointer transition ${selectedUser === chat
                             ? "bg-blue-100"
                             : "bg-white hover:bg-gray-200"
-                        }`}
+                          }`}
                         onClick={() => handleUserSelect(chat)}
                       >
                         <div className="flex items-center">
-                        <Image
-  src={chat.connectionID?.profileImage || '/default-profile.png'}
-  alt="User"
-  width={40}
-  height={40}
-  className="rounded-full"
-/>
+                          <Image
+                            src={chat.connectionID?.profileImage || '/default-profile.png'}
+                            alt="User"
+                            width={40}
+                            height={40}
+                            className="rounded-full"
+                          />
                           <div className="ml-3">
                             <h2 className="text-sm font-semibold">
                               {chat.connectionID?.firstName}
@@ -414,21 +410,20 @@ bg-white border-s border-gray-200 dark:bg-neutral-800 dark:border-neutral-700 w-
                         return (
                           <div
                             key={item.user?._id}
-                            className={`flex items-center justify-between p-2 rounded-lg cursor-pointer transition  ${
-                              selectedUser === item.user
+                            className={`flex items-center justify-between p-2 rounded-lg cursor-pointer transition  ${selectedUser === item.user
                                 ? "bg-blue-100"
                                 : "bg-white hover:bg-gray-200"
-                            }`}
-                            onClick={() => handleUserSelect(item.user)}
+                              }`}
+                            onClick={() => handleUserSelect(item?.user)}
                           >
                             <div className="flex items-center">
-                            <Image
-  src={item.user?.profileImage || '/default-profile.png'}
-  alt="User"
-  width={40}
-  height={40}
-  className="rounded-full object-cover"
-/>
+                              <Image
+                                src={item.user?.profileImage || '/default-profile.png'}
+                                alt="User"
+                                width={40}
+                                height={40}
+                                className="rounded-full object-cover"
+                              />
                               <div className="ml-3 ">
                                 <h2 className="text-sm font-semibold">
                                   {item.user?.firstName}
@@ -439,7 +434,7 @@ bg-white border-s border-gray-200 dark:bg-neutral-800 dark:border-neutral-700 w-
                                     <>
                                       <span className="font-medium">
                                         {item.lastMessage?.sender ===
-                                        activeuser?._id
+                                          activeuser?._id
                                           ? "You: "
                                           : item.user?.firstName + ": "}
                                       </span>
@@ -483,17 +478,17 @@ bg-white border-s border-gray-200 dark:bg-neutral-800 dark:border-neutral-700 w-
                         onClick={() => setSelectedUser(null)}
                         className="text-xl"
                       />
-                 <Image
-  src={
-    selectedUser?.connectionID?.profileImage ||
-    selectedUser?.profileImage ||
-    '/default-profile.png'
-  }
-  alt="User"
-  width={40}
-  height={40}
-  className="rounded-full"
-/>
+                      <Image
+                        src={
+                          selectedUser?.connectionID?.profileImage ||
+                          selectedUser?.profileImage ||
+                          '/default-profile.png'
+                        }
+                        alt="User"
+                        width={40}
+                        height={40}
+                        className="rounded-full"
+                      />
                       <div className="ml-3">
                         <h2 className="font-medium">
                           {selectedUser?.connectionID?.firstName ||
@@ -523,14 +518,14 @@ bg-white border-s border-gray-200 dark:bg-neutral-800 dark:border-neutral-700 w-
                                 ?.map((id) => id.toString())
                                 .includes(
                                   selectedUser?._id ||
-                                    selectedUser?.connectionID?._id
+                                  selectedUser?.connectionID?._id
                                 ) ? (
                                 <li>
                                   <button
                                     onClick={() =>
                                       handleStar(
                                         selectedUser?.connectionID?._id ||
-                                          selectedUser?._id,
+                                        selectedUser?._id,
                                         "removestar"
                                       )
                                     }
@@ -545,7 +540,7 @@ bg-white border-s border-gray-200 dark:bg-neutral-800 dark:border-neutral-700 w-
                                     onClick={() =>
                                       handleStar(
                                         selectedUser?.connectionID?._id ||
-                                          selectedUser?._id,
+                                        selectedUser?._id,
                                         "star"
                                       )
                                     }
@@ -566,7 +561,7 @@ bg-white border-s border-gray-200 dark:bg-neutral-800 dark:border-neutral-700 w-
                                     onClick={() =>
                                       handleBlock(
                                         selectedUser?.connectionID?._id ||
-                                          selectedUser?._id,
+                                        selectedUser?._id,
                                         "unblock"
                                       )
                                     }
@@ -581,7 +576,7 @@ bg-white border-s border-gray-200 dark:bg-neutral-800 dark:border-neutral-700 w-
                                     onClick={() =>
                                       handleBlock(
                                         selectedUser?.connectionID?._id ||
-                                          selectedUser?._id,
+                                        selectedUser?._id,
                                         "block"
                                       )
                                     }
@@ -597,7 +592,7 @@ bg-white border-s border-gray-200 dark:bg-neutral-800 dark:border-neutral-700 w-
                                   onClick={() =>
                                     handleDeleteConversation(
                                       selectedUser?.connectionID?._id ||
-                                        selectedUser?._id
+                                      selectedUser?._id
                                     )
                                   }
                                   className="w-full text-left px-4 py-2 hover:bg-gray-100 text-sm font-semibold"
@@ -611,7 +606,7 @@ bg-white border-s border-gray-200 dark:bg-neutral-800 dark:border-neutral-700 w-
                                   onClick={() =>
                                     handleClearChat(
                                       selectedUser?.connectionID?._id ||
-                                        selectedUser?._id
+                                      selectedUser?._id
                                     )
                                   }
                                   className="w-full text-left px-4 py-2 hover:bg-gray-100 text-sm font-semibold"
@@ -634,38 +629,39 @@ bg-white border-s border-gray-200 dark:bg-neutral-800 dark:border-neutral-700 w-
                       return (
                         <div
                           key={index}
-                          className={`w-max grid ${
-                            msg.sender === activeuser?._id ? "ml-auto" : ""
-                          }`}
+                          className={`w-max grid ${msg.sender === activeuser?._id ? "ml-auto" : ""
+                            }`}
                         >
                           {showProfile && (
                             <div className="flex items-center space-x-1">
-                              <img
-                                src={`${
-                                  msg.sender === activeuser?._id
-                                    ? activeuser?.profileImage
-                                    : selectedUser?.connectionID?.profileImage
-                                    ? selectedUser?.connectionID?.profileImage
-                                    : selectedUser?.profileImage
-                                }`}
-                                className="w-8 h-8 rounded-full"
-                              />
+                           <Image
+  src={
+    msg.sender === activeuser?._id
+      ? activeuser?.profileImage || '/default-profile.png'
+      : selectedUser?.connectionID?.profileImage ||
+        selectedUser?.profileImage ||
+        '/default-profile.png'
+  }
+  alt="User"
+  width={32}
+  height={32}
+  className="rounded-full"
+/>
                               <p className="text-sm font-semibold">
                                 {msg.sender === activeuser?._id
                                   ? "You"
                                   : selectedUser?.connectionID?.firstName
-                                  ? selectedUser?.connectionID?.firstName
-                                  : selectedUser?.firstName}
+                                    ? selectedUser?.connectionID?.firstName
+                                    : selectedUser?.firstName}
                               </p>
                             </div>
                           )}
 
                           <div
-                            className={`px-3.5 py-1 rounded-md mb-2 flex flex-col ${
-                              msg.sender === activeuser?._id
+                            className={`px-3.5 py-1 rounded-md mb-2 flex flex-col ${msg.sender === activeuser?._id
                                 ? "bg-primary text-white"
                                 : "bg-gray-100 text-gray-900"
-                            }`}
+                              }`}
                           >
                             <h5 className="text-sm font-normal leading-snug">
                               {msg.message}
@@ -684,7 +680,7 @@ bg-white border-s border-gray-200 dark:bg-neutral-800 dark:border-neutral-700 w-
                     <>
                       <p>
                         {conversation?.isBlockedUsers?.map((item) =>
-                          item == activeuser._id
+                          item == activeuser?._id
                             ? "you blocked this user"
                             : "you are blocked by this user"
                         )}
@@ -734,7 +730,7 @@ bg-white border-s border-gray-200 dark:bg-neutral-800 dark:border-neutral-700 w-
                                   strokeLinecap="round"
                                 />
                               </svg>
-                            
+
                             </button>
                           </div>
                         </div>
