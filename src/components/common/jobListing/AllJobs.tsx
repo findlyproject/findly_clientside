@@ -1,3 +1,4 @@
+/* eslint-disable react-hooks/exhaustive-deps */
 
 "use client";
 
@@ -28,7 +29,7 @@ function AllJobs({input}:Input) {
     }, 500);
 
     return () => clearTimeout(handler);
-  }, [input]);
+  }, [input,applied]);
 
   useEffect(() => {
     setPage(1);

@@ -28,10 +28,10 @@ const Posts = () => {
     return typeof owner === "object" && owner !== null && "name" in owner;
   };
 
-  const totalPages = Math.ceil(posts.length / postPerPage);
+  const totalPages = Math.ceil(posts?.length / postPerPage);
   const indexOfLastUser = currentPage * postPerPage;
   const indexOfFirstUser = indexOfLastUser - postPerPage;
-  const currentPosts = posts.slice(indexOfFirstUser, indexOfLastUser);
+  const currentPosts = posts?.slice(indexOfFirstUser, indexOfLastUser);
 
   const goToPage = (pageNumber: number) => {
     setCurrentPage(pageNumber);

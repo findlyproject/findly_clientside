@@ -51,6 +51,7 @@ export const Profile = () => {
     }
 
     try {
+      await new Promise((resolve) => setTimeout(resolve, 2000));
       const result = await dispatch(editAdminProfile(formDataToSend));
       if (result.type === "edit/admin/fulfilled") {
         console.log("done");
@@ -102,7 +103,7 @@ export const Profile = () => {
           validationSchema={validationSchema}
           onSubmit={handleUpdate}
         >
-          {({ handleChange, values, errors, touched, resetForm }) => (
+          {({ handleChange, values, errors, touched, resetForm ,isSubmitting}) => (
             <Form className="mt-6 space-y-4">
               <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                 <div className="relative">
@@ -191,12 +192,40 @@ export const Profile = () => {
                 />
               </div>
               <div className="flex space-x-4">
-                <button
-                  type="submit"
-                  className="bg-primary text-white px-4 py-2 rounded-md"
-                >
-                  Update
-                </button>
+              <button
+  type="submit"
+  className="bg-primary text-white px-4 py-2 rounded-md flex items-center justify-center gap-2"
+  disabled={isSubmitting} // Optional: prevent multiple submits
+>
+  {isSubmitting ? (
+    <>
+      <svg
+        className="w-5 h-5 stroke-white animate-spin"
+        viewBox="0 0 24 24"
+        fill="none"
+        xmlns="http://www.w3.org/2000/svg"
+      >
+        <g clipPath="url(#clip0_9023_61563)">
+          <path
+            d="M14.6437 2.05426C11.9803 1.2966 9.01686 1.64245 6.50315 3.25548C1.85499 6.23817 0.504864 12.4242 3.48756 17.0724C6.47025 21.7205 12.6563 23.0706 17.3044 20.088C20.4971 18.0393 22.1338 14.4793 21.8792 10.9444"
+            stroke="currentColor"
+            strokeWidth="1.4"
+            strokeLinecap="round"
+          ></path>
+        </g>
+        <defs>
+          <clipPath id="clip0_9023_61563">
+            <rect width="24" height="24" fill="white"></rect>
+          </clipPath>
+        </defs>
+      </svg>
+      <span>Updating...</span>
+    </>
+  ) : (
+    <span>Update</span>
+  )}
+</button>
+
                 <button
                   type="reset"
                   onClick={() => {

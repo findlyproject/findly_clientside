@@ -1,15 +1,15 @@
+/* eslint-disable react-hooks/exhaustive-deps */
 "use client";
 import { useEffect, useRef, useState } from "react";
 import Sidebar from "./Sidebar";
 import Image from "next/image";
-import { HiPaperClip } from "react-icons/hi";
-import { LuSend } from "react-icons/lu";
+
 import { FaEllipsisV, FaTrash, FaCopy } from "react-icons/fa";
 import { useAppSelector } from "@/lib/store/hooks";
 import api, { socket } from "@/utils/api";
 import { MdClose, MdImage, MdVideoCameraBack } from "react-icons/md";
 import { toast } from "react-toastify";
-import { useRouter } from "next/navigation";
+
 import { IoReorderThreeOutline } from "react-icons/io5";
 import { RxCross2 } from "react-icons/rx";
 import CommunityDetails from "./CommunityDetails";
@@ -211,8 +211,7 @@ console.log("commuu",community);
   };
 
   console.log("community", community);
-  const route = activeCompany ? "/company" : "message";
-  ///// get comunity mssage //////
+
   const getcommunitymessage = async () => {
     try {
       const response = await api.get(
@@ -253,6 +252,7 @@ console.log("commuu",community);
     return () => mediaQuery.removeEventListener("change", handleChange);
   });
   console.log("isopen", isopen);
+  console.log("community.members",community?.members )
   return (
     <div className="w-full flex bg-gray-100 relative h-screen pt-24">
       <div className={`${isopen ? "flex absolute left-0 z-50" : ""}`}>
@@ -316,15 +316,15 @@ console.log("commuu",community);
                     <div>
                       {community.members.find(
                         (member) =>
-                          member.memberId === activeCompany?._id ||
-                          member.memberId === activeuser?._id
+                          member.memberId == activeCompany?._id ||
+                          member.memberId == activeuser?._id
                       ) ? (
                         <div>
                           <ul className="flex flex-col space-y-4 p-4  rounded-lg">
                             {message.map((item, index) => {
                               console.log("item", item);
 
-                              // const isSender = item.sender?._id === activeuser?._id||activeCompany?._id
+                              
                               const isSender =
                                 item.senderModel === "User"
                                   ? item.sender?._id == activeuser?._id

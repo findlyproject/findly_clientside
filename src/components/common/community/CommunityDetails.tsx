@@ -10,14 +10,20 @@ import { MdModeEditOutline } from "react-icons/md";
 import { FaPencilAlt } from "react-icons/fa";
 
 import { Community,CommunityMessage } from "@/types/Types";
-interface CommunityDetailsProps {
-  id: string;
+import { Metadata } from "next";
+// interface CommunityDetailsProps {
+//   id: string;
+//   onClose: () => void;
+// }
+type Props = {
+  params: {
+    id: string;
+  };
   onClose: () => void;
-}
-export default function CommunityDetails({
-  id,
-  onClose,
-}: CommunityDetailsProps) {
+};
+export default function CommunityDetails({params,onClose}:Props) {
+ const id= params.id
+ 
   const [activeTab, setActiveTab] = useState("images");
   const activeuser = useAppSelector((state) => state.user.activeuser);
   const activeCompany=useAppSelector((state)=>state.companyLogin.activeCompany)

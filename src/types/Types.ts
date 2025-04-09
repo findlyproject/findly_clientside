@@ -74,10 +74,28 @@ export interface Connection {
     jobTitle: string[];
     connecting:Connection[]
   };
-  status:boolean
-  
-  createdAt:string;
-  _id:string
+  status?:boolean
+  jobTitle?: string[];
+  profileImage?: string;
+  firstName?: string;
+  createdAt?:string;
+  _id?:string
+  unreadCount:number
+  lastMessage:{
+    _id:string;
+  sender:string;
+  receiver:string;
+  seen:boolean;
+  isDeleted:boolean;
+  message:string;
+  timestamp:Date;
+  }
+  user:{
+    firstName: string;
+  lastName: string;
+_id:string;
+  profileImage: string;
+  }
 
 }
 export interface User{
@@ -297,6 +315,9 @@ export interface MessageType{
   isDeleted:boolean;
   message:string;
   timestamp:Date;
+  unreadCount:string
+ 
+  
 
 }
 
@@ -596,7 +617,7 @@ export interface SavedType{
     createdAt: string;
     images?: string[];
     video?: string;
-    likedBy?: any[];
-    comments?: any[];
+    likedBy?: User[];
+    comments?: IComment[];
   }
 }
