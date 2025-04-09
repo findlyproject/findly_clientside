@@ -1,17 +1,16 @@
 
 import { createAsyncThunk } from "@reduxjs/toolkit";
 import api from "@/utils/api";
-import { setActive, setConnectionRequest, setforgotPassword, SetLogout, setPeopleKnow, setSavedJobs, UserProfile } from "../userSlice";
+import { setActive, setConnectionRequest, setforgotPassword, SetLogout, setPeopleKnow, setSavedJobs,  } from "../userSlice";
 import handleAsync from "@/utils/handleAsync";
 import { AxiosResponse } from "axios";
 import {setAllRatings,Rating} from '../ratingSlice'
-import { toast } from "react-toastify";
-import { setAlljobs } from "../jobSlice";
-import { resetPostState, setLikes } from "../postSlice";
+import { resetPostState } from "../postSlice";
+import { User } from "@/types/Types";
 
 //register
 interface RegisterResponse {
-  user: UserProfile;
+  user: User
 }
 
 export const registerUser = createAsyncThunk(
@@ -44,14 +43,14 @@ export const registerUser = createAsyncThunk(
     if (!response) {
       return rejectWithValue("registration falied.please try again.");
     }
-    dispatch(setActive(response?.data?.user as UserProfile));
+    dispatch(setActive(response?.data?.user as User));
     return response?.data?.user;
   }
 );
 
 
 interface LoginResponse {
-  logeduser: UserProfile;
+  logeduser: User;
 }
 
 export const loginUser = createAsyncThunk(
@@ -67,7 +66,7 @@ export const loginUser = createAsyncThunk(
       return rejectWithValue("Login failed. Please try again.");
     }
 
-    dispatch(setActive(response?.data?.logeduser as UserProfile));
+    dispatch(setActive(response?.data?.logeduser as User));
     return response?.data?.logeduser;
   }
 );
@@ -81,7 +80,7 @@ export const googlloginUser = createAsyncThunk(
     if (!response) {
       return rejectWithValue("Login failed. Please try again.");
     }
-    dispatch(setActive(response?.data?.finduser as UserProfile));
+    dispatch(setActive(response?.data?.finduser as User));
     return response?.data?.logeduser;
   }
 );
@@ -146,7 +145,7 @@ export const RateFindly = createAsyncThunk(
 
 //request to connect
 interface ConnectRequestResponse {
-  finduser: UserProfile;
+  finduser: User;
 }
 
 export const connectionRequest = createAsyncThunk(
@@ -162,7 +161,7 @@ export const connectionRequest = createAsyncThunk(
       return rejectWithValue("Login failed. Please try again.");
     }
 
-    dispatch(setConnectionRequest(response?.data?.finduser as UserProfile));
+    dispatch(setConnectionRequest(response?.data?.finduser as User));
     return response?.data?.finduser;
   }
 );
@@ -192,7 +191,7 @@ export const updateBanner = createAsyncThunk(
         `user/update-banner`,
         { banner },
       ));
-      
+      console.log("response",response)
       dispatch(setActive(response?.data.user));
       return response?.data;
 
@@ -265,7 +264,7 @@ export const fetchPeopleKnow = createAsyncThunk(
   "post/fetchPeopleKnow",
   async (_, { dispatch, rejectWithValue }) => {
     try {
-      const response: AxiosResponse<{ suggestedUsers: UserProfile[] }> = await api.get(
+      const response: AxiosResponse<{ suggestedUsers: User[] }> = await api.get(
         "/user/people-you-might-know"
       );
 
@@ -285,19 +284,18 @@ export const fetchPeopleKnow = createAsyncThunk(
 // get saved jobs//
 
 
-export const fetchSavedJobs = createAsyncThunk<UserProfile[],number,{rejectWithValue:string}>(
+export const fetchSavedJobs = createAsyncThunk(
   "/user/getsavedjobs",
-  async (page, { dispatch, rejectWithValue }) => {
+  async (page:number, { dispatch, rejectWithValue }) => {
     try {
-      const response: AxiosResponse<{ suggestedUsers: UserProfile[] }> = await api.get(
+      const response: AxiosResponse<{ data: User[] }> = await api.get(
         `/user/getsavedjobs?page=${page}`
       );
-      
       if (!response.data.data || !response.data.data) {
         return rejectWithValue("No user found");
       }
       dispatch(setSavedJobs(response.data?.data)); 
-      return response.data.suggestedUsers;
+      return response.data.data;
     } catch (error) {
       console.error("Error fetching saved jobs:", error);
       dispatch(setSavedJobs([])); 
@@ -306,21 +304,17 @@ export const fetchSavedJobs = createAsyncThunk<UserProfile[],number,{rejectWithV
   }
 );
 
-// save jobs 
 
-interface SaveJobsResponse {
-  message: string;
-}
-
-export const saveJobs = createAsyncThunk<SaveJobsResponse,string, { rejectValue: string }>(
+export const saveJobs = createAsyncThunk(
   "/user/savejobs",
-  async (id, { dispatch,rejectWithValue }) => {
+  async (_id:string, {rejectWithValue }) => {
     try {
-      const response: AxiosResponse<{ suggestedUsers: UserProfile[] }> = await api.post(
-       `/user/saveJobs/${id}`
+      const response: AxiosResponse<{ data: User[] }> = await api.post(
+       `/user/saveJobs/${_id}`
       );
-      dispatch(fetchSavedJobs())
-      toast.success(response.data.message)
+      console.log("response",response)
+      // dispatch(fetchSavedJobs())
+      // toast.success(response.data.message)
       return response.data;
     } catch (error) {
       console.error("Error save job:", error);

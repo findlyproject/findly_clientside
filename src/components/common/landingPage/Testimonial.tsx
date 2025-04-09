@@ -1,3 +1,4 @@
+/* eslint-disable react-hooks/exhaustive-deps */
 
 
 "use client";
@@ -139,6 +140,7 @@ useEffect(()=>{
           >
             <h3 className="text-2xl font-bold dark:text-white text-black">
               {testimonials[active]?.userId?.firstName} {testimonials[active]?.userId?.lastName}
+              {testimonials[active]?.userId.firstName} {testimonials[active]?.userId.lastName}
             </h3>
             <p className="text-sm text-gray-500 dark:text-neutral-500">
               {testimonials[active]?.userId.jobTitle}
