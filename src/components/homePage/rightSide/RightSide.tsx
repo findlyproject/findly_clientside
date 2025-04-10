@@ -21,6 +21,9 @@ import { Connection, conversation, User } from "@/types/Types";
 import { MessageType } from "@/types/Types";
 import { toast } from "react-toastify";
 import { useAppSelector } from "@/lib/store/hooks";
+
+
+
 export default function RightSide() {
   // const dispatch = useAppDispatch();
   const [starred, setStarred] = useState<Connection[]>([]);
@@ -92,7 +95,7 @@ export default function RightSide() {
   const fetchMessages = async () => {
     if (selectedUser) {
       const responseofMessage = await api.get(
-        `/message/conversation/${activeuser?._id}/${selectedUser?.connectionID?._id || selectedUser?._id
+        `/message/conversation/${activeuser?._id}/${selectedUser?.connectionID?._id || selectedUser?.user?._id
         }`
       );
       console.log("responseofMessage", responseofMessage);
@@ -105,19 +108,20 @@ export default function RightSide() {
   }, [selectedUser, activeuser?._id]);
   console.log("messages", messages);
 
-  const handleUserSelect = (user: Connection) => {
+  const handleUserSelect = (item: Connection) => {
+console.log("focuded item",item);
 
-    console.log("user....", user);
-    setSelectedUser(user);
+    console.log("user....", item);
+    setSelectedUser(item);
     setMessages([]);
     fetchMessages();
-    socket.emit("joinRoom", user?.connectionID?._id || user?._id);
+    socket.emit("joinRoom", item?.connectionID?._id || item?.user?._id);
   };
 
   // Send Message
   const handleSendMessage = async () => {
     const response = await api.post(
-      `/message/send/${activeuser?._id}/${selectedUser?.connectionID?._id || selectedUser?._id
+      `/message/send/${activeuser?._id}/${selectedUser?.connectionID?._id || selectedUser?.user?._id
       }`,
       { message: message }
     );
@@ -167,7 +171,7 @@ export default function RightSide() {
 
   const fetchAllConversation = async () => {
     const senderId = activeuser?._id;
-    const receiverId = selectedUser?._id || selectedUser?.connectionID?._id;
+    const receiverId = selectedUser?.user?._id || selectedUser?.connectionID?._id;
     console.log("selectedUser...conver", selectedUser);
 
     console.log("senderId,receiverId", senderId, receiverId);
@@ -185,7 +189,7 @@ export default function RightSide() {
   useEffect(() => {
     if (
       activeuser?._id &&
-      (selectedUser?._id || selectedUser?.connectionID?._id)
+      (selectedUser?.user?._id || selectedUser?.connectionID?._id)
     ) {
       fetchAllConversation();
     } else {
@@ -233,6 +237,10 @@ export default function RightSide() {
     fetchAllConversation();
     setActiveTab("focused");
   };
+
+
+  console.log("selectedUser",selectedUser);
+  
   return (
     <>
       <div
@@ -376,7 +384,11 @@ bg-white border-s border-gray-200 dark:bg-neutral-800 dark:border-neutral-700 w-
                             ? "bg-blue-100"
                             : "bg-white hover:bg-gray-200"
                           }`}
-                        onClick={() => handleUserSelect(chat)}
+                        onClick={() =>{ 
+                          console.log("chat",chat);
+                          
+                       return   handleUserSelect(chat)}
+                        }
                       >
                         <div className="flex items-center">
                           <Image
@@ -400,6 +412,8 @@ bg-white border-s border-gray-200 dark:bg-neutral-800 dark:border-neutral-700 w-
                   ) : (
                     <div>
                       {focused.map((item) => {
+                        console.log("focused",item.user._id);
+                        
                         const formattedDate = new Date(
                           item?.lastMessage?.timestamp
                         ).toLocaleDateString("en-US", {
@@ -414,12 +428,15 @@ bg-white border-s border-gray-200 dark:bg-neutral-800 dark:border-neutral-700 w-
                                 ? "bg-blue-100"
                                 : "bg-white hover:bg-gray-200"
                               }`}
-                            onClick={() => handleUserSelect(item?.user)}
+                            onClick={() =>{ 
+                              console.log("item",item);
+                              
+                              return handleUserSelect(item)}}
                           >
                             <div className="flex items-center">
                               <Image
                                 src={item.user?.profileImage || '/default-profile.png'}
-                                alt="User"
+                                alt="Userrrrr"
                                 width={40}
                                 height={40}
                                 className="rounded-full object-cover"
@@ -464,6 +481,9 @@ bg-white border-s border-gray-200 dark:bg-neutral-800 dark:border-neutral-700 w-
                     </div>
                   )}
                 </div>
+
+
+
               </div>
             </aside>
           )}
@@ -481,7 +501,7 @@ bg-white border-s border-gray-200 dark:bg-neutral-800 dark:border-neutral-700 w-
                       <Image
                         src={
                           selectedUser?.connectionID?.profileImage ||
-                          selectedUser?.profileImage ||
+                          selectedUser?.user?.profileImage ||
                           '/default-profile.png'
                         }
                         alt="User"
@@ -492,7 +512,7 @@ bg-white border-s border-gray-200 dark:bg-neutral-800 dark:border-neutral-700 w-
                       <div className="ml-3">
                         <h2 className="font-medium">
                           {selectedUser?.connectionID?.firstName ||
-                            selectedUser?.firstName}
+                            selectedUser?.user?.firstName}
                         </h2>
                       </div>
                     </div>
@@ -502,7 +522,7 @@ bg-white border-s border-gray-200 dark:bg-neutral-800 dark:border-neutral-700 w-
                         onClick={(event) =>
                           handleDropdown(
                             event,
-                            selectedUser?.connectionID?._id || selectedUser?._id
+                            selectedUser?.connectionID?._id || selectedUser?.user?._id
                           )
                         }
                       >
@@ -510,14 +530,14 @@ bg-white border-s border-gray-200 dark:bg-neutral-800 dark:border-neutral-700 w-
                       </button>
 
                       {(Dropdown === selectedUser?.connectionID?._id ||
-                        Dropdown === selectedUser?._id) &&
-                        selectedUser?._id && (
+                        Dropdown === selectedUser?.user?._id) &&
+                        selectedUser?.user?._id && (
                           <div className="absolute top-full right-0 mt-1 w-40 bg-white shadow-lg rounded-lg border z-50">
                             <ul className="flex flex-col">
                               {conversation?.isStarredUsers
                                 ?.map((id) => id.toString())
                                 .includes(
-                                  selectedUser?._id ||
+                                  selectedUser?.user?._id ||
                                   selectedUser?.connectionID?._id
                                 ) ? (
                                 <li>
@@ -525,7 +545,7 @@ bg-white border-s border-gray-200 dark:bg-neutral-800 dark:border-neutral-700 w-
                                     onClick={() =>
                                       handleStar(
                                         selectedUser?.connectionID?._id ||
-                                        selectedUser?._id,
+                                        selectedUser?.user?._id,
                                         "removestar"
                                       )
                                     }
@@ -540,7 +560,7 @@ bg-white border-s border-gray-200 dark:bg-neutral-800 dark:border-neutral-700 w-
                                     onClick={() =>
                                       handleStar(
                                         selectedUser?.connectionID?._id ||
-                                        selectedUser?._id,
+                                        selectedUser?.user?._id,
                                         "star"
                                       )
                                     }
@@ -554,14 +574,14 @@ bg-white border-s border-gray-200 dark:bg-neutral-800 dark:border-neutral-700 w-
                               {conversation?.isBlockedUsers
                                 ?.map((id) => id.toString())
                                 .includes(
-                                  activeuser?._id || selectedUser?._id
+                                  activeuser?._id || selectedUser?.user?._id||selectedUser?.connectionID?._id
                                 ) ? (
                                 <li>
                                   <button
                                     onClick={() =>
                                       handleBlock(
                                         selectedUser?.connectionID?._id ||
-                                        selectedUser?._id,
+                                        selectedUser?.user?._id,
                                         "unblock"
                                       )
                                     }
@@ -576,7 +596,7 @@ bg-white border-s border-gray-200 dark:bg-neutral-800 dark:border-neutral-700 w-
                                     onClick={() =>
                                       handleBlock(
                                         selectedUser?.connectionID?._id ||
-                                        selectedUser?._id,
+                                        selectedUser?.user?._id,
                                         "block"
                                       )
                                     }
@@ -592,7 +612,7 @@ bg-white border-s border-gray-200 dark:bg-neutral-800 dark:border-neutral-700 w-
                                   onClick={() =>
                                     handleDeleteConversation(
                                       selectedUser?.connectionID?._id ||
-                                      selectedUser?._id
+                                      selectedUser?.user?._id
                                     )
                                   }
                                   className="w-full text-left px-4 py-2 hover:bg-gray-100 text-sm font-semibold"
@@ -606,7 +626,7 @@ bg-white border-s border-gray-200 dark:bg-neutral-800 dark:border-neutral-700 w-
                                   onClick={() =>
                                     handleClearChat(
                                       selectedUser?.connectionID?._id ||
-                                      selectedUser?._id
+                                      selectedUser?.user?._id
                                     )
                                   }
                                   className="w-full text-left px-4 py-2 hover:bg-gray-100 text-sm font-semibold"
@@ -639,7 +659,7 @@ bg-white border-s border-gray-200 dark:bg-neutral-800 dark:border-neutral-700 w-
     msg.sender === activeuser?._id
       ? activeuser?.profileImage || '/default-profile.png'
       : selectedUser?.connectionID?.profileImage ||
-        selectedUser?.profileImage ||
+        selectedUser?.user?.profileImage ||
         '/default-profile.png'
   }
   alt="User"
@@ -652,7 +672,7 @@ bg-white border-s border-gray-200 dark:bg-neutral-800 dark:border-neutral-700 w-
                                   ? "You"
                                   : selectedUser?.connectionID?.firstName
                                     ? selectedUser?.connectionID?.firstName
-                                    : selectedUser?.firstName}
+                                    : selectedUser?.user?.firstName}
                               </p>
                             </div>
                           )}

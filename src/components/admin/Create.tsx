@@ -15,7 +15,6 @@ import {
   editTitle,
   handleApproveSkill,
   handleApproveTitle,
-  handleBlock,
   handleRemoveSkill,
   handleRemoveTitle,
   postSkill,
@@ -41,7 +40,7 @@ const Create = () => {
   const formattedTitles =
     titles.charAt(0).toUpperCase() + titles.slice(1).toLowerCase();
 
-  console.log("skills", skills);
+  
 
   useEffect(() => {
     fetchSkills();

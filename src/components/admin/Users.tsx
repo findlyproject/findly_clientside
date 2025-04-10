@@ -225,7 +225,7 @@ const Users = () => {
                     {user.firstName} {user.lastName}
                   </div>
                 </td>
-                <td className="p-4">{user.phone || "N/A"}</td>
+                <td className="p-4">{user.phoneNumber || "N/A"}</td>
                 <td className="p-4">{user.email}</td>
                 <td className="p-4">
                   <span
@@ -268,8 +268,8 @@ const Users = () => {
                     onClick={() => handleBlock(user._id)}
                     className={`p-2 rounded hover:opacity-80 ${
                       user.isBlocked
-                        ? "bg-purple-600 text-white"
-                        : "bg-purple-100 text-purple-700"
+                        ? "bg-primary text-white"
+                        : "bg-purple-100 text-primary"
                     }`}
                   >
                     {user.isBlocked ? "Unblock" : "Block"}
@@ -301,7 +301,7 @@ const Users = () => {
         </table>
       </div>
 
-      {/* Pagination */}
+     
       <div className="flex justify-center mt-6 gap-2">
         <button
           onClick={() => goToPage(currentPage - 1)}
@@ -317,7 +317,7 @@ const Users = () => {
               onClick={() => goToPage(page)}
               className={`px-3 py-1 rounded ${
                 currentPage === page
-                  ? "bg-purple-600 text-white"
+                  ? "bg-primary text-white"
                   : "bg-gray-200 hover:bg-gray-300"
               }`}
             >
