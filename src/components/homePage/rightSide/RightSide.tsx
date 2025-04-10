@@ -1,5 +1,6 @@
-import { findnMembers } from "@/lib/store/features/actions/communityActions";
-import { useAppDispatch, useAppSelector } from "@/lib/store/hooks";
+/* eslint-disable react-hooks/exhaustive-deps */
+// import { findnMembers } from "@/lib/store/features/actions/communityActions";
+
 
 import { useEffect, useState } from "react";
 
@@ -9,21 +10,28 @@ import { IoMdArrowBack } from "react-icons/io";
 import Image from "next/image";
 import { RiArrowDropDownLine } from "react-icons/ri";
 import { HiOutlineAdjustmentsHorizontal } from "react-icons/hi2";
-import { CiSearch } from "react-icons/ci";
 import EmojiPicker from "emoji-picker-react";
 import { EmojiClickData } from "emoji-picker-react";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faSmile } from "@fortawesome/free-solid-svg-icons";
-import OutsideClickHandler from "react-outside-click-handler";
+
 import { BsThreeDots } from "react-icons/bs";
-import { Connection, User } from "@/types/Types";
+import { Connection, conversation, User } from "@/types/Types";
 
 import { MessageType } from "@/types/Types";
 import { toast } from "react-toastify";
+import { useAppSelector } from "@/lib/store/hooks";
+
+
+
 export default function RightSide() {
-  const dispatch = useAppDispatch();
-  const [starred, setStarred] = useState([]);
-  const [conversation, setConversation] = useState({});
+  // const dispatch = useAppDispatch();
+  const [starred, setStarred] = useState<Connection[]>([]);
+
+
+  const [conversation, setConversation] = useState<conversation>();
+  console.log("coneeeee",conversation);
+  
   const [Chatlist, setChatlist] = useState([]);
   const [selectedUser, setSelectedUser] = useState<Connection | null>(null);
   const [message, setMessage] = useState("");
@@ -31,8 +39,10 @@ export default function RightSide() {
   const [members, setMembers] = useState([]);
   const [activeTab, setActiveTab] = useState("focused");
   const [focused, setFocused] = useState<Connection[]>([]);
+  console.log("focused", focused);
+  const [other, setOther] = useState<Connection[]>([]);
 
-  const [other, setOther] = useState<User[]>([]);
+
   const activeuser = useAppSelector((state) => state.user.activeuser);
   const [showPicker, setShowPicker] = useState(false);
 
@@ -58,12 +68,15 @@ export default function RightSide() {
   }, []);
 
   const handleStarred = async () => {
+    console.log("haje");
+
     setActiveTab("starred");
     const starredres = await api.get(`/message/starred`);
     console.log("starredres", starredres);
 
     setStarred(starredres.data.starredUsers);
   };
+  console.log("sttttt", starred);
 
   useEffect(() => {
     if (activeTab === "focused") {
@@ -73,17 +86,16 @@ export default function RightSide() {
     }
   }, [activeTab, members, Chatlist, starred]);
 
-  const fetchMembers = () => {
-    const result = dispatch(findnMembers);
-    console.log("result", result);
-  };
+  // const fetchMembers = () => {
+  //   const result = dispatch(findnMembers);
+  //   console.log("result", result);
+  // };
 
   console.log("other..", other);
   const fetchMessages = async () => {
     if (selectedUser) {
       const responseofMessage = await api.get(
-        `/message/conversation/${activeuser?._id}/${
-          selectedUser?.connectionID?._id || selectedUser?._id
+        `/message/conversation/${activeuser?._id}/${selectedUser?.connectionID?._id || selectedUser?.user?._id
         }`
       );
       console.log("responseofMessage", responseofMessage);
@@ -96,19 +108,20 @@ export default function RightSide() {
   }, [selectedUser, activeuser?._id]);
   console.log("messages", messages);
 
-  const handleUserSelect = (user: Connection) => {
-    console.log("user....", user);
-    setSelectedUser(user);
+  const handleUserSelect = (item: Connection) => {
+console.log("focuded item",item);
+
+    console.log("user....", item);
+    setSelectedUser(item);
     setMessages([]);
     fetchMessages();
-    socket.emit("joinRoom", user?.connectionID?._id || user?._id);
+    socket.emit("joinRoom", item?.connectionID?._id || item?.user?._id);
   };
 
   // Send Message
   const handleSendMessage = async () => {
     const response = await api.post(
-      `/message/send/${activeuser?._id}/${
-        selectedUser?.connectionID?._id || selectedUser?._id
+      `/message/send/${activeuser?._id}/${selectedUser?.connectionID?._id || selectedUser?.user?._id
       }`,
       { message: message }
     );
@@ -158,7 +171,7 @@ export default function RightSide() {
 
   const fetchAllConversation = async () => {
     const senderId = activeuser?._id;
-    const receiverId = selectedUser?._id || selectedUser?.connectionID?._id;
+    const receiverId = selectedUser?.user?._id || selectedUser?.connectionID?._id;
     console.log("selectedUser...conver", selectedUser);
 
     console.log("senderId,receiverId", senderId, receiverId);
@@ -176,7 +189,7 @@ export default function RightSide() {
   useEffect(() => {
     if (
       activeuser?._id &&
-      (selectedUser?._id || selectedUser?.connectionID?._id)
+      (selectedUser?.user?._id || selectedUser?.connectionID?._id)
     ) {
       fetchAllConversation();
     } else {
@@ -224,6 +237,10 @@ export default function RightSide() {
     fetchAllConversation();
     setActiveTab("focused");
   };
+
+
+  console.log("selectedUser",selectedUser);
+  
   return (
     <>
       <div
@@ -301,22 +318,20 @@ bg-white border-s border-gray-200 dark:bg-neutral-800 dark:border-neutral-700 w-
 
                 <div className="flex justify-center space-x-4">
                   <button
-                    className={`px-4 py-2 text-sm font-semibold transition-all ${
-                      activeTab === "focused"
+                    className={`px-4 py-2 text-sm font-semibold transition-all ${activeTab === "focused"
                         ? "border-b-2 border-primary text-primary"
                         : "border-b border-gray-700 text-gray-700"
-                    }`}
+                      }`}
                     onClick={() => setActiveTab("focused")}
                   >
                     Focused
                   </button>
 
                   <button
-                    className={`px-4 py-2 text-sm font-semibold transition-all ${
-                      activeTab === "other"
+                    className={`px-4 py-2 text-sm font-semibold transition-all ${activeTab === "other"
                         ? "border-b-2 border-primary text-primary"
                         : "border-b border-gray-700 text-gray-700"
-                    }`}
+                      }`}
                     onClick={() => setActiveTab("other")}
                   >
                     Other
@@ -329,25 +344,28 @@ bg-white border-s border-gray-200 dark:bg-neutral-800 dark:border-neutral-700 w-
                       starred.map((user, index) => (
                         <div
                           key={index}
-                          className={`flex items-center justify-between p-2 rounded-lg cursor-pointer transition ${
-                            selectedUser === user
+                          className={`flex items-center justify-between p-2 rounded-lg cursor-pointer transition ${selectedUser === user
                               ? "bg-blue-100"
                               : "bg-white hover:bg-gray-200"
-                          }`}
+                            }`}
                           onClick={() => handleUserSelect(user)}
                         >
                           <div className="flex items-center">
-                            <img
-                              src={user?.profileImage}
+
+
+                            <Image
+                              src={user?.profileImage || "/default-profile.png"} // fallback if undefined
                               alt="User"
-                              className="w-10 h-10 rounded-full"
+                              width={40}
+                              height={40}
+                              className="rounded-full object-cover"
                             />
                             <div className="ml-3">
                               <h2 className="text-sm font-semibold">
-                                {user.firstName}
+                                {user?.firstName}
                               </h2>
                               <p className="text-sm text-gray-400">
-                                {user.jobTitle?.[0]}
+                                {user?.jobTitle?.[0]}
                               </p>
                             </div>
                           </div>
@@ -362,18 +380,23 @@ bg-white border-s border-gray-200 dark:bg-neutral-800 dark:border-neutral-700 w-
                     other.map((chat, index) => (
                       <div
                         key={index}
-                        className={`flex items-center justify-between p-2 rounded-lg cursor-pointer transition ${
-                          selectedUser === chat
+                        className={`flex items-center justify-between p-2 rounded-lg cursor-pointer transition ${selectedUser === chat
                             ? "bg-blue-100"
                             : "bg-white hover:bg-gray-200"
-                        }`}
-                        onClick={() => handleUserSelect(chat)}
+                          }`}
+                        onClick={() =>{ 
+                          console.log("chat",chat);
+                          
+                       return   handleUserSelect(chat)}
+                        }
                       >
                         <div className="flex items-center">
-                          <img
-                            src={chat.connectionID?.profileImage}
+                          <Image
+                            src={chat.connectionID?.profileImage || '/default-profile.png'}
                             alt="User"
-                            className="w-10 h-10 rounded-full"
+                            width={40}
+                            height={40}
+                            className="rounded-full"
                           />
                           <div className="ml-3">
                             <h2 className="text-sm font-semibold">
@@ -389,8 +412,10 @@ bg-white border-s border-gray-200 dark:bg-neutral-800 dark:border-neutral-700 w-
                   ) : (
                     <div>
                       {focused.map((item) => {
+                        console.log("focused",item.user._id);
+                        
                         const formattedDate = new Date(
-                          item.lastMessage.timestamp
+                          item?.lastMessage?.timestamp
                         ).toLocaleDateString("en-US", {
                           month: "long",
                           day: "numeric",
@@ -399,18 +424,22 @@ bg-white border-s border-gray-200 dark:bg-neutral-800 dark:border-neutral-700 w-
                         return (
                           <div
                             key={item.user?._id}
-                            className={`flex items-center justify-between p-2 rounded-lg cursor-pointer transition  ${
-                              selectedUser === item.user
+                            className={`flex items-center justify-between p-2 rounded-lg cursor-pointer transition  ${selectedUser === item.user
                                 ? "bg-blue-100"
                                 : "bg-white hover:bg-gray-200"
-                            }`}
-                            onClick={() => handleUserSelect(item.user)}
+                              }`}
+                            onClick={() =>{ 
+                              console.log("item",item);
+                              
+                              return handleUserSelect(item)}}
                           >
                             <div className="flex items-center">
-                              <img
-                                src={item.user?.profileImage}
-                                alt="User"
-                                className="w-10 h-10 rounded-full object-cover"
+                              <Image
+                                src={item.user?.profileImage || '/default-profile.png'}
+                                alt="Userrrrr"
+                                width={40}
+                                height={40}
+                                className="rounded-full object-cover"
                               />
                               <div className="ml-3 ">
                                 <h2 className="text-sm font-semibold">
@@ -422,7 +451,7 @@ bg-white border-s border-gray-200 dark:bg-neutral-800 dark:border-neutral-700 w-
                                     <>
                                       <span className="font-medium">
                                         {item.lastMessage?.sender ===
-                                        activeuser?._id
+                                          activeuser?._id
                                           ? "You: "
                                           : item.user?.firstName + ": "}
                                       </span>
@@ -452,6 +481,9 @@ bg-white border-s border-gray-200 dark:bg-neutral-800 dark:border-neutral-700 w-
                     </div>
                   )}
                 </div>
+
+
+
               </div>
             </aside>
           )}
@@ -466,18 +498,21 @@ bg-white border-s border-gray-200 dark:bg-neutral-800 dark:border-neutral-700 w-
                         onClick={() => setSelectedUser(null)}
                         className="text-xl"
                       />
-                      <img
+                      <Image
                         src={
                           selectedUser?.connectionID?.profileImage ||
-                          selectedUser?.profileImage
+                          selectedUser?.user?.profileImage ||
+                          '/default-profile.png'
                         }
-                        className="w-10 h-10 rounded-full"
                         alt="User"
+                        width={40}
+                        height={40}
+                        className="rounded-full"
                       />
                       <div className="ml-3">
                         <h2 className="font-medium">
                           {selectedUser?.connectionID?.firstName ||
-                            selectedUser?.firstName}
+                            selectedUser?.user?.firstName}
                         </h2>
                       </div>
                     </div>
@@ -487,7 +522,7 @@ bg-white border-s border-gray-200 dark:bg-neutral-800 dark:border-neutral-700 w-
                         onClick={(event) =>
                           handleDropdown(
                             event,
-                            selectedUser?.connectionID?._id || selectedUser?._id
+                            selectedUser?.connectionID?._id || selectedUser?.user?._id
                           )
                         }
                       >
@@ -495,22 +530,22 @@ bg-white border-s border-gray-200 dark:bg-neutral-800 dark:border-neutral-700 w-
                       </button>
 
                       {(Dropdown === selectedUser?.connectionID?._id ||
-                        Dropdown === selectedUser?._id) &&
-                        selectedUser?._id && (
+                        Dropdown === selectedUser?.user?._id) &&
+                        selectedUser?.user?._id && (
                           <div className="absolute top-full right-0 mt-1 w-40 bg-white shadow-lg rounded-lg border z-50">
                             <ul className="flex flex-col">
                               {conversation?.isStarredUsers
                                 ?.map((id) => id.toString())
                                 .includes(
-                                  selectedUser?._id ||
-                                    selectedUser?.connectionID?._id
+                                  selectedUser?.user?._id ||
+                                  selectedUser?.connectionID?._id
                                 ) ? (
                                 <li>
                                   <button
                                     onClick={() =>
                                       handleStar(
                                         selectedUser?.connectionID?._id ||
-                                          selectedUser?._id,
+                                        selectedUser?.user?._id,
                                         "removestar"
                                       )
                                     }
@@ -525,7 +560,7 @@ bg-white border-s border-gray-200 dark:bg-neutral-800 dark:border-neutral-700 w-
                                     onClick={() =>
                                       handleStar(
                                         selectedUser?.connectionID?._id ||
-                                          selectedUser?._id,
+                                        selectedUser?.user?._id,
                                         "star"
                                       )
                                     }
@@ -539,14 +574,14 @@ bg-white border-s border-gray-200 dark:bg-neutral-800 dark:border-neutral-700 w-
                               {conversation?.isBlockedUsers
                                 ?.map((id) => id.toString())
                                 .includes(
-                                  activeuser?._id || selectedUser?._id
+                                  activeuser?._id || selectedUser?.user?._id||selectedUser?.connectionID?._id
                                 ) ? (
                                 <li>
                                   <button
                                     onClick={() =>
                                       handleBlock(
                                         selectedUser?.connectionID?._id ||
-                                          selectedUser?._id,
+                                        selectedUser?.user?._id,
                                         "unblock"
                                       )
                                     }
@@ -561,7 +596,7 @@ bg-white border-s border-gray-200 dark:bg-neutral-800 dark:border-neutral-700 w-
                                     onClick={() =>
                                       handleBlock(
                                         selectedUser?.connectionID?._id ||
-                                          selectedUser?._id,
+                                        selectedUser?.user?._id,
                                         "block"
                                       )
                                     }
@@ -577,7 +612,7 @@ bg-white border-s border-gray-200 dark:bg-neutral-800 dark:border-neutral-700 w-
                                   onClick={() =>
                                     handleDeleteConversation(
                                       selectedUser?.connectionID?._id ||
-                                        selectedUser?._id
+                                      selectedUser?.user?._id
                                     )
                                   }
                                   className="w-full text-left px-4 py-2 hover:bg-gray-100 text-sm font-semibold"
@@ -591,7 +626,7 @@ bg-white border-s border-gray-200 dark:bg-neutral-800 dark:border-neutral-700 w-
                                   onClick={() =>
                                     handleClearChat(
                                       selectedUser?.connectionID?._id ||
-                                        selectedUser?._id
+                                      selectedUser?.user?._id
                                     )
                                   }
                                   className="w-full text-left px-4 py-2 hover:bg-gray-100 text-sm font-semibold"
@@ -614,38 +649,39 @@ bg-white border-s border-gray-200 dark:bg-neutral-800 dark:border-neutral-700 w-
                       return (
                         <div
                           key={index}
-                          className={`w-max grid ${
-                            msg.sender === activeuser?._id ? "ml-auto" : ""
-                          }`}
+                          className={`w-max grid ${msg.sender === activeuser?._id ? "ml-auto" : ""
+                            }`}
                         >
                           {showProfile && (
                             <div className="flex items-center space-x-1">
-                              <img
-                                src={`${
-                                  msg.sender === activeuser?._id
-                                    ? activeuser?.profileImage
-                                    : selectedUser?.connectionID?.profileImage
-                                    ? selectedUser?.connectionID?.profileImage
-                                    : selectedUser?.profileImage
-                                }`}
-                                className="w-8 h-8 rounded-full"
-                              />
+                           <Image
+  src={
+    msg.sender === activeuser?._id
+      ? activeuser?.profileImage || '/default-profile.png'
+      : selectedUser?.connectionID?.profileImage ||
+        selectedUser?.user?.profileImage ||
+        '/default-profile.png'
+  }
+  alt="User"
+  width={32}
+  height={32}
+  className="rounded-full"
+/>
                               <p className="text-sm font-semibold">
                                 {msg.sender === activeuser?._id
                                   ? "You"
                                   : selectedUser?.connectionID?.firstName
-                                  ? selectedUser?.connectionID?.firstName
-                                  : selectedUser?.firstName}
+                                    ? selectedUser?.connectionID?.firstName
+                                    : selectedUser?.user?.firstName}
                               </p>
                             </div>
                           )}
 
                           <div
-                            className={`px-3.5 py-1 rounded-md mb-2 flex flex-col ${
-                              msg.sender === activeuser?._id
+                            className={`px-3.5 py-1 rounded-md mb-2 flex flex-col ${msg.sender === activeuser?._id
                                 ? "bg-primary text-white"
                                 : "bg-gray-100 text-gray-900"
-                            }`}
+                              }`}
                           >
                             <h5 className="text-sm font-normal leading-snug">
                               {msg.message}
@@ -664,7 +700,7 @@ bg-white border-s border-gray-200 dark:bg-neutral-800 dark:border-neutral-700 w-
                     <>
                       <p>
                         {conversation?.isBlockedUsers?.map((item) =>
-                          item == activeuser._id
+                          item == activeuser?._id
                             ? "you blocked this user"
                             : "you are blocked by this user"
                         )}
@@ -714,7 +750,7 @@ bg-white border-s border-gray-200 dark:bg-neutral-800 dark:border-neutral-700 w-
                                   strokeLinecap="round"
                                 />
                               </svg>
-                            
+
                             </button>
                           </div>
                         </div>

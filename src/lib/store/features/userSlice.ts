@@ -1,7 +1,9 @@
 import {
   Ieducation,
   IlocationType,
+  Job,
   JobLocationType,
+  SavedType,
   User,
 } from "@/types/Types";
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
@@ -17,7 +19,7 @@ interface LoginState {
     email: string;
     otp: string;
   };
-  savedJobs: string[];
+  savedJobs: SavedType[];
   jobfilter: {
     title: string;
     experienceLevel: string;
@@ -80,7 +82,7 @@ const loginSlice = createSlice({
   name: "login",
   initialState,
   reducers: {
-    setActive: (state, action: PayloadAction<User | null>) => {
+    setActive: (state, action) => {
       state.activeuser = action.payload;
     },
     setGooglelogin: (state) => {

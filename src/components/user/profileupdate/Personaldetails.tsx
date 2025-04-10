@@ -15,15 +15,7 @@ interface ImageType {
   banner: string | File | undefined;
 }
 
-interface input {
-  firstName: string | undefined;
-  lastName: string | undefined;
-  email: string | undefined;
-  phoneNumber: string | undefined | number;
-  dateOfBirth: Date | undefined | number;
-  about: string | undefined;
-  gender: string | undefined;
-}
+
 
 function Personaldetails() {
   const dispatch = useAppDispatch();

@@ -10,19 +10,20 @@ const SavedJobs = () => {
   const [loading, setLoading] = useState(true);
   const [page, setPage] = useState(1);
   const [hasMore, setHasMore] = useState(true);
-
+  const savedjobs:SavedType[] = useAppSelector((state) => state.user.savedJobs);
+console.log(".....",savedjobs);
   const dispatch = useAppDispatch();
   useEffect(() => {
     if (savedjobs.length !== 0) {
       setLoading(false)
+      setHasMore(true)
     }
     setTimeout(() => {
       setLoading(false);
     }, 5000);
     dispatch(fetchSavedJobs(page))
-  }, [])
-  const savedjobs:SavedType[] = useAppSelector((state) => state.user.savedJobs);
-console.log(".....",savedjobs);
+  }, [dispatch, page, savedjobs.length])
+
 
   return (
     <div className="p-4">

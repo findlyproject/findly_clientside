@@ -15,8 +15,11 @@ export const  Posts=()=> {
   const name = searchParams.get("name");
   console.log(name)
   const [activeTab, setActiveTab] = useState(name);
-  const [posts, setPosts] = useState<IPost[]>([]);
+  const [posts, setPosts] = useState<SavePost[]>([]);
+  console.log("postscc",posts);
+  
   const [userPosts, setUserposts] = useState<SavePost[]>([]);
+  console.log("userPosts",userPosts);
   const [userLiked, setUserLiked] = useState<SavePost[]>([]);
 
   const [savedPosts, setsavedPosts] = useState<IPost[]>([]);
@@ -36,9 +39,9 @@ const responses=await api.get(`/${route}/likes`)
 setUserLiked(responses.data.likedPosts)
     };
     fetchuserPosts();
-  }, [dispatch]);
+  }, [dispatch, route]);
 
-console.log(save)
+console.log("save,",save)
 
   useEffect(() => {
     if (activeTab === "saved") {
@@ -46,10 +49,10 @@ console.log(save)
     } else {
       setPosts(userPosts);
     }
-  }, [activeTab,savedPosts,userPosts]);
+  }, [activeTab, save, savedPosts, userPosts]);
 
 const handleUnsave=async(postid:string)=>{
-const res=await api.post(`/${route}/save/${postid}`)
+        await api.post(`/${route}/save/${postid}`)
 setsavedPosts((pre)=>pre.filter((item)=>item._id!==postid))
 const response=await api.get(`/${route}/saveds`)
 dispatch(setSaved(response.data.saved))
@@ -150,22 +153,25 @@ console.log(posts)
             )
           ) :activeTab === "posts" ? (
             <>
-           {posts.filter((item) => !item.isDeleted).length > 0 ? (
+           {posts&&posts.filter((item) => !item.postId.isDeleted).length > 0 ? (
   <div>
     <h2 className="text-lg font-semibold text-gray-800 mb-4">Active Posts</h2>
     <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
       {posts
-        .filter((item) => !item.isDeleted)
+        .filter((item) => !item.postId.isDeleted)
         .map((item) => (
           <div
             key={item._id}
             className="bg-white shadow-md rounded-lg p-4 hover:shadow-lg transition"
           >
             {item.images?.length > 0 ? (
-              <img
-                src={item.images[0]}
-                className="w-full h-40 object-cover rounded-md"
-              />
+           <Image
+           src={item.images[0] || '/fallback-image.png'}
+           alt="Product Image"
+           width={500}
+           height={160}
+           className="w-full h-40 object-cover rounded-md"
+         />
             ) : (
               <video
                 src={item?.video}
@@ -194,10 +200,13 @@ console.log(posts)
                   X
                 </button>
                   {item.images?.length > 0 ? (
-                    <img
-                      src={item.images?.[0]}
-                      className="w-full h-40 object-cover rounded-md"
-                    />
+                    <Image
+                    src={item.images?.[0] || '/fallback-image.png'}
+                    alt="Product Image"
+                    width={500}
+                    height={160}
+                    className="w-full h-40 object-cover rounded-md"
+                  />
                   ) : (
                     <video
                       src={item?.video}

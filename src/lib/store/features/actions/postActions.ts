@@ -91,7 +91,7 @@ export const addPostByUser = createAsyncThunk(
 
     formData.append("description", description);
 
-    mediaFiles.forEach((file, index) => {
+    mediaFiles.forEach((file) => {
       formData.append("media", file);
     });
 
@@ -164,8 +164,8 @@ export const updatePostByUser = createAsyncThunk(
       const response = await api.patch(`${routes}/update/${postId}`, formData);
       dispatch(updatePost({ postId, updatedData: response.data.post }));
       return response.data.post;
-    } catch (error: any) {
-      return rejectWithValue(error.response?.data || "Something went wrong");
+    } catch (error) {
+      return rejectWithValue(error|| "Something went wrong");
     }
   }
 );

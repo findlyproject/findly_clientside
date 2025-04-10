@@ -1,3 +1,4 @@
+/* eslint-disable react-hooks/exhaustive-deps */
 "use client";
 import { useEffect, useRef, useState } from "react";
 import Sidebar from "./Sidebar";
@@ -208,8 +209,7 @@ console.log("commuu",community);
   };
 
   console.log("community", community);
-  const route = activeCompany ? "/company" : "message";
-  ///// get comunity mssage //////
+
   const getcommunitymessage = async () => {
     try {
       const response = await api.get(
@@ -322,7 +322,7 @@ console.log("commuu",community);
                             {message.map((item, index) => {
                               console.log("item", item);
 
-                              // const isSender = item.sender?._id === activeuser?._id||activeCompany?._id
+                              
                               const isSender =
                                 item.senderModel === "User"
                                   ? item.sender?._id == activeuser?._id
@@ -654,7 +654,7 @@ console.log("commuu",community);
           <>
            {community && (
       <CommunityDetails
-        id={community._id}
+      params={{ id: community._id }}
         onClose={() => setSelectedCommunity(null)}
       />
     )}

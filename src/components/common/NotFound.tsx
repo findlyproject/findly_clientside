@@ -42,7 +42,7 @@ export default function NotFound() {
                 <circle cx="147.131" cy="31.0854" r="1.36752" fill="#4F46E5"/>
                 </svg>
                 <div className="block text-center mt-5">
-                  <h5 className="md:text-xl text-lg leading-8 text-gray-900 font-medium mb-1.5"><span className="text-indigo-600 font-semibold ">Oops!</span> It seems like you've taken a wrong turn</h5>
+                  <h5 className="md:text-xl text-lg leading-8 text-gray-900 font-medium mb-1.5"><span className="text-indigo-600 font-semibold ">Oops!</span> It seems like you ve taken a wrong turn</h5>
                   <p className="text-sm text-gray-500"> We are working to bring it back.</p>
                 </div>
             </div>

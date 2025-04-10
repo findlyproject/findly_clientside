@@ -2,7 +2,6 @@
 import { useState } from 'react';
 import { Notifications } from '@/types/Types';
 const Notification = () => {
-  const [isOpen, setIsOpen] = useState(false);
   const [activeTab, setActiveTab] = useState('All');
   
   // Sample notification data
