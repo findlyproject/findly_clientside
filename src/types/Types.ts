@@ -312,6 +312,11 @@ export interface MemberType{
   }
   memberModel:string;
 }
+export interface Member{
+  _id:string;
+  memberId:string;
+  memberModel:string;
+}
 export interface CommunityMessage{
   _id:string;
   communityId:string;
@@ -334,7 +339,7 @@ _id: string;
 name: string;
 description: string;
 profile: string;
-members: MemberType[];
+members: Member[];
 createdBy:{
   _id:string;
   name:string
@@ -344,7 +349,22 @@ createdAt:string;
 updatedAt:string;
 
 }
-
+export interface Community2 {
+  _id: string;
+  name: string;
+  description: string;
+  profile: string;
+  members: MemberType[];
+  createdBy:{
+    _id:string;
+    name:string
+  };
+  isDeleted:boolean;
+  createdAt:string;
+  updatedAt:string;
+  
+  }
+  
 
 //post
 
@@ -599,4 +619,15 @@ export interface SavedType{
     likedBy?: any[];
     comments?: any[];
   }
+}
+
+
+
+export interface RevenueItem {
+  day: string;
+  revenue: number;
+}
+export interface BarData {
+  date: string;
+  Revenue: number;
 }

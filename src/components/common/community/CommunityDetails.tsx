@@ -9,7 +9,8 @@ import { useAppSelector } from "@/lib/store/hooks";
 import { MdModeEditOutline } from "react-icons/md";
 import { FaPencilAlt } from "react-icons/fa";
 
-import { Community,CommunityMessage } from "@/types/Types";
+import {Community2,CommunityMessage } from "@/types/Types";
+import Image from "next/image";
 interface CommunityDetailsProps {
   id: string;
   onClose: () => void;
@@ -23,7 +24,7 @@ export default function CommunityDetails({
   const activeCompany=useAppSelector((state)=>state.companyLogin.activeCompany)
   const [message, setMessage] = useState<CommunityMessage[]>([]);
   const router = useRouter();
-  const [details, setDetails] = useState<Community | null>(null);
+  const [details, setDetails] = useState<Community2 | null>(null);
   const [dropdown, setDropdown] = useState(false);
   const dropdownRef = useRef<HTMLDivElement | null>(null);
 
@@ -202,10 +203,12 @@ export default function CommunityDetails({
 
       <div className="relative flex flex-col items-center -mt-12">
         <div className="relative w-24 h-24">
-          <img
-            src={preview || details?.profile}
+          <Image
+            src={preview || details?.profile||""}
             alt="Community Profile"
             className="w-full h-full rounded-full border-4 border-white shadow-md"
+            width={80}
+            height={80}
           />
 
           <input

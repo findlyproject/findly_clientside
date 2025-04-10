@@ -6,6 +6,7 @@ import { IoMdStar, IoMdStarHalf, IoMdStarOutline } from "react-icons/io";
 
 import { TiTickOutline } from "react-icons/ti";
 import { adminApproveReviews, adminRemoveRating, findlyReviews } from '@/lib/store/features/actions/adminActions';
+import Image from "next/image";
 export const Ratings=()=> {
     const dispatch=useAppDispatch()
     const reviews=useAppSelector((state)=>state.admin.reviews)
@@ -41,11 +42,11 @@ console.log("result",result);
   return (
     <div>
       {reviews.map((item) => {
-        const rating = item.starsRating;
+        const rating = typeof item.starsRating === 'number' ? item.starsRating : parseFloat(item.starsRating) || 0;
         const fullStars = Math.floor(rating);
-        const halfStars = rating % 1 !== 0 ? 1 : 0;
+        const halfStars = rating % 1 >= 0.5 ? 1 : 0;
         const emptyStars = 5 - fullStars - halfStars;
-
+       
         return (
           <article
             key={item._id}
@@ -53,10 +54,12 @@ console.log("result",result);
           >
             <div className="flex items-start justify-between mb-4">
               <div className="flex items-center">
-                <img
+                <Image
                   className="w-10 h-10 me-4 rounded-full"
-                  src={item.userId?.profileImage}
+                  src={item.userId?.profileImage||""}
                   alt="profile image of user"
+                  width={40}
+                  height={40}
                 />
 
                 <div className="font-medium">

@@ -4,7 +4,7 @@ import {
   fetchCompanies,
   handleBlock,
 } from "@/lib/store/features/actions/adminActions";
-
+import Image from "next/image";
 import { useAppDispatch, useAppSelector } from "@/lib/store/hooks";
 
 import { useRouter } from "next/navigation";
@@ -16,29 +16,25 @@ const Companies = () => {
   const companies = useAppSelector((state) => state.admin.companies);
   const router = useRouter();
   const [currentPage, setCurrentPage] = useState(1);
-  const companiesPerPage = 4
+  const companiesPerPage = 4;
   useEffect(() => {
     listCompanies();
   }, []);
-
-  console.log("companies", companies);
 
   const listCompanies = () => {
     dispatch(fetchCompanies());
   };
 
-  const unblockAndBlock =async (id: string) => {
-    const result =await dispatch(handleBlock(id));
+  const unblockAndBlock = async (id: string) => {
+    const result = await dispatch(handleBlock(id));
 
-    console.log("result", result);
     if (handleBlock.fulfilled.match(result)) {
       console.log("Company status updated:", result.payload);
-      listCompanies(); 
+      listCompanies();
     } else if (handleBlock.rejected.match(result)) {
       console.error("Failed to update company status:", result.payload);
-      listCompanies(); 
+      listCompanies();
     }
-   
   };
 
   const indexOfLastCompany = currentPage * companiesPerPage;
@@ -49,7 +45,6 @@ const Companies = () => {
   );
   const totalPages = Math.ceil(companies.length / companiesPerPage);
 
-  // Handlers for Pagination
   const handleNextPage = () => {
     if (currentPage < totalPages) setCurrentPage(currentPage + 1);
   };
@@ -57,7 +52,6 @@ const Companies = () => {
   const handlePreviousPage = () => {
     if (currentPage > 1) setCurrentPage(currentPage - 1);
   };
-
 
   return (
     <div className="flex flex-col">
@@ -86,8 +80,8 @@ const Companies = () => {
                   >
                     <td className="p-5 text-sm text-gray-900">
                       <div className="flex items-center gap-3">
-                        <img
-                          src={user.logo || "ass"}
+                        <Image
+                          src={user.logo || ""}
                           height={30}
                           width={30}
                           alt={user.name}
@@ -127,7 +121,6 @@ const Companies = () => {
               </tbody>
             </table>
 
-            {/* Pagination */}
             <div className="flex justify-center mt-4 space-x-2">
               <button
                 className="px-3 py-1 border rounded-md bg-gray-200 disabled:opacity-50"
