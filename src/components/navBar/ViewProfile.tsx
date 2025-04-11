@@ -13,7 +13,7 @@ export const ViewProfile = () => {
 
   const { activeuser } = useAppSelector((state) => state.user);
   const route = activeuser ? "user" : "company";
-  const aboutText = activeuser?.about ?? "Tell me about yourself...";
+  const aboutText = activeuser?.about ?? "Tell about yourself...";
 
   const [isExpanded, setIsExpanded] = useState(false);
   const [connections, setConnections] = useState<Connection[]>([]);

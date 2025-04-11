@@ -1,5 +1,6 @@
 "use client";
 
+import { Job } from "@/types/Types";
 import api from "@/utils/api";
 import { useRouter } from "next/navigation";
 import React, { useEffect, useState } from "react";
@@ -7,7 +8,7 @@ import React, { useEffect, useState } from "react";
 export const MyJobPosts = () => {
   const [currentPage, setCurrentPage] = useState(1);
   const jobsPerPage = 3
- const[jobs,setJobs]=useState([])
+ const[jobs,setJobs]=useState<Job[]>([])
 
 const route = useRouter()
   const totalPages = Math.ceil(jobs.length / jobsPerPage);
@@ -48,7 +49,7 @@ const route = useRouter()
           <div className="text-right">
             <p className="text-lg font-semibold">{job.salary.min}-{job.salary.max}</p>
             <button className="mt-2 px-4 py-2 bg-primary text-white rounded "
-            onClick={()=>route.push(`/company/jobs/${job._id}`)}>
+            onClick={()=>route.push(`/company/jobs/details/${job._id}`)}>
               Details
             </button>
           </div>

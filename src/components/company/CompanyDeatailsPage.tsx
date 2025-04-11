@@ -1,7 +1,5 @@
 
 "use client"
-
-import { companyData } from "@/lib/store/features/companyslice";
 import { useAppDispatch, useAppSelector } from "@/lib/store/hooks";
 import { FcRating } from "react-icons/fc";
 import { Star } from "lucide-react";
@@ -12,7 +10,7 @@ import React, { useEffect, useState } from "react";
 import { FaStar, FaEnvelope, FaPhone, FaGlobe, FaFacebook, FaInstagram, FaLinkedin, FaTwitter } from "react-icons/fa";
 import OutsideClickHandler from "react-outside-click-handler";
 import { MdDelete } from "react-icons/md";
-import { Rating } from "@/types/Types";
+import { Company, Rating, User } from "@/types/Types";
 import { addReview, deleteReview } from "@/lib/store/features/actions/companyActions";
   export interface ReviewInput {
   review: string;
@@ -23,9 +21,9 @@ import { addReview, deleteReview } from "@/lib/store/features/actions/companyAct
 const CompanyProfile = ({ id }: { id: string }) => {
   const activeuser=useAppSelector((state)=>state.user.activeuser)
     const [showModal,setShowModal]=useState(false)
-    const [review,setReview]=useState<companyData[]>([])
-    const [companyProfile,setCompanyDetails]=useState<companyData>()
-    const activeCompany = useAppSelector((state) => state.companyLogin.activeCompany)
+    const [review,setReview]=useState<Rating[]>([])
+    const [companyProfile,setCompanyDetails]=useState<Company>()
+    const activeCompany = useAppSelector((state) => state.companyLogin.activeCompany )
     const activeUser=useAppSelector((state)=>state.user.activeuser)
 const active=activeCompany||activeUser
 
@@ -104,7 +102,7 @@ const handleChange=(e:React.ChangeEvent<HTMLInputElement|HTMLTextAreaElement>)=>
     ))
 }
 
-console.log("rewies",rewies);
+console.log("companyProfile",companyProfile);
 
 
   
@@ -172,6 +170,8 @@ console.log("rewies",rewies);
   ];
 
   const handleFollow=async(companyid:string)=>{
+    console.log("companyid",companyid);
+    
     const response=await api.post(`/company/follow/${companyid}`)
     console.log("response of follow",response);
     findCompany()
@@ -220,7 +220,7 @@ console.log("rewies",rewies);
             className=" w-56 h-56 object-cover"
           />
           <br></br>
-          {activeUser && (
+          {activeUser && companyProfile?._id &&  (
   companyProfile?.followers?.includes(activeUser?._id) ? (
     <button
       onClick={() => handleFollow(companyProfile?._id)}
@@ -317,7 +317,7 @@ console.log("rewies",rewies);
               companyProfile.employees.map((user, index) => {
                 console.log("user",user);
                 
-             return  <li className="text-primary" key={index}>{user?.employee?.firstName} - {user.position}</li>
+             return  <li className="text-primary" key={index}>{user?.employee} - {user.position}</li>
             })
             ) : (
               <li>Write employees of your company...</li>
@@ -399,7 +399,7 @@ console.log("rewies",rewies);
                   </div>}
              
                    <p className="font-semibold"> {rev?.name || rev?.companyId?.name || rev?.userId?.firstName}</p>
-                   <span>{rev?.email || rev?.companyId?.emial || rev?.userId?.email}</span>
+                   <span>{rev?.email || rev?.companyId?.email || rev?.userId?.email}</span>
                    
                    <div className="flex items-center text-yellow-500">
                {Array.from({ length: 5 }, (_, index) => (

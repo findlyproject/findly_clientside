@@ -8,6 +8,7 @@ export type InputChangeEvent = React.ChangeEvent<HTMLInputElement>;
 export type formChangeEvent=React.FormEvent<HTMLFormElement>
 export type ChangeEventType = React.ChangeEvent<HTMLInputElement | HTMLSelectElement|HTMLTextAreaElement>;
 export type MouseEventType=React.MouseEvent<HTMLButtonElement>
+export type KeyDownEventType = React.KeyboardEvent<HTMLInputElement >;
 
 export interface EducationType {  
   college: string;  
@@ -110,6 +111,7 @@ _id:string
 
 }
 export interface User{
+  
   firstName: string;
   lastName: string;
   email: string;
@@ -158,7 +160,7 @@ export interface User{
   subscriptionStartDate: Date | null;
   coverLetter?: string;
   isBlocked?: boolean;
-  _id: string;
+  _id?: string;
 }
 
 
@@ -193,7 +195,7 @@ export interface Company {
   cpassword:string;
   followers?:User[]
   banner?: string;
-  foundedAt: Date;
+  foundedAt: string;
   employees: {
     _id:string;
     employee: string;  
@@ -300,7 +302,14 @@ export interface Rating {
   starsRating: number;
   name:string;
   email:string
+  companyId:{
+     name:string;
+     _id:string
+     email:string
+  };
   userId: {
+    email:string
+    _id:string;
     firstName: string;
     lastName: string;
     profileImage?: string; 
