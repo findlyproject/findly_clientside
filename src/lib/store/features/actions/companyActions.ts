@@ -255,10 +255,11 @@ export const loginCompany=createAsyncThunk(
         return data;
       }
     );
-
+    type AboutFormValues = { about: string };
     export const editProfile = createAsyncThunk(
+      
       "edit/profile",
-      async ({companyId,values}:{companyId?:string,values:Company},{ dispatch,rejectWithValue } ) => {
+      async ({companyId,values}:{companyId?:string,values:AboutFormValues},{ dispatch,rejectWithValue } ) => {
 
         const response = await handleAsync(() => api.patch(
           `/company/edit/${companyId}`,
@@ -277,7 +278,7 @@ export const loginCompany=createAsyncThunk(
 
     export const editContact = createAsyncThunk(
       "edit/contact",
-      async ({companyId,values}:{companyId?:string,values:Company},{ dispatch,rejectWithValue } ) => {
+      async ({companyId,values}:{companyId?:string,values: Partial<Company>},{ dispatch,rejectWithValue } ) => {
 
         const response = await handleAsync(() => api.patch(
           `/company/editcontact/${companyId}`,
@@ -297,18 +298,40 @@ export const loginCompany=createAsyncThunk(
 
     export const editEmployee = createAsyncThunk(
       "edit/employee",
-      async ({companyId,values}:{companyId?:string,values:Company},{ dispatch,rejectWithValue } ) => {
+      async ({companyId,positions}:{companyId?:string,positions:Company},{ dispatch,rejectWithValue } ) => {
 
         const response = await handleAsync(() => api.patch(
           `/company/editemployee/${companyId}`,
-        {employees:values}
+        {employees:positions}
         ));
     
         if (!response || !response.data) {
           return rejectWithValue("delete job failed.");
         }
         const data=response.data.company
-        console.log("datacontact",data);
+        console.log("daitaaa",data);
+        console.log("responsedaitaiai",response);
+        
+        dispatch(setActiveCompany(data));
+        return data;
+      }
+    );
+
+    export const removeeditEmployee = createAsyncThunk(
+      "edit/employee/remove",
+      async ({companyId,email}:{companyId?:string,email:string},{dispatch, rejectWithValue } ) => {
+
+        const response = await handleAsync(() => api.patch(
+          `/company/removeemployee/${companyId}`,
+        {email:email}
+        ));
+    
+        if (!response || !response.data) {
+          return rejectWithValue("delete job failed.");
+        }
+        const data=response.data.company
+        console.log("daitaaa",data);
+        console.log("responsedaitaiai",response);
         
         dispatch(setActiveCompany(data));
         return data;
@@ -361,7 +384,7 @@ export const loginCompany=createAsyncThunk(
 
     export const editService = createAsyncThunk(
       "edit/service",
-      async ({companyId,services}:{companyId?:string,services:Company},{ dispatch,rejectWithValue } ) => {
+      async ({companyId,services}:{companyId?:string,services:string[]},{ dispatch,rejectWithValue } ) => {
 
         const response = await handleAsync(() => api.patch(
           `/company/editservices/${companyId}`,

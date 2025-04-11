@@ -1,12 +1,25 @@
 import Image from 'next/image'
 import React from 'react'
 import { MdAddIcCall } from "react-icons/md";
-import { FaPencilAlt } from 'react-icons/fa'
-import { MdOutlineEmail } from 'react-icons/md'
-import { Spinner } from "@material-tailwind/react";
+import { Spinner } from "flowbite-react";
 import { FaCloudUploadAlt } from "react-icons/fa";
+import { Company } from '@/types/Types';
 
-const HeaderProfile: React.FC = ({ handlebannerUpload,loading,handleUpload,activecompany,selectedFile,handleFileChange,bannerPreview,handleBannerChange,selectedBanner,preview}) => {
+
+interface HeaderProfileProps {
+  handlebannerUpload: () => void;
+  loading: boolean;
+  handleUpload: () => void;
+  activecompany: Company|null
+  selectedFile: File | null;
+  handleFileChange: (event: React.ChangeEvent<HTMLInputElement>) => void;
+  bannerPreview: string | null;
+  handleBannerChange: (event: React.ChangeEvent<HTMLInputElement>) => void;
+  selectedBanner: File | null;
+  preview: string | null;
+}
+
+const HeaderProfile: React.FC<HeaderProfileProps>= ({ handlebannerUpload,loading,handleUpload,activecompany,selectedFile,handleFileChange,bannerPreview,handleBannerChange,selectedBanner,preview}) => {
   return (
 
     <div>
@@ -22,7 +35,7 @@ const HeaderProfile: React.FC = ({ handlebannerUpload,loading,handleUpload,activ
           }}
       >
       <Image
-        src={bannerPreview}
+        src={bannerPreview||""}
         alt="Banner"
         layout="fill"
         objectFit="cover"
@@ -72,7 +85,7 @@ const HeaderProfile: React.FC = ({ handlebannerUpload,loading,handleUpload,activ
       }}
      className="absolute  bottom-[-40px] left-6 w-24 h-24 rounded-full overflow-hidden border-4 border-white shadow-lg">
         <Image
-          src={preview}
+          src={preview||""}
           alt="Profile"
           width={96}
           height={96}

@@ -72,22 +72,22 @@ export default {
   },
 
 
-  plugins: [
-    require("tailwindcss-animate"),
-    function ({ addUtilities }) {
-      addUtilities({
-        ".scrollbar-hidden": {
-          "-ms-overflow-style": "none" ,
-          "scrollbar-width": "none" 
-        },
-        ".scrollbar-hidden::-webkit-scrollbar": {
-          display: "none" ,
-        },
-      });
-    },
+//   plugins: [
+//     require("tailwindcss-animate"),
+//     function ({ addUtilities }) {
+//       addUtilities({
+//         ".scrollbar-hidden": {
+//           "-ms-overflow-style": "none" ,
+//           "scrollbar-width": "none" 
+//         },
+//         ".scrollbar-hidden::-webkit-scrollbar": {
+//           display: "none" ,
+//         },
+//       });
+//     },
 	
 
-  ],
+//   ],
 } satisfies Config;
 
 //This plugin adds each Tailwind color as a global CSS variable, e.g. var(--gray-200).
