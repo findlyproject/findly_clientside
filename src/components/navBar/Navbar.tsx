@@ -11,40 +11,33 @@ import { logoutUser } from "@/lib/store/features/actions/userActions";
 import Image from "next/image";
 import { InputChangeEvent } from "@/types/Types";
 
-
 function Navbar() {
-
   const pathname = usePathname();
   const router = useRouter();
   const dispatch = useAppDispatch();
-
   const { activeuser } = useAppSelector((state) => state.user);
   const { activeCompany } = useAppSelector((state) => state.companyLogin);
-
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
   const [searchQuery, setSearchQuery] = useState("");
   const [searchResults, setSearchResults] = useState<User[]>([]);
- 
-    const route=activeCompany?"company":"user"
-    
-    useEffect(() => {
-      if (searchQuery.length > 0) {
-        const fetchUsers = async () => {
-         
-            const response = await api.get(
-              `/user/usersearch?firstName=${searchQuery}`
-            );
-  
-            setSearchResults(response.data.results);
-          
-        };
-  
-        fetchUsers();
-      } else {
-        setSearchResults([]);
-      }
-    }, [searchQuery]);
+  const route = activeCompany ? "company" : "user";
+
+  useEffect(() => {
+    if (searchQuery.length > 0) {
+      const fetchUsers = async () => {
+        const response = await api.get(
+          `/user/usersearch?firstName=${searchQuery}`
+        );
+
+        setSearchResults(response.data.results);
+      };
+
+      fetchUsers();
+    } else {
+      setSearchResults([]);
+    }
+  }, [searchQuery]);
 
   const handleSearchChange = (e: InputChangeEvent) => {
     setSearchQuery(e.target.value);
@@ -58,8 +51,7 @@ function Navbar() {
     // signOut()
     router.replace("/");
   };
-  
-  
+
   return (
     <header className="w-full  ">
       {activeuser || activeCompany ? (
@@ -76,7 +68,7 @@ function Navbar() {
               <div className="hidden xl:flex md:space-x-2 space-x-4">
                 <Link
                   href="/"
-                  className="home  text-primary flex items-center hover:bg-primary hover:bg-opacity-20 justify-center px-3 py-2 rounded-lg" 
+                  className="home  text-primary flex items-center hover:bg-primary hover:bg-opacity-20 justify-center px-3 py-2 rounded-lg"
                 >
                   Home
                 </Link>
@@ -84,7 +76,6 @@ function Navbar() {
                   <Link
                     href="/user/jobs"
                     className=" text-primary flex items-center hover:bg-primary hover:bg-opacity-20 justify-center px-3 py-2 rounded-lg "
-
                   >
                     Jobs
                   </Link>
@@ -92,7 +83,6 @@ function Navbar() {
                   <Link
                     href="/company/candidatelist"
                     className=" text-primary flex items-center hover:bg-primary hover:bg-opacity-20 justify-center px-3 py-2 rounded-lg "
-                      
                   >
                     CandidateList
                   </Link>
@@ -100,7 +90,6 @@ function Navbar() {
                 <Link
                   href="/contactus"
                   className=" text-primary flex items-center hover:bg-primary hover:bg-opacity-20 justify-center px-3 py-2 rounded-lg "
-
                 >
                   Contact
                 </Link>
@@ -159,43 +148,47 @@ function Navbar() {
               {searchQuery && searchResults?.length > 0 && (
                 <div className="absolute top-full left-0 mt-2 w-full max-h-60 overflow-y-auto border  border-gray-300 bg-white p-4 rounded-lg shadow-md  ">
                   <ul className="mt-2 space-y-2 ">
-                  {searchResults.map((item) => (
-                    
-                   
-        <li
-          key={item._id}
-          className="cursor-pointer flex items-center gap-2 pl-4 hover:bg-primary hover:bg-opacity-20 rounded-full"
-        
-          onClick={() =>
-            router.push(
-              item._id === activeuser?._id
-                ? `/${route}/profile`
-                :item._id===activeCompany?._id
-                ?`/${route}/profile`
-
-                : `/${route}/${item._id}/${item.type}`
-            )
-          }
-          
-          
-        >
-          <Image
-            width={100}
-            height={100}
-            src={item.type === "User" 
-              ? item.profileImage ?? "https://res.cloudinary.com/dq1auwpkm/image/upload/v1738735360/profile_jtwxaj.png" 
-              : item.logo ?? "https://res.cloudinary.com/dq1auwpkm/image/upload/v1738735360/profile_jtwxaj.png"} 
-            alt={item.type === "User" ? `${item.firstName} ${item.lastName}` : item.name}
-            className="w-7 h-7 rounded-full"
-          />
-          <div>
-            <p className="text-sm font-semibold">
-              {item.type === "User" ? `${item.firstName} ${item.lastName}` : item.name}
-            </p>
-            <p className="text-sm text-gray-500">{item.email}</p>
-          </div>
-        </li>
-      ))}
+                    {searchResults.map((item) => (
+                      <li
+                        key={item._id}
+                        className="cursor-pointer flex items-center gap-2 pl-4 hover:bg-primary hover:bg-opacity-20 rounded-full"
+                        onClick={() =>
+                          router.push(
+                            item._id === activeuser?._id
+                              ? `/${route}/profile`
+                              : item._id === activeCompany?._id
+                              ? `/${route}/profile`
+                              : `/${route}/${item._id}/${item.type}`
+                          )
+                        }
+                      >
+                        <Image
+                          width={100}
+                          height={100}
+                          src={
+                            item.type === "User"
+                              ? item.profileImage ??
+                                "https://res.cloudinary.com/dq1auwpkm/image/upload/v1738735360/profile_jtwxaj.png"
+                              : item.logo ??
+                                "https://res.cloudinary.com/dq1auwpkm/image/upload/v1738735360/profile_jtwxaj.png"
+                          }
+                          alt={
+                            item.type === "User"
+                              ? `${item.firstName} ${item.lastName}`
+                              : item.name
+                          }
+                          className="w-7 h-7 rounded-full"
+                        />
+                        <div>
+                          <p className="text-sm font-semibold">
+                            {item.type === "User"
+                              ? `${item.firstName} ${item.lastName}`
+                              : item.name}
+                          </p>
+                          <p className="text-sm text-gray-500">{item.email}</p>
+                        </div>
+                      </li>
+                    ))}
                   </ul>
                 </div>
               )}
@@ -203,11 +196,10 @@ function Navbar() {
 
             {/* Right Section */}
             <div className="right flex items-center lg:space-x-4 justify-end">
-              <div  onMouseLeave={() => setIsMenuOpen(false)}>
+              <div onMouseLeave={() => setIsMenuOpen(false)}>
                 <div
                   className="xl:hidden md:ml-10 flex items-center"
                   onMouseEnter={() => setIsMenuOpen(true)}
-                
                 >
                   <svg
                     xmlns="http://www.w3.org/2000/svg"
@@ -237,8 +229,7 @@ function Navbar() {
                     </Link>
                     {activeuser ? (
                       <Link
-                    href="/user/jobs"
-                       
+                        href="/user/jobs"
                         className="block font-montserrat px-4 py-2 rounded-full"
                         onClick={() => {
                           setIsMenuOpen(false);
@@ -279,7 +270,7 @@ function Navbar() {
                   </div>
                 )}
               </div>
-              
+
               <Link
                 href="/community"
                 className="hidden  items w-10 h-10 sm:w-12 sm:h-12 rounded-full md:flex items-center justify-center hover:bg-gray-200"
@@ -311,7 +302,7 @@ function Navbar() {
                       <Image
                         width={100}
                         height={100}
-                        src={activeuser?.profileImage }
+                        src={activeuser?.profileImage}
                         alt="User Profile"
                         className="w-full h-full object-cover"
                       />
@@ -319,11 +310,11 @@ function Navbar() {
                       <Image
                         width={100}
                         height={100}
-                        src={activeCompany?.logo }
+                        src={activeCompany?.logo}
                         alt="User Profile"
                         className="w-full h-full object-cover"
                       />
-                    ):(
+                    ) : (
                       <div className="bg-gray-200 flex items-center justify-center w-full h-full text-lg text-black">
                         {activeuser?.firstName
                           ? activeuser?.firstName[0].toUpperCase()
@@ -341,15 +332,19 @@ function Navbar() {
                     className="absolute top-full right-0  w-64 bg-white shadow-lg rounded-lg p-2 "
                   >
                     <div className="py-2">
-                      <p className="px-4 text-xs text-gray-500">Your accounts</p>
+                      <p className="px-4 text-xs text-gray-500">
+                        Your accounts
+                      </p>
                       <button
-  className="block w-full text-left px-4 py-2 text-sm hover:bg-gray-100"
-  onClick={() => router.push(activeuser ? "/user/profile" : "/company/profile")}
->
+                        className="block w-full text-left px-4 py-2 text-sm hover:bg-gray-100"
+                        onClick={() =>
+                          router.push(
+                            activeuser ? "/user/profile" : "/company/profile"
+                          )
+                        }
+                      >
                         Profile
                       </button>
-                      
-                     
                     </div>
 
                     <div className="py-3">
@@ -372,7 +367,7 @@ function Navbar() {
                       >
                         Settings
                       </button>
-                     
+
                       <button
                         className="block w-full text-left px-4 py-2 text-sm hover:bg-gray-100"
                         onClick={handleLogout}
@@ -468,8 +463,6 @@ function Navbar() {
           </nav>
         </>
       )}
-      
-      
     </header>
   );
 }
