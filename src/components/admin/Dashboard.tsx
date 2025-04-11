@@ -12,12 +12,13 @@ import {
   ResponsiveContainer,
 } from "recharts";
 import api from "@/utils/api";
-import { Company, DailyRevenueType, User } from "@/types/Types";
+import { BarData, Company, DailyRevenueType, RevenueItem, User } from "@/types/Types";
 import { useAppDispatch, useAppSelector } from "@/lib/store/hooks";
 import { fetchCompanies } from "@/lib/store/features/actions/adminActions";
 
+
 const Dashboard: React.FC = () => {
-  const [barData, setBardata] = useState([]);
+  const [barData, setBardata] = useState<BarData[]>([]);
   const [activecompany, setActiveCompany] = useState(0);
   const [activeusers, setActiveusers] = useState(0);
   const [premiumusers, setPremiumUsers] = useState(0);
@@ -39,8 +40,6 @@ const Dashboard: React.FC = () => {
 
   console.log("users", users.length);
   console.log("premiumusers", premiumusers);
-  const [chartData, setChartData] = useState({});
-  const [chartOptions, setChartOptions] = useState({});
 
   const [dailyUser, setDailyUser] = useState(0);
   const [aboutUser, setaboutUser] = useState<User[]>([]);
@@ -50,8 +49,8 @@ const Dashboard: React.FC = () => {
   const [totalRevenue, setTotalRevenue] = useState(0);
 
   const [daily, setDaily] = useState<DailyRevenueType[]>([]);
-  const x1Labels = daily?.map((item) => item.day) || [];
-  const dailyData = daily?.map((item) => item.revenue) || [];
+  // const x1Labels = daily?.map((item) => item.day) || [];
+  // const dailyData = daily?.map((item) => item.revenue) || [];
   const [company, setCompany] = useState<DailyRevenueType[]>([]);
 
   const companydata = company?.map((item) => item.revenue || []);
@@ -61,7 +60,7 @@ const Dashboard: React.FC = () => {
     const fetch = async () => {
       const companies = await api.get("admin/companies");
       setActiveCompany(companies.data.activeCompaniesCount);
-      // setPremiumCompanies(companies.data.premiumCompaniesCount)
+
       const users = await api.get(`/admin/users`);
       setActiveusers(users.data.activeUsersCount);
 
@@ -92,8 +91,8 @@ const Dashboard: React.FC = () => {
       setCompany(companyrevenue.data.dailyRevenue || []);
 
       const barresponse = await api.get(`/admin/sevendays`);
-      const apiData = barresponse.data.data;
 
+      const apiData: RevenueItem[] = barresponse.data.data;
       const formattedData = apiData.map((item) => ({
         date: item.day,
         Revenue: item.revenue,
@@ -118,7 +117,11 @@ const Dashboard: React.FC = () => {
 
   const pieData = [
     { name: "Users", value: Math.round(userPercentage), color: "#ba99cf" },
-    { name: "Companies", value:  Math.round(companyPercentage), color: "#945eb5" },
+    {
+      name: "Companies",
+      value: Math.round(companyPercentage),
+      color: "#945eb5",
+    },
     {
       name: "Premium Clients",
       value: Math.round(premuimPercentage),
@@ -471,12 +474,7 @@ const Dashboard: React.FC = () => {
         </div>
       </div>
 
-      {/* <div className="card">
-        <Chart type="line" data={chartData} options={chartOptions} />
-      </div> */}
-
       <div className="p-4 grid grid-cols-1 md:grid-cols-2 gap-4">
-       
         <div className="bg-white rounded-lg shadow-md p-4">
           <div className="flex justify-between items-center mb-2">
             <h3 className="font-semibold text-lg">Latest Sales</h3>
@@ -511,7 +509,6 @@ const Dashboard: React.FC = () => {
           </div>
         </div>
 
-      
         <div className="bg-white rounded-lg shadow-md p-4">
           <h3 className="font-semibold text-lg mb-4">Users</h3>
           <ResponsiveContainer width="100%" height={250}>

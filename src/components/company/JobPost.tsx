@@ -1,6 +1,7 @@
 "use client";
 import { postJobs } from "@/lib/store/features/actions/companyActions";
 import { useAppDispatch } from "@/lib/store/hooks";
+import { ChangeEventType, JobPosting, KeyDownEventType } from "@/types/Types";
 import api from "@/utils/api";
 import { ErrorMessage, Field, Form, Formik } from "formik";
 import { useRouter } from "next/navigation";
@@ -85,7 +86,7 @@ export const JobPost = () => {
     }
   };
 
-  const handleSubmit = async (values) => {
+  const handleSubmit = async (values:JobPosting) => {
     values.requirements = requirement;
     values.benefits = benefit;
     values.jobResponsibilities = responsible;
@@ -97,7 +98,7 @@ export const JobPost = () => {
 
     if (result.type === "post/job/fulfilled") {
       console.log("resu", result);
-
+         toast.success("job posted");
       router.push("/company/posts/jobs")
 
     }
@@ -112,22 +113,22 @@ export const JobPost = () => {
     <div className="max-w-screen-2x1 container pt-48 mx-auto xl">
       {/* form */}
       <div className=" bg-[#FAFAFA] py-10 px-4 lg:px-16">
-        <Formik
+        <Formik 
           initialValues={{
             title: "",
             industry: "",
             jobType: "",
-            salary: { rate: "", min: "", max: "" },
+            salary: { rate: "", min: 0, max: 0 },
             experienceLevel: "",
             location: "",
             applicationDeadline: "",
             qualification: "",
-            jobResponsibilities: "",
+            jobResponsibilities: [],
             description: "",
             requirements: [],
             contactEmail: "",
             contactPhone: "",
-            benefits: ""
+            benefits: []
           }}
           validationSchema={validationSchema}
           onSubmit={handleSubmit}
@@ -302,6 +303,8 @@ export const JobPost = () => {
                   />
                 </div>
               </div>
+
+
               {/* 5th row */}
               <div className="flex flex-col lg:flex-row items-start justify-between gap-8">
                 {/* Requirements Section */}
@@ -311,8 +314,8 @@ export const JobPost = () => {
                     type="text"
                     name="requirements"
                     value={requirementInput}
-                    onChange={(e) => setRequirementInput(e.target.value)}
-                    onKeyDown={(e) =>
+                    onChange={(e:ChangeEventType) => setRequirementInput(e.target.value)}
+                    onKeyDown={(e:KeyDownEventType) =>
                       handleKeyDown(
                         e, requirementInput, setRequirementInput, setRequirement, values, setFieldValue, "requirements"
 
@@ -363,11 +366,9 @@ export const JobPost = () => {
                     type="text"
                     value={benefitInput}
                     name="benefits"
-                    onChange={(e) => setBenefitInput(e.target.value)}
-                    onKeyDown={(e) =>
-                      handleKeyDown(
-                        e, benefitInput, setBenefitInput, setBenefit, values, setFieldValue, "benefit"
-                      )
+                    onChange={(e:ChangeEventType) => setBenefitInput(e.target.value)}
+                    onKeyDown={(e:KeyDownEventType) =>
+                      handleKeyDown(e, benefitInput, setBenefitInput, setBenefit, values, setFieldValue, "benefits")
                     }
                     placeholder="Type a benefit and press Enter"
                     className="block w-full  bg-white border border-gray-300 rounded-md py-2 px-3 text-gray-900 focus:outline-none focus:ring-2 focus:ring-primary sm:text-sm"
@@ -418,10 +419,10 @@ export const JobPost = () => {
                     as="textarea"
                     rows={2}
                     value={responsibleInput}
-                    onChange={(e) => setResponsibleInput(e.target.value)}
-                    onKeyDown={(e) =>
+                    onChange={(e:ChangeEventType) => setResponsibleInput(e.target.value)}
+                    onKeyDown={(e:KeyDownEventType) =>
                       handleKeyDown(
-                        e, responsibleInput, setResponsibleInput, setResponsible, values, setFieldValue, "responsible"
+                        e, responsibleInput, setResponsibleInput, setResponsible, values, setFieldValue, "jobResponsibilities"
                       )
                     }
                     name="jobResponsibilities"
@@ -462,6 +463,11 @@ export const JobPost = () => {
                     )}
                   </div>
                 </div>
+
+
+
+
+
                 <div className="lg:w-1/2 w-full">
                   <label className="block mb-2 text-lg">Job Description</label>
                   <Field

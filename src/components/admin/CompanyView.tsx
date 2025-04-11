@@ -7,6 +7,7 @@ import Link from "next/link";
 import { Company } from "@/types/Types";
 import { CiLocationOn, CiMail } from "react-icons/ci";
 import { LuPhone } from "react-icons/lu";
+import Image from "next/image";
 function CompanyView() {
   const { id } = useParams();
   const [company, setCompany] = useState<Company | null>(null);
@@ -14,7 +15,7 @@ function CompanyView() {
   useEffect(() => {
     const fetchCompany = async () => {
       const response = await api.get(`/admin/company/${id}`);
-      console.log("response,,,,,,,,,", response);
+      
 
       setCompany(response.data.findCompanyprofile);
     };
@@ -65,7 +66,7 @@ function CompanyView() {
         <div className="max-w-5xl mx-auto bg-white shadow-lg rounded-xl p-10 grid grid-cols-1 md:grid-cols-3 gap-6 mt-10">
           <div className="space-y-4 text-center md:text-left">
             <div className="flex flex-col items-center space-y-3">
-              <img
+              <Image
                 src={company?.logo || ""}
                 alt="Profile"
                 className="w-32 h-32 rounded-full object-cover border-2 border-gray-300"

@@ -1,4 +1,4 @@
-import { companyData } from "@/lib/store/features/companyslice";
+// import { companyData } from "@/lib/store/features/companyslice";
 import { IoMdCloseCircle } from "react-icons/io";
 import { Button, Card } from "flowbite-react";
 import { RiMoneyRupeeCircleFill } from "react-icons/ri";
@@ -17,29 +17,21 @@ import { Spinner } from "@material-tailwind/react";
 import api from "@/utils/api";
 import { useAppDispatch } from "@/lib/store/hooks";
 import { deleteJob, editJobDeadline } from "@/lib/store/features/actions/companyActions";
+import { ChangeEventType, Company, Job } from "@/types/Types";
 
 export interface modalProps {
   isOpen: boolean;
   setIsOpen: (open: boolean) => void;
   setCurrentPage: (page: number) => void;
   currentPage: number;
-  jobs: {
-    _id: string;
-    title: string;
-    company: companyData;
-    location: string;
-    salary: { rate: string; min: number; max: number };
-    jobType: string;
-    applicationDeadline: string;
-    experienceLevel: string;
-    createdAt: string;
-    isDelete: boolean
-  }[];
+
+  jobs:Job[]
   isDelete: boolean
   _id: string;
 
   findJobPsts: (value: number) => void,
   setJobs: React.Dispatch<React.SetStateAction<modalProps["jobs"]>>;
+
 }
 
 
@@ -75,7 +67,7 @@ const Modal: React.FC<modalProps> = ({ isOpen, setIsOpen, jobs, setJobs, findJob
     setSelectedJob(job);
 
   };
-  const handleChange = (e) => {
+  const handleChange = (e:ChangeEventType) => {
     setNewDeadline(e.target.value);
   };
   const handleBlur = async () => {

@@ -5,21 +5,19 @@ import { setEmail, setPassword } from "@/lib/store/features/registerSlice";
 import { useAppDispatch } from "@/lib/store/hooks";
 import api from "@/utils/api";
 import Link from "next/link";
+import Image from "next/image";
 
 export const RegisterPage = () => {
   const dispatch = useAppDispatch();
+  const router = useRouter();
   const [Email, setLocalemail] = useState("");
   const [Password, setLocalpassword] = useState("");
   const [ConformPassword, setConformPassword] = useState("");
-
   const [showPassword, setShowPassword] = useState(false);
   const [showConfirmPassword, setShowConfirmPassword] = useState(false);
-
   const [EmailError, setEmailError] = useState("");
   const [PasswordError, setPasswordError] = useState("");
   const [ConformPasswordError, setConformPasswordError] = useState("");
-
-  const router = useRouter();
 
   const validateEmail = (email: string): boolean => {
     const emailRegex = /^[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,}$/;
@@ -33,8 +31,6 @@ export const RegisterPage = () => {
   };
 
   const checkEmailExists = async (email: string) => {
-    console.log("emailll", email);
-
     try {
       const response = await api.get(`/user/all?email=${email}`);
       console.log("response check email", response);
@@ -48,7 +44,6 @@ export const RegisterPage = () => {
 
   const validateForm = async () => {
     let isValid = true;
-    console.log("emaillllllllll", Email);
 
     if (!Email) {
       setEmailError("Email is required.");
@@ -58,7 +53,6 @@ export const RegisterPage = () => {
       isValid = false;
     } else {
       const emailExists = await checkEmailExists(Email);
-      console.log("emailExists", emailExists);
 
       if (emailExists) {
         setEmailError("Email already exists. Please use a different email.");
@@ -267,9 +261,12 @@ export const RegisterPage = () => {
         </div>
 
         <button className="w-full py-2 border-2 border-gray-300 text-gray-800 font-semibold rounded-full hover:bg-gray-100 focus:outline-none focus:ring-2 focus:ring-gray-300 flex items-center justify-center space-x-2">
-          <img
+          <Image
             src="https://static-00.iconduck.com/assets.00/google-icon-2048x2048-czn3g8x8.png"
+            alt="googleimage"
             className="w-5 h-5"
+            width={10}
+            height={10}
           />
           <span>Sign in with Google</span>
         </button>

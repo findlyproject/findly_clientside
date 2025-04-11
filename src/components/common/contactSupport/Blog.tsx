@@ -19,7 +19,7 @@ export default function Blog() {
           {/* Blog Image */}
           <Image
             className="w-full object-cover h-[12rem] md:h-[18rem] aspect-square rounded-lg"
-            src="/public/asstes/aboutimage1.jpg"
+            src="/assets/aboutimage1.jpg"
             alt="career blog image"
             width={30}
             height={30}

@@ -7,22 +7,24 @@ import { useEffect, useRef, useState } from "react";
 import { formatDistanceToNow } from "date-fns";
 import { MdDelete } from "react-icons/md";
 import { FaStar, FaEnvelope, FaPhone, FaGlobe, FaFacebook, FaInstagram, FaLinkedin, FaTwitter } from "react-icons/fa";
-import Modal, { modalProps } from "./JobPostModal";
+import Modal,{ modalProps } from "./JobPostModal";
 import PostModal from "./PostModal";
 import { MdVerified } from "react-icons/md";
-import { FaRegImage } from "react-icons/fa6";
 import { ImProfile } from "react-icons/im";
-import { Spinner } from "@material-tailwind/react";
+// import { Spinner } from "@material-tailwind/react";
+import { Spinner } from "flowbite-react";
 import Image from "next/image";
-import { Company } from "@/types/Types";
+import { Company, Job, Rating } from "@/types/Types";
 import { TiEdit } from "react-icons/ti";
 import { useRouter } from "next/navigation";
 
 const CompanyProfile = () => {
   const [isOpen, setIsOpen] = useState(false);
   const [isOpenPosts, setIsOpenPosts] = useState(false);
-  const [reviews, setReviews] = useState<Company[]>([])
+  const [reviews, setReviews] = useState<Rating[]>([])
   const [jobs, setJobs] = useState<modalProps[]>([])
+ 
+
   const [posts, setPosts] = useState([])
   const [page, setPage] = useState(1)
   const [currentPage, setCurrentPage] = useState<number>(1);
@@ -162,6 +164,10 @@ const router=useRouter()
     
     router.push("/company/profile/edit")
   }
+
+
+  console.log("jobs",jobs);
+  
   return (
     <div className="min-h-screen bg-gray-200 p-10 flex justify-center items-center ">
       <div className="bg-white p-8 rounded-lg shadow-lg w-full max-w-3xl ">
@@ -254,17 +260,16 @@ const router=useRouter()
           <br /> <br />
           <span className="text-lg font-normal">Key Team Members</span>
 
-          <ul className="mb-5">
-            {activeCompany?.employees && activeCompany.employees.length > 0 ? (
-              activeCompany.employees.map((user, index) => {
-                console.log("user", user);
-
-                return <li className="text-primary" key={index}>{user?.employee?.firstName} - {user.position}</li>
+          {/* <ul className="mb-5">
+            {activeCompany?.employees && activeCompany?.employees?.length > 0 ? (
+              activeCompany?.employees.map((user, index) => {
+                
+                return <li className="text-primary" key={index}>{user?.employee} - {user?.position}</li>
               })
             ) : (
               <li>Write employees of your company...</li>
             )}
-          </ul>
+          </ul> */}
         </div>
 
 
@@ -344,6 +349,8 @@ const router=useRouter()
               </span>
             </div>
           )}
+
+
 
           {(hasMore && !loading) && (
             <div className="flex justify-center">

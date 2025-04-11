@@ -1,12 +1,12 @@
 "use client";
+
+import React, { useState, useEffect } from "react";
+import { CiMail, CiLocationOn } from "react-icons/ci";
+import { LuPhone } from "react-icons/lu";
 import { User } from "@/types/Types";
 import api from "@/utils/api";
 import { useParams } from "next/navigation";
-import React, { useState, useEffect } from "react";
-import { CiMail } from "react-icons/ci";
-import { LuPhone } from "react-icons/lu";
-import { CiLocationOn } from "react-icons/ci";
-import { useAppDispatch } from "@/lib/store/hooks";
+
 function UserView() {
   const { id } = useParams();
   const [user, setUser] = useState<User | null>(null);
@@ -14,7 +14,6 @@ function UserView() {
   const fetchUser = async () => {
     try {
       const response = await api.get(`/admin/user/${id}`);
-      console.log("reeeeeee", response);
 
       setUser(response.data.finduserprofile);
     } catch (error) {
@@ -59,7 +58,7 @@ function UserView() {
               </svg>
             </div>
             <span className="text-black text-sm font-normal leading-snug">
-              Loading...
+              Loading... User not Found!!
             </span>
           </div>
         </div>
@@ -97,6 +96,7 @@ function UserView() {
                 <LuPhone className="text-primary" />
                 {user?.phoneNumber}
               </p>
+              
               <p className="flex items-center gap-2">
                 <CiMail className="text-primary" />
                 {user?.email}
