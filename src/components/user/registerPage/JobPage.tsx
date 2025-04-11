@@ -120,7 +120,7 @@ const handleKeyDown =async (e: React.KeyboardEvent<HTMLInputElement>) => {
   if (e.key === "Enter" && inputValue.trim()) {
     e.preventDefault();
     setJobTitles([...JobTitles, inputValue.trim()]);
-    const response=await api.post(`/admin/titlebyuser`,{name:inputValue})
+   await api.post(`/admin/titlebyuser`,{name:inputValue})
     setInputValue("");
   }
 };

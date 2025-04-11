@@ -9,12 +9,11 @@ import { useAppDispatch, useAppSelector } from "@/lib/store/hooks";
 import { Formik, Form, ErrorMessage, Field } from "formik";
 import * as Yup from "yup";
 import { Country, State, City } from "country-state-city";
-import PhoneInput from "react-phone-input-2";
 import "react-phone-input-2/lib/style.css";
 import api from "@/utils/api";
 import { RxCross2 } from "react-icons/rx";
-import { User } from "@/types/Types";
-import { editContact, editEmployee, editProfetional, editProfile, editService, editsocialmedia, uploadBanner, uploadLogo } from "@/lib/store/features/actions/companyActions";
+import { ChangeEventType, Company, MouseEventType, User } from "@/types/Types";
+import { editContact, editEmployee, editProfetional, editProfile, editService, editsocialmedia, removeeditEmployee, uploadBanner, uploadLogo } from "@/lib/store/features/actions/companyActions";
 import HeaderProfile from "./Header";
 import { IoIosSave, IoMdAdd } from "react-icons/io";
 import { Spinner } from "flowbite-react";
@@ -24,7 +23,7 @@ export default function ProfileEdit() {
   const activecompany = useAppSelector(
     (state) => state.companyLogin.activeCompany
   );
-  console.log("activecompany", activecompany);
+
 
   const [selectedFile, setSelectedFile] = useState<File | null>(null);
   const [preview, setPreview] = useState(
@@ -41,15 +40,20 @@ export default function ProfileEdit() {
   const [employees, setEmployees] = useState<User[]>([]);
   const [showDropdown, setShowDropdown] = useState(false);
   const [selectedEmployee, setSelectedEmployee] = useState("");
-  const [positions, setPosition] = useState({
+  const [positions, setPosition] = useState<Company>({
     employee: "",
     position: "",
+
   });
 
-  console.log("positionsadfssssssssssssssssssssssssss",positions);
-  
 
-  const [services, setServices] = useState(activecompany?.services || []);
+  console.log("selectedEmployee", selectedEmployee);
+  console.log("positions", positions);
+
+
+  // const [services, setServices] = useState<Company[]>(activecompany?.services || []);
+  const [services, setServices] = useState<string[]>(activecompany?.services || []);
+
 
   const [serviceInput, setServiceInput] = useState("");
 
@@ -82,30 +86,6 @@ export default function ProfileEdit() {
       .min(1, "At least one service is required"),
   })
 
-  const employeeValidation = Yup.object().shape({
-  employees: Yup.array()
-      .of(
-        Yup.object().shape({
-          employee: Yup.string().required("Employee name is required"),
-          position: Yup.string().required("Position is required"),
-        })
-      )
-      .min(1, "At least one employee is required"),
-  })
-
-  const profetionalValidation = Yup.object().shape({
-    name: Yup.string().required("Company Name is required"),
-    email: Yup.string().required("email is required"),
-    address: Yup.object().shape({
-      landmark: Yup.string().required("Landmark is required"),
-      country: Yup.string().required("Country is required"),
-      state: Yup.string().required("State is required"),
-      city: Yup.string().required("City is required"),
-      pincode: Yup.string()
-        .matches(/^[0-9]{6}$/, "Invalid Pincode")
-        .required("Pincode is required"),
-    }),
-  })
 
   const socialMediaValidation = Yup.object().shape({
     socialMedia: Yup.object().shape({
@@ -118,58 +98,17 @@ export default function ProfileEdit() {
 
   const contactValidation = Yup.object().shape({
     name: Yup.string().required("Company Name is required"),
-    // phoneNumber: Yup.string()
-    // .matches(/^[0-9]+$/, "Phone number must be only digits")
-    // .min(10, "Phone number must be at least 10 digits"),
+
     founder: Yup.string().required("founder is required"),
     email: Yup.string().required("email is required"),
   })
 
   const aboutVlidation = Yup.object().shape({
-    // name: Yup.string().required("Company Name is required"),
-    // contact: Yup.string()
-    //   .matches(/^[0-9]{10}$/, "Invalid mobile number")
-    //   .required("Mobile Number is required"),
+
     about: Yup.string().required("bio is required"),
-    // founder: Yup.string().required("founder is required"),
-    // email: Yup.string().required("email is required"),
-    // foundedAt: Yup.string().required("founded at is required"),
-    // services: Yup.string().required("Services are required"),
 
-    // workHours: Yup.object()
-    //   .shape({
-    //     start: Yup.string().required("Start time is required"),
-    //     end: Yup.string().required("End time is required"),
-    //   })
-    //   .required("Work hours are required"),
-    // socialMedia: Yup.object().shape({
-    //   facebook: Yup.string().url("Invalid Facebook URL"),
-    //   instagram: Yup.string().url("Invalid Instagram URL"),
-    //   twitter: Yup.string().url("Invalid Twitter URL"),
-    //   linkedin: Yup.string().url("Invalid LinkedIn URL"),
-    // }),
-    // employees: Yup.array()
-    //   .of(
-    //     Yup.object().shape({
-    //       employee: Yup.string().required("Employee name is required"),
-    //       position: Yup.string().required("Position is required"),
-    //     })
-    //   )
-    //   .min(1, "At least one employee is required"),
-
-    // IndustryType: Yup.string().required("Industry Type is required"),
-    // address: Yup.object().shape({
-    //   landmark: Yup.string().required("Landmark is required"),
-    //   country: Yup.string().required("Country is required"),
-    //   state: Yup.string().required("State is required"),
-    //   city: Yup.string().required("City is required"),
-    //   pincode: Yup.string()
-    //     .matches(/^[0-9]{6}$/, "Invalid Pincode")
-    //     .required("Pincode is required"),
-    // }),
   });
-  console.log("selectedemployeee", selectedEmployee);
-  console.log("position", positions);
+
 
   const position = [
     { id: 1, name: "Chief Executive Officer" },
@@ -208,23 +147,41 @@ export default function ProfileEdit() {
     { id: 23, name: "Supply Chain & Logistics" },
   ];
 
-  console.log("activecompany", activecompany);
 
 
-  const handleSubmit = async (values: any) => {
-    setLoading(true)
-    const companyId = activecompany?._id
-    const result = await dispatch(editProfile({ companyId, values }))
+
+  // const handleSubmit = async (values:string) => {
+
+
+  //   setLoading(true)
+  //   const companyId = activecompany?._id
+  //   const result = await dispatch(editProfile({ companyId, values }))
+  //   if (result.type === "edit/profile/fulfilled") {
+
+  //     setTimeout(() => {
+  //       setLoading(false)
+  //       setContact(prev => ({ ...prev, stats: false, name: "" }))
+  //     }, 2000)
+  //   }
+  // };
+
+
+  const handleSubmit = async (values: { about: string }) => {
+    setLoading(true);
+    const companyId = activecompany?._id;
+
+    const result = await dispatch(editProfile({ companyId, values }));
+
     if (result.type === "edit/profile/fulfilled") {
-
       setTimeout(() => {
-        setLoading(false)
-        setContact(prev => ({ ...prev, stats: false, name: "" }))
-      }, 2000)
+        setLoading(false);
+        setContact(prev => ({ ...prev, stats: false, name: "" }));
+      }, 2000);
     }
   };
 
-  const handleContactSubmit = async (values: any) => {
+
+  const handleContactSubmit = async (values: Partial<Company>) => {
 
     setLoading(true)
 
@@ -242,7 +199,7 @@ export default function ProfileEdit() {
 
   }
 
-  const handleSocialMediaSubmit = async (values: any) => {
+  const handleSocialMediaSubmit = async (values: Company) => {
 
     console.log("www", values);
 
@@ -255,12 +212,15 @@ export default function ProfileEdit() {
 
   }
 
-  const handleServicesSubmit = async (e) => {
+  const handleServicesSubmit = async () => {
+    console.log("dsfa");
     setLoading(true)
-    e.preventDefault()
+
     const companyId = activecompany?._id
     console.log("serviiiiii", services);
     const result = await dispatch(editService({ companyId, services }))
+    console.log("eeeserveie", result);
+
     if (result.type === "edit/service/fulfilled") {
       console.log("editedcontact", result);
       setTimeout(() => {
@@ -271,16 +231,18 @@ export default function ProfileEdit() {
 
   }
 
-  const handleemployeeSubmit = async (values) => {
+  const handleemployeeSubmit = async (values: Company) => {
     setLoading(true)
+    console.log("inposition ", positions);
 
 
     const companyId = activecompany?._id
 
     console.log("values employeee", values)
-    const result = await dispatch(editEmployee({ companyId, values }))
+    const result = await dispatch(editEmployee({ companyId, positions }))
+    console.log("edit employee", result);
     if (result.type === "edit/employee/fulfilled") {
-      console.log("editedcontact", result);
+
       setTimeout(() => {
         setLoading(false)
         setContact(prev => ({ ...prev, stats: false, name: "" }))
@@ -290,8 +252,31 @@ export default function ProfileEdit() {
 
   }
 
-  
-  const handleProfetionalSubmit = async (values) => {
+
+  const handleRemoveEmployee = async (email: string) => {
+    setLoading(true)
+    console.log("inposition ", positions);
+
+
+    const companyId = activecompany?._id
+
+    console.log("values employeee", email)
+    const result = await dispatch(removeeditEmployee({ companyId, email }))
+    console.log("edit remove", result);
+    if (result.type === " edit/employee/remove") {
+
+      setTimeout(() => {
+        setLoading(false)
+        setContact(prev => ({ ...prev, stats: false, name: "" }))
+      }, 2000)
+
+    }
+
+  }
+
+
+
+  const handleProfetionalSubmit = async (values: Company) => {
     setLoading(true)
     const companyId = activecompany?._id
 
@@ -372,7 +357,7 @@ export default function ProfileEdit() {
     }
   };
 
-  const handleAddService = (event) => {
+  const handleAddService = (event: MouseEventType) => {
     event.stopPropagation();
     if (serviceInput.trim() !== "") {
       setServices((prev) => [...prev, serviceInput]);
@@ -399,39 +384,14 @@ export default function ProfileEdit() {
 
           <Formik
             initialValues={{
-              // name: activecompany?.name || "",
-              // contact: activecompany?.contact,
-              // founder: activecompany?.founder || "",
-              // foundedAt: activecompany?.foundedAt || "",
+
               about: activecompany?.about || "",
-              // email: activecompany?.email || "",
 
-              // workHours: {
-              //   start: activecompany?.workHours?.start || "",
-              //   end: activecompany?.workHours?.end || "",
-              // },
-              // services: [],
-              // IndustryType: activecompany?.IndustryType || "",
-              // address: {
-              //   landmark: activecompany?.address.landmark || "",
-              //   country: activecompany?.address.country || "",
-              //   state: activecompany?.address.state || "",
-              //   city: activecompany?.address.city || "",
-              //   pincode: activecompany?.address.pincode || "",
-              // },
-              // socialMedia: {
-              //   facebook: activecompany?.socialMedia?.facebook || "",
-              //   instagram: activecompany?.socialMedia?.instagram || "",
-              //   twitter: activecompany?.socialMedia?.twitter || "",
-              //   linkedin: activecompany?.socialMedia?.linkedin || "",
-              // },
-
-              // employees: activecompany?.employees || [],
             }}
             validationSchema={aboutVlidation}
             onSubmit={handleSubmit}
           >
-            {({ isValid, dirty, values, handleChange, isSubmitting, setFieldValue }) => (
+            {({ values, handleChange, isSubmitting }) => (
               <Form className="space-y-6">
                 <div className="mt-6 space-y-4  ">
                   <div className="bg-gray-200 rounded-xl  p-5 flex flex-col items-end" >
@@ -511,7 +471,7 @@ export default function ProfileEdit() {
             )}
           </Formik>
 
-          <Formik
+          <Formik<Partial<Company>>
             initialValues={{
               name: activecompany?.name || "",
               contact: undefined,
@@ -523,7 +483,7 @@ export default function ProfileEdit() {
             validationSchema={contactValidation}
             onSubmit={handleContactSubmit}
           >
-            {({ isValid, dirty, values, handleChange, isSubmitting, setFieldValue }) => (
+            {({ values, handleChange, isSubmitting, setFieldValue }) => (
               <Form className="space-y-6">
                 <div className="mt-6 space-y-4  ">
 
@@ -592,19 +552,34 @@ export default function ProfileEdit() {
                                 <div className="bg-red-700 w-4/6 ms-3">
 
 
-                                  <PhoneInput
+                                  {/* <PhoneInput
                                     country={"in"}
                                     value={values.contact || ""}
-                                    onChange={(phone) => {
-                                      console.log("phone", phone); 
-                                      setFieldValue("contact", phone || ""); 
+                                    onChange={(phone, data) => {
+                                      console.log("Full phone:", phone); 
+                                      console.log("Country code:", data.dialCode); 
+
+                                      setFieldValue("contact", phone || "");
+
+                                  
+                                      setFieldValue("countryCode", data.dialCode);
                                     }}
                                     inputProps={{
                                       name: "contact",
                                       required: true,
-                                      className: "w-full ms-3 rounded-xl border ps-5 p-2",
+                                      className: "w-full ms-3 rounded-xl bg-red-100 border ps-5 p-2",
                                     }}
+                                  /> */}
+
+                                  <input
+                                    type="tel"
+                                    name="contact"
+                                    value={values.contact || ""}
+                                    onChange={e => setFieldValue("contact", e.target.value)}
+                                    required
+                                    className="w-full ms-3 rounded-xl bg-red-100 border ps-5 p-2"
                                   />
+
                                   <ErrorMessage
                                     name="contact"
                                     component="div"
@@ -653,7 +628,9 @@ export default function ProfileEdit() {
                               </div>
                               <div className="w-full flex items-center ">
                                 <label className="text-md font-medium h-10 bg-white w-2/6  rounded-xl p-2 space-y-4">Contact Number:</label>
-                                <span className="text-md font-medium italic h-10 bg-white w-4/6 ms-3  rounded-xl p-2 space-y-4">{activecompany?.contact || "Not update yet"}</span>
+                                <span className="text-md text-gray-400 italic h-10 bg-white w-4/6 ms-3 rounded-xl p-2">
+                                  {activecompany?.contact || "Not update yet"}
+                                </span>
                               </div>
                               <div className="w-full flex items-center">
                                 <label className="text-md font-medium h-10 bg-white w-2/6  rounded-xl p-2 space-y-4">Email:</label>
@@ -667,9 +644,6 @@ export default function ProfileEdit() {
                           )
                         }
                       </div>
-
-
-
                     </div>
                   </div>
 
@@ -677,16 +651,16 @@ export default function ProfileEdit() {
               </Form>
             )}
           </Formik>
+
+
+
           <Formik
             initialValues={{ services: "" }}
             validationSchema={serviceValidation}
-            onSubmit={(values, { setSubmitting }) => {
-              // handleServicesSubmit();
-              setSubmitting(false);
-            }}
-
+            onSubmit={handleServicesSubmit}
           >
-            {({ isValid, dirty, values, handleChange, isSubmitting, setFieldValue }) => (
+
+            {({  isSubmitting }) => (
               <Form className="space-y-6">
                 <div className="mt-6 space-y-4  ">
 
@@ -740,7 +714,7 @@ export default function ProfileEdit() {
                                       type="text"
                                       name="services"
                                       value={serviceInput}
-                                      onChange={(e) => setServiceInput(e.target.value)}
+                                      onChange={(e:ChangeEventType) => setServiceInput(e.target.value)}
                                       className="w-3/6 border h-12 p-2 rounded-md"
                                       placeholder="Enter your services here.."
                                     />
@@ -795,12 +769,15 @@ export default function ProfileEdit() {
 
 
 
-          <Formik
+          <Formik<Partial<Company>>
             initialValues={{ employees: activecompany?.employees || [], }}
-            // validationSchema={employeeValidation}
+
+     
+          
+
             onSubmit={handleemployeeSubmit}
           >
-            {({ isValid, dirty, values, handleChange, isSubmitting, setFieldValue }) => (
+            {({  values, isSubmitting, setFieldValue }) => (
               <Form className="space-y-6">
                 <div className="mt-6 space-y-4  ">
 
@@ -859,7 +836,9 @@ export default function ProfileEdit() {
                                     placeholder="Search employees..."
                                   />
 
-                                  {/* {showDropdown && employees.length > 0 && (
+
+
+                                  {showDropdown && employees.length > 0 && (
                                     <div className="absolute w-full bg-white border rounded-md shadow-md mt-1 max-h-40 overflow-y-auto">
                                       {employees.map((emp) => (
                                         <div
@@ -869,6 +848,8 @@ export default function ProfileEdit() {
                                             setPosition((prev) => ({
                                               ...prev,
                                               employee: emp?.firstName,
+                                              email: emp?.email,
+
                                             }));
                                             setSearchQuery("");
                                             setEmployees([]);
@@ -876,39 +857,11 @@ export default function ProfileEdit() {
                                           className="p-2 hover:bg-gray-100 cursor-pointer flex justify-between"
                                         >
                                           <span>{emp?.firstName}</span>
-                                          <span className="text-gray-500 text-sm">
-                                            {emp?.email}
-                                          </span>
+                                          <span className="text-gray-500 text-sm">{emp?.email}</span>
                                         </div>
                                       ))}
                                     </div>
-                                  )} */}
-
-{showDropdown && employees.length > 0 && (
-  <div className="absolute w-full bg-white border rounded-md shadow-md mt-1 max-h-40 overflow-y-auto">
-    {employees.map((emp) => (
-      <div
-        key={emp?._id}
-        onClick={() => {
-          setSelectedEmployee(emp?.firstName);
-          setPosition((prev) => ({
-            ...prev,
-            employee: emp?.firstName, // Updating employee name
-            email: emp?.email, // Adding email
-            id: emp?._id, // Storing ID if needed
-          }));
-          setSearchQuery("");
-          setEmployees([]);
-        }}
-        className="p-2 hover:bg-gray-100 cursor-pointer flex justify-between"
-      >
-        <span>{emp?.firstName}</span>
-        <span className="text-gray-500 text-sm">{emp?.email}</span>
-      </div>
-    ))}
-  </div>
-)}
-
+                                  )}
                                   <div className="flex items-center gap-2">
                                     <div className="flex flex-col w-1/2">
                                       <label className="text-sm">Employee *</label>
@@ -999,28 +952,23 @@ export default function ProfileEdit() {
 
                             <div className="p-10 flex justify-center">
                               <ul className="list-none space-y-3 w-full max-w-md">
-                                {values.employees?.map((value, index) => (
-                                   <li
-                                   key={index}
-                                   className="flex justify-between items-center bg-gray-100 p-2 rounded-md"
-                                 >
-                                   <div>
-                                     <p className="font-medium">{value.employee.firstName}</p>
-                                     <p className="text-sm text-gray-600">{value.position}</p>
-                                   </div>
-                                   <button
-                                     type="button"
-                                     onClick={() => {
-                                       setFieldValue(
-                                         "employees",
-                                         values.employees.filter((_, i) => i !== index)
-                                       );
-                                     }}
-                                     className="text-red-500 hover:text-red-700"
-                                   >
-                                     Remove
-                                   </button>
-                                 </li>
+                                {activecompany.employees?.map((value, index) => (
+                                  <li
+                                    key={index}
+                                    className="flex justify-between items-center bg-gray-100 p-2 rounded-md"
+                                  >
+                                    <div>
+                                      <p className="font-medium">{value.employee.firstName}</p>
+                                      <p className="text-sm text-gray-600">{value.position}</p>
+                                    </div>
+                                    <button
+                                      type="button"
+                                      onClick={() => handleRemoveEmployee(value.employee?.email)}
+                                      className="text-red-500 hover:text-red-700"
+                                    >
+                                      Remove
+                                    </button>
+                                  </li>
                                 ))}
                               </ul>
                             </div>
@@ -1057,7 +1005,7 @@ export default function ProfileEdit() {
             // validationSchema={profetionalValidation}
             onSubmit={handleProfetionalSubmit}
           >
-            {({ isValid, dirty, values, handleChange, isSubmitting, setFieldValue }) => (
+            {({  values, handleChange, isSubmitting, setFieldValue }) => (
               <Form className="space-y-6">
                 <div className="mt-6 space-y-4  ">
 
@@ -1321,7 +1269,7 @@ export default function ProfileEdit() {
                 linkedin: activecompany?.socialMedia?.linkedin || "",
               },
             }}
-            validationSchema={socialMediaValidation}
+            // validationSchema={socialMediaValidation}
             onSubmit={handleSocialMediaSubmit}
           >
             {({ isValid, dirty, values, handleChange, isSubmitting, setFieldValue }) => (
