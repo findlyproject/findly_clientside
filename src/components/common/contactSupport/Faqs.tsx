@@ -50,8 +50,8 @@ const FAQSection: React.FC = () => {
               src="/assets/aboutimage2.jpg"
               alt="FAQ section"
               className="w-96 rounded-xl object-cover"
-              height={30}
-              width={30}
+              height={250}
+              width={250}
             />
           </div>
 
