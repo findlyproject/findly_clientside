@@ -121,7 +121,7 @@ const router=useRouter()
 
           const updatedReviews = [...prevReviews];
 
-          data.forEach((review) => {
+          data.forEach((review:Rating) => {
             if (!review.isDelete) {
               const index = updatedReviews.findIndex((r) => r._id === review._id);
 
@@ -181,7 +181,7 @@ const router=useRouter()
   ></div>
 
  
-  <div className="absolute bottom-[-40px] flex justify-start ps-10  w-full">
+  <div className="absolute bottom-[-40px] flex justify-start  w-full">
   <div className="relative w-[100px] h-[100px]">
   <Image
     src={activeCompany?.logo || "/default-image.png"}
@@ -260,16 +260,16 @@ const router=useRouter()
           <br /> <br />
           <span className="text-lg font-normal">Key Team Members</span>
 
-          {/* <ul className="mb-5">
+          <ul className="mb-5">
             {activeCompany?.employees && activeCompany?.employees?.length > 0 ? (
               activeCompany?.employees.map((user, index) => {
                 
-                return <li className="text-primary" key={index}>{user?.employee} - {user?.position}</li>
+                return <li className="text-primary" key={index}>{user?.employee.firstName} - {user?.position}</li>
               })
             ) : (
               <li>Write employees of your company...</li>
             )}
-          </ul> */}
+          </ul>
         </div>
 
 

@@ -30,6 +30,8 @@ const SubscribedPlanDetails: React.FC = () => {
 
   const handleContinue = async () => {
     if (sessionId) {
+      console.log("sessionId",sessionId);
+      
       const result = await dispatch(verification({ sessionId, route }));
       console.log("a", result);
       if (result.type === "verification/fulfilled") {
@@ -37,6 +39,8 @@ const SubscribedPlanDetails: React.FC = () => {
         if (allFeatures?.userId) {
           router.push("/user/profile");
         } else if (allFeatures?.companyId) {
+          console.log("companyId...",allFeatures?.companyId);
+          
           router.push("/company/profile");
         }
       }

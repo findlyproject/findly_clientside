@@ -30,14 +30,14 @@ export const ViewProfile = () => {
 
   return (
     <>
-      <section className="relative">
-        {/* <Image
+      <section className="relative ">
+        <Image
           src={activeuser?.banner || ""}
           alt="cover-image"
           className="w-full absolute top-20 px-10 left-0 z-0 h-60 object-cover"
           width={240}
           height={240}
-        /> */}
+        />
         <div className="w-full max-w-7xl mx-auto space-y-5 px-6 md:px-8">
           <div className="flex items-center justify-center sm:justify-start relative z-10 mb-5">
             <Image
@@ -105,13 +105,13 @@ export const ViewProfile = () => {
           <div className="flex flex-col lg:flex-row max-lg:gap-5 items-center justify-between py-0.5">
             <div className="flex items-center gap-4">
               <button
-                className="py-3.5 px-5 rounded-full bg-indigo-600 text-white font-semibold text-base leading-7 shadow-sm shadow-transparent transition-all duration-500 hover:shadow-gray-100 hover:bg-indigo-700"
+                className="py-3.5 px-5 rounded-full bg-primary text-white font-semibold text-base leading-7 shadow-sm shadow-transparent transition-all duration-500 hover:shadow-gray-100 hover:bg-indigo-700"
                 onClick={() => router.push(`/${route}/profile/edit`)}
               >
                 Edit Profile
               </button>
               <button
-                className="py-3.5 px-5 rounded-full bg-indigo-50 text-indigo-600 font-semibold text-base leading-7 shadow-sm shadow-transparent transition-all duration-500 hover:bg-indigo-100"
+                className="py-3.5 px-5 rounded-full bg-purple-100 text-primary font-semibold text-base leading-7 shadow-sm shadow-transparent transition-all duration-500 hover:bg-indigo-100"
                 onClick={() => setResume(true)}
               >
                 Resume upload
@@ -170,7 +170,7 @@ export const ViewProfile = () => {
             {aboutText.length > 150 && (
               <div className="flex justify-center mt-5">
                 <button
-                  className="px-4 py-2 text-white bg-blue-600 border border-blue-600 rounded-lg shadow-md transition-all duration-300 hover:bg-blue-700 hover:border-blue-700 active:scale-95"
+                  className="px-4 py-2 text-white bg-primary border border-primary rounded-lg shadow-md transition-all duration-300 hover:bg-blue-700 hover:border-blue-700 active:scale-95"
                   onClick={() => setIsExpanded(!isExpanded)}
                 >
                   {isExpanded ? "Read Less" : "Read More"}

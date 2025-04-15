@@ -193,7 +193,7 @@ export interface Company {
   contact?: number;
   password: string;
   cpassword:string;
-  followers?:User[]
+  followers?:string[]
   banner?: string;
   foundedAt: string;
   employees: {
@@ -303,6 +303,7 @@ export interface DeleteAccountProps {
 
 //subscription
 export interface Subscription {
+  _id:string
   clientSecret: string;
   features: string[];
   plan: string;
@@ -348,6 +349,7 @@ export interface Rating {
   };
   status:boolean;
   createdAt:string;
+  isDelete:boolean
 
 }
 
@@ -659,19 +661,36 @@ export interface JobPosting {
   applicationDeadline: string;
   contactEmail: string;
   contactPhone: string;
-  
+  qualification:string;
   company:Company
   createdAt: string;
   updatedAt: string;
   status: string;
   isDeleted: boolean;
   __v: number;
+
+  
   postedBy?: {
     name: string;
   };
 };
 
-
+export interface InitialJobPost{
+  title: string,
+            industry:string ,
+            jobType: string,
+            salary: { rate: string, min: number, max: number },
+            experienceLevel: string,
+            location: string,
+            applicationDeadline: string,
+            qualification: string,
+            jobResponsibilities: string[],
+            description: string,
+            requirements: string[],
+            contactEmail: string,
+            contactPhone: string,
+            benefits: string[]
+}
 export interface SavedType{
   jobId:Job
   timestamp:string

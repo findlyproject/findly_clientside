@@ -7,7 +7,8 @@ import { setActiveCompany, setAppliedUsers, setCompanyLogOut } from "../companys
 import { setforgotPassword } from "../companyslice";
 import { resetPostState } from "../postSlice";
 import { ReviewInput } from "@/components/company/CompanyDeatailsPage";
-import { Company, position, ProfileEdit, SocialMediaEdit } from "@/types/Types";
+
+import { Company, position, ProfileEdits, SocialMediaEdit,InitialJobPost } from "@/types/Types";
 
 
 export const loginCompany=createAsyncThunk(
@@ -341,7 +342,7 @@ export const loginCompany=createAsyncThunk(
     
     export const editProfetional = createAsyncThunk(
       "edit/profetional",
-      async ({companyId,values}:{companyId?:string,values:ProfileEdit},{ dispatch,rejectWithValue } ) => {
+      async ({companyId,values}:{companyId?:string,values:ProfileEdits},{ dispatch,rejectWithValue } ) => {
 
         const response = await handleAsync(() => api.patch(
           `/company/editprofetional/${companyId}`,
@@ -508,7 +509,7 @@ export const loginCompany=createAsyncThunk(
 
     export const postJobs = createAsyncThunk(
       "post/job",
-      async (values,{rejectWithValue } ) => {
+      async (values:InitialJobPost,{rejectWithValue } ) => {
 
         const response = await handleAsync(() =>  api.post(`/company/jobposting`,values));
     console.log("ree finded",response);

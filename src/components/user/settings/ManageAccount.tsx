@@ -18,15 +18,18 @@ import { useRouter } from "next/navigation";
 import DeleteAccount from "./DeleteAccount";
 import { setDetailes, SetLogout } from "@/lib/store/features/userSlice";
 import { setCompanyLogOut } from "@/lib/store/features/companyslice";
-import { deleteAccount, deleteAccountVerification } from "@/lib/store/features/actions/userActions";
-import { useTranslation } from "@/Context/TranslationContext";
+import { deleteAccount, deleteAccountVerification, logoutUser } from "@/lib/store/features/actions/userActions";
+
 import api from "@/utils/api";
 import { button } from "@material-tailwind/react";
+import { Subscription } from "@/types/Types";
+import { logOutCompany } from "@/lib/store/features/actions/companyActions";
 
 
 export default function ManageAccount() {
   const router = useRouter();
-
+const activeuser=useAppSelector((state)=>state.user.activeuser)
+const activeCompany=useAppSelector((state)=>state.companyLogin.activeCompany)
   const [otpModal, setOtpModal] = useState(false);
   const [showModal, setShowModal] = useState(false);
   const [showPick, setShowPick] = useState(false);
@@ -35,7 +38,7 @@ export default function ManageAccount() {
   const [selectedReasons, setSelectedReasons] = useState<number[]>([]);
   const user = useAppSelector((state) => state.user.activeuser );
   const company = useAppSelector((state) => state.companyLogin.activeCompany );
-  const[activeSubscriptions,setactiveSubscriptions]=useState()
+  const[activeSubscriptions,setactiveSubscriptions]=useState<Subscription[]>([])
   const route = user ? "user" : "company";
   const dispatch = useAppDispatch();
   const reasons = [
@@ -54,14 +57,22 @@ export default function ManageAccount() {
     "We have concerns about data security and privacy",
     "Other",
   ];
-  const { translateText, language, setLanguage } = useTranslation();
-  const [translatedText, setTranslatedText] = useState("");
+  // const { translateText, language, setLanguage } = useTranslation();
+  // const [translatedText, setTranslatedText] = useState("");
 
-  const handleTranslate = async () => {
-    const translated = await translateText("Hello, how are you?");
-    setTranslatedText(translated);
+  // const handleTranslate = async () => {
+  //   const translated = await translateText("Hello, how are you?");
+  //   setTranslatedText(translated);
+  // };
+const handleLogout = () => {
+    if (activeuser) {
+      dispatch(logoutUser());
+    } else if (activeCompany) {
+      dispatch(logOutCompany());
+    }
+    // signOut()
+    router.replace("/");
   };
-
   const closeOtpModal = () => {
     setShowPick(false);
     setOtpModal(false);
@@ -101,7 +112,7 @@ export default function ManageAccount() {
       console.log("Response of details of payment", response);
   
       // Filter active subscriptions
-      const activeSubscription = response.data.subscription.filter((sub) =>
+      const activeSubscription = response.data.subscription.filter((sub:Subscription) =>
         new Date(sub.endDate) > new Date()
       );
       setactiveSubscriptions(activeSubscription)
@@ -155,6 +166,7 @@ export default function ManageAccount() {
       prev.includes(index) ? prev.filter((i) => i !== index) : [...prev, index]
     );
   };
+console.log("activeSubscriptions",activeSubscriptions);
 
   const formatTime = (time: number) =>
     `${Math.floor(time / 60)}:${String(time % 60).padStart(2, "0")}`;
@@ -284,31 +296,13 @@ export default function ManageAccount() {
       </h2>
 
       <div className="flex justify-between items-center mb-4">
-        <h1>Current Language: {language.toUpperCase()}</h1>
-        <select
-          onChange={(e) => setLanguage(e.target.value)}
-          value={language}
-          className="border rounded-md p-2"
-        >
-          <option value="en">English</option>
-          <option value="fr">French</option>
-          <option value="es">Spanish</option>
-          <option value="de">German</option>
-        </select>
+        <h1>Current Language: English</h1>
+        
       </div>
 
-      <button
-        onClick={handleTranslate}
-        className="bg-primary text-white px-4 py-2 rounded-md hover:bg-blue-700"
-      >
-        Translate
-      </button>
+      
 
-      {translatedText && (
-        <p className="mt-4 text-gray-700 font-semibold">
-          Translated: {translatedText}
-        </p>
-      )}
+     
     </div>
 
       <div className="bg-white rounded-2xl shadow-lg p-6 sm:p-8 w-full max-w-3xl">
@@ -348,7 +342,7 @@ export default function ManageAccount() {
             <div className="bg-gray-100 rounded-lg p-4 text-sm text-gray-600">
              <ul className="space-y-2">
              <ul className="space-y-2">
-  {activeSubscriptions?.map((subscription) => (
+  {activeSubscriptions?.map((subscription:Subscription) => (
     <li key={subscription._id} className="p-2 border rounded-lg">
       <strong>Plan:</strong> {subscription.plan} <br />
       <strong>Price:</strong> ₹{subscription.price} <br />
@@ -383,13 +377,13 @@ export default function ManageAccount() {
           <div className="flex space-x-3">
           <button
             onClick={() => setShowModal(true)}
-            className="bg-red-500 rounded-lg p-3 text-white text-md mb-2"
+            className="bg-primary rounded-lg p-3 text-white text-md mb-2"
           >
             Delete Account
           </button>
           <button
-            onClick={() => setShowModal(true)}
-            className="bg-red-500 flex gap-3 rounded-lg p-3 text-white text-md mb-2"
+            onClick={handleLogout}
+            className="bg-purple-100 flex gap-3 rounded-lg p-3 text-primary text-md mb-2"
           >
 
   Logout <IoIosLogOut className="text-xl pt-1" />

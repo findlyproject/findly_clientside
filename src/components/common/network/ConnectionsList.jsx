@@ -106,7 +106,7 @@ const {activeuser}=useAppSelector(state=>state.user)
             className={`px-4 py-2 text-white font-medium rounded-md w-full ${
               connections.includes(user.id)
                 ? "bg-gray-400 cursor-not-allowed"
-                : "bg-blue-600 hover:bg-blue-700"
+                : "bg-primary hover:bg-purple-700"
             }`}
           >
             
