@@ -252,7 +252,7 @@ console.log("commuu",community);
   console.log("isopen", isopen);
   console.log("community",community )
   return (
-    <div className="w-full flex bg-gray-100 relative h-screen pt-24">
+    <div className="w-full  flex bg-gray-100 relative h-screen ">
       <div className={`${isopen ? "flex absolute left-0 z-50" : ""}`}>
         <div
           className={`w-auto relative h-screen overflow-y-auto ${
