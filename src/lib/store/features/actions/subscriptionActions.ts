@@ -48,6 +48,7 @@ export const subscription=createAsyncThunk(
     "features",
     async ({sessionId,route}:{sessionId:string,route:string}, { dispatch, rejectWithValue }) => {
       console.log("route",route);
+      console.log("sessionId",sessionId);
       
       const response = await handleAsync<AxiosResponse>(() =>api.get(`/${route}/payment/findsubscriptionbyId/${sessionId}`));
   
@@ -69,6 +70,7 @@ export const subscription=createAsyncThunk(
     async({sessionId,route}:{sessionId:string,route:string},{dispatch,rejectWithValue})=>{
         const response=await handleAsync<AxiosResponse>(()=>api.post(`/${route}/payment/verifySubscription/${sessionId}`))
        
+console.log("responseveririririi",response);
 
         if(!response){
             rejectWithValue("verification failed")

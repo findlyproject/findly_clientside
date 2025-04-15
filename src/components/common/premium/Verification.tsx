@@ -23,20 +23,29 @@ const SubscribedPlanDetails: React.FC = () => {
   const routes = useRouter();
 
   useEffect(() => {
-    if (sessionId) {
-      dispatch(features({ sessionId, route }));
-    }
+const display=async()=>{
+  if (sessionId) {
+    await dispatch(features({ sessionId, route }));
+   }
+
+}
+display()
   }, [dispatch, sessionId,route]);
 
   const handleContinue = async () => {
+    console.log("session",sessionId);
+    
     if (sessionId) {
       const result = await dispatch(verification({ sessionId, route }));
       console.log("a", result);
       if (result.type === "verification/fulfilled") {
         console.log("resultproiiii", result);
         if (allFeatures?.userId) {
+          console.log("bb",allFeatures?.userId);
           router.push("/user/profile");
         } else if (allFeatures?.companyId) {
+          console.log("dd",allFeatures?.companyId);
+          
           router.push("/company/profile");
         }
       }
