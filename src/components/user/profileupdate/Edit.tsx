@@ -46,7 +46,7 @@ function Edit() {
       };
       dispatch(setprofessionalUserData(professionalData));
     }
-  }, []); 
+  }, [dispatch]); 
 
   return (
     <div className="w-full h-auto flex justify-center py-4 pt-24">

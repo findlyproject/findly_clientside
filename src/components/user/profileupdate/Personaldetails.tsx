@@ -3,19 +3,20 @@ import Image from "next/image";
 import { useAppDispatch, useAppSelector } from "@/lib/store/hooks";
 import api from "@/utils/api";
 import {
+  registerSendOtp,
   updateBanner,
   updateBasicInfo,
   updateProfileImage,
+  verifyOtp,
 } from "@/lib/store/features/actions/userActions";
 import { toast } from "react-toastify";
 import { Formik, Form, Field, ErrorMessage } from "formik";
 import * as Yup from "yup";
+import OTPInput from "react-otp-input";
 interface ImageType {
   profileImage: string | File | undefined;
   banner: string | File | undefined;
 }
-
-
 
 function Personaldetails() {
   const dispatch = useAppDispatch();
@@ -38,75 +39,18 @@ function Personaldetails() {
   };
 
   // Trigger handleUploadImage when `image` state updates
-  useEffect(() => {
-    if (image.profileImage || image.banner) {
-      handleUploadImage();
-    }
-  }, [image]);
 
-  const handleUploadImage = async () => {
-    const uploadImage = async (image: File) => {
-      if (!image || !image.type) {
-        return null;
-      }
-      const response = await api.get("/user/generate-signed-url", {
-        params: { fileType: image.type },
-      });
+  const [showOtpField, setShowOtpField] = useState(false);
 
-      if (!response.data) {
-        throw new Error("Failed to get signed URL");
-      }
-
-      const { api_key, timestamp, signature, folder, cloudName } =
-        response.data;
-
-      const formData = new FormData();
-      formData.append("file", image);
-      formData.append("api_key", api_key);
-      formData.append("timestamp", timestamp.toString());
-      formData.append("signature", signature);
-      formData.append("folder", folder);
-
-      const uploadResponse = await fetch(
-        `https://api.cloudinary.com/v1_1/${cloudName}/image/upload`,
-        {
-          method: "POST",
-          body: formData,
-        }
-      );
-
-      const data = await uploadResponse.json();
-      if (!data.secure_url) {
-        throw new Error("Upload failed");
-      }
-
-      return data.secure_url;
-    };
-
-    try {
-      const profileImageUrl = image.profileImage
-        ? await uploadImage(image.profileImage as File)
-        : null;
-      const bannerImageUrl = image.banner
-        ? await uploadImage(image.banner as File)
-        : null;
-
-      if (profileImageUrl) dispatch(updateProfileImage(profileImageUrl));
-      if (bannerImageUrl) dispatch(updateBanner(bannerImageUrl));
-
-      if (profileImageUrl || bannerImageUrl) {
-        toast.success("Image uploaded successfully!");
-      }
-    } catch (error) {
-      console.error("Image upload failed:", error);
-    }
-  };
   const validationSchema = Yup.object({
     firstName: Yup.string().required("First name is required"),
     lastName: Yup.string().required("Last name is required"),
     email: Yup.string()
       .email("Invalid email format")
       .required("Email is required"),
+    otp: showOtpField
+      ? Yup.number().required("* OTP is required")
+      : Yup.string(),
     phoneNumber: Yup.string()
       .matches(/^[0-9]+$/, "Phone number must be only digits")
       .min(10, "Phone number must be at least 10 digits"),
@@ -114,47 +58,123 @@ function Personaldetails() {
     gender: Yup.string().required("Please select a gender"),
     about: Yup.string().max(500, "Maximum 500 characters allowed"),
   });
-  const [originalEmail, setOriginalEmail] = useState(activeuser?.email);
-  const [showOtpField, setShowOtpField] = useState(false);
-  const [otp, setOtp] = useState("");
+  interface FormValues {
+    firstName: string;
+    lastName: string;
+    email: string;
+    otp?: string;
+    phoneNumber?: string;
+    dateOfBirth?: Date | string;
+    gender: string;
+    about?: string;
+  }
 
-  const handleSubmit = (values) => {
+  useEffect(() => {
+    const handleUploadImage = async () => {
+      const uploadImage = async (image: File) => {
+        if (!image || !image.type) {
+          return null;
+        }
+        const response = await api.get("/user/generate-signed-url", {
+          params: { fileType: image.type },
+        });
+
+        if (!response.data) {
+          throw new Error("Failed to get signed URL");
+        }
+
+        const { api_key, timestamp, signature, folder, cloudName } =
+          response.data;
+
+        const formData = new FormData();
+        formData.append("file", image);
+        formData.append("api_key", api_key);
+        formData.append("timestamp", timestamp.toString());
+        formData.append("signature", signature);
+        formData.append("folder", folder);
+
+        const uploadResponse = await fetch(
+          `https://api.cloudinary.com/v1_1/${cloudName}/image/upload`,
+          {
+            method: "POST",
+            body: formData,
+          }
+        );
+
+        const data = await uploadResponse.json();
+        if (!data.secure_url) {
+          throw new Error("Upload failed");
+        }
+
+        return data.secure_url;
+      };
+
+      try {
+        const profileImageUrl = image.profileImage
+          ? await uploadImage(image.profileImage as File)
+          : null;
+        const bannerImageUrl = image.banner
+          ? await uploadImage(image.banner as File)
+          : null;
+
+        if (profileImageUrl) dispatch(updateProfileImage(profileImageUrl));
+        if (bannerImageUrl) dispatch(updateBanner(bannerImageUrl));
+
+        if (profileImageUrl || bannerImageUrl) {
+          toast.success("Image uploaded successfully!");
+        }
+      } catch (error) {
+        console.error("Image upload failed:", error);
+      }
+    };
+    if (image.profileImage || image.banner) {
+      handleUploadImage();
+    }
+  }, [image.banner, image.profileImage, dispatch]);
+
+  const originalEmail = activeuser?.email;
+
+  const handleSubmit = (values: FormValues) => {
     if (values.email !== originalEmail) {
       // Trigger OTP process
-      sendOtpToEmail(values.email);
-      setShowOtpField(true);
+      HandleOtpSend(values.email);
     } else {
       dispatch(updateBasicInfo({ basicInfo: values }));
       toast.success("Personal details saved successfully!");
     }
   };
-
-  const sendOtpToEmail = async (email) => {
-    try {
-      const response = await axios.post("/api/send-otp", { email });
-      toast.info("OTP sent to your new email.");
-    } catch (error) {
-      toast.error("Failed to send OTP. Try again.");
+  const handleClick = (values: FormValues) => {
+    if (showOtpField) {
+      if (values.email && values.otp) {
+        HandleOtpVerify({ email: values.email, otp: values.otp });
+      }
+    } else {
+      handleSubmit(values);
     }
   };
 
-  const verifyOtp = async (values) => {
-    try {
-      const response = await axios.post("/api/verify-otp", {
-        email: values.email,
-        otp,
-      });
-      if (response.data.success) {
-        dispatch(updateBasicInfo({ basicInfo: values }));
-        toast.success("Email updated successfully!");
-        setOriginalEmail(values.email);
-        setShowOtpField(false);
-      } else {
-        toast.error("Invalid OTP. Try again.");
-      }
-    } catch (error) {
-      toast.error("OTP verification failed.");
+  const HandleOtpSend = async (email: string) => {
+    console.log(email);
+    const result = await dispatch(registerSendOtp(email));
+    if (result.type === "user/otp/register/fulfilled") {
+      setShowOtpField(true);
     }
+  };
+
+  // Handle OTP verification
+  const HandleOtpVerify = async (values: { otp: string; email: string }) => {
+    const result = await dispatch(verifyOtp(values));
+    if (result.type === "user/otp/verification/fulfilled") {
+      setShowOtpField(false);
+    }
+  };
+  //date conversion
+  const formatDate = (date: string | Date) => {
+    const d = new Date(date);
+    const year = d.getFullYear();
+    const month = String(d.getMonth() + 1).padStart(2, '0');
+    const day = String(d.getDate()).padStart(2, '0');
+    return `${year}-${month}-${day}`;
   };
 
   return (
@@ -259,27 +279,32 @@ function Personaldetails() {
         </div>
       </div>
 
-      <Formik
+      <Formik<FormValues>
         initialValues={{
-          firstName: activeuser?.firstName,
-          lastName: activeuser?.lastName,
-          email: activeuser?.email,
-          phoneNumber: activeuser?.phoneNumber,
-          dateOfBirth: activeuser?.dateOfBirth,
-          gender: activeuser?.gender,
-          about: activeuser?.about,
+          firstName: activeuser?.firstName || "",
+          lastName: activeuser?.lastName || "",
+          email: activeuser?.email || "",
+          phoneNumber: activeuser?.phoneNumber || "",
+          dateOfBirth: activeuser?.dateOfBirth ? formatDate(activeuser.dateOfBirth) : "",
+          gender: activeuser?.gender || "",
+          about: activeuser?.about || "",
+          otp: "",
         }}
         validationSchema={validationSchema}
         onSubmit={(values, { setSubmitting }) => {
           if (showOtpField) {
-            verifyOtp(values);
+            if (values.email && values.otp) {
+              HandleOtpVerify({ email: values.email, otp: values.otp });
+            } else {
+              console.error("Email or OTP is missing");
+            }
           } else {
             handleSubmit(values);
           }
           setSubmitting(false);
         }}
       >
-        {({ isSubmitting }) => (
+        {({ values, isSubmitting, setFieldValue }) => (
           <Form className="p-6 bg-gray-100 rounded-lg shadow-lg mt-4 w-full">
             <h2 className="text-xl font-semibold mb-4">Personal Details</h2>
 
@@ -315,19 +340,30 @@ function Personaldetails() {
 
             {/* Email & Phone Number */}
             <div className="grid grid-cols-2 gap-4 my-4">
-              <div className="grid gap-3">
-                <label>Email</label>
-                <Field
-                  type="email"
-                  name="email"
-                  className="p-2 border rounded-md"
-                />
+              <div className="grid gap-2">
+                <label htmlFor="email">Email</label>
+                <div className="flex gap-2 items-center">
+                  <Field
+                    type="email"
+                    name="email"
+                    id="email"
+                    className="p-2 border rounded-md flex-1"
+                  />
+                  <button
+                    type="button"
+                    onClick={() => handleClick(values)}
+                    className="bg-primary text-white px-4 py-2 rounded hover:bg-blue-600"
+                  >
+                    {showOtpField ? "Verify OTP" : "change"}
+                  </button>
+                </div>
                 <ErrorMessage
                   name="email"
                   component="div"
                   className="text-red-500 text-sm"
                 />
               </div>
+
               <div className="grid gap-3">
                 <label>Phone Number</label>
                 <Field
@@ -347,11 +383,20 @@ function Personaldetails() {
             {showOtpField && (
               <div className="grid gap-3 my-4">
                 <label>Enter OTP</label>
-                <input
-                  type="text"
-                  value={otp}
-                  onChange={(e) => setOtp(e.target.value)}
-                  className="p-2 border rounded-md w-full"
+                <OTPInput
+                  value={values.otp}
+                  onChange={(otp) => setFieldValue("otp", otp)}
+                  numInputs={6}
+                  renderInput={(props) => <input {...props} />}
+                  inputStyle={{
+                    width: "55px",
+                    height: "55px",
+                    margin: "5px",
+                    fontSize: "20px",
+                    textAlign: "center",
+                    border: "1px solid #6b48ab",
+                    borderRadius: "5px",
+                  }}
                 />
               </div>
             )}
@@ -413,11 +458,7 @@ function Personaldetails() {
                 className="p-2 bg-primary rounded-lg text-xl text-white mt-3"
                 disabled={isSubmitting}
               >
-                {isSubmitting
-                  ? "Processing..."
-                  : showOtpField
-                  ? "Verify OTP"
-                  : "Save"}
+                save
               </button>
             </div>
           </Form>
