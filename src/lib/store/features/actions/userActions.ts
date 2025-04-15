@@ -180,7 +180,6 @@ export const forgotPassword = createAsyncThunk(
   }
 )
 
-//update profile//
 
 // Update Banner
 export const updateBanner = createAsyncThunk(
@@ -234,6 +233,37 @@ export const updateBasicInfo = createAsyncThunk(
     } catch  {
       return rejectWithValue("proffessional detail not updated");
     }
+  }
+);
+export const registerSendOtp = createAsyncThunk(
+  "user/otp/register",
+  async (email:string,{rejectWithValue } ) => {
+console.log(email)
+    const response = await handleAsync(() =>api.post("user/send-otp", {email:email}));
+console.log(response)
+    if (!response || !response.data) {
+      return rejectWithValue("send register otp failed.");
+    }
+
+    return response.data;
+  }
+);
+
+
+export const verifyOtp = createAsyncThunk(
+  "user/otp/verification",
+  async (values:{ email: string; otp: string },{dispatch, rejectWithValue } ) => {
+
+    const response = await handleAsync(() =>api.post("user/verify-otp", values));
+    console.log(response)
+    dispatch(setActive(response?.data.user));
+    if (!response || !response.data) {
+      return rejectWithValue("send register otp failed.");
+    }
+
+         
+
+    return response.data;
   }
 );
 
