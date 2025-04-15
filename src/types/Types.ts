@@ -47,7 +47,7 @@ export interface Ieducation {
   endYear: string;
   college: string;
   subject: string;
-  _id:string;
+  _id?:string;
 
 }
 
@@ -199,18 +199,18 @@ export interface Company {
   employees: {
     _id:string;
     employee: {
-      firstName:string
+      firstName:string;
       email:string;
       _id:string
-    }
-
-    position: string; 
+    }  
+    position: string;
+    
   }[];
   role?: "company" | "premium";
   type?:string
   IndustryType?: string;
   founder:string
- 
+
   applications:applicationData[]
   address: {
     pincode: string;
@@ -246,6 +246,31 @@ export interface Company {
 //     company: string;
 //     salary: { rate: string; min: number; max: number };
 //   }
+
+export interface position{
+  employee:string
+  position:string
+}
+export interface SocialMediaEdit{
+ 
+  socialMedia:{
+    facebook:string
+    instagram:string
+    twitter:string
+    linkedin:string
+  }
+}
+export interface ProfileEdits{
+  name:string
+  email: string
+  address: {
+    landmark:string,
+    country:string,
+    state:string,
+    city:string,
+    pincode:string
+}
+}
 export interface applicationData {
     companyId: string;
     coverLetter: string;

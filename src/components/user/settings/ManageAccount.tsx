@@ -19,7 +19,7 @@ import DeleteAccount from "./DeleteAccount";
 import { setDetailes, SetLogout } from "@/lib/store/features/userSlice";
 import { setCompanyLogOut } from "@/lib/store/features/companyslice";
 import { deleteAccount, deleteAccountVerification, logoutUser } from "@/lib/store/features/actions/userActions";
-import { useTranslation } from "@/Context/TranslationContext";
+
 import api from "@/utils/api";
 import { button } from "@material-tailwind/react";
 import { Subscription } from "@/types/Types";
@@ -57,8 +57,8 @@ const activeCompany=useAppSelector((state)=>state.companyLogin.activeCompany)
     "We have concerns about data security and privacy",
     "Other",
   ];
-  const { translateText, language, setLanguage } = useTranslation();
-  const [translatedText, setTranslatedText] = useState("");
+  // const { translateText, language, setLanguage } = useTranslation();
+  // const [translatedText, setTranslatedText] = useState("");
 
   // const handleTranslate = async () => {
   //   const translated = await translateText("Hello, how are you?");
@@ -296,31 +296,13 @@ console.log("activeSubscriptions",activeSubscriptions);
       </h2>
 
       <div className="flex justify-between items-center mb-4">
-        <h1>Current Language: {language.toUpperCase()}</h1>
-        <select
-          onChange={(e) => setLanguage(e.target.value)}
-          value={language}
-          className="border rounded-md p-2"
-        >
-          <option value="en">English</option>
-          <option value="fr">French</option>
-          <option value="es">Spanish</option>
-          <option value="de">German</option>
-        </select>
+        <h1>Current Language: English</h1>
+        
       </div>
 
-      <button
-        // onClick={handleTranslate}
-        className="bg-primary text-white px-4 py-2 rounded-md hover:bg-purple-100 hover:text-primary"
-      >
-        Translate
-      </button>
+      
 
-      {translatedText && (
-        <p className="mt-4 text-gray-700 font-semibold">
-          Translated: {translatedText}
-        </p>
-      )}
+     
     </div>
 
       <div className="bg-white rounded-2xl shadow-lg p-6 sm:p-8 w-full max-w-3xl">

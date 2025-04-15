@@ -12,7 +12,7 @@ import { Country, State, City } from "country-state-city";
 import "react-phone-input-2/lib/style.css";
 import api from "@/utils/api";
 import { RxCross2 } from "react-icons/rx";
-import { ChangeEventType, Company, MouseEventType, User } from "@/types/Types";
+import { ChangeEventType, Company, MouseEventType, ProfileEdits, SocialMediaEdit, User } from "@/types/Types";
 import { editContact, editEmployee, editProfetional, editProfile, editService, editsocialmedia, removeeditEmployee, uploadBanner, uploadLogo } from "@/lib/store/features/actions/companyActions";
 import HeaderProfile from "./Header";
 import { IoIosSave, IoMdAdd } from "react-icons/io";
@@ -40,9 +40,9 @@ export default function ProfileEdit() {
   const [employees, setEmployees] = useState<User[]>([]);
   const [showDropdown, setShowDropdown] = useState(false);
   const [selectedEmployee, setSelectedEmployee] = useState("");
-  const [positions, setPosition] = useState<Company>({
-    employee: "",
+  const [positions, setPosition] = useState({
     position: "",
+    employee:""
 
   });
 
@@ -88,6 +88,8 @@ export default function ProfileEdit() {
 
 
   const socialMediaValidation = Yup.object().shape({
+  
+    
     socialMedia: Yup.object().shape({
       facebook: Yup.string().url("Invalid Facebook URL"),
       instagram: Yup.string().url("Invalid Instagram URL"),
@@ -121,49 +123,36 @@ export default function ProfileEdit() {
     { id: 8, name: "General Manager" },
     { id: 9, name: "Team Lead" },
   ];
-  const industryTypes = [
-    { id: 1, name: "Information Technology" },
-    { id: 2, name: "Finance & Banking" },
-    { id: 3, name: "Healthcare & Pharmaceuticals" },
-    { id: 4, name: "Education & E-Learning" },
-    { id: 5, name: "Manufacturing" },
-    { id: 6, name: "Retail & E-commerce" },
-    { id: 7, name: "Real Estate & Construction" },
-    { id: 8, name: "Telecommunications" },
-    { id: 9, name: "Automobile & Transportation" },
-    { id: 10, name: "Energy & Utilities" },
-    { id: 11, name: "Hospitality & Tourism" },
-    { id: 12, name: "Media & Entertainment" },
-    { id: 13, name: "Legal & Consulting" },
-    { id: 14, name: "Agriculture & Farming" },
-    { id: 15, name: "Aerospace & Defense" },
-    { id: 16, name: "Biotechnology" },
-    { id: 17, name: "Fashion & Apparel" },
-    { id: 18, name: "Food & Beverage" },
-    { id: 19, name: "Government & Public Administration" },
-    { id: 20, name: "Marketing & Advertising" },
-    { id: 21, name: "Non-Profit & Social Services" },
-    { id: 22, name: "Sports & Fitness" },
-    { id: 23, name: "Supply Chain & Logistics" },
-  ];
+  // const industryTypes = [
+  //   { id: 1, name: "Information Technology" },
+  //   { id: 2, name: "Finance & Banking" },
+  //   { id: 3, name: "Healthcare & Pharmaceuticals" },
+  //   { id: 4, name: "Education & E-Learning" },
+  //   { id: 5, name: "Manufacturing" },
+  //   { id: 6, name: "Retail & E-commerce" },
+  //   { id: 7, name: "Real Estate & Construction" },
+  //   { id: 8, name: "Telecommunications" },
+  //   { id: 9, name: "Automobile & Transportation" },
+  //   { id: 10, name: "Energy & Utilities" },
+  //   { id: 11, name: "Hospitality & Tourism" },
+  //   { id: 12, name: "Media & Entertainment" },
+  //   { id: 13, name: "Legal & Consulting" },
+  //   { id: 14, name: "Agriculture & Farming" },
+  //   { id: 15, name: "Aerospace & Defense" },
+  //   { id: 16, name: "Biotechnology" },
+  //   { id: 17, name: "Fashion & Apparel" },
+  //   { id: 18, name: "Food & Beverage" },
+  //   { id: 19, name: "Government & Public Administration" },
+  //   { id: 20, name: "Marketing & Advertising" },
+  //   { id: 21, name: "Non-Profit & Social Services" },
+  //   { id: 22, name: "Sports & Fitness" },
+  //   { id: 23, name: "Supply Chain & Logistics" },
+  // ];
 
 
 
 
-  // const handleSubmit = async (values:string) => {
 
-
-  //   setLoading(true)
-  //   const companyId = activecompany?._id
-  //   const result = await dispatch(editProfile({ companyId, values }))
-  //   if (result.type === "edit/profile/fulfilled") {
-
-  //     setTimeout(() => {
-  //       setLoading(false)
-  //       setContact(prev => ({ ...prev, stats: false, name: "" }))
-  //     }, 2000)
-  //   }
-  // };
 
 
   const handleSubmit = async (values: { about: string }) => {
@@ -199,14 +188,18 @@ export default function ProfileEdit() {
 
   }
 
-  const handleSocialMediaSubmit = async (values: Company) => {
+  const handleSocialMediaSubmit = async (values: SocialMediaEdit) => {
 
     console.log("www", values);
-
+    setLoading(true)
     const companyId = activecompany?._id
     const result = await dispatch(editsocialmedia({ companyId, values }))
-    if (result.type === "edit/contact/fulfilled") {
+    if (result.type === "edit/socialmedia/fulfilled") {
       console.log("editedcontact", result);
+      setTimeout(() => {
+        setLoading(false)
+        setContact(prev => ({ ...prev, stats: false, name: "" }))
+      }, 2000)
 
     }
 
@@ -231,7 +224,7 @@ export default function ProfileEdit() {
 
   }
 
-  const handleemployeeSubmit = async (values: Company) => {
+  const handleemployeeSubmit = async (values: Partial<Company>) => {
     setLoading(true)
     console.log("inposition ", positions);
 
@@ -276,7 +269,7 @@ export default function ProfileEdit() {
 
 
 
-  const handleProfetionalSubmit = async (values: Company) => {
+  const handleProfetionalSubmit = async (values: ProfileEdits) => {
     setLoading(true)
     const companyId = activecompany?._id
 
@@ -549,27 +542,10 @@ export default function ProfileEdit() {
                               </div>
                               <div className="w-full flex items-center ">
                                 <label className="text-md font-medium h-10 bg-white w-2/6  rounded-xl p-2 space-y-4">Contact Number:</label>
-                                <div className=" w-4/6 ms-3">
+                                <div className=" w-4/6 ms-1">
 
 
-                                  {/* <PhoneInput
-                                    country={"in"}
-                                    value={values.contact || ""}
-                                    onChange={(phone, data) => {
-                                      console.log("Full phone:", phone); 
-                                      console.log("Country code:", data.dialCode); 
-
-                                      setFieldValue("contact", phone || "");
-
-                                  
-                                      setFieldValue("countryCode", data.dialCode);
-                                    }}
-                                    inputProps={{
-                                      name: "contact",
-                                      required: true,
-                                      className: "w-full ms-3 rounded-xl bg-red-100 border ps-5 p-2",
-                                    }}
-                                  /> */}
+                                
 
                                   <input
                                     type="tel"
@@ -577,7 +553,7 @@ export default function ProfileEdit() {
                                     value={values.contact || ""}
                                     onChange={e => setFieldValue("contact", e.target.value)}
                                     required
-                                    className="w-full ms-3 rounded-xl bg-white border ps-5 p-2"
+                                    className="w-full ms-3 rounded-xl   border ps-5 p-2"
                                   />
 
                                   <ErrorMessage
@@ -847,7 +823,6 @@ export default function ProfileEdit() {
                                             setSelectedEmployee(emp?.firstName);
                                             setPosition((prev) => ({
                                               ...prev,
-                                              employee: emp?.firstName,
                                               email: emp?.email,
 
                                             }));
@@ -928,7 +903,7 @@ export default function ProfileEdit() {
                                           }
 
                                           setFieldValue("employees", [
-                                            ...values.employees,
+                                            ...(values.employees || []),
                                             {
                                               employee: selectedEmployee,
                                               position: positions.position,
@@ -958,12 +933,12 @@ export default function ProfileEdit() {
                                     className="flex justify-between items-center bg-gray-100 p-2 rounded-md"
                                   >
                                     <div>
-                                      <p className="font-medium">{value.employee?.firstName}</p>
+                                      <p className="font-medium">{value?.employee.firstName}</p>
                                       <p className="text-sm text-gray-600">{value.position}</p>
                                     </div>
                                     <button
                                       type="button"
-                                      onClick={() => handleRemoveEmployee(value.employee?.email)}
+                                      onClick={() => handleRemoveEmployee(value?.employee?.email)}
                                       className="text-red-500 hover:text-red-700"
                                     >
                                       Remove
@@ -989,7 +964,7 @@ export default function ProfileEdit() {
 
 
 
-          <Formik
+          <Formik<ProfileEdits>
             initialValues={{
               name: activecompany?.name || "",
               email: activecompany?.email || "",
@@ -1260,7 +1235,7 @@ export default function ProfileEdit() {
 
 
 
-          <Formik
+          <Formik<SocialMediaEdit>
             initialValues={{
               socialMedia: {
                 facebook: activecompany?.socialMedia?.facebook || "",
@@ -1269,10 +1244,10 @@ export default function ProfileEdit() {
                 linkedin: activecompany?.socialMedia?.linkedin || "",
               },
             }}
-            // validationSchema={socialMediaValidation}
+            validationSchema={socialMediaValidation}
             onSubmit={handleSocialMediaSubmit}
           >
-            {({ isValid, dirty, values, handleChange, isSubmitting, setFieldValue }) => (
+            {({ values, isSubmitting, setFieldValue }) => (
               <Form className="space-y-6">
                 <div className="mt-6 space-y-4  ">
 
@@ -1347,7 +1322,7 @@ export default function ProfileEdit() {
                                         className="w-full border p-2 rounded-md h-10"
                                       />
                                       <ErrorMessage
-                                        name="socialMeadia[platform]"
+                                        name={`socialMedia.${platform}`}
                                         component="div"
                                         className="text-red-500 text-sm"
                                       />
