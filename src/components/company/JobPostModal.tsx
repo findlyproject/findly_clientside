@@ -14,10 +14,10 @@ import { RiDeleteBinLine } from "react-icons/ri";
 import { GoLink } from "react-icons/go";
 import { FaCalendarAlt } from "react-icons/fa";
 import { Spinner } from "@material-tailwind/react";
-import api from "@/utils/api";
+
 import { useAppDispatch } from "@/lib/store/hooks";
 import { deleteJob, editJobDeadline } from "@/lib/store/features/actions/companyActions";
-import { ChangeEventType, Company, Job } from "@/types/Types";
+import { ChangeEventType, Job } from "@/types/Types";
 
 export interface modalProps {
   isOpen: boolean;

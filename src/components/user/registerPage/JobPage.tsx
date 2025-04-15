@@ -236,7 +236,7 @@ export default function JobPage() {
               ))}
             </select>
 
-            {/* City Dropdown */}
+            
             <select
               name="city"
               className="border p-3 w-full rounded-lg mb-3 focus:outline-none focus:ring-2 focus:ring-blue-400"
