@@ -7,7 +7,7 @@ import { setActiveCompany, setAppliedUsers, setCompanyLogOut } from "../companys
 import { setforgotPassword } from "../companyslice";
 import { resetPostState } from "../postSlice";
 import { ReviewInput } from "@/components/company/CompanyDeatailsPage";
-import { Company } from "@/types/Types";
+import { Company, position, ProfileEdit, SocialMediaEdit } from "@/types/Types";
 
 
 export const loginCompany=createAsyncThunk(
@@ -298,7 +298,7 @@ export const loginCompany=createAsyncThunk(
 
     export const editEmployee = createAsyncThunk(
       "edit/employee",
-      async ({companyId,positions}:{companyId?:string,positions:Company},{ dispatch,rejectWithValue } ) => {
+      async ({companyId,positions}:{companyId?:string,positions:position},{ dispatch,rejectWithValue } ) => {
 
         const response = await handleAsync(() => api.patch(
           `/company/editemployee/${companyId}`,
@@ -341,7 +341,7 @@ export const loginCompany=createAsyncThunk(
     
     export const editProfetional = createAsyncThunk(
       "edit/profetional",
-      async ({companyId,values}:{companyId?:string,values:Company},{ dispatch,rejectWithValue } ) => {
+      async ({companyId,values}:{companyId?:string,values:ProfileEdit},{ dispatch,rejectWithValue } ) => {
 
         const response = await handleAsync(() => api.patch(
           `/company/editprofetional/${companyId}`,
@@ -364,7 +364,7 @@ export const loginCompany=createAsyncThunk(
       
     export const editsocialmedia = createAsyncThunk(
       "edit/socialmedia",
-      async ({companyId,values}:{companyId?:string,values:Company},{ dispatch,rejectWithValue } ) => {
+      async ({companyId,values}:{companyId?:string,values:SocialMediaEdit},{ dispatch,rejectWithValue } ) => {
 
         const response = await handleAsync(() => api.patch(
           `/company/editsocialmedia/${companyId}`,

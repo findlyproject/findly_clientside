@@ -198,14 +198,19 @@ export interface Company {
   foundedAt: string;
   employees: {
     _id:string;
-    employee: string;  
-    position: string; 
+    employee: {
+      firstName:string;
+      email:string;
+      _id:string
+    }  
+    position: string;
+    
   }[];
   role?: "company" | "premium";
   type?:string
   IndustryType?: string;
   founder:string
- 
+
   applications:applicationData[]
   address: {
     pincode: string;
@@ -241,6 +246,31 @@ export interface Company {
 //     company: string;
 //     salary: { rate: string; min: number; max: number };
 //   }
+
+export interface position{
+  employee:string
+  position:string
+}
+export interface SocialMediaEdit{
+ 
+  socialMedia:{
+    facebook:string
+    instagram:string
+    twitter:string
+    linkedin:string
+  }
+}
+export interface ProfileEdits{
+  name:string
+  email: string
+  address: {
+    landmark:string,
+    country:string,
+    state:string,
+    city:string,
+    pincode:string
+}
+}
 export interface applicationData {
     companyId: string;
     coverLetter: string;
