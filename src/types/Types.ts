@@ -46,7 +46,7 @@ export interface Ieducation {
   endYear: string;
   college: string;
   subject: string;
-  _id:string;
+  _id?:string;
 
 }
 

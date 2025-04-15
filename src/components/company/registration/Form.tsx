@@ -4,14 +4,10 @@ import { Eye, EyeOff, Camera } from "lucide-react";
 import { Country, State, City } from "country-state-city";
 import { Formik, Form, ErrorMessage, Field } from "formik";
 import * as Yup from "yup";
-import api from "@/utils/api";
 import { useRouter, useSearchParams } from "next/navigation";
-import { toast } from "react-toastify";
 import Image from "next/image";
 import { useAppDispatch } from "@/lib/store/hooks";
-import { setActiveCompany } from "@/lib/store/features/companyslice";
-import { Company, SelectChangeEvent } from "../../../types/Types";
-import handleAsync from "@/utils/handleAsync";
+import { SelectChangeEvent } from "../../../types/Types";
 import PhoneInput from "react-phone-input-2";
 import "react-phone-input-2/lib/style.css"; // Import default styles
 import { companyRegistration } from "@/lib/store/features/actions/companyActions";
@@ -92,8 +88,27 @@ const RegistrationForm = () => {
     { id: 23, name: "Supply Chain & Logistics" },
   ];
 
+  type FormValues = {
+    name: string;
+    email: string;
+    contact?: string;
+    foundedAt: Date;
+    password: string;
+    cpassword: string;
+    IndustryType: string;
+    founder: string;
+    address: {
+      landmark: string;
+      country: string;
+      state: string;
+      city: string;
+      pincode: string;
+    };
+  };
+  
+
   //registration
-  const submit = async (values: Company) => {
+  const submit = async (values: FormValues) => {
     const formData = new FormData();
 
     Object.entries(values).forEach(([key, value]) => {
@@ -149,7 +164,7 @@ const RegistrationForm = () => {
       {/* column 2 */}
 
       <div className="w-full my-10 max-w-screen-lg rounded-xl ">
-        <Formik
+        <Formik<FormValues>
           initialValues={{
             name: Name,
             email: Email,
@@ -452,7 +467,7 @@ const RegistrationForm = () => {
                       <option value="">Select City</option>
                       {values.address.state &&
                         City.getCitiesOfState(
-                          values.address.country,
+                          values?.address?.country,
                           values.address.state
                         )?.map((city) => (
                           <option key={city.name} value={city.name}>

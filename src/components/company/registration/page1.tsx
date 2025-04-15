@@ -4,12 +4,9 @@ import Link from "next/link";
 import React, { useState } from "react";
 import { Formik, Form, Field, ErrorMessage } from "formik";
 import * as Yup from "yup";
-import api from "@/utils/api";
 import { useRouter } from "next/navigation";
 import { useAppDispatch } from "@/lib/store/hooks";
-import { setActiveCompany } from "@/lib/store/features/companyslice";
 import OtpInput from "react-otp-input";
-import handleAsync from "@/utils/handleAsync";
 import { registerSendOtp, verifyOtp } from "@/lib/store/features/actions/companyActions";
 const Page1: React.FC = () => {
   const dispatch = useAppDispatch();
@@ -42,11 +39,11 @@ const Page1: React.FC = () => {
   }) => {
     const result =await dispatch(verifyOtp(values))
     if(result.type==="company/otp/verification/fulfilled"){
+      console.log("hello")
       router.push(
-        `/company/register/form?email=${encodeURIComponent(
-          values.email
-        )}&name=${encodeURIComponent(values.name)}`
+        `/company/register/form?email=${encodeURIComponent(values.email)}&name=${encodeURIComponent(values.name)}`
       );
+
     }
 
   };
