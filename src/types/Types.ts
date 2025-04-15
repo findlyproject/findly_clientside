@@ -8,6 +8,7 @@ export type InputChangeEvent = React.ChangeEvent<HTMLInputElement>;
 export type formChangeEvent=React.FormEvent<HTMLFormElement>
 export type ChangeEventType = React.ChangeEvent<HTMLInputElement | HTMLSelectElement|HTMLTextAreaElement>;
 export type MouseEventType=React.MouseEvent<HTMLButtonElement>
+export type KeyDownEventType = React.KeyboardEvent<HTMLInputElement >;
 
 export interface EducationType {  
   college: string;  
@@ -90,12 +91,12 @@ export interface Connection {
   message:string;
   timestamp:Date;
   }
-  user:{
+  user: {
     firstName: string;
-  lastName: string;
-_id:string;
-  profileImage: string;
-  }
+    lastName: string;
+    _id: string;
+    profileImage: string;
+  };
 
 }
 
@@ -110,6 +111,7 @@ _id:string
 
 }
 export interface User{
+  
   firstName: string;
   lastName: string;
   email: string;
@@ -158,7 +160,7 @@ export interface User{
   subscriptionStartDate: Date | null;
   coverLetter?: string;
   isBlocked?: boolean;
-  _id: string;
+  _id?: string;
 }
 
 
@@ -193,7 +195,7 @@ export interface Company {
   cpassword:string;
   followers?:User[]
   banner?: string;
-  foundedAt: Date;
+  foundedAt: string;
   employees: {
     _id:string;
     employee: string;  
@@ -300,7 +302,14 @@ export interface Rating {
   starsRating: number;
   name:string;
   email:string
+  companyId:{
+     name:string;
+     _id:string
+     email:string
+  };
   userId: {
+    email:string
+    _id:string;
     firstName: string;
     lastName: string;
     profileImage?: string; 
@@ -344,6 +353,11 @@ export interface MemberType{
   }
   memberModel:string;
 }
+export interface Member{
+  _id:string;
+  memberId:string;
+  memberModel:string;
+}
 export interface CommunityMessage{
   _id:string;
   communityId:string;
@@ -366,7 +380,7 @@ _id: string;
 name: string;
 description: string;
 profile: string;
-members: MemberType[];
+members: Member[];
 createdBy:{
   _id:string;
   name:string
@@ -376,7 +390,22 @@ createdAt:string;
 updatedAt:string;
 
 }
-
+export interface Community2 {
+  _id: string;
+  name: string;
+  description: string;
+  profile: string;
+  members: MemberType[];
+  createdBy:{
+    _id:string;
+    name:string
+  };
+  isDeleted:boolean;
+  createdAt:string;
+  updatedAt:string;
+  
+  }
+  
 
 //post
 
@@ -631,4 +660,15 @@ export interface SavedType{
     likedBy?: User[];
     comments?: IComment[];
   }
+}
+
+
+
+export interface RevenueItem {
+  day: string;
+  revenue: number;
+}
+export interface BarData {
+  date: string;
+  Revenue: number;
 }

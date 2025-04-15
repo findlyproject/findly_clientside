@@ -111,7 +111,7 @@ const {activeuser}=useAppSelector(state=>state.user)
           >
             
             {(() => {
-    const userConnection = user.connecting.find(conn => conn.connectionID === activeuser._id);
+    const userConnection = user.connecting.find(conn => conn.connectionID === activeuser?._id);
 
     if (!userConnection) {
       return "Connect";

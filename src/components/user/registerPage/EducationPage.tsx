@@ -1,17 +1,12 @@
-
 "use client";
 
 import React, { useState } from "react";
 import { useRouter } from "next/navigation";
 import { useAppDispatch } from "@/lib/store/hooks";
 import { Country, State, City } from "country-state-city";
-import {
-  setEducation,
-  setLocation
- 
-} from "@/lib/store/features/registerSlice";
+import { setEducation, setLocation } from "@/lib/store/features/registerSlice";
 
-export  default function EducationPage() {
+export default function EducationPage() {
   const dispatch = useAppDispatch();
   const [Location, setLocallocation] = useState({
     country: "",
@@ -20,63 +15,49 @@ export  default function EducationPage() {
     stateName: "",
     city: "",
   });
-
-
-  const countries = Country.getAllCountries();
-    const states = Location.country
-      ? State.getStatesOfCountry(Location.country)
-      : [];
-    const cities = Location.state
-      ? City.getCitiesOfState(Location.country, Location.state)
-      : [];
-
-
-
-      console.log("countries",countries);
-      console.log("states",states,"cities",cities);
-      const handleChange = (e:React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
-        const { name, value } = e.target;
-    
-        if (name === "country") {
-          const selectedCountry = countries.find((c) => c.isoCode === value);
-          setLocallocation({
-            country: selectedCountry?.isoCode || "",
-            countryName: selectedCountry?.name || "",
-            state: "",
-            stateName: "",
-            city: "",
-          });
-        } else if (name === "state") {
-          const selectedState = states.find((s) => s.isoCode === value);
-          setLocallocation({
-            ...Location,
-            state: selectedState?.isoCode || "",
-            stateName: selectedState?.name || "",
-            city: "",
-          });
-        } else if (name === "city") {
-          setLocallocation({ ...Location, city: value });
-        }
-      };
-      
   const [College, setLocalcollege] = useState("");
   const [StartYear, setStartYear] = useState("");
   const [EndYear, setEndYear] = useState("");
-
-  
   const [locationError, setlocationError] = useState("");
   const [collegeError, setcollegeError] = useState("");
   const [startError, setstartError] = useState("");
   const [endError, setendError] = useState("");
-  
-  
-  
- 
-  
-  const router = useRouter();
-  const validateYears = (year: string): boolean => {
-    return /^\d{4}$/.test(year); // Ensures 4-digit year
+   const router = useRouter();
+  const countries = Country.getAllCountries();
+  const states = Location.country
+    ? State.getStatesOfCountry(Location.country)
+    : [];
+  const cities = Location.state
+    ? City.getCitiesOfState(Location.country, Location.state)
+    : [];
+
+  const handleChange = (
+    e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>
+  ) => {
+    const { name, value } = e.target;
+
+    if (name === "country") {
+      const selectedCountry = countries.find((c) => c.isoCode === value);
+      setLocallocation({
+        country: selectedCountry?.isoCode || "",
+        countryName: selectedCountry?.name || "",
+        state: "",
+        stateName: "",
+        city: "",
+      });
+    } else if (name === "state") {
+      const selectedState = states.find((s) => s.isoCode === value);
+      setLocallocation({
+        ...Location,
+        state: selectedState?.isoCode || "",
+        stateName: selectedState?.name || "",
+        city: "",
+      });
+    } else if (name === "city") {
+      setLocallocation({ ...Location, city: value });
+    }
   };
+
   const handleContinue = (e: React.MouseEvent<HTMLButtonElement>) => {
     e.preventDefault();
 
@@ -108,21 +89,21 @@ export  default function EducationPage() {
     }
 
     if (isValid) {
-      
-      
-      
-     
- if (Location.country && Location.state && Location.city) {
-      dispatch(setLocation(Location));
-      setLocallocation({
-        country: "",
-        countryName: "",
-        state: "",
-        stateName: "",
-        city: "",
-      });
-    }
-      dispatch(setEducation([{college:College,startYear:StartYear,endYear:EndYear}]));
+      if (Location.country && Location.state && Location.city) {
+        dispatch(setLocation(Location));
+        setLocallocation({
+          country: "",
+          countryName: "",
+          state: "",
+          stateName: "",
+          city: "",
+        });
+      }
+      dispatch(
+        setEducation([
+          { college: College, startYear: StartYear, endYear: EndYear },
+        ])
+      );
 
       router.push(`/user/register/namepage/educationpage/questionpage`);
     }
@@ -141,51 +122,51 @@ export  default function EducationPage() {
             <label className="text-gray-700 font-medium mb-1">Location</label>
 
             <select
-          name="country"
-          className="border p-3 w-full rounded-lg mb-3 focus:outline-none focus:ring-2 focus:ring-blue-400"
-          value={Location.country}
-          onChange={handleChange}
-        >
-          <option value="">Select Country</option>
-          {countries.map((country) => (
-            <option key={country.isoCode} value={country.isoCode}>
-              {country.name}
-            </option>
-          ))}
-        </select>
+              name="country"
+              className="border p-3 w-full rounded-lg mb-3 focus:outline-none focus:ring-2 focus:ring-blue-400"
+              value={Location.country}
+              onChange={handleChange}
+            >
+              <option value="">Select Country</option>
+              {countries.map((country) => (
+                <option key={country.isoCode} value={country.isoCode}>
+                  {country.name}
+                </option>
+              ))}
+            </select>
 
-        {/* State Dropdown */}
-        <select
-          name="state"
-          className="border p-3 w-full rounded-lg mb-3 focus:outline-none focus:ring-2 focus:ring-blue-400"
-          value={Location.state}
-          onChange={handleChange}
-          disabled={!Location.country}
-        >
-          <option value="">Select State</option>
-          {states.map((state) => (
-            <option key={state.isoCode} value={state.isoCode}>
-              {state.name}
-            </option>
-          ))}
-        </select>
+            {/* State Dropdown */}
+            <select
+              name="state"
+              className="border p-3 w-full rounded-lg mb-3 focus:outline-none focus:ring-2 focus:ring-blue-400"
+              value={Location.state}
+              onChange={handleChange}
+              disabled={!Location.country}
+            >
+              <option value="">Select State</option>
+              {states.map((state) => (
+                <option key={state.isoCode} value={state.isoCode}>
+                  {state.name}
+                </option>
+              ))}
+            </select>
 
-        {/* City Dropdown */}
-        <select
-          name="city"
-          className="border p-3 w-full rounded-lg mb-3 focus:outline-none focus:ring-2 focus:ring-blue-400"
-          value={Location.city}
-          onChange={handleChange}
-          disabled={!Location.state}
-        >
-          <option value="">Select City</option>
-          {cities.map((city) => (
-            <option key={city.name} value={city.name}>
-              {city.name}
-            </option>
-          ))}
-        </select>
-            
+            {/* City Dropdown */}
+            <select
+              name="city"
+              className="border p-3 w-full rounded-lg mb-3 focus:outline-none focus:ring-2 focus:ring-blue-400"
+              value={Location.city}
+              onChange={handleChange}
+              disabled={!Location.state}
+            >
+              <option value="">Select City</option>
+              {cities.map((city) => (
+                <option key={city.name} value={city.name}>
+                  {city.name}
+                </option>
+              ))}
+            </select>
+
             {locationError && (
               <span className="text-red-500">{locationError}</span>
             )}
@@ -199,7 +180,7 @@ export  default function EducationPage() {
               type="text"
               placeholder="School or College/University"
               value={College}
-              onFocus={()=>setcollegeError("")}
+              onFocus={() => setcollegeError("")}
               onChange={(e) => setLocalcollege(e.target.value)}
               className="px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-primary"
             />
@@ -217,7 +198,7 @@ export  default function EducationPage() {
                 type="text"
                 placeholder=" Start year"
                 value={StartYear}
-                onFocus={()=>setstartError("")}
+                onFocus={() => setstartError("")}
                 onChange={(e) => setStartYear(e.target.value)}
                 className="px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-primary"
               />
@@ -230,7 +211,7 @@ export  default function EducationPage() {
                 type="text"
                 placeholder="End year"
                 value={EndYear}
-                onFocus={()=>setendError("")}
+                onFocus={() => setendError("")}
                 onChange={(e) => setEndYear(e.target.value)}
                 className="px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-primary"
               />

@@ -69,6 +69,8 @@ export default function CandidateDetails() {
     try {
       setLoading(true);
       const response = await api.post("company/generate-offer-letter", {jobApplicationId:id, startDate:date});
+      console.log("response of offer letter",response);
+      
       setOfferLetter(response.data.offerLetter); // Update textarea with generated content
     } catch (error) {
       console.error("Error generating offer letter:", error);

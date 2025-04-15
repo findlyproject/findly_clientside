@@ -153,12 +153,12 @@ console.log(posts)
             )
           ) :activeTab === "posts" ? (
             <>
-           {posts&&posts.filter((item) => !item.postId.isDeleted).length > 0 ? (
+           {posts&&posts.filter((item) => !item.postId?.isDeleted).length > 0 ? (
   <div>
     <h2 className="text-lg font-semibold text-gray-800 mb-4">Active Posts</h2>
     <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
       {posts
-        .filter((item) => !item.postId.isDeleted)
+        .filter((item) => !item.postId?.isDeleted)
         .map((item) => (
           <div
             key={item._id}

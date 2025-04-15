@@ -2,7 +2,7 @@
 import React from "react";
 import { useRouter } from "next/navigation";
 
-export  default function QuestionPage() {
+export default function QuestionPage() {
   const router = useRouter();
 
   const handleContinue = (e: React.MouseEvent<HTMLButtonElement>) => {
@@ -26,7 +26,10 @@ export  default function QuestionPage() {
                 name="radioGroup"
                 className="w-5 h-5 text-primary border-gray-300"
               />
-              <label htmlFor="radioOption1" className="text-gray-700 font-medium">
+              <label
+                htmlFor="radioOption1"
+                className="text-gray-700 font-medium"
+              >
                 Yes, I m actively looking for a new job
               </label>
             </div>
@@ -38,7 +41,10 @@ export  default function QuestionPage() {
                 name="radioGroup"
                 className="w-5 h-5 text-primary border-gray-300"
               />
-              <label htmlFor="radioOption2" className="text-gray-700 font-medium">
+              <label
+                htmlFor="radioOption2"
+                className="text-gray-700 font-medium"
+              >
                 Not really, but would consider the right opportunity
               </label>
             </div>
@@ -50,7 +56,10 @@ export  default function QuestionPage() {
                 name="radioGroup"
                 className="w-5 h-5 text-primary border-gray-300"
               />
-              <label htmlFor="radioOption3" className="text-gray-700 font-medium">
+              <label
+                htmlFor="radioOption3"
+                className="text-gray-700 font-medium"
+              >
                 No, I m not interested in any job opportunity
               </label>
             </div>

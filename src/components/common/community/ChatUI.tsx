@@ -3,13 +3,11 @@
 import { useEffect, useRef, useState } from "react";
 import Sidebar from "./Sidebar";
 import Image from "next/image";
-
 import { FaEllipsisV, FaTrash, FaCopy } from "react-icons/fa";
 import { useAppSelector } from "@/lib/store/hooks";
 import api, { socket } from "@/utils/api";
 import { MdClose, MdImage, MdVideoCameraBack } from "react-icons/md";
 import { toast } from "react-toastify";
-
 import { IoReorderThreeOutline } from "react-icons/io5";
 import { RxCross2 } from "react-icons/rx";
 import CommunityDetails from "./CommunityDetails";
@@ -252,9 +250,9 @@ console.log("commuu",community);
     return () => mediaQuery.removeEventListener("change", handleChange);
   });
   console.log("isopen", isopen);
-  console.log("community.members",community?.members )
+  console.log("community",community )
   return (
-    <div className="w-full flex bg-gray-100 relative h-screen pt-24">
+    <div className="w-full  flex bg-gray-100 relative h-screen ">
       <div className={`${isopen ? "flex absolute left-0 z-50" : ""}`}>
         <div
           className={`w-auto relative h-screen overflow-y-auto ${
@@ -576,7 +574,7 @@ console.log("commuu",community);
                     {community.members.find(
                       (member) =>
                         member.memberId == activeCompany?._id ||
-                        member.memberId === activeuser?._id
+                        member.memberId ==activeuser?._id
                     ) ? (
                       <>
                       
@@ -656,7 +654,7 @@ console.log("commuu",community);
           <>
            {community && (
       <CommunityDetails
-        id={community._id}
+      params={{ id: community._id }}
         onClose={() => setSelectedCommunity(null)}
       />
     )}
