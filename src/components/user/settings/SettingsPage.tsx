@@ -8,7 +8,7 @@ import {
   FaInfoCircle,
   FaBars,
   FaTimes,
-  FaHome,
+ 
 } from "react-icons/fa";
 import { TbPremiumRights } from "react-icons/tb";
 import ManageAccount from "./ManageAccount";

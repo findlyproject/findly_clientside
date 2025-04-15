@@ -549,7 +549,7 @@ export default function ProfileEdit() {
                               </div>
                               <div className="w-full flex items-center ">
                                 <label className="text-md font-medium h-10 bg-white w-2/6  rounded-xl p-2 space-y-4">Contact Number:</label>
-                                <div className="bg-red-700 w-4/6 ms-3">
+                                <div className=" w-4/6 ms-3">
 
 
                                   {/* <PhoneInput
@@ -577,7 +577,7 @@ export default function ProfileEdit() {
                                     value={values.contact || ""}
                                     onChange={e => setFieldValue("contact", e.target.value)}
                                     required
-                                    className="w-full ms-3 rounded-xl bg-red-100 border ps-5 p-2"
+                                    className="w-full ms-3 rounded-xl bg-white border ps-5 p-2"
                                   />
 
                                   <ErrorMessage
@@ -952,13 +952,13 @@ export default function ProfileEdit() {
 
                             <div className="p-10 flex justify-center">
                               <ul className="list-none space-y-3 w-full max-w-md">
-                                {activecompany.employees?.map((value, index) => (
+                                {activecompany?.employees?.map((value, index) => (
                                   <li
                                     key={index}
                                     className="flex justify-between items-center bg-gray-100 p-2 rounded-md"
                                   >
                                     <div>
-                                      <p className="font-medium">{value.employee.firstName}</p>
+                                      <p className="font-medium">{value.employee?.firstName}</p>
                                       <p className="text-sm text-gray-600">{value.position}</p>
                                     </div>
                                     <button

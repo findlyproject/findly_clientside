@@ -438,11 +438,11 @@ export default function CommunityDetails({params,onClose}:Props) {
                   </span>
 
                   <p>
-                    {member.memberId._id === details.createdBy?._id
+                    {member.memberId?._id === details.createdBy?._id
                       ? details.createdBy?.name
                       : ""}
                   </p>
-                  {details.createdBy._id === member.memberId._id && (
+                  {details.createdBy?._id === member.memberId?._id && (
                     <span className="text-primary ml-auto bg-gray-100 border border-primary rounded-full text-sm px-2 py-1">
                       Admin
                     </span>

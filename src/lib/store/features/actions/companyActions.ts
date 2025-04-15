@@ -7,7 +7,7 @@ import { setActiveCompany, setAppliedUsers, setCompanyLogOut } from "../companys
 import { setforgotPassword } from "../companyslice";
 import { resetPostState } from "../postSlice";
 import { ReviewInput } from "@/components/company/CompanyDeatailsPage";
-import { Company } from "@/types/Types";
+import { Company, InitialJobPost } from "@/types/Types";
 
 
 export const loginCompany=createAsyncThunk(
@@ -508,7 +508,7 @@ export const loginCompany=createAsyncThunk(
 
     export const postJobs = createAsyncThunk(
       "post/job",
-      async (values,{rejectWithValue } ) => {
+      async (values:InitialJobPost,{rejectWithValue } ) => {
 
         const response = await handleAsync(() =>  api.post(`/company/jobposting`,values));
     console.log("ree finded",response);
