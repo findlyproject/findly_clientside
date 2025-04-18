@@ -14,10 +14,9 @@ import { RiDeleteBinLine } from "react-icons/ri";
 import { GoLink } from "react-icons/go";
 import { FaCalendarAlt } from "react-icons/fa";
 import { Spinner } from "@material-tailwind/react";
-import api from "@/utils/api";
 import { useAppDispatch } from "@/lib/store/hooks";
 import { deleteJob, editJobDeadline } from "@/lib/store/features/actions/companyActions";
-import { ChangeEventType, Company, Job } from "@/types/Types";
+import { ChangeEventType, Job } from "@/types/Types";
 
 export interface modalProps {
   isOpen: boolean;
@@ -30,7 +29,7 @@ export interface modalProps {
   _id: string;
 
   findJobPsts: (value: number) => void,
-  setJobs: React.Dispatch<React.SetStateAction<modalProps["jobs"]>>;
+  setJobs: (value:modalProps)=>void;
 
 }
 
@@ -38,7 +37,7 @@ export interface modalProps {
 const Modal: React.FC<modalProps> = ({ isOpen, setIsOpen, jobs, setJobs, findJobPsts, currentPage }) => {
   const dispatch=useAppDispatch()
   const [detailModal, setDetailsModal] = useState(false)
-  const [selectedJob, setSelectedJob] = useState<modalProps["jobs"][0] | null>(null);
+  const [selectedJob, setSelectedJob] = useState<modalProps["jobs"][0] >(null);
   const [openMenu, setOpenMenu] = useState<string | null>(null);
   const [isEditing, setIsEditing] = useState(false);
   const [newDeadline, setNewDeadline] = useState(selectedJob?.applicationDeadline as string );
@@ -245,7 +244,7 @@ const Modal: React.FC<modalProps> = ({ isOpen, setIsOpen, jobs, setJobs, findJob
               ))}
 
             </div>
-            {detailModal && (
+            {/* {detailModal && (
               <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50 backdrop-blur-lg z-50 transition-all">
                 <div className="bg-white dark:bg-gray-800 w-[90%] max-w-3xl rounded-2xl shadow-2xl p-6 relative">
 
@@ -377,7 +376,7 @@ const Modal: React.FC<modalProps> = ({ isOpen, setIsOpen, jobs, setJobs, findJob
                   </div>
                 </div>
               </div>
-            )}
+            )} */}
 
 
 

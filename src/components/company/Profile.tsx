@@ -14,7 +14,7 @@ import { ImProfile } from "react-icons/im";
 // import { Spinner } from "@material-tailwind/react";
 import { Spinner } from "flowbite-react";
 import Image from "next/image";
-import { Company, Job, Rating } from "@/types/Types";
+import { Rating } from "@/types/Types";
 import { TiEdit } from "react-icons/ti";
 import { useRouter } from "next/navigation";
 
@@ -22,11 +22,14 @@ const CompanyProfile = () => {
   const [isOpen, setIsOpen] = useState(false);
   const [isOpenPosts, setIsOpenPosts] = useState(false);
   const [reviews, setReviews] = useState<Rating[]>([])
-  const [jobs, setJobs] = useState<modalProps[]>([])
+  const [jobs, setJobs] = useState({})
  
 
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const [posts, setPosts] = useState([])
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const [page, setPage] = useState(1)
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const [currentPage, setCurrentPage] = useState<number>(1);
   const [totalPages, setTotalPages] = useState(1);
   const [hasMore, setHasMore] = useState(true);
@@ -279,7 +282,7 @@ const router=useRouter()
           <ul>
             {
               activeCompany?.employees && activeCompany.employees.length > 0 ? (
-                activeCompany?.services?.map((item) => (<li className="text-primary" key={item}>{item}</li>))) :
+                activeCompany?.services?.map((item,index) => (<li className="text-primary" key={index}>{item}</li>))) :
                 (
                   <li>Write Servieces of your company...</li>
                 )

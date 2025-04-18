@@ -8,6 +8,8 @@ import { setforgotPassword } from "../companyslice";
 import { resetPostState } from "../postSlice";
 import { ReviewInput } from "@/components/company/CompanyDeatailsPage";
 import { Company } from "@/types/Types";
+import { addJob } from "../jobSlice";
+import { JobFormValues } from "@/components/company/JobPost";
 
 
 export const loginCompany=createAsyncThunk(
@@ -508,15 +510,14 @@ export const loginCompany=createAsyncThunk(
 
     export const postJobs = createAsyncThunk(
       "post/job",
-      async (values,{rejectWithValue } ) => {
-
+      async (values:JobFormValues,{dispatch,rejectWithValue } ) => {
         const response = await handleAsync(() =>  api.post(`/company/jobposting`,values));
-    console.log("ree finded",response);
     
         if (!response || !response.data) {
           return rejectWithValue("delete job failed.");
           
         }
+          dispatch(addJob(response.data.job));
      
       }
     );

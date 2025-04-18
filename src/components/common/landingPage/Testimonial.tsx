@@ -12,17 +12,11 @@ import Image from "next/image";
 import { useEffect, useState } from "react";
 import { useDispatch } from "react-redux";
 
-type Testimonial = {
-  quote: string;
-  name: string;
-  designation: string;
-  src: string;
-};
+
 export const AnimatedTestimonials = ({
   
   autoplay = false,
 }: {
-  testimonials: Testimonial[];
   autoplay?: boolean;
 }) => {
   const [active, setActive] = useState(0);
@@ -43,7 +37,7 @@ const dispatch=useDispatch()
 useEffect(()=>{
   setTimeout(() => {
     handleNext()
-  }, 10000);
+  }, 20000);
 })
   useEffect(() => {
     if (autoplay) {
@@ -65,7 +59,7 @@ useEffect(()=>{
     return Math.floor(Math.random() * 21) - 10;
   };
   return (
-    <div className="max-w-sm  md:max-w-4xl mx-auto antialiased font-sans px-4 md:px-8 lg:px-12 py-20 bg-white">
+    <div className="max-w-sm  md:max-w-4xl mx-auto antialiased font-sans px-4 md:px-8 lg:px-12 py-20 bg-gray-100">
         <span className="text-sm text-gray-500 font-medium block mb-2">
         TESTIMONIAL           </span>
       <div className="relative grid grid-cols-1 md:grid-cols-2  gap-20">
@@ -139,7 +133,6 @@ useEffect(()=>{
             }}
           >
             <h3 className="text-2xl font-bold dark:text-white text-black">
-              {testimonials[active]?.userId?.firstName} {testimonials[active]?.userId?.lastName}
               {testimonials[active]?.userId.firstName} {testimonials[active]?.userId.lastName}
             </h3>
             <p className="text-sm text-gray-500 dark:text-neutral-500">
