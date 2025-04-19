@@ -3,7 +3,8 @@
 import { subscription } from "@/lib/store/features/actions/subscriptionActions";
 import { useAppDispatch, useAppSelector } from "@/lib/store/hooks";
 import { useRouter } from "next/navigation";
-import { Plan } from "@/types/Types";
+import { Company, Plan, User } from "@/types/Types";
+import { useState } from "react";
 
 const plans: Plan[] = [
   {
@@ -49,6 +50,8 @@ const plans: Plan[] = [
 ];
 
 const PricingPlans: React.FC = () => {
+
+  const [open,setOpen]=useState(false)
   const isYearly=false
   const router = useRouter();
   // const [isYearly, setIsYearly] = useState(false);
@@ -56,10 +59,16 @@ const PricingPlans: React.FC = () => {
   const activeCompany = useAppSelector(
     (state) => state.companyLogin.activeCompany
   );
+  const activeUser=useAppSelector((state)=>state.user.activeuser)
+  console.log("active com",activeCompany);
+  console.log("active use",activeUser);
   const route = activeCompany ? "company" : "user";
   const purchasePlan = async (plan: Plan) => {
- 
-
+        const active:Company|User|null=activeCompany?activeCompany:activeUser
+    if(active?.role==="premium"){
+      setOpen(true)
+      return
+    }
     const resultAction = await dispatch(subscription({ plan, route }));
     console.log("resultAction", resultAction);
     if (resultAction.type === "subscription/fulfilled") {
@@ -75,6 +84,45 @@ const PricingPlans: React.FC = () => {
           </h2>
         </div>
 
+        {
+          open&&(
+            <div className="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-50">
+            <div className="bg-white rounded-lg shadow-lg max-w-md w-full p-6 text-center">
+              <h2 className="text-2xl font-semibold text-gray-800 mb-4">
+                Active Subscription Detected
+              </h2>
+          
+              <p className="text-gray-700 mb-4">
+                You currently have an active subscription plan. To choose a new plan, you ll need to remove your existing one or wait for it to expire.
+              </p>
+          
+              <p className="text-sm text-gray-600">
+                Want to cancel your subscription?{" "}
+                <a
+                  href="#"
+                  className="text-blue-600 font-medium underline hover:text-blue-800"
+                  onClick={()=>router.push(`/${route}/settings?id=subscription`)}
+                  
+                >
+                  Click here
+                </a>
+                .
+              </p>
+          
+              <div className="mt-6">
+                <button
+                  onClick={() =>setOpen(false)}
+                  className="px-5 py-2 bg-gray-200 text-gray-800 rounded hover:bg-gray-300 transition"
+                >
+                  Close
+                </button>
+              </div>
+            </div>
+          </div>
+          
+          
+          )
+        }
         <div className="space-y-8 lg:grid lg:grid-cols-3 sm:gap-6 xl:gap-8 lg:space-y-0 lg:items-center">
           {plans.map((plan) => (
             <div
