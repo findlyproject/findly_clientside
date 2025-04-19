@@ -9,6 +9,7 @@ import { resetPostState } from "../postSlice";
 import { ReviewInput } from "@/components/company/CompanyDeatailsPage";
 
 import { Company, position, ProfileEdits, SocialMediaEdit,InitialJobPost } from "@/types/Types";
+import { addJob } from "../jobSlice";
 
 
 export const loginCompany=createAsyncThunk(
@@ -509,15 +510,15 @@ export const loginCompany=createAsyncThunk(
 
     export const postJobs = createAsyncThunk(
       "post/job",
-      async (values:InitialJobPost,{rejectWithValue } ) => {
+      async (values:InitialJobPost,{dispatch,rejectWithValue } ) => {
 
         const response = await handleAsync(() =>  api.post(`/company/jobposting`,values));
-    console.log("ree finded",response);
     
         if (!response || !response.data) {
           return rejectWithValue("delete job failed.");
           
         }
+          dispatch(addJob(response.data.job));
      
       }
     );

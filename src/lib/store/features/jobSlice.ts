@@ -14,11 +14,12 @@ const jobSlice = createSlice({
     setjobs: (state, action) => {
       state.allJobs = action.payload;
     },
-    setAlljobs: (state, action) => {
-      state.allJobs = [...state.allJobs, ...action.payload];
+    addJob: (state, action) => {
+      if(state.allJobs!==null)
+        state.allJobs=state.allJobs.concat(action.payload);
     },
   },
 });
 
-export const { setjobs, setAlljobs } = jobSlice.actions;
+export const { setjobs,addJob } = jobSlice.actions;
 export default jobSlice.reducer;

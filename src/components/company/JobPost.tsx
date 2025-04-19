@@ -53,6 +53,27 @@ const validationSchema = Yup.object().shape({
     .required("Contact phone is required"),
 });
 
+export interface JobFormValues {
+  title: string;
+  industry: string;
+  jobType: string;
+  salary: {
+    rate: string;
+    min: number;
+    max: number;
+  };
+  experienceLevel: string;
+  location: string;
+  applicationDeadline: string;
+  qualification: string;
+  jobResponsibilities: string[];
+  description: string;
+  requirements: string[];
+  contactEmail: string;
+  contactPhone: string;
+  benefits: string[];
+};
+
 export const JobPost = () => {
   const [requirementInput, setRequirementInput] = useState("");
   const [requirement, setRequirement] = useState<string[]>([]);
@@ -65,39 +86,68 @@ export const JobPost = () => {
   const dispatch = useAppDispatch()
   const router=useRouter()
 
+ 
+  const industryTypes = [
+    { id: 1, name: "Information Technology" },
+    { id: 2, name: "Finance & Banking" },
+    { id: 3, name: "Healthcare & Pharmaceuticals" },
+    { id: 4, name: "Education & E-Learning" },
+    { id: 5, name: "Manufacturing" },
+    { id: 6, name: "Retail & E-commerce" },
+    { id: 7, name: "Real Estate & Construction" },
+    { id: 8, name: "Telecommunications" },
+    { id: 9, name: "Automobile & Transportation" },
+    { id: 10, name: "Energy & Utilities" },
+    { id: 11, name: "Hospitality & Tourism" },
+    { id: 12, name: "Media & Entertainment" },
+    { id: 13, name: "Legal & Consulting" },
+    { id: 14, name: "Agriculture & Farming" },
+    { id: 15, name: "Aerospace & Defense" },
+    { id: 16, name: "Biotechnology" },
+    { id: 17, name: "Fashion & Apparel" },
+    { id: 18, name: "Food & Beverage" },
+    { id: 19, name: "Government & Public Administration" },
+    { id: 20, name: "Marketing & Advertising" },
+    { id: 21, name: "Non-Profit & Social Services" },
+    { id: 22, name: "Sports & Fitness" },
+    { id: 23, name: "Supply Chain & Logistics" },
+  ];
+  type ArrayFieldKeys = "jobResponsibilities" | "requirements" | "benefits";
+
   // Generalized function for handling Enter key events
   const handleKeyDown = (
     e: React.KeyboardEvent<HTMLInputElement>,
     inputValue: string,
     setInputValue: React.Dispatch<React.SetStateAction<string>>,
     setList: React.Dispatch<React.SetStateAction<string[]>>,
-    values: any,
-    setFieldValue: (field: string, value: any) => void,
-    fieldName: string
+    values: JobFormValues,
+    setFieldValue: <K extends keyof JobFormValues>(
+      field: K,
+      value: JobFormValues[K],
+      shouldValidate?: boolean
+    ) => void,
+    fieldName: ArrayFieldKeys
   ) => {
     if (e.key === "Enter" && inputValue.trim()) {
       e.preventDefault();
-
+  
       const updatedList = [...(values[fieldName] || []), inputValue.trim()];
-
-      setFieldValue(fieldName, updatedList); // ✅ Store as an array in Formik
-      setList(updatedList); // ✅ Update local state for UI
-      setInputValue(""); // Clear input
+  
+      setFieldValue(fieldName, updatedList);
+      setList(updatedList);
+      setInputValue("");
     }
   };
+  
 
   const handleSubmit = async (values:InitialJobPost) => {
     values.requirements = requirement;
     values.benefits = benefit;
     values.jobResponsibilities = responsible;
 
-    console.log("valuessssssssss", values);
-
-
     const result = await dispatch(postJobs(values))
 
     if (result.type === "post/job/fulfilled") {
-      console.log("resu", result);
          toast.success("job posted");
       router.push("/company/posts/jobs")
 
@@ -105,7 +155,7 @@ export const JobPost = () => {
    
   };
   return (
-    <div className="max-w-screen-2x1 container pt-48 mx-auto xl">
+    <div className="max-w-screen-2x1 container pt-24 mx-auto xl">
       {/* form */}
       <div className=" bg-[#FAFAFA] py-10 px-4 lg:px-16">
         <Formik<InitialJobPost>
@@ -154,9 +204,9 @@ export const JobPost = () => {
                     className="block w-full  bg-white border border-gray-300 rounded-md py-2 px-3 text-gray-900 focus:outline-none focus:ring-2 focus:ring-primary sm:text-sm"
                   >
                     <option value="">Choose your industry</option>
-                    <option value="Full-time">IT</option>
-                    <option value="Part-time"></option>
-                    <option value="Temporary"></option>
+                    {industryTypes.map((value,index)=>(
+                    <option key={index}value={value.name}>{value.name}</option>
+                  ))}
                   </Field>
                   <ErrorMessage
                     name="industry"

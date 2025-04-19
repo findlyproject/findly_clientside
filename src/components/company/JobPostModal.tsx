@@ -247,7 +247,7 @@ const Modal: React.FC<modalProps> = ({ isOpen, setIsOpen, jobs, setJobs, findJob
               ))}
 
             </div>
-            {detailModal && (
+            {/* {detailModal && (
               <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50 backdrop-blur-lg z-50 transition-all">
                 <div className="bg-white dark:bg-gray-800 w-[90%] max-w-3xl rounded-2xl shadow-2xl p-6 relative">
 
@@ -379,7 +379,7 @@ const Modal: React.FC<modalProps> = ({ isOpen, setIsOpen, jobs, setJobs, findJob
                   </div>
                 </div>
               </div>
-            )}
+            )} */}
 
 
 
