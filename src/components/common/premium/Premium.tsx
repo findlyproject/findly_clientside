@@ -1,10 +1,13 @@
+/* eslint-disable react-hooks/exhaustive-deps */
 "use client";
 
 import { subscription } from "@/lib/store/features/actions/subscriptionActions";
 import { useAppDispatch, useAppSelector } from "@/lib/store/hooks";
 import { useRouter } from "next/navigation";
-import { Company, Plan, User } from "@/types/Types";
-import { useState } from "react";
+import {  Plan, Subscription } from "@/types/Types";
+import { useEffect, useState } from "react";
+
+import api from "@/utils/api";
 
 const plans: Plan[] = [
   {
@@ -50,8 +53,9 @@ const plans: Plan[] = [
 ];
 
 const PricingPlans: React.FC = () => {
-
+  const [details, setDetails] = useState<Subscription[]>([]);
   const [open,setOpen]=useState(false)
+
   const isYearly=false
   const router = useRouter();
   // const [isYearly, setIsYearly] = useState(false);
@@ -59,13 +63,25 @@ const PricingPlans: React.FC = () => {
   const activeCompany = useAppSelector(
     (state) => state.companyLogin.activeCompany
   );
-  const activeUser=useAppSelector((state)=>state.user.activeuser)
-  console.log("active com",activeCompany);
-  console.log("active use",activeUser);
+ 
   const route = activeCompany ? "company" : "user";
+
+  const detailsPlan = async () => {
+    const response = await api.get(`/${route}/payment/subscriptiondetails`);
+    console.log("response of details of payment", response);
+    setDetails(response.data.subscription);
+  };
+  useEffect(() => {
+  
+    detailsPlan();
+  }, [route]);
+  const activePlan=details.find((data)=>data.isDeleted===false&&data.paymentStatus==="completed")
+
+  
+ 
   const purchasePlan = async (plan: Plan) => {
-        const active:Company|User|null=activeCompany?activeCompany:activeUser
-    if(active?.role==="premium"){
+
+    if(activePlan?.paymentStatus==="completed"){
       setOpen(true)
       return
     }

@@ -315,6 +315,7 @@ export interface Subscription {
   sessionId: string;
   companyId:string
   active:boolean;
+  isDeleted:boolean
 }
 
 
@@ -663,7 +664,7 @@ export interface JobPosting {
   applicationDeadline: string;
   contactEmail: string;
   contactPhone: string;
-  qualification:string;
+
   company:Company
   createdAt: string;
   updatedAt: string;

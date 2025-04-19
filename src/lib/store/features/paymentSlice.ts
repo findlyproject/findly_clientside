@@ -1,19 +1,7 @@
 
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 import { Subscription } from "@/types/Types";
-// export interface SubscriptionData {
-//   clientSecret: string;
-//   features: string[];
-//   plan: string;
-//   price: number;
-//   paymentStatus: string;
-//   startDate: string;
-//   endDate: string;
-//   userId: string;
-//   sessionId: string;
-//   companyId:string
-//   active:boolean;
-// }
+
 
 interface PaymentState {
   clientsecret: string;
