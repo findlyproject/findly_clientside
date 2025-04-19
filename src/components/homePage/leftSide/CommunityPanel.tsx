@@ -27,7 +27,7 @@ export  function CommunityPanel(){
               </div>
               <div className="ml-2">
                 <div className="text-base font-medium text-gray-800">{user.firstName}</div>
-                <div className="text-xs text-gray-500">{user.jobTitle}</div>
+                <div className="text-xs text-gray-500">{user.jobTitle?.[0]}</div>
               </div>
             </div>
           ))}

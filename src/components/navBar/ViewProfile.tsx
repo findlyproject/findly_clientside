@@ -34,12 +34,12 @@ export const ViewProfile = () => {
         <Image
           src={activeuser?.banner || ""}
           alt="cover-image"
-          className="w-full absolute top-20 px-10 left-0 z-0 h-60 object-cover"
+          className="w-full absolute top-10 px-10 left-0 z-0 h-60 object-cover"
           width={240}
           height={240}
         />
         <div className="w-full max-w-7xl mx-auto space-y-5 px-6 md:px-8">
-          <div className="flex items-center justify-center sm:justify-start relative z-10 mb-5">
+          <div className="flex items-center justify-center sm:justify-start relative z-10 pt-56">
             <Image
               src={activeuser?.profileImage || ""}
               alt="user-avatar-image"

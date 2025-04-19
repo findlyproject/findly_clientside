@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-unused-vars */
 // import { companyData } from "@/lib/store/features/companyslice";
 'use client'
 import { IoMdCloseCircle } from "react-icons/io";
