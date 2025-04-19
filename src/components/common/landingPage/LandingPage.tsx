@@ -2,7 +2,6 @@
 
 import Image from "next/image";
 import { useRouter } from "next/navigation";
-// import register3 from "../../../../public/assets/register3.jpg";
 import goup from "../../../../public/landingPage-group-discussion.png";
 import { AnimatedTestimonials } from "./Testimonial";
 import { useEffect, useState } from "react";
@@ -10,10 +9,7 @@ import api from "@/utils/api";
 import CountUp from "react-countup";
 import { toast } from "react-toastify";
 import { formChangeEvent } from "@/types/Types";
-import women from "../../../../public/assets/women.jpg";
-import men from "../../../../public/assets/men.jpg";
 import { PlaceholdersAndVanishInput } from "@/Animation/PlaceholdersAndVanishInput";
-import { motion } from "framer-motion";
 
 function LandingPage() {
   const [users, setUsers] = useState([]);
@@ -26,20 +22,7 @@ function LandingPage() {
     "Look for entry-level finance jobs...",
     "Discover UI/UX design opportunities...",
   ];
-  const options = [
-    {
-      title: "Become a Candidate",
-      description: "Registering as a jobseeker is a vital step to access employment opportunities, resources, and support tailored to your career goals.",
-      image: "women", // Replace with actual import
-      route: "/user/register",
-    },
-    {
-      title: "Become an Employer",
-      description: "Registering as a recruiter or employer enables access to a diverse talent pool and streamlines the hiring process, enhancing workforce management.",
-      image: "men", // Replace with actual import
-      route: "/company/register",
-    },
-  ];
+ 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     console.log(e.target.value);
   };
