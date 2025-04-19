@@ -77,7 +77,7 @@ const {activeuser}=useAppSelector(state=>state.user)
   <button
     type="button"
     onClick={() => setShowMessage((prev) => !prev)}
-    className="fixed right-0 py-10 px-2 inline-flex justify-center bg-white items-center text-primary text-sm font-medium rounded-lg shadow-sm align-middle focus:outline-none"
+    className="fixed right-0 py-10 px-2 cursor-pointer inline-flex justify-center bg-white items-center text-primary text-sm font-medium rounded-lg shadow-sm align-middle focus:outline-none"
     aria-haspopup="dialog"
     aria-expanded="false"
     aria-controls="hs-sidebar-empty-content"
@@ -85,6 +85,7 @@ const {activeuser}=useAppSelector(state=>state.user)
     data-hs-overlay="#hs-sidebar-empty-content"
     style={{ writingMode: "vertical-rl", textOrientation: "sideways" }}
     onMouseEnter={() => setShowMessage(true)}
+    
   >
     messages
   </button>

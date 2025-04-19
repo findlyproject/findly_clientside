@@ -2,7 +2,6 @@
 import { postJobs } from "@/lib/store/features/actions/companyActions";
 import { useAppDispatch } from "@/lib/store/hooks";
 import { ChangeEventType, InitialJobPost, KeyDownEventType } from "@/types/Types";
-
 import { ErrorMessage, Field, Form, Formik } from "formik";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
