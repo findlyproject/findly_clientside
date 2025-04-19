@@ -12,7 +12,7 @@ import { toast } from "react-toastify";
 import { formChangeEvent } from "@/types/Types";
 import BlurText from "@/Animation/BlurText";
 import { StickyScroll } from "@/Animation/Slider";
-// import sighup from "../../../../public/assets/signup.svg"
+import sighup from "../../../../public/assets/jobhunt.svg"
 import jobhunt from "../../../../public/assets/jobhunt.svg"
 import resume from "../../../../public/assets/resume.svg"
 import interview from "../../../../public/assets/interview.svg"
@@ -31,13 +31,13 @@ const content = [
       "Get started by signing up with your details. Provide your name, email, and a secure password to create your account. This will give you access to a personalized job search experience.",
     content: (
       <div className="h-full w-full flex items-center justify-center text-white">
-       {/* <Image
+       <Image
           src={sighup}
           width={300}
           height={300}
           className="h-full w-full object-fit"
           alt="Job search illustration"
-        /> */}
+        />
       </div>
     ),
   },
@@ -157,7 +157,7 @@ function LandingPage() {
   direction="top"
   className="text-4xl font-normal text-white sm:text-5xl lg:text-6xl xl:text-7xl"
 />
-<BlurText
+<BlurText 
   text="Find your dream job effortlessly! Create your profile, upload your resume, and explore opportunities that match your skills. Take the next step in your career today! "
   delay={150}
   animateBy="words"
@@ -363,7 +363,7 @@ function LandingPage() {
       <div className="relative flex flex-col items-center  py-18">
         
         
-        <div className="absolute top-1/2 -mt-40 w-full h-3/6  bg-white  flex justify-center items-center  z-0"></div>
+        {/* <div className="absolute top-1/2 -mt-40 w-full h-3/6  bg-white  flex justify-center items-center  z-0"></div> */}
         <section className="py-24 relative">
         <div className="w-full  px-4 md:px-5 lg:px-5 mx-auto">
             <div className="w-full flex-col justify-start items-center lg:gap-12 gap-10 inline-flex">

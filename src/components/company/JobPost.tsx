@@ -1,8 +1,8 @@
 "use client";
 import { postJobs } from "@/lib/store/features/actions/companyActions";
 import { useAppDispatch } from "@/lib/store/hooks";
-import { ChangeEventType, JobPosting, KeyDownEventType } from "@/types/Types";
-import api from "@/utils/api";
+import { ChangeEventType, InitialJobPost, KeyDownEventType } from "@/types/Types";
+
 import { ErrorMessage, Field, Form, Formik } from "formik";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
@@ -86,7 +86,7 @@ export const JobPost = () => {
     }
   };
 
-  const handleSubmit = async (values:JobPosting) => {
+  const handleSubmit = async (values:InitialJobPost) => {
     values.requirements = requirement;
     values.benefits = benefit;
     values.jobResponsibilities = responsible;
@@ -102,18 +102,13 @@ export const JobPost = () => {
       router.push("/company/posts/jobs")
 
     }
-    // const response = await api.post("/company/final-register", formData);
-    // if (response.status == 201) {
-    //   console.log("Registration successful:", response.data);
-    //   toast.success("Registration successful");
-    //   // router.push("/company/home");
-    // }
+   
   };
   return (
     <div className="max-w-screen-2x1 container pt-48 mx-auto xl">
       {/* form */}
       <div className=" bg-[#FAFAFA] py-10 px-4 lg:px-16">
-        <Formik 
+        <Formik<InitialJobPost>
           initialValues={{
             title: "",
             industry: "",

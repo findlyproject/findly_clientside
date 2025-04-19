@@ -36,6 +36,8 @@ display()
     console.log("session",sessionId);
     
     if (sessionId) {
+      console.log("sessionId",sessionId);
+      
       const result = await dispatch(verification({ sessionId, route }));
       console.log("a", result);
       if (result.type === "verification/fulfilled") {
@@ -44,7 +46,7 @@ display()
           console.log("bb",allFeatures?.userId);
           router.push("/user/profile");
         } else if (allFeatures?.companyId) {
-          console.log("dd",allFeatures?.companyId);
+          console.log("companyId...",allFeatures?.companyId);
           
           router.push("/company/profile");
         }

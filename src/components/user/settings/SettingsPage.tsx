@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import {
   FaUser,
   FaBell,
@@ -8,7 +8,7 @@ import {
   FaInfoCircle,
   FaBars,
   FaTimes,
-  FaHome,
+ 
 } from "react-icons/fa";
 import { TbPremiumRights } from "react-icons/tb";
 import ManageAccount from "./ManageAccount";
@@ -16,7 +16,8 @@ import Notifications from "./Notifications";
 import HelpandSupport from "./HelpandSupport";
 import TermsAndPolicy from "./TermsAndPolicy";
 import SubscriptionDetail from "./SubscriptionDetail";
-import { useRouter } from "next/navigation";
+import { useRouter, useSearchParams } from "next/navigation";
+
 
 const menuItems = [
   { id: "edit-profile", name: "Manage Account", icon: <FaUser /> },
@@ -26,14 +27,23 @@ const menuItems = [
   { id: "terms", name: "Terms & Policies", icon: <FaInfoCircle /> },
 ];
 
+
 export default function SettingsPage() {
+
+ 
   const router = useRouter();
+  const searchParams=useSearchParams()
+  const id=searchParams.get("id")
   const [selected, setSelected] = useState("edit-profile");
   const [isSidebarOpen, setIsSidebarOpen] = useState(false);
 
   if (selected === "back") {
     router.push(`/user/home`);
   }
+
+  useEffect(()=>{
+    setSelected("subscription")
+  },[id])
 
   return (
     <div className="flex flex-col md:flex-row min-h-screen pt-20 bg-gray-100">

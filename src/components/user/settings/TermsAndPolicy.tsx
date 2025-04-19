@@ -1,9 +1,20 @@
 import React, { useState } from "react";
+interface SectionProps  {
+  title: string;
+  isOpen: boolean;
+  toggle: () => void;
+  children: React.ReactNode;
+ 
+};
 
+interface FqProps{
+  question:string;
+  answer:string;
+}
 export default function TermsAndPolicy() {
-  const [openSection, setOpenSection] = useState(null);
+  const [openSection, setOpenSection] = useState<string|null>(null);
 
-  const toggleSection = (section) => {
+  const toggleSection = (section:string) => {
     setOpenSection(openSection === section ? null : section);
   };
 
@@ -95,7 +106,7 @@ export default function TermsAndPolicy() {
   );
 }
 
-function Section({ title, isOpen, toggle, children }) {
+function Section({ title, isOpen, toggle, children }:SectionProps) {
   return (
     <div className="border rounded-lg shadow-sm">
       <button
@@ -123,7 +134,7 @@ function Section({ title, isOpen, toggle, children }) {
   );
 }
 
-function FAQItem({ question, answer }) {
+function FAQItem({ question, answer }:FqProps) {
   return (
     <div className="border-b pb-2">
       <p className="font-semibold text-gray-800">{question}</p>
