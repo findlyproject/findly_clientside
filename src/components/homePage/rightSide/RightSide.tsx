@@ -16,7 +16,7 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faSmile } from "@fortawesome/free-solid-svg-icons";
 
 import { BsThreeDots } from "react-icons/bs";
-import { Connection, conversation, User } from "@/types/Types";
+import { Connection, conversation } from "@/types/Types";
 
 import { MessageType } from "@/types/Types";
 import { toast } from "react-toastify";
@@ -254,7 +254,7 @@ bg-white border-s border-gray-200 dark:bg-neutral-800 dark:border-neutral-700 w-
         role="dialog"
         aria-label="Sidebar"
       >
-        <div className="flex h-screen">
+        <div className="flex h-[85vh]">
           {!selectedUser && (
             <aside className="w-full  border-r overflow-y-auto">
               <div className="p-4">

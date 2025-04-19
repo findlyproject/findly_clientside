@@ -6,24 +6,31 @@ import { useRouter } from "next/navigation";
 import api from "@/utils/api";
 import { FaCheckCircle } from "react-icons/fa";
 import { Subscription } from "@/types/Types";
+import { useAppSelector } from "@/lib/store/hooks";
 
 export default function SubscriptionDetail(){
   const router = useRouter();
   const [details, setDetails] = useState<Subscription[]>([]);
+  const activeCompany=useAppSelector((state)=>state.companyLogin.activeCompany)
+  const route=activeCompany?"company":"user"
+  const activeUser=useAppSelector((state)=>state.user.activeuser)
+  const active=activeCompany?activeCompany:activeUser
   useEffect(() => {
     const details = async () => {
-      const response = await api.get(`/payment/subscriptiondetails`);
+      const response = await api.get(`${route}/payment/subscriptiondetails`);
       console.log("response of details of payment", response);
       setDetails(response.data.subscription);
     };
     details();
-  }, []);
+  }, [route]);
   return (
     <div className="min-h-screen bg-gray-100 flex flex-col items-start py-8 px-4">
       <h1 className="text-2xl md:text-3xl font-semibold mb-6">
         Subscription Details
       </h1>
-      <div className="bg-white rounded-2xl shadow-lg p-6 md:p-8 max-w-lg w-full">
+     {
+      active?.role!=="premium"?(
+        <div className="bg-white rounded-2xl shadow-lg p-6 md:p-8 max-w-lg w-full">
         <div className="flex flex-col md:flex-row md:items-center md:space-x-8 space-y-4 md:space-y-0">
           <div>
             <MdVerifiedUser className="text-green-700 w-12 h-12 md:w-14 md:h-14" />
@@ -45,6 +52,8 @@ export default function SubscriptionDetail(){
           </button>
         </div>
       </div>
+      ):""
+     }
 
       <div>
       <h2 className="text-xl md:text-xl  mt-20 font-semibold mb-4">

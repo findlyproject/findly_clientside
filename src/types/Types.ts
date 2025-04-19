@@ -656,6 +656,7 @@ export interface JobPosting {
   experienceLevel: string;
   industry: string;
   salary: Salary 
+  qualification:string;
   requirements: string[];
   jobResponsibilities: string[];
   benefits: string[];

@@ -2,7 +2,6 @@
 
 import { useAppSelector } from "@/lib/store/hooks";
 import api from "@/utils/api";
-import handleAsync from "@/utils/handleAsync";
 import Image from "next/image";
 import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
@@ -17,7 +16,7 @@ export  function FeedIdentityModule  (){
   useEffect(() => {
     const fetchPostLength = async () => {
       try {
-        const response = await handleAsync(()=>api.get(`${route}/posts`));
+        const response = await api.get(`${route}/posts`);
         if(response?.status==200){
 
           console.log("response",response);
