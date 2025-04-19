@@ -15,6 +15,7 @@ import api from "@/utils/api";
 import { BarData, Company, DailyRevenueType, RevenueItem, User } from "@/types/Types";
 import { useAppDispatch, useAppSelector } from "@/lib/store/hooks";
 import { fetchCompanies } from "@/lib/store/features/actions/adminActions";
+import Image from "next/image";
 
 
 const Dashboard: React.FC = () => {
@@ -313,9 +314,12 @@ const Dashboard: React.FC = () => {
                         <tr key={index}>
                           <td className="py-3 px-5 border-b border-blue-gray-50">
                             <div className="flex items-center gap-4">
-                              <img
-                                src={item.profileImage}
+                              <Image
+                                src={item.profileImage||""}
+                                alt="user"
                                 className="w-10 h-10 rounded-full"
+                                width={40}
+                                height={40}
                               />
                               <p className="block antialiased font-sans text-sm leading-normal text-blue-gray-900 font-bold">
                                 {item.firstName} {item.lastName}
@@ -421,9 +425,12 @@ const Dashboard: React.FC = () => {
                         <tr key={index}>
                           <td className="py-3 px-5 border-b border-blue-gray-50">
                             <div className="flex items-center gap-4">
-                              <img
-                                src={item.logo}
+                              <Image
+                                src={item.logo||""}
+                                alt="companylogo"
                                 className="w-10 h-10 rounded-full"
+                                width={40}
+                                height={40}
                               />
                               <p className="block antialiased font-sans text-sm leading-normal text-blue-gray-900 font-bold">
                                 {item.name}
