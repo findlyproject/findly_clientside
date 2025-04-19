@@ -2,7 +2,7 @@
 // import { companyData } from "@/lib/store/features/companyslice";
 'use client'
 import { IoMdCloseCircle } from "react-icons/io";
-import { Button, Card } from "flowbite-react";
+import { Card } from "flowbite-react";
 import { RiMoneyRupeeCircleFill } from "react-icons/ri";
 import { FaLocationDot } from "react-icons/fa6";
 
@@ -21,6 +21,7 @@ import { useAppDispatch } from "@/lib/store/hooks";
 import { deleteJob, editJobDeadline } from "@/lib/store/features/actions/companyActions";
 import { ChangeEventType, Job } from "@/types/Types";
 import { useState } from "react";
+import { useRouter } from "next/navigation";
 
 export interface modalProps {
   isOpen: boolean;
@@ -47,7 +48,7 @@ const Modal: React.FC<modalProps> = ({ isOpen, setIsOpen, jobs, setJobs, findJob
   const [loading, setLoading] = useState(false);
   console.log("selectedJob", selectedJob);
   const dispatch=useAppDispatch()
-
+const route=useRouter()
 
   const handleClose = () => {
     setIsOpen(false);
@@ -234,12 +235,12 @@ const Modal: React.FC<modalProps> = ({ isOpen, setIsOpen, jobs, setJobs, findJob
 
 
 
-                      <Button
-                        onClick={() => handleDetails(job)}
+                      <button
+                         onClick={()=>route.push(`/company/jobs/details/${job._id}`)}
                         className="mt-4 flex items-center justify-center bg-primary hover:shadow-black text-white font-semibold  px-4 rounded-lg transition-all duration-300">
                         View Details
 
-                      </Button>
+                      </button>
 
                     </div>
 
