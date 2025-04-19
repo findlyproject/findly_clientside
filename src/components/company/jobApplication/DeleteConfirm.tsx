@@ -1,6 +1,5 @@
 
 "use client"
-
 interface ConfirmationModalProps {
   isOpen: boolean;
   onClose: () => void;

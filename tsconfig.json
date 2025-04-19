@@ -35,7 +35,7 @@
     "src/components/googletransilate/GoogleTranslate.jsx",
     "src/types/**/*.ts",
     ".next/types/**/*.ts"
-, "src/Animation/BlurText.jsx"  ],
+, "src/Animation/BlurText.jsx", "src/Animation/PlaceholdersAndVanishInput.jsx"  ],
   "exclude": [
     "node_modules"
   ]

@@ -5,7 +5,7 @@ import { AxiosResponse } from "axios";
 
 
 import { setClientSecret, setSubscription } from '../paymentSlice';
-import { setActive } from '../userSlice';
+
 
 interface Plan {
     id: number;
@@ -67,7 +67,7 @@ export const subscription=createAsyncThunk(
 
   export const verification=createAsyncThunk(
     "verification",
-    async({sessionId,route}:{sessionId:string,route:string},{dispatch,rejectWithValue})=>{
+    async({sessionId,route}:{sessionId:string,route:string},{rejectWithValue})=>{
         const response=await handleAsync<AxiosResponse>(()=>api.post(`/${route}/payment/verifySubscription/${sessionId}`))
        
 console.log("responseveririririi",response);
@@ -75,9 +75,7 @@ console.log("responseveririririi",response);
         if(!response){
             rejectWithValue("verification failed")
         }
-        const  features=response?.data.subscription
-        const  account=response?.data.accountInfo
-     dispatch(setSubscription(features))
-     dispatch(setActive(account))
+
+
     }
   )

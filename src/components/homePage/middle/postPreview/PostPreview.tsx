@@ -125,7 +125,6 @@ const[singlePost,setSinglePost]=useState(false)
           : "Unknown Owner"}
       </h3>
     </Link>
-
     {/* Additional Info */}
     <div className="text-[10px] text-gray-500">
       <p className="text-xs text-gray-500">

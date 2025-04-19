@@ -7,7 +7,7 @@ import React, { useEffect, useState } from "react";
 
 export const MyJobPosts = () => {
   const [currentPage, setCurrentPage] = useState(1);
-  const jobsPerPage = 3
+  const jobsPerPage = 4
  const[jobs,setJobs]=useState<Job[]>([])
 
 const route = useRouter()

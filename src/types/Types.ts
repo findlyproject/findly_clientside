@@ -315,6 +315,7 @@ export interface Subscription {
   sessionId: string;
   companyId:string
   active:boolean;
+  isDeleted:boolean
 }
 
 
@@ -655,13 +656,14 @@ export interface JobPosting {
   experienceLevel: string;
   industry: string;
   salary: Salary 
+  qualification:string;
   requirements: string[];
   jobResponsibilities: string[];
   benefits: string[];
   applicationDeadline: string;
   contactEmail: string;
   contactPhone: string;
-  qualification:string;
+
   company:Company
   createdAt: string;
   updatedAt: string;
