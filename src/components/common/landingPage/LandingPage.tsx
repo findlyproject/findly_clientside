@@ -26,6 +26,20 @@ function LandingPage() {
     "Look for entry-level finance jobs...",
     "Discover UI/UX design opportunities...",
   ];
+  const options = [
+    {
+      title: "Become a Candidate",
+      description: "Registering as a jobseeker is a vital step to access employment opportunities, resources, and support tailored to your career goals.",
+      image: "women", // Replace with actual import
+      route: "/user/register",
+    },
+    {
+      title: "Become an Employer",
+      description: "Registering as a recruiter or employer enables access to a diverse talent pool and streamlines the hiring process, enhancing workforce management.",
+      image: "men", // Replace with actual import
+      route: "/company/register",
+    },
+  ];
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     console.log(e.target.value);
   };
@@ -158,14 +172,7 @@ function LandingPage() {
 
                 {/* Trust indicators with enhanced styling */}
                 <div className="mt-10 sm:mt-12">
-                  <div className="flex items-center space-x-2">
-                    <div className="flex items-center px-4 py-2 bg-white bg-opacity-10 backdrop-filter backdrop-blur-sm rounded-full">
-                      <span className="text-lg font-medium text-white">
-                        Trusted by 50k+ users
-                      </span>
-                    </div>
-                    <div className="h-px flex-1 bg-gradient-to-r from-white to-transparent opacity-20"></div>
-                  </div>
+                  
 
                   <div className="flex items-center mt-4 bg-white bg-opacity-10 backdrop-filter backdrop-blur-sm rounded-full px-4 py-2">
                     <div className="flex">
@@ -802,8 +809,8 @@ function LandingPage() {
       </div>
 
       <AnimatedTestimonials />
-
-      <div className="grid grid-cols-1 md:grid-cols-2 gap-10 bg-gray-100 p-12">
+     
+      {/* <div className="grid grid-cols-1 md:grid-cols-2 gap-10 bg-gray-100 p-12">
         {[
           {
             title: "Become a Candidate",
@@ -868,7 +875,7 @@ function LandingPage() {
           </motion.div>
         ))}
         
-      </div>
+      </div> */}
     </div>
   );
 }

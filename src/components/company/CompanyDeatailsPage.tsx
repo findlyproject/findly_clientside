@@ -220,17 +220,17 @@ console.log("companyProfile",companyProfile);
             className=" w-56 h-56 object-cover"
           />
           <br></br>
-          {activeUser && companyProfile?._id &&  (
-  companyProfile?.followers?.includes(activeUser?._id) ? (
+          {activeUser?._id && companyProfile?._id &&  (
+  companyProfile?.followers?.includes(activeUser._id) ? (
     <button
-      onClick={() => handleFollow(companyProfile?._id)}
+      onClick={() => handleFollow(companyProfile._id)}
       className="bg-primary p-1 rounded-md text-white font-semibold"
     >
       UnFollow
     </button>
   ) : (
     <button
-      onClick={() => handleFollow(companyProfile?._id)}
+      onClick={() => handleFollow(companyProfile._id)}
       className="bg-primary p-1 rounded-md text-white font-semibold"
     >
       Follow
@@ -317,7 +317,7 @@ console.log("companyProfile",companyProfile);
               companyProfile.employees.map((user, index) => {
                 console.log("user",user);
                 
-             return  <li className="text-primary" key={index}>{user?.employee} - {user.position}</li>
+             return  <li className="text-primary" key={index}>{user?.employee?.firstName} - {user.position}</li>
             })
             ) : (
               <li>Write employees of your company...</li>

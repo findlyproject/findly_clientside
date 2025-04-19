@@ -69,6 +69,7 @@ export const subscription=createAsyncThunk(
     async({sessionId,route}:{sessionId:string,route:string},{dispatch,rejectWithValue})=>{
         const response=await handleAsync<AxiosResponse>(()=>api.post(`/${route}/payment/verifySubscription/${sessionId}`))
        
+console.log("response of verii",response);
 
         if(!response){
             rejectWithValue("verification failed")

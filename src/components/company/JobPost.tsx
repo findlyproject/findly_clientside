@@ -1,7 +1,8 @@
 "use client";
 import { postJobs } from "@/lib/store/features/actions/companyActions";
 import { useAppDispatch } from "@/lib/store/hooks";
-import { ChangeEventType, KeyDownEventType } from "@/types/Types";
+import { ChangeEventType, InitialJobPost, JobPosting, KeyDownEventType } from "@/types/Types";
+import api from "@/utils/api";
 import { ErrorMessage, Field, Form, Formik } from "formik";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
@@ -139,7 +140,7 @@ export const JobPost = () => {
   };
   
 
-  const handleSubmit = async (values:JobFormValues) => {
+  const handleSubmit = async (values:InitialJobPost) => {
     values.requirements = requirement;
     values.benefits = benefit;
     values.jobResponsibilities = responsible;
@@ -151,12 +152,13 @@ export const JobPost = () => {
       router.push("/company/posts/jobs")
 
     }
+   
   };
   return (
     <div className="max-w-screen-2x1 container pt-24 mx-auto xl">
       {/* form */}
       <div className=" bg-[#FAFAFA] py-10 px-4 lg:px-16">
-        <Formik<JobFormValues>
+        <Formik<InitialJobPost>
           initialValues={{
             title: "",
             industry: "",

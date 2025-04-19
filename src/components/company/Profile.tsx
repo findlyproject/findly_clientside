@@ -22,7 +22,8 @@ const CompanyProfile = () => {
   const [isOpen, setIsOpen] = useState(false);
   const [isOpenPosts, setIsOpenPosts] = useState(false);
   const [reviews, setReviews] = useState<Rating[]>([])
-  const [jobs, setJobs] = useState({})
+  const [jobs, setJobs] = useState<Job[]>([]);
+
  
 
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
@@ -75,14 +76,14 @@ const router=useRouter()
       if (response.status === 200) {
 
 
-        const data: modalProps[] = response.data.postedJobs || [];
+        const data: Job[] = response.data.postedJobs || [];
         setTotalPages(response.data.totalPages || 1);
 
         setJobs((prevJobs) => {
 
-          const updatedJobs: modalProps[] = [...prevJobs];
+          const updatedJobs: Job[] = [...prevJobs];
           data.forEach((job) => {
-            if (!job.isDelete) {
+            if (!job.isDeleted) {
               const index = updatedJobs.findIndex((j) => j?._id === job?._id);
               if (index !== -1) {
                 updatedJobs[index] = job;
@@ -124,7 +125,7 @@ const router=useRouter()
 
           const updatedReviews = [...prevReviews];
 
-          data.forEach((review) => {
+          data.forEach((review:Rating) => {
             if (!review.isDelete) {
               const index = updatedReviews.findIndex((r) => r._id === review._id);
 
@@ -184,7 +185,7 @@ const router=useRouter()
   ></div>
 
  
-  <div className="absolute bottom-[-40px] flex justify-start ps-10  w-full">
+  <div className="absolute bottom-[-40px] flex justify-start  w-full">
   <div className="relative w-[100px] h-[100px]">
   <Image
     src={activeCompany?.logo || "/default-image.png"}
@@ -263,16 +264,16 @@ const router=useRouter()
           <br /> <br />
           <span className="text-lg font-normal">Key Team Members</span>
 
-          {/* <ul className="mb-5">
+          <ul className="mb-5">
             {activeCompany?.employees && activeCompany?.employees?.length > 0 ? (
               activeCompany?.employees.map((user, index) => {
                 
-                return <li className="text-primary" key={index}>{user?.employee} - {user?.position}</li>
+                return <li className="text-primary" key={index}>{user?.employee.firstName} - {user?.position}</li>
               })
             ) : (
               <li>Write employees of your company...</li>
             )}
-          </ul> */}
+          </ul>
         </div>
 
 
@@ -308,7 +309,16 @@ const router=useRouter()
             <ImProfile />
           </button>
 
-          <Modal isOpen={isOpen} setIsOpen={setIsOpen} jobs={jobs} setJobs={setJobs} findJobPsts={findJobPsts} currentPage={currentPage} totalPages={totalPages} />
+          <Modal
+  isOpen={isOpen}
+  setIsOpen={setIsOpen}
+  jobs={jobs}
+  setJobs={setJobs}
+  findJobPsts={findJobPsts}
+  currentPage={currentPage}
+  setCurrentPage={setCurrentPage}
+                    
+/>
           <PostModal isOpenPosts={isOpenPosts} setIsOpenPosts={setIsOpenPosts} />
 
         </div>

@@ -193,19 +193,24 @@ export interface Company {
   contact?: number;
   password: string;
   cpassword:string;
-  followers?:User[]
+  followers?:string[]
   banner?: string;
   foundedAt: string;
   employees: {
     _id:string;
-    employee: string;  
-    position: string; 
+    employee: {
+      firstName:string;
+      email:string;
+      _id:string
+    }  
+    position: string;
+    
   }[];
   role?: "company" | "premium";
   type?:string
   IndustryType?: string;
   founder:string
- 
+
   applications:applicationData[]
   address: {
     pincode: string;
@@ -241,6 +246,31 @@ export interface Company {
 //     company: string;
 //     salary: { rate: string; min: number; max: number };
 //   }
+
+export interface position{
+  employee:string
+  position:string
+}
+export interface SocialMediaEdit{
+ 
+  socialMedia:{
+    facebook:string
+    instagram:string
+    twitter:string
+    linkedin:string
+  }
+}
+export interface ProfileEdits{
+  name:string
+  email: string
+  address: {
+    landmark:string,
+    country:string,
+    state:string,
+    city:string,
+    pincode:string
+}
+}
 export interface applicationData {
     companyId: string;
     coverLetter: string;
@@ -273,6 +303,7 @@ export interface DeleteAccountProps {
 
 //subscription
 export interface Subscription {
+  _id:string
   clientSecret: string;
   features: string[];
   plan: string;
@@ -318,6 +349,7 @@ export interface Rating {
   };
   status:boolean;
   createdAt:string;
+  isDelete:boolean
 
 }
 
@@ -630,19 +662,36 @@ export interface JobPosting {
   applicationDeadline: string;
   contactEmail: string;
   contactPhone: string;
-  
+  qualification:string;
   company:Company
   createdAt: string;
   updatedAt: string;
   status: string;
   isDeleted: boolean;
   __v: number;
+
+  
   postedBy?: {
     name: string;
   };
 };
 
-
+export interface InitialJobPost{
+  title: string,
+            industry:string ,
+            jobType: string,
+            salary: { rate: string, min: number, max: number },
+            experienceLevel: string,
+            location: string,
+            applicationDeadline: string,
+            qualification: string,
+            jobResponsibilities: string[],
+            description: string,
+            requirements: string[],
+            contactEmail: string,
+            contactPhone: string,
+            benefits: string[]
+}
 export interface SavedType{
   jobId:Job
   timestamp:string

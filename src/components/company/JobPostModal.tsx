@@ -1,9 +1,10 @@
 // import { companyData } from "@/lib/store/features/companyslice";
+'use client'
 import { IoMdCloseCircle } from "react-icons/io";
 import { Button, Card } from "flowbite-react";
 import { RiMoneyRupeeCircleFill } from "react-icons/ri";
 import { FaLocationDot } from "react-icons/fa6";
-import { useState } from "react";
+
 import Dropdown from "@mui/joy/Dropdown";
 import Menu from "@mui/joy/Menu";
 import MenuButton from "@mui/joy/MenuButton";
@@ -14,35 +15,37 @@ import { RiDeleteBinLine } from "react-icons/ri";
 import { GoLink } from "react-icons/go";
 import { FaCalendarAlt } from "react-icons/fa";
 import { Spinner } from "@material-tailwind/react";
+
 import { useAppDispatch } from "@/lib/store/hooks";
 import { deleteJob, editJobDeadline } from "@/lib/store/features/actions/companyActions";
 import { ChangeEventType, Job } from "@/types/Types";
+import { useState } from "react";
 
 export interface modalProps {
   isOpen: boolean;
   setIsOpen: (open: boolean) => void;
   setCurrentPage: (page: number) => void;
   currentPage: number;
-
+ 
   jobs:Job[]
-  isDelete: boolean
-  _id: string;
+
 
   findJobPsts: (value: number) => void,
-  setJobs: (value:modalProps)=>void;
+  setJobs: React.Dispatch<React.SetStateAction<Job  []>>
 
 }
 
 
 const Modal: React.FC<modalProps> = ({ isOpen, setIsOpen, jobs, setJobs, findJobPsts, currentPage }) => {
-  const dispatch=useAppDispatch()
+ 
   const [detailModal, setDetailsModal] = useState(false)
-  const [selectedJob, setSelectedJob] = useState<modalProps["jobs"][0] >(null);
+  const [selectedJob, setSelectedJob] = useState<Job| null>(null);
   const [openMenu, setOpenMenu] = useState<string | null>(null);
   const [isEditing, setIsEditing] = useState(false);
   const [newDeadline, setNewDeadline] = useState(selectedJob?.applicationDeadline as string );
   const [loading, setLoading] = useState(false);
   console.log("selectedJob", selectedJob);
+  const dispatch=useAppDispatch()
 
 
   const handleClose = () => {
@@ -274,7 +277,7 @@ const Modal: React.FC<modalProps> = ({ isOpen, setIsOpen, jobs, setJobs, findJob
                         </p>
                       </div>
                       <div>
-                        {isEditing && (selectedJob?._id == job._id) ? (
+                        {isEditing && (selectedJob?._id == jobs._id) ? (
                           <div>
                             <input
                               type="date"
@@ -289,7 +292,7 @@ const Modal: React.FC<modalProps> = ({ isOpen, setIsOpen, jobs, setJobs, findJob
                           <p
                             className={`text-xs text-white px-3 py-1 rounded-lg font-semibold w-fit ${new Date(selectedJob.applicationDeadline) < new Date()
                               ? "bg-red-500"
-                              : new Date(selectedJob.applicationDeadline) <= new Date(new Date().setDate(new Date().getDate() + 15))
+                              : new Date(selectedJob?.applicationDeadline) <= new Date(new Date().setDate(new Date().getDate() + 15))
                                 ? "bg-yellow-500"
                                 : "bg-green-500"
                               }`}
