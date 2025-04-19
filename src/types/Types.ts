@@ -160,7 +160,7 @@ export interface User{
   subscriptionStartDate: Date | null;
   coverLetter?: string;
   isBlocked?: boolean;
-  _id?: string;
+  _id: string;
 }
 
 
@@ -451,6 +451,7 @@ export interface IReport {
   updatedAt:Date;
   postId:IPost
   userId:User
+  //  userId:string
   
   }
   

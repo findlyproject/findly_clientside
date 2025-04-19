@@ -193,7 +193,7 @@ function CompanyView() {
                       key={item._id}
                       className="px-3 py-1 rounded-full text-sm bg-primary text-white"
                     >
-                      {item.employee} - {item.position}
+                      {item.employee?.firstName} - {item.position}
                     </span>
                   ))
                 ) : (
