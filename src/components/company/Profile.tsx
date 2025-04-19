@@ -265,7 +265,7 @@ const router=useRouter()
             {activeCompany?.employees && activeCompany?.employees?.length > 0 ? (
               activeCompany?.employees.map((user, index) => {
                 
-                return <li className="text-primary" key={index}>{user?.employee.firstName} - {user?.position}</li>
+                return <li className="text-primary" key={index}>{user?.employee?.firstName} - {user?.position}</li>
               })
             ) : (
               <li>Write employees of your company...</li>

@@ -14,6 +14,7 @@ import { useAppDispatch } from "@/lib/store/hooks";
 import { IReport } from "@/types/Types";
 import { useRouter } from "next/navigation";
 import { BsThreeDotsVertical } from "react-icons/bs";
+import Image from "next/image";
 
 function ReportedPosts() {
   const [post, setPost] = useState<IReport[]>([]);
@@ -128,11 +129,14 @@ function ReportedPosts() {
                   className="flex flex-col md:flex-row mb-8 border border-gray-200 rounded-lg shadow-md dark:border-gray-700 bg-white dark:bg-gray-800"
                 >
                   <div className="relative md:w-1/2 w-full group">
-                    <img
-                      src={item.postId?.images?.[0]}
-                      alt="Post"
-                      className="object-cover w-full h-full rounded-t-lg md:rounded-none md:rounded-s-lg"
-                    />
+                  <Image
+  src={item.postId?.images?.[0] || ""}
+  alt="Post"
+  className="object-cover w-[400px] h-[300px] rounded-t-lg md:rounded-none md:rounded-s-lg"
+  width={400}
+  height={300}
+/>
+
 
                     <div className="absolute bottom-0 left-0 right-0 bg-white bg-opacity-70 text-black text-sm p-2 opacity-0 group-hover:opacity-100 transition-opacity duration-300">
                       {item.postId?.description || "No Description"}
@@ -196,20 +200,22 @@ function ReportedPosts() {
                         Reported By:
                       </span>
                       <div className="flex items-center mt-2">
-                        <img
+                        <Image
                           className="rounded-full w-10 h-10 object-cover"
                           src={
                             item.reportedBy?.profileImage ||
                             "https://via.placeholder.com/150"
                           }
                           alt="Reporter Profile"
+                          width={40}
+                          height={40}
                         />
                         <div className="ml-3">
                           <p className="font-medium dark:text-white">
                             {item.reportedBy?.lastName || "Unknown"}
                           </p>
                           <p className="text-sm text-gray-500 dark:text-gray-400">
-                            {item.reportedBy.jobTitle?.[0] || "MERN Developer"}
+                            {item.reportedBy?.jobTitle?.[0] || "MERN Developer"}
                           </p>
                         </div>
                       </div>
@@ -246,13 +252,15 @@ function ReportedPosts() {
                     </h3>
 
                     <div className="relative group mb-4">
-                      <img
+                      <Image
                         src={
                           item.userId?.profileImage ||
                           "https://via.placeholder.com/150"
                         }
                         alt="Reported User"
                         className="object-cover w-24 h-24 rounded-full border-2 border-gray-300 dark:border-gray-600"
+                        width={96}
+                        height={96}
                       />
 
                       <div className="absolute bottom-0 left-0 right-0 bg-white bg-opacity-80 text-black text-sm p-2 opacity-0 group-hover:opacity-100 transition-opacity duration-300 text-center rounded-b-full">
@@ -328,20 +336,22 @@ function ReportedPosts() {
                         Reported By:
                       </span>
                       <div className="flex items-center mt-2">
-                        <img
+                        <Image
                           className="rounded-full w-10 h-10 object-cover"
                           src={
                             item.reportedBy?.profileImage ||
                             "https://via.placeholder.com/150"
                           }
                           alt="Reporter Profile"
+                          width={40}
+                          height={40}
                         />
                         <div className="ml-3">
                           <p className="font-medium dark:text-white">
                             {item.reportedBy?.lastName || "Unknown"}
                           </p>
                           <p className="text-sm text-gray-500 dark:text-gray-400">
-                            {item.reportedBy.jobTitle?.[0] || "MERN Developer"}
+                            {item.reportedBy?.jobTitle?.[0] || "MERN Developer"}
                           </p>
                         </div>
                       </div>

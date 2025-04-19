@@ -157,6 +157,7 @@ import {
   fetchUsers,
 } from "@/lib/store/features/actions/adminActions";
 import { useAppDispatch, useAppSelector } from "@/lib/store/hooks";
+import Image from "next/image";
 import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
 
@@ -214,10 +215,12 @@ const Users = () => {
             {currentUsers.map((user) => (
               <tr key={user._id} className="hover:bg-gray-50">
                 <td className="p-4">
-                  <img
+                  <Image
                     src={user.profileImage || "/default-avatar.png"}
                     alt={user.firstName}
                     className="h-10 w-10 rounded-full object-cover"
+                    width={40}
+                    height={40}
                   />
                 </td>
                 <td className="p-4">
