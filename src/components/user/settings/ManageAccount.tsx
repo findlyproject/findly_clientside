@@ -16,12 +16,12 @@ import { IoIosLogOut } from "react-icons/io";
 
 import { useRouter } from "next/navigation";
 import DeleteAccount from "./DeleteAccount";
-import { setDetailes, SetLogout } from "@/lib/store/features/userSlice";
+import {  SetLogout } from "@/lib/store/features/userSlice";
 import { setCompanyLogOut } from "@/lib/store/features/companyslice";
 import { deleteAccount, deleteAccountVerification, logoutUser } from "@/lib/store/features/actions/userActions";
 
 import api from "@/utils/api";
-import { button } from "@material-tailwind/react";
+
 import { Subscription } from "@/types/Types";
 import { logOutCompany } from "@/lib/store/features/actions/companyActions";
 
@@ -99,13 +99,13 @@ const handleLogout = () => {
     }
   }, [otpModal, showModal]);
 
-  const [isDarkMode, setIsDarkMode] = useState(false);
+  // const [isDarkMode, setIsDarkMode] = useState(false);
   const [isShow, setIsShow] = useState(false);
 
-  const handleToggle = () => {
-    setIsDarkMode(!isDarkMode);
-    document.documentElement.classList.toggle("dark");
-  };
+  // const handleToggle = () => {
+  //   setIsDarkMode(!isDarkMode);
+  //   document.documentElement.classList.toggle("dark");
+  // };
   useEffect(() => {
     const details = async () => {
       const response = await api.get(`/payment/subscriptiondetails`);
