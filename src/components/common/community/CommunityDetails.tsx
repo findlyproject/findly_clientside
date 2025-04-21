@@ -23,7 +23,7 @@ type Props = {
   };
   onClose: () => void;
 };
-export default function CommunityDetails({params,onClose}:Props) {
+export  function CommunityDetails({params,onClose}:Props) {
  const id= params.id
  
   const [activeTab, setActiveTab] = useState("images");

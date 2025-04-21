@@ -10,7 +10,7 @@ import { MdClose, MdImage, MdVideoCameraBack } from "react-icons/md";
 import { toast } from "react-toastify";
 import { IoReorderThreeOutline } from "react-icons/io5";
 import { RxCross2 } from "react-icons/rx";
-import CommunityDetails from "./CommunityDetails";
+import {CommunityDetails} from "./CommunityDetails";
 
 
 import { Community,CommunityMessage } from "@/types/Types";
