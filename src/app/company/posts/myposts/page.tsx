@@ -5,7 +5,7 @@ export default function page() {
   return (
     <div>
       <Navbar/>
-      {/* <MyPosts/> */}
+      <MyPosts/>
     </div>
   )
 }

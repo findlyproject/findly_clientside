@@ -8,7 +8,7 @@ export default function page ({ params }: { params: { id: string } }) {
   return (
     <div>
       <Navbar />
-      <CommunityDetails id={id} />
+      <CommunityDetails params={{ id }} onClose={() => {}} />
     </div>
   );
 }

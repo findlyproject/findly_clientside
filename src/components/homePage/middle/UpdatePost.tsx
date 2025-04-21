@@ -9,6 +9,7 @@ import OutsideClickHandler from "react-outside-click-handler";
 export interface UpdatePostProps {
   post: IPost;
   UpdateOpen:boolean
+  
 }
 
 export const UpdatePost: React.FC<UpdatePostProps> = ({ post,UpdateOpen }) => {

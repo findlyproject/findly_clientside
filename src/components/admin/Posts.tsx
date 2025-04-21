@@ -1,3 +1,4 @@
+/* eslint-disable react-hooks/exhaustive-deps */
 "use client";
 
 import { fetchAllPostsAdmin } from "@/lib/store/features/actions/postActions";

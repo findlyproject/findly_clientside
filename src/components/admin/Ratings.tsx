@@ -1,3 +1,4 @@
+/* eslint-disable react-hooks/exhaustive-deps */
 "use client";
 import { useAppDispatch, useAppSelector } from "@/lib/store/hooks";
 import React, { useEffect } from "react";

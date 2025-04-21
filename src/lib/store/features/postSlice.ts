@@ -1,7 +1,7 @@
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 
 
-import {  IPost, IComment, IReply, ISavePost, SavePost} from "@/types/Types";
+import {  IPost, IComment, IReply, SavePost} from "@/types/Types";
 
 
 
@@ -14,7 +14,7 @@ export interface PostState {
   commentReplay?:IReply[]
   commentsReplay?:IComment[] | null;
   likes: string[]; 
-  saved:SavePost []
+  saved:SavePost[]
 }
 
 const initialState: PostState = {
