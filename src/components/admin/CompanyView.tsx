@@ -1,3 +1,4 @@
+/* eslint-disable react-hooks/exhaustive-deps */
 "use client";
 import api from "@/utils/api";
 import { useParams } from "next/navigation";

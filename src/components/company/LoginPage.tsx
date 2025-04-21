@@ -8,6 +8,7 @@ import { useAppDispatch, useAppSelector } from "@/lib/store/hooks";
 import { forgotPassword, loginCompany } from "@/lib/store/features/actions/companyActions";
 import { toast } from "react-toastify";
 import { useRouter } from "next/navigation";
+import Image from "next/image";
 
 
 
@@ -146,7 +147,13 @@ const Login = () => {
         </p>
       </div>
       <div className="hidden md:block w-1/2 ">
-        <img className="h-full w-full object-cover" src="https://i.pinimg.com/736x/a5/79/5f/a5795fa00be3cfb313cd561f31a991ae.jpg" alt="" />
+      <Image
+  src="https://i.pinimg.com/736x/a5/79/5f/a5795fa00be3cfb313cd561f31a991ae.jpg"
+  alt="Bridge Image"
+  width={736}
+  height={1104}
+  className="h-full w-full object-cover"
+/>
       </div>
     </div>
   </div>

@@ -7,6 +7,7 @@ import { useEffect, useRef, useState } from "react";
 import { formatDistanceToNow } from "date-fns";
 import { MdDelete } from "react-icons/md";
 import { FaStar, FaEnvelope, FaPhone, FaGlobe, FaFacebook, FaInstagram, FaLinkedin, FaTwitter } from "react-icons/fa";
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
 import Modal,{ modalProps } from "./JobPostModal";
 import PostModal from "./PostModal";
 import { MdVerified } from "react-icons/md";
@@ -14,7 +15,7 @@ import { ImProfile } from "react-icons/im";
 // import { Spinner } from "@material-tailwind/react";
 import { Spinner } from "flowbite-react";
 import Image from "next/image";
-import { Rating } from "@/types/Types";
+import { Job, Rating } from "@/types/Types";
 import { TiEdit } from "react-icons/ti";
 import { useRouter } from "next/navigation";
 
@@ -30,8 +31,9 @@ const CompanyProfile = () => {
   const [posts, setPosts] = useState([])
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const [page, setPage] = useState(1)
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+  
   const [currentPage, setCurrentPage] = useState<number>(1);
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const [totalPages, setTotalPages] = useState(1);
   const [hasMore, setHasMore] = useState(true);
   const [loading, setLoading] = useState(false)
@@ -50,6 +52,7 @@ const router=useRouter()
     fetchReviews(page);
     findJobPsts(currentPage)
     findposts()
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [])
 
   const findposts = async () => {
@@ -185,6 +188,7 @@ const router=useRouter()
   ></div>
 
  
+
   <div className="absolute bottom-[-40px] flex justify-start  w-full">
   <div className="relative w-[100px] h-[100px]">
   <Image

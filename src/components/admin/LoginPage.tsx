@@ -32,7 +32,7 @@ export default function LoginPage() {
   };
 
   const validate = () => {
-    let newErrors = { email: "", password: "" };
+    const newErrors = { email: "", password: "" };
     let isValid = true;
 
     if (!datas.email.trim()) {
