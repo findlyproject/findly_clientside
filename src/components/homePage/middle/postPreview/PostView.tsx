@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-unused-vars */
 "use client";
 
 import { useEffect, useState } from "react";
@@ -20,6 +21,7 @@ import relativeTime from "dayjs/plugin/relativeTime";
 import { Comments } from "./Comment";
 import ShareMenu from "@/components/common/ShareMenu";
 import OutsideClickHandler from "react-outside-click-handler";
+import { IPost, User } from "@/types/Types";
 
 dayjs.extend(relativeTime);
 
@@ -28,7 +30,7 @@ interface PostViewProps {
 }
 
 const PostView = ({ postId }: PostViewProps) => {
-  const [post, setPost] = useState<any>(null);
+  const [post, setPost] = useState<IPost|null>(null);
   const [loading, setLoading] = useState(true);
   const [isShowLikes, setIsShowLikes] = useState(false);
   const [isShowComments, setIsShowComments] = useState(false);
@@ -72,19 +74,52 @@ const PostView = ({ postId }: PostViewProps) => {
   const toggleLikes = () => setIsShowLikes((prev) => !prev);
 
   return (
-    <section className="max-w-2xl mx-auto p-6 bg-white shadow-md rounded-lg">
+    <section className="max-w-2xl mx-auto p-6 bg-white shadow-md rounded-lg ">
       {/* Post Owner */}
-      <div className="flex items-center mb-4">
-        <Image
+      <div className="flex items-center mb-4 mt-20">
+        {/* <Image
           src={post.owner?.profileImage || "/default-profile.png"}
           alt="Profile"
           width={40}
           height={40}
           className="rounded-full"
-        />
+        /> */}
+        <Image
+              src={
+                post.owner && typeof post.owner === "object" && post.owner.type === "Company"
+                  ? post.owner.logo || "https://via.placeholder.com/35" // Default if no logo
+                  : (post.owner as User)?.profileImage ||
+                    "https://res.cloudinary.com/dq1auwpkm/image/upload/v1738735360/profile_jtwxaj.png"
+              }
+              className="rounded-full size-8 object-cover"
+              alt={
+                post.owner && typeof post.owner === "object"
+                  ? post.owner.type === "Company"
+                    ? post.owner.name || "Company"
+                    : (post.owner as User)?.firstName || "User"
+                  : "Unknown"
+              }
+              width={35}
+              height={35}
+            />
         <div className="ml-3">
-          <Link href={`/profile/${post.owner?._id}`} className="font-semibold hover:underline">
-            {post.owner?.firstName} {post.owner?.lastName}
+             <Link
+            href={
+              typeof post.owner === "object" && post.owner !== null && "_id" in post.owner && post.owner._id === currentUser?._id
+                ? `/${routes}/profile`
+                : typeof post.owner === "object" && post.owner !== null && "_id" in post.owner
+                ? `/${routes}/${post.owner._id}/${post.owner.type}`
+                : "#"
+            }
+            className="hover:underline"
+          >
+            <h3 className="text-lg font-semibold text-gray-900">
+              {typeof post.owner === "object" && post.owner !== null
+                ? post.owner.type === "Company"
+                  ? post.owner.name || "Unknown Company"
+                  : `${(post.owner as User)?.firstName || ""} ${(post.owner as User)?.lastName || ""}`.trim() || "Unknown User"
+                : "Unknown Owner"}
+            </h3>
           </Link>
           <p className="text-sm text-gray-500">{dayjs(post.createdAt).fromNow()}</p>
         </div>

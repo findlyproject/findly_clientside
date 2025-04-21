@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-unused-vars */
 "use client";
 
 import { useEffect, useState } from "react";
@@ -9,7 +10,7 @@ import { useRouter } from "next/navigation";
 import Image from "next/image";
 import Link from "next/link";
 import { setLikes, setSaved } from "@/lib/store/features/postSlice";
-import { IPost, User } from "@/types/Types";
+import { Company, IPost, User } from "@/types/Types";
 import "swiper/css";
 import "swiper/css/navigation";
 import { useAppDispatch, useAppSelector } from "@/lib/store/hooks";
@@ -36,7 +37,7 @@ export const PostPreview = ({ post }: PostPreviewProps) => {
   const [isShareMenuVisible, setShareMenuVisible] = useState(false);
   const [isSaved, setIsSaved] = useState(false);
   const dispatch = useAppDispatch();
-  const router = useRouter();
+
   const [isShowMenu, setIsShowMenu] = useState(false);
   const [isShowLikes, setIsShowLikes] = useState(false);
   const toggleLikes = () => setIsShowLikes((prev) => !prev);
@@ -84,8 +85,8 @@ const[singlePost,setSinglePost]=useState(false)
       <div className="flex items-center mb-3">
   {/* Profile Image Clickable */}
   <div
-    className="cursor-pointer"
-    onClick={() => router.push(`/main/profile/${post.owner?._id}`)}
+    className="cursor-pointer "
+ 
   >
     <Image
       src={
@@ -110,33 +111,35 @@ const[singlePost,setSinglePost]=useState(false)
   {/* Owner Info */}
   <div className="ml-3">
     <Link
-      href={
-        post.owner && typeof post.owner === "object" && post.owner._id === currentUser?._id
-          ? `/${route}/profile`
-          : `/${route}/${post.owner?._id}/${post.owner?.type}`
-      }
-      className="hover:underline"
-    >
-      <h3 className="text-lg font-semibold text-gray-900">
-        {post.owner && typeof post.owner === "object"
-          ? post.owner.type === "Company"
-            ? post.owner.name || "Unknown Company" // Show Company Name
-            : `${(post.owner as User)?.firstName || ""} ${(post.owner as User)?.lastName || ""}`.trim() || "Unknown User" // Show User Name
-          : "Unknown Owner"}
-      </h3>
-    </Link>
+  href={
+    typeof post.owner === "object" && post.owner !== null && "_id" in post.owner && post.owner._id === currentUser?._id
+      ? `/${route}/profile`
+      : typeof post.owner === "object" && post.owner !== null && "_id" in post.owner
+      ? `/${route}/${post.owner._id}/${post.owner.type}`
+      : "#"
+  }
+  className="hover:underline"
+>
+  <h3 className="text-lg font-semibold text-gray-900">
+    {typeof post.owner === "object" && post.owner !== null
+      ? post.owner.type === "Company"
+        ? post.owner.name || "Unknown Company"
+        : `${(post.owner as User)?.firstName || ""} ${(post.owner as User)?.lastName || ""}`.trim() || "Unknown User"
+      : "Unknown Owner"}
+  </h3>
+</Link>
     {/* Additional Info */}
     <div className="text-[10px] text-gray-500">
-      <p className="text-xs text-gray-500">
-        {post.owner && typeof post.owner === "object"
-          ? post.owner._id === currentUser?._id
-            ? "You"
-            : post.owner.type === "Company"
-            ? post.owner.IndustryType || "Company" // Show Industry for Company
-            : (post.owner as User)?.jobTitle?.[0] || "Professional"
-          : "Unknown"}{" "}
-        • {dayjs(post.createdAt).fromNow()}
-      </p>
+    <p className="text-xs text-gray-500">
+  {post.owner && typeof post.owner === "object" && "_id" in post.owner
+    ? post.owner._id === currentUser?._id
+      ? "You"
+      : post.owner.type === "Company"
+      ? (post.owner as Company)?.IndustryType || "Company" // Type-safe access
+      : (post.owner as User)?.jobTitle?.[0] || "Professional"
+    : "Unknown"}{" "}
+  • {dayjs(post.createdAt).fromNow()}
+</p>
     </div>
   </div>
 </div>
@@ -369,8 +372,8 @@ const[singlePost,setSinglePost]=useState(false)
           <div className="max-h-60 overflow-y-autospace-y-4">
           {Array.isArray(post.likedBy) && post.likedBy.length > 0 ? (
   post.likedBy.map((item, index) => {
-    const isUser = item.type === "user"  // Check if it's a User
-    const isCompany = item.type === "company"; // Check if it's a Company
+    const isUser = item.type === "user"  
+    const isCompany = item.type === "company"; 
 
     return (
       <div
