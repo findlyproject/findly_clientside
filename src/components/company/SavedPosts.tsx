@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-unused-vars */
 "use client";
 import { setSaved } from "@/lib/store/features/postSlice";
 import { useAppDispatch, useAppSelector } from "@/lib/store/hooks";
@@ -6,7 +7,7 @@ import { formatDistanceToNowStrict } from "date-fns";
 import api from "@/utils/api";
 import { handleUnsavePosts } from "@/lib/store/features/actions/companyActions";
 import { Company, SavedType, User } from "@/types/Types";
-
+import Image from "next/image";
 export default function SavedPosts() {
   const [activeTab, setActiveTab] = useState("saved");
   const [posts, setPosts] = useState<SavedType[]>([]);
@@ -107,17 +108,19 @@ export default function SavedPosts() {
   </button>
 
   {/* Profile Image */}
-  <img
-    src={
-      isCompany(item.postId.owner)
-        ? item.postId.owner.logo || "/profile.jpg"
-        : isUser(item.postId.owner)
-        ? item.postId.owner.profileImage || "/profile.jpg"
-        : "/profile.jpg"
-    }
-    alt="Profile"
-    className="w-12 h-12 rounded-full border"
-  />
+  <Image
+  src={
+    isCompany(item.postId.owner)
+      ? item.postId.owner.logo || "/profile.jpg"
+      : isUser(item.postId.owner)
+      ? item.postId.owner.profileImage || "/profile.jpg"
+      : "/profile.jpg"
+  }
+  alt="Profile"
+  width={48}
+  height={48}
+  className="w-12 h-12 rounded-full border"
+/>
 
   {/* Owner Details */}
   <div>
@@ -161,11 +164,13 @@ export default function SavedPosts() {
 
                     <div className="mt-3">
                       {item.postId.images&&item.postId.images?.length > 0 ? (
-                        <img
-                          src={item.postId.images[0]}
-                          className="w-full h-40 object-cover rounded-md"
-                          alt="Post"
-                        />
+                        <Image
+                        src={item.postId.images[0]}
+                        alt="Post"
+                        width={400} // adjust based on layout
+                        height={160} // adjust based on layout
+                        className="w-full h-40 object-cover rounded-md"
+                      />
                       ) : item.postId.video ? (
                         <video
                           src={item.postId.video}

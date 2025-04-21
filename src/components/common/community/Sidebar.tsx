@@ -18,9 +18,9 @@ const Sidebar: React.FC<SidebarProps> = ({ setCommunity, community, isopen, setI
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [isModal, setIsModal] = useState(false);
   const [communities, setCommunities] = useState<Community[]>([]);
-  const [selectedCommunity, setSelectedCommunity] = useState<Community | null>(
-    null
-  );
+  // const [selectedCommunity, setSelectedCommunity] = useState<Community | null>(
+  //   null
+  // );
 
   const [input, setInput] = useState({
     name: "",

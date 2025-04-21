@@ -11,12 +11,7 @@ export function middleware(req: NextRequest) {
   const token = req.cookies.get("token")?.value;
   const url = req.nextUrl.clone();
   const pathName = url.pathname;
-  console.log("userType",userType);
-  console.log("token",token);
-  console.log("pathName",pathName);
-  console.log("isUserProtectedRoute",isUserProtectedRoute(pathName));
-  console.log("isCompanyProtectedRoute",isCompanyProtectedRoute(pathName));
-  
+
   if (token && (pathName === "/"||pathName==="/user/register"||pathName === "/"||pathName==="/company/register"||pathName==="/login/company"||pathName==="/login/user")) {
     console.log("dff");
     

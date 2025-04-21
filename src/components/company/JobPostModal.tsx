@@ -92,7 +92,7 @@ const route=useRouter()
       console.error("Error updating deadline:", error);
     } finally {
       setTimeout(() => {
-        console.log("ddddddddddd");
+   
 
         setLoading(false);
         setIsEditing(false);
