@@ -1,7 +1,7 @@
 import {
   Ieducation,
   IlocationType,
-  Job,
+ 
   JobLocationType,
   SavedType,
   User,

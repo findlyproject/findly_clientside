@@ -2,7 +2,7 @@
 import PostView from '@/components/homePage/middle/postPreview/PostView'
 import Navbar from '@/components/navBar/Navbar'
 import { useParams } from 'next/navigation';
-import { useRouter } from 'next/router';
+
 import React from 'react'
 
 function Page() {
