@@ -1,3 +1,4 @@
+/* eslint-disable react-hooks/exhaustive-deps */
 
 "use client"
 import { useAppDispatch, useAppSelector } from "@/lib/store/hooks";
@@ -10,8 +11,9 @@ import React, { useEffect, useState } from "react";
 import { FaStar, FaEnvelope, FaPhone, FaGlobe, FaFacebook, FaInstagram, FaLinkedin, FaTwitter } from "react-icons/fa";
 import OutsideClickHandler from "react-outside-click-handler";
 import { MdDelete } from "react-icons/md";
-import { Company, Rating, User } from "@/types/Types";
+import { Company, Rating } from "@/types/Types";
 import { addReview, deleteReview } from "@/lib/store/features/actions/companyActions";
+import Image from "next/image";
   export interface ReviewInput {
   review: string;
   name: string;
@@ -214,11 +216,14 @@ console.log("companyProfile",companyProfile);
            </OutsideClickHandler>
         <div className="flex items-start justify-between  gap-6">
           <div className="flex flex-col">
-          <img
-            src={companyProfile?.logo}
-            alt="Profile"
-            className=" w-56 h-56 object-cover"
-          />
+          <Image
+  src={companyProfile?.logo || ""}
+  alt="Profile"
+  width={224}
+  height={224}
+  className="w-56 h-56 object-cover rounded-full"
+/>
+
           <br></br>
           {activeUser?._id && companyProfile?._id &&  (
   companyProfile?.followers?.includes(activeUser._id) ? (
@@ -355,11 +360,14 @@ console.log("companyProfile",companyProfile);
               className="group cursor-pointer w-full max-lg:max-w-xl lg:w-1/3 border border-gray-300 rounded-2xl p-5 transition-all duration-300 hover:border-indigo-600"
             >
               <div className="flex items-center mb-6">
-                <img
-                  src={blog.image}
-                  alt={blog.author}
-                  className="rounded-lg w-full object-cover"
-                />
+              <Image
+  src={blog.image}
+  alt={blog.author}
+  width={500} // Example value matching the container's width
+  height={300} // Example value matching the container's height
+  className="rounded-lg w-full h-[300px] object-cover"
+/>
+
               </div>
               <div className="block">
                 <h4 className="text-gray-900 font-medium leading-8 mb-9">

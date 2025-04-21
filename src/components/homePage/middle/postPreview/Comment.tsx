@@ -6,7 +6,7 @@ import { useState, useRef, useEffect } from "react";
 import { useAppDispatch, useAppSelector } from "@/lib/store/hooks";
 import dayjs from "dayjs";
 import relativeTime from "dayjs/plugin/relativeTime";
-import { CommentsProps } from "@/types/Types";
+import { CommentsProps, Company, User } from "@/types/Types";
 import {
   deleteAComment,
   deleteReplay,
@@ -347,9 +347,9 @@ export const Comments = ({ postId, comments }: CommentsProps) => {
                       <Image
   src={
     comment.user?.type === "user"
-      ? comment.user.profileImage ||
+      ? (comment.user as User)?.profileImage ||
         "https://res.cloudinary.com/dq1auwpkm/image/upload/v1738735360/profile_jtwxaj.png"
-      : comment.user?.logo ||
+      : (comment.user as Company)?.logo ||
         "https://res.cloudinary.com/dq1auwpkm/image/upload/v1738735360/profile_jtwxaj.png"
   }
   alt="User Profile"

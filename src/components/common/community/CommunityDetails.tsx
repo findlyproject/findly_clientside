@@ -1,3 +1,4 @@
+/* eslint-disable react-hooks/exhaustive-deps */
 "use client";
 import { AxiosError, AxiosResponse } from "axios";
 import api from "@/utils/api";
@@ -10,7 +11,7 @@ import { MdModeEditOutline } from "react-icons/md";
 import { FaPencilAlt } from "react-icons/fa";
 
 import {Community2,CommunityMessage } from "@/types/Types";
-import { Metadata } from "next";
+
 import Image from "next/image";
 // import Image from "next/image";
 // interface CommunityDetailsProps {
@@ -23,7 +24,7 @@ type Props = {
   };
   onClose: () => void;
 };
-export default function CommunityDetails({params,onClose}:Props) {
+export  function CommunityDetails({params,onClose}:Props) {
  const id= params.id
  
   const [activeTab, setActiveTab] = useState("images");
@@ -211,7 +212,7 @@ export default function CommunityDetails({params,onClose}:Props) {
       <div className="relative flex flex-col items-center -mt-12">
         <div className="relative w-24 h-24">
           <Image
-            src={preview || details?.profile||""}
+            src={preview || details?.profile ||"https://res.cloudinary.com/dq1auwpkm/image/upload/v1738735360/profile_jtwxaj.png"}
             alt="Community Profile"
             className="w-full h-full rounded-full border-4 border-white shadow-md"
             width={80}
@@ -386,11 +387,14 @@ export default function CommunityDetails({params,onClose}:Props) {
                 .filter((item) => item.type === "image")
                 .map((item, index) => (
                   <li key={index}>
-                    <img
-                      src={item.message}
-                      className="w-full h-[150px] object-cover rounded-lg"
-                      alt="Post"
-                    />
+                  <Image
+  src={item.message||"https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQsBGOs2225fFqTfnl5EKlrEUBn5-drby1x3Q&s"}
+  alt="Post"
+  width={500} // Replace with actual width in pixels
+  height={150}
+  className="w-full h-[150px] object-cover rounded-lg"
+/>
+
                   </li>
                 ))}
             </ul>
@@ -418,18 +422,22 @@ export default function CommunityDetails({params,onClose}:Props) {
                   key={index}
                   className="py-2 flex items-center border-b pb-2"
                 >
-                  <img
+                  
+                  <Image
                     src={
                       member.memberModel === "User"
-                        ? member.memberId?.profileImage
-                        : member.memberId?.logo
+                        ? member.memberId?.profileImage 
+                        : member.memberId?.logo 
                     }
                     className="w-8 h-8 rounded-full"
+                    width={32}
+                    height={32}
                     alt={
                       member.memberModel === "User"
                         ? member.memberId?.firstName
                         : member.memberId?.name
                     }
+                    
                   />
                   <span className="ml-3">
                     {member.memberModel === "User"
