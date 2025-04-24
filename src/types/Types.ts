@@ -153,8 +153,8 @@ export interface User{
   about?: string;
   createdAt:string;
   updatedAt:string;
-  resumePDF?: ResumeFile[];
-  resumeVideo?: ResumeFile[];
+  resumePDF?: ResumePayload["resumePDF"];
+resumeVideo?: ResumePayload["resumeVideo"];
   role: "user" | "premium";
   subscriptionEndDate: Date | null;
   subscriptionStartDate: Date | null;
@@ -239,14 +239,25 @@ export interface Company {
     updatedAt: string;
 }
 
-//  export interface Job {
-//     _id: string;
-//     title: string;
-//     location: string;
-//     company: string;
-//     salary: { rate: string; min: number; max: number };
-//   }
 
+export interface ResumePayload{
+  resumePDF:{
+    fileName:string;
+    fileUrl:string;
+    isDeleted:boolean;
+    uploadedAt:string;
+    _id:string
+  }[]
+  
+resumeVideo:{
+  fileName:string;
+  fileUrl:string;
+  isDeleted:boolean; 
+uploadedAt:string;
+_id:string
+}[]
+
+}
 export interface position{
   employee:string
   position:string
