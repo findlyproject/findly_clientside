@@ -1,8 +1,9 @@
 import {
   Ieducation,
   IlocationType,
-  Job,
+ 
   JobLocationType,
+  ResumePayload,
   SavedType,
   User,
 } from "@/types/Types";
@@ -108,7 +109,7 @@ const loginSlice = createSlice({
     ) => {
       if (!action.payload) return;
     
-      // Initialize professionalData only if it doesn't exist
+   
       if (!state.professionalData) {
         state.professionalData = {
           location: state.activeuser?.location || undefined,
@@ -126,7 +127,7 @@ const loginSlice = createSlice({
         const typedKey = key as keyof typeof state.professionalData;
     
         if (Array.isArray(state.professionalData[typedKey]) && Array.isArray(value)) {
-          const existingArray = state.professionalData[typedKey] as any[];
+          const existingArray = state.professionalData[typedKey] ;
     
           // Remove duplicates based on a unique property (e.g., `id`)
           const mergedArray = [...existingArray, ...value];
@@ -185,8 +186,10 @@ const loginSlice = createSlice({
 
     setResume: (state, action: PayloadAction<ResumePayload>) => {
       if (state.activeuser) {
-        state.activeuser.resumePDF = action.payload.resumePDF;
-        state.activeuser.resumeVideo = action.payload.resumeVideo;
+        console.log("actionssss",action);
+        
+        state.activeuser.resumePDF = action.payload.resumePDF.filter(pdf => !pdf.isDeleted);
+        state.activeuser.resumeVideo = action.payload.resumeVideo.filter(video => !video.isDeleted);
       }
     },
     setRemoveResume: (state, action) => {
