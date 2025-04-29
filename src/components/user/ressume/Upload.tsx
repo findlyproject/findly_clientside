@@ -30,9 +30,9 @@ const FileUpload = () => {
 
   useEffect(() => {
     if (resumePdf?.[0]) {
-      setPreviewUrl(resumePdf.fileUrl);
+      setPreviewUrl(resumePdf[0].fileUrl);
     } else if (resumevideo?.[0]) {
-      setPreviewUrl(resumevideo.fileUrl);
+      setPreviewUrl(resumevideo[0].fileUrl);
     }
   }, [resumePdf, resumevideo]);
 
@@ -147,10 +147,10 @@ const FileUpload = () => {
                   {files.resume || (resumePdf && resumePdf.length > 0) ? (
                     <div>
                       <p className="text-sm font-semibold">
-                        {files.resume?.name || resumePdf[0]?.fileName}
+                        {files.resume?.name || resumePdf?.[0]?.fileName}
                       </p>
                       <iframe
-                        src={files.resume ? previewUrl : resumePdf[0]?.fileUrl}
+                        src={files.resume ? previewUrl || "" : resumePdf?.[0]?.fileUrl ?? ""}
                         title="Resume Preview"
                         width="400px"
                         height="400px"
@@ -188,7 +188,7 @@ const FileUpload = () => {
                   <div>
                     <p className="text-sm font-semibold">
                       {files.introductionVideo?.name ||
-                        resumevideo[0]?.fileName}
+                        resumevideo?.[0]?.fileName}
                     </p>
                     <video
                       controls
@@ -199,8 +199,8 @@ const FileUpload = () => {
                       <source
                         src={
                           files.introductionVideo
-                            ? previewUrl
-                            : resumevideo[0]?.fileUrl
+                            ? previewUrl ?? ""
+                            : resumevideo?.[0]?.fileUrl ?? ""
                         }
                         type="video/mp4"
                       />

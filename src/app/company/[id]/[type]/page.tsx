@@ -1,19 +1,33 @@
-import React from "react";
-import DetailsUser from "@/components/navBar/DetailsUser";
-import Navbar from "@/components/navBar/Navbar";
-import CompanyProfile from "@/components/company/CompanyDeatailsPage";
+// import React from "react";
+// import DetailsUser from "@/components/navBar/DetailsUser";
+// import Navbar from "@/components/navBar/Navbar";
+// import CompanyProfile from "@/components/company/CompanyDeatailsPage";
 
-export default async function Page({
-  params,
-}: {
-  params: { id: string; type: string };
-}) {
-  const { id, type } = await params; // ✅ Extract values from params
+// export default async function Page({
+//   params,
+// }: {
+//   params: { id: string; type: string };
+// }) {
+//   const { id, type } = await params; // ✅ Extract values from params
 
+//   return (
+//     <div>
+//       <Navbar />
+//       {type === "User" ? <DetailsUser id={id} /> : <CompanyProfile id={id} />}
+//     </div>
+//   );
+// }
+import React from 'react'
+import { Navbar } from 'flowbite-react'
+import ClientPage from './ClientPage'
+
+function page() {
   return (
     <div>
-      <Navbar />
-      {type === "User" ? <DetailsUser id={id} /> : <CompanyProfile id={id} />}
+      <Navbar/>
+      <ClientPage/>
     </div>
-  );
+  )
 }
+
+export default page

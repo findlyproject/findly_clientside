@@ -1,19 +1,14 @@
-import React from "react";
-import DetailsUser from "@/components/navBar/DetailsUser";
-import Navbar from "@/components/navBar/Navbar";
-import CompanyProfile from "@/components/company/CompanyDeatailsPage";
+import React from 'react'
+import ClientPage from './ClientPage'
+import { Navbar } from 'flowbite-react'
 
-export default  function Page({
-  params,
-}: {
-  params: { id: string; type: string };
-}) {
-  const { id, type } =  params;
-
+function page() {
   return (
     <div>
-      <Navbar />
-      {type === "User" ? <DetailsUser id={id} /> : <CompanyProfile id={id} />}
+      <Navbar/>
+      <ClientPage/>
     </div>
-  );
+  )
 }
+
+export default page
