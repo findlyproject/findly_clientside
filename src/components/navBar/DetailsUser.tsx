@@ -460,7 +460,6 @@ import api from "@/utils/api";
 import { setDetailes } from "@/lib/store/features/userSlice";
 import { useAppDispatch, useAppSelector } from "@/lib/store/hooks";
 import Image from "next/image";
-import verification from "../../../public/assets/verify.jpg";
 import { useRouter } from "next/navigation";
 import { MdOutlineReport } from "react-icons/md";
 import { CiCircleInfo } from "react-icons/ci";
@@ -554,7 +553,7 @@ const DetailsUser = ({ id }: { id: string }) => {
                 <span>
                   {user?.role === "premium" && (
                     <Image
-                      src={verification}
+                      src="/assets/verify.jpg"
                       width={30}
                       height={20}
                       alt="Verified"
