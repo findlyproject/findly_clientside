@@ -1,9 +1,6 @@
 import React from "react";
 import Footer from "../footer/Footer";
 import Image from "next/image";
-import aboutimage1 from "../../../../public/assets/aboutimage1.jpg";
-import aboutimage2 from "../../../../public/assets/aboutimage2.jpg";
-import aboutimage3 from "../../../../public/assets/aboutimage3.jpg";
 
 export default function AboutPage() {
   return (
@@ -11,22 +8,28 @@ export default function AboutPage() {
       <section className="flex flex-col lg:flex-row items-center justify-center px-4 md:px-8 lg:px-20 py-10 gap-6 lg:gap-10">
         {/* Image Section */}
         <div className="flex flex-col md:flex-row lg:flex-col gap-4 w-full lg:w-auto">
-          <Image
-            src={aboutimage1}
+        <Image
+            src='/assets/aboutimage1.jpg'
             alt="About Image 1"
             className="rounded-lg shadow-md w-full lg:w-72 h-[250px] md:h-[300px] object-cover"
+            width={200}
+            height={200}
           />
           <Image
-            src={aboutimage2}
+            src="/assets/aboutimage2.jpg"
             alt="About Image 2"
             className="rounded-lg shadow-md w-full lg:w-72 h-[250px] md:h-[300px] object-cover"
+            width={200}
+            height={200}
           />
         </div>
 
         {/* Main Image with Badge */}
         <div className="relative w-full lg:w-auto">
           <Image
-            src={aboutimage3}
+              width={200}
+              height={200}
+            src="/assets/aboutimage3.jpg"
             alt="Girl using tablet"
             className="rounded-lg shadow-md w-full lg:w-72 h-[300px] object-cover"
           />
