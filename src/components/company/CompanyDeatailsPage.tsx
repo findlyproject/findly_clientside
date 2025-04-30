@@ -217,7 +217,7 @@ console.log("companyProfile",companyProfile);
         <div className="flex items-start justify-between  gap-6">
           <div className="flex flex-col">
           <Image
-  src={companyProfile?.logo || ""}
+  src={companyProfile?.logo || "https://pagedone.io/asset/uploads/1696244579.png"}
   alt="Profile"
   width={224}
   height={224}
@@ -361,7 +361,7 @@ console.log("companyProfile",companyProfile);
             >
               <div className="flex items-center mb-6">
               <Image
-  src={blog.image}
+  src={blog.image||"https://pagedone.io/asset/uploads/1696244579.png"}
   alt={blog.author}
   width={500} // Example value matching the container's width
   height={300} // Example value matching the container's height
