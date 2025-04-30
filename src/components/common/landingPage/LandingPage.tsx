@@ -2,7 +2,7 @@
 
 import Image from "next/image";
 import { useRouter } from "next/navigation";
-import goup from "../../../../public/landingPage-group-discussion.png";
+
 import { AnimatedTestimonials } from "./Testimonial";
 import { useEffect, useState } from "react";
 import api from "@/utils/api";
@@ -438,7 +438,7 @@ function LandingPage() {
         <div className="absolute -inset-2 bg-purple-500 opacity-20 rounded-xl"></div>
         <div className="relative overflow-hidden rounded-xl shadow-lg">
           <Image
-            src={goup}
+            src="/landingPage-group-discussion.png"
             alt="About Us Illustration"
             width={300}
             height={300}
