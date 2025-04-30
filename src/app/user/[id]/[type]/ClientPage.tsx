@@ -8,7 +8,6 @@ export default function ClientPage() {
   const params = useParams();
   const id = params.id as string;
   const type = params.type as string;
-console.log("params",params);
   return (
     <>
       {type === 'User' ? <DetailsUser id={id} /> : <CompanyProfile id={id} />}
