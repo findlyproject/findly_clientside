@@ -1,9 +1,6 @@
 import React from "react";
 import Footer from "../footer/Footer";
 import Image from "next/image";
-// import aboutimage1 from "../../../../public/assets/aboutimage1.jpg";
-import aboutimage2 from "../../../../public/assets/aboutimage2.jpg";
-import aboutimage3 from "../../../../public/assets/aboutimage3.jpg";
 
 export default function AboutPage() {
   return (
