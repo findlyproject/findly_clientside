@@ -14,7 +14,7 @@ import { CiCircleRemove } from "react-icons/ci";
 import { ReportUserModal } from "./ReportUserModal";
 import { User } from "@/types/Types";
 
-const DetailsUser = ({ id }: { id: string }) => {
+const   DetailsUser = ({ id }: { id: string }) => {
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
   const dropdownRef = useRef<HTMLDivElement | null>(null);
   const [isModalOpen, setIsModalOpen] = useState(false);

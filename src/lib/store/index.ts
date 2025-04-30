@@ -67,13 +67,15 @@ export const makeStore = () =>
           ignoredActions: [FLUSH, REHYDRATE, PAUSE, PERSIST, PURGE, REGISTER],
         },
       }),
-  });
+  })
  
-
 export const store = makeStore();
-export const persistor = persistStore(store);
-
+export const persistor = persistStore(store)
 
 export type AppStore = ReturnType<typeof makeStore>;
 export type RootState = ReturnType<AppStore["getState"]>;
-export type AppDispatch = AppStore["dispatch"];
+export type AppDispatch = AppStore["dispatch"]
+
+
+
+
