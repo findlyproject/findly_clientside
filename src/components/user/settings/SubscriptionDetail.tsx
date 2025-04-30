@@ -18,7 +18,7 @@ export default function SubscriptionDetail(){
   const activeUser=useAppSelector((state)=>state.user.activeuser)
   const route=activeCompany?"company":"user"
   useEffect(() => {
-    // Only run if either is set (not null or undefined)
+   
     if (activeCompany != null || activeUser != null) {
       detailsPlan();
     }
